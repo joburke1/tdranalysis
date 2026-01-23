@@ -1,0 +1,23 @@
+# Arlington Zoning Analyzer Dependencies
+# Core geospatial libraries
+geopandas>=0.14.0
+shapely>=2.0.0
+pyproj>=3.6.0
+
+# Data handling
+pandas>=2.0.0
+numpy>=1.24.0
+
+# HTTP requests for data download
+requests>=2.31.0
+
+# Configuration and validation
+pydantic>=2.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Development/exploration
+jupyter>=1.0.0
+matplotlib>=3.7.0

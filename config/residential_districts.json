@@ -1,0 +1,214 @@
+{
+  "_metadata": {
+    "source": "Arlington County Zoning Ordinance, Article 5 - Residential (R) Districts",
+    "effective_date": "2025-10-01",
+    "last_updated": "2025-01-23",
+    "notes": "By-right standards for one-family dwellings only. Special exception and site plan standards not included."
+  },
+  "districts": {
+    "R-20": {
+      "name": "One-Family Dwelling District",
+      "article_section": "§5.2",
+      "density": {
+        "min_lot_area_sf": 20000,
+        "min_lot_area_per_dwelling_unit_sf": 20000,
+        "min_lot_width_ft": 100
+      },
+      "height": {
+        "max_height_ft": 35
+      },
+      "coverage": {
+        "max_lot_coverage_pct": 25,
+        "max_lot_coverage_with_front_porch_pct": 28,
+        "max_lot_coverage_with_detached_garage_pct": 30,
+        "max_lot_coverage_with_both_pct": 33,
+        "max_main_building_footprint_pct": 16,
+        "max_main_building_footprint_with_porch_pct": 19,
+        "max_main_building_footprint_sf": 4480,
+        "max_main_building_footprint_with_porch_sf": 5320
+      },
+      "parking": {
+        "spaces_per_dwelling_unit": 2
+      }
+    },
+    "R-10": {
+      "name": "One-Family Dwelling District",
+      "article_section": "§5.3",
+      "density": {
+        "min_lot_area_sf": 10000,
+        "min_lot_area_per_dwelling_unit_sf": 10000,
+        "min_lot_width_ft": 80
+      },
+      "height": {
+        "max_height_ft": 35
+      },
+      "coverage": {
+        "max_lot_coverage_pct": 32,
+        "max_lot_coverage_with_front_porch_pct": 35,
+        "max_lot_coverage_with_detached_garage_pct": 37,
+        "max_lot_coverage_with_both_pct": 40,
+        "max_main_building_footprint_pct": 25,
+        "max_main_building_footprint_with_porch_pct": 28,
+        "max_main_building_footprint_sf": 3500,
+        "max_main_building_footprint_with_porch_sf": 3920
+      },
+      "parking": {
+        "spaces_per_dwelling_unit": 2
+      }
+    },
+    "R-10T": {
+      "name": "One-Family and Townhouse Dwelling District",
+      "article_section": "§5.4",
+      "notes": "By-right applies to one-family only; townhouse requires site plan",
+      "density": {
+        "min_lot_area_sf": 10000,
+        "min_lot_area_per_dwelling_unit_sf": 10000,
+        "min_lot_width_ft": 80
+      },
+      "height": {
+        "max_height_ft": 35
+      },
+      "coverage": {
+        "max_lot_coverage_pct": 32,
+        "max_lot_coverage_with_front_porch_pct": 35,
+        "max_lot_coverage_with_detached_garage_pct": 37,
+        "max_lot_coverage_with_both_pct": 40,
+        "max_main_building_footprint_pct": 25,
+        "max_main_building_footprint_with_porch_pct": 28,
+        "max_main_building_footprint_sf": 3500,
+        "max_main_building_footprint_with_porch_sf": 3920
+      },
+      "parking": {
+        "spaces_per_dwelling_unit": 2
+      }
+    },
+    "R-8": {
+      "name": "One-Family Dwelling District",
+      "article_section": "§5.5",
+      "density": {
+        "min_lot_area_sf": 8000,
+        "min_lot_area_per_dwelling_unit_sf": 8000,
+        "min_lot_width_ft": 70
+      },
+      "height": {
+        "max_height_ft": 35
+      },
+      "coverage": {
+        "max_lot_coverage_pct": 35,
+        "max_lot_coverage_with_front_porch_pct": 38,
+        "max_lot_coverage_with_detached_garage_pct": 40,
+        "max_lot_coverage_with_both_pct": 43,
+        "max_main_building_footprint_pct": 25,
+        "max_main_building_footprint_with_porch_pct": 28,
+        "max_main_building_footprint_sf": 2800,
+        "max_main_building_footprint_with_porch_sf": 3136
+      },
+      "parking": {
+        "spaces_per_dwelling_unit": 2
+      }
+    },
+    "R-6": {
+      "name": "One-Family Dwelling District",
+      "article_section": "§5.6",
+      "density": {
+        "min_lot_area_sf": 6000,
+        "min_lot_area_per_dwelling_unit_sf": 6000,
+        "min_lot_width_ft": 60
+      },
+      "height": {
+        "max_height_ft": 35
+      },
+      "coverage": {
+        "max_lot_coverage_pct": 40,
+        "max_lot_coverage_with_front_porch_pct": 43,
+        "max_lot_coverage_with_detached_garage_pct": 45,
+        "max_lot_coverage_with_both_pct": 48,
+        "max_main_building_footprint_pct": 30,
+        "max_main_building_footprint_with_porch_pct": 33,
+        "max_main_building_footprint_sf": 2520,
+        "max_main_building_footprint_with_porch_sf": 2772
+      },
+      "parking": {
+        "spaces_per_dwelling_unit": 2
+      }
+    },
+    "R-5": {
+      "name": "One-Family and Restricted Two-Family Dwelling District",
+      "article_section": "§5.7",
+      "notes": "By-right applies to one-family only; two-family requires special conditions",
+      "density": {
+        "min_lot_area_sf": 5000,
+        "min_lot_area_per_dwelling_unit_sf": 5000,
+        "min_lot_width_ft": 50
+      },
+      "height": {
+        "max_height_ft": 35
+      },
+      "coverage": {
+        "max_lot_coverage_pct": 45,
+        "max_lot_coverage_with_front_porch_pct": 48,
+        "max_lot_coverage_with_detached_garage_pct": 50,
+        "max_lot_coverage_with_both_pct": 53,
+        "max_main_building_footprint_pct": 34,
+        "max_main_building_footprint_with_porch_pct": 37,
+        "max_main_building_footprint_sf": 2380,
+        "max_main_building_footprint_with_porch_sf": 2590
+      },
+      "parking": {
+        "spaces_per_dwelling_unit": 2
+      }
+    },
+    "R15-30T": {
+      "name": "Townhouse Dwelling District",
+      "article_section": "§5.8",
+      "notes": "By-right applies to one-family only; townhouse/higher density requires site plan",
+      "density": {
+        "min_lot_area_sf": 5000,
+        "min_lot_area_per_dwelling_unit_sf": 5000,
+        "min_lot_width_ft": 50
+      },
+      "height": {
+        "max_height_ft": 35
+      },
+      "coverage": {
+        "max_lot_coverage_pct": 45,
+        "max_lot_coverage_with_front_porch_pct": 48,
+        "max_lot_coverage_with_detached_garage_pct": 50,
+        "max_lot_coverage_with_both_pct": 53,
+        "max_main_building_footprint_pct": 34,
+        "max_main_building_footprint_with_porch_pct": 37,
+        "max_main_building_footprint_sf": 2380,
+        "max_main_building_footprint_with_porch_sf": 2590
+      },
+      "parking": {
+        "spaces_per_dwelling_unit": 2
+      }
+    },
+    "R2-7": {
+      "name": "Two-Family and Townhouse Dwelling District",
+      "article_section": "§5.9",
+      "notes": "By-right for one-family; two-family and townhouse have specific requirements",
+      "density": {
+        "min_lot_area_sf": 5000,
+        "min_lot_area_per_dwelling_unit_sf": 5000,
+        "min_lot_width_ft": 50
+      },
+      "height": {
+        "max_height_ft": 35
+      },
+      "coverage": {
+        "max_lot_coverage_pct": 40,
+        "max_lot_coverage_with_front_porch_pct": 43,
+        "max_lot_coverage_with_detached_garage_pct": 45,
+        "max_lot_coverage_with_both_pct": 48,
+        "max_main_building_footprint_pct": 30,
+        "max_main_building_footprint_with_porch_pct": 33,
+        "max_main_building_footprint_sf": 2520,
+        "max_main_building_footprint_with_porch_sf": 2772
+      },
+      "parking": {
+        "spaces_per_dwelling_unit": 2
+      }
+    }
+  }
+}

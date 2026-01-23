@@ -1,0 +1,53 @@
+{
+  "_metadata": {
+    "source": "Arlington County Zoning Ordinance, Article 3 - Density and Dimensional Standards, §3.2",
+    "effective_date": "2025-10-01",
+    "last_updated": "2025-01-23",
+    "notes": "Setback and yard requirements for one-family dwellings in R districts"
+  },
+  "setbacks": {
+    "front_yard": {
+      "description": "Front yard setback from street right-of-way",
+      "rule": "Larger of: 50 feet from street centerline OR 25 feet from street right-of-way line",
+      "min_from_centerline_ft": 50,
+      "min_from_row_ft": 25,
+      "height_ratio_rule": "No closer to centerline than 50% of building height"
+    },
+    "side_yard": {
+      "description": "Side yard requirements for one-family dwellings",
+      "rule": "Aggregate width of both side yards shall not be less than 30% of required lot width",
+      "aggregate_pct_of_lot_width": 30,
+      "notes": "Individual side yard minimums vary; typically 8-10 feet minimum per side"
+    },
+    "rear_yard": {
+      "description": "Rear yard setback",
+      "min_ft": 25,
+      "notes": "On interior lots, no structure shall be located closer than 25 feet from rear lot line"
+    }
+  },
+  "accessory_buildings": {
+    "description": "Setbacks for accessory buildings in R districts",
+    "max_height_stories": 1.5,
+    "max_height_ft": 25,
+    "max_footprint_r5_r6_sf": 560,
+    "max_footprint_other_sf": 650,
+    "min_distance_from_main_building_ft": 8,
+    "min_from_side_lot_line_ft": 1,
+    "min_from_rear_lot_line_interior_ft": 1,
+    "min_from_rear_lot_line_corner_ft": 10
+  },
+  "encroachments": {
+    "description": "Allowed encroachments into required yards",
+    "bay_oriel_windows_chimney_inches": 18,
+    "eaves_cornices_inches": 30,
+    "porch_into_front_yard_ft": 4,
+    "porch_min_from_row_ft": 21,
+    "stairs_min_from_lot_line_ft": 5
+  },
+  "visual_clearance": {
+    "description": "Corner lot visibility triangle",
+    "triangle_distance_from_intersection_ft": 25,
+    "min_clear_height_ft": 3,
+    "max_clear_height_ft": 10
+  }
+}
