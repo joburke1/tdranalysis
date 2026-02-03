@@ -10,7 +10,7 @@ This tool determines what can be built on a residential parcel "by-right" (witho
 - **Lot Dimensions**: Area, width, depth calculated from parcel geometry
 - **Development Standards**: Height, coverage, and footprint limits from the Zoning Ordinance
 
-The analysis is based on **Article 5 (Residential Districts)** and **Article 3 (Density and Dimensional Standards)** of the Arlington County Zoning Ordinance, effective October 1, 2025.
+Disclaimer: The analysis is based on **Article 5 (Residential Districts)** and **Article 3 (Density and Dimensional Standards)** of the Arlington County Zoning Ordinance.  A copy of the zoning code downloaded from https://www.arlingtonva.us/Government/Programs/Building/Codes-Ordinances/Zoning on October 1, 2025 is provided for reference, however the code may have changed. This project is a point in time implementation intended to support policy analysis.  Do not use for other purposes.
 
 ## Features
 
@@ -20,6 +20,10 @@ The analysis is based on **Article 5 (Residential Districts)** and **Article 3 (
 - Validate conformance against zoning requirements
 - Determine maximum building footprint, lot coverage, and height
 - Identify limiting factors for development
+
+## Requirements
+
+- **Python 3.11+** (required by pandas 3.0 and numpy 2.4)
 
 ## Installation
 
@@ -104,6 +108,9 @@ print(f"Max Height: {result.max_height_ft} ft")
 
 ```
 arlington-zoning-analyzer/
+├── calculation proceedures/     # Calculation methodology documentation
+│   ├── maximum development potential human.md
+│   └── maximum development potential llm.md
 ├── config/                      # Zoning rules configuration
 │   ├── residential_districts.json
 │   └── setback_rules.json
@@ -126,6 +133,15 @@ arlington-zoning-analyzer/
 ├── requirements.txt
 └── README.md
 ```
+
+## Calculation Procedures
+
+The `calculation proceedures/` directory contains step-by-step documentation of how maximum development potential is calculated from zoning rules and parcel geometry:
+
+- **maximum development potential human.md** — Written for human readers, explaining the calculation methodology in plain language.
+- **maximum development potential llm.md** — Structured for LLM consumption, providing the same calculation logic in a format optimized for AI-assisted analysis and code generation.
+
+These documents serve as the authoritative reference for the analysis logic implemented in `src/`.
 
 ## Configuration
 

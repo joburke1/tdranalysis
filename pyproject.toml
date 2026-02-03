@@ -1,0 +1,5 @@
+[project]
+name = "arlington-zoning-analyzer"
+version = "0.1.0"
+description = "Analyze maximum by-right residential development potential for parcels in Arlington County, Virginia"
+requires-python = ">=3.11"
