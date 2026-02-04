@@ -2,8 +2,8 @@
 Data Processor for Arlington Zoning Analyzer
 
 Handles spatial joins between parcel data and zoning polygons,
-enriches parcel data with zoning attributes, and prepares data
-for development potential analysis.
+tabular joins to property/assessment records, and prepares
+enriched parcel data for development potential analysis.
 """
 
 import logging
@@ -19,36 +19,66 @@ logger = logging.getLogger(__name__)
 class DataProcessor:
     """
     Processes and enriches Arlington County GIS data.
-    
+
     Performs spatial joins between parcels and zoning districts,
-    identifies split-zoned parcels, and prepares data for analysis.
+    tabular joins to property/assessment records, identifies
+    split-zoned parcels, and prepares data for analysis.
     """
-    
+
     # Expected CRS for Arlington County data (Virginia State Plane North)
     ARLINGTON_CRS = "EPSG:2283"  # NAD83 / Virginia North (ftUS)
     WGS84_CRS = "EPSG:4326"
-    
+
     # Residential zoning district prefixes
     RESIDENTIAL_PREFIXES = ("R-", "R2-", "R1")
-    
+
+    # Columns to keep from the property dataset when joining
+    PROPERTY_COLUMNS = [
+        "realEstatePropertyCode",
+        "grossFloorAreaSquareFeetQty",
+        "storyHeightCnt",
+        "propertyYearBuilt",
+        "numberOfUnitsCnt",
+        "lotSizeQty",
+        "propertyClassTypeCode",
+        "propertyClassTypeDsc",
+        "zoningDescListText",
+        "commercialInd",
+        "mixedUseInd",
+    ]
+
+    # Columns to keep from the assessment dataset when joining
+    ASSESSMENT_COLUMNS = [
+        "realEstatePropertyCode",
+        "improvementValueAmt",
+        "landValueAmt",
+        "totalValueAmt",
+    ]
+
     def __init__(
         self,
         parcels_gdf: gpd.GeoDataFrame,
         zoning_gdf: gpd.GeoDataFrame,
-        glup_gdf: Optional[gpd.GeoDataFrame] = None
+        glup_gdf: Optional[gpd.GeoDataFrame] = None,
+        property_df: Optional[pd.DataFrame] = None,
+        assessment_df: Optional[pd.DataFrame] = None,
     ):
         """
-        Initialize the processor with loaded GeoDataFrames.
-        
+        Initialize the processor with loaded data.
+
         Args:
             parcels_gdf: GeoDataFrame of parcel polygons
             zoning_gdf: GeoDataFrame of zoning district polygons
             glup_gdf: Optional GeoDataFrame of GLUP designations
+            property_df: Optional DataFrame of property attributes from the Arlington Open Data API
+            assessment_df: Optional DataFrame of assessment values from the Arlington Open Data API
         """
         self.parcels = parcels_gdf.copy()
         self.zoning = zoning_gdf.copy()
         self.glup = glup_gdf.copy() if glup_gdf is not None else None
-        
+        self.property_data = property_df.copy() if property_df is not None else None
+        self.assessment_data = assessment_df.copy() if assessment_df is not None else None
+
         self._ensure_consistent_crs()
         
     def _ensure_consistent_crs(self) -> None:
@@ -236,30 +266,145 @@ class DataProcessor:
             code_upper.startswith(prefix) for prefix in self.RESIDENTIAL_PREFIXES
         )
     
+    def join_property_data(
+        self, gdf: gpd.GeoDataFrame
+    ) -> gpd.GeoDataFrame:
+        """
+        Join property attributes to parcels via Real Property Code (RPC).
+
+        Adds building characteristics from the Arlington Open Data API
+        property dataset: gross floor area, story count, year built,
+        number of units, and property classification.
+
+        Args:
+            gdf: GeoDataFrame with a parcel ID column matching RPC format
+
+        Returns:
+            GeoDataFrame enriched with property attributes
+        """
+        if self.property_data is None:
+            logger.info("No property data provided, skipping property join")
+            return gdf
+
+        parcel_id_col = self.identify_parcel_id_column()
+        logger.info(
+            f"Joining property data to parcels via "
+            f"'{parcel_id_col}' → 'realEstatePropertyCode'..."
+        )
+
+        # Select and deduplicate property columns
+        available_cols = [
+            c for c in self.PROPERTY_COLUMNS if c in self.property_data.columns
+        ]
+        prop_subset = self.property_data[available_cols].copy()
+
+        # Keep only the most recent record per RPC (last in dataset)
+        prop_subset = prop_subset.drop_duplicates(
+            subset=["realEstatePropertyCode"], keep="last"
+        )
+
+        before_count = len(gdf)
+        enriched = gdf.merge(
+            prop_subset,
+            left_on=parcel_id_col,
+            right_on="realEstatePropertyCode",
+            how="left",
+        )
+        # Drop the redundant join key if it's different from parcel_id_col
+        if parcel_id_col != "realEstatePropertyCode":
+            enriched = enriched.drop(columns=["realEstatePropertyCode"], errors="ignore")
+
+        matched = enriched["grossFloorAreaSquareFeetQty"].notna().sum()
+        logger.info(
+            f"Property join: {matched}/{before_count} parcels matched "
+            f"({matched / before_count * 100:.1f}%)"
+        )
+
+        return enriched
+
+    def join_assessment_data(
+        self, gdf: gpd.GeoDataFrame
+    ) -> gpd.GeoDataFrame:
+        """
+        Join assessment values to parcels via Real Property Code (RPC).
+
+        Adds land value, improvement value, and total assessed value
+        from the Arlington Open Data API assessment dataset.
+
+        Args:
+            gdf: GeoDataFrame with a parcel ID column matching RPC format
+
+        Returns:
+            GeoDataFrame enriched with assessment values
+        """
+        if self.assessment_data is None:
+            logger.info("No assessment data provided, skipping assessment join")
+            return gdf
+
+        parcel_id_col = self.identify_parcel_id_column()
+        logger.info(
+            f"Joining assessment data to parcels via "
+            f"'{parcel_id_col}' → 'realEstatePropertyCode'..."
+        )
+
+        available_cols = [
+            c for c in self.ASSESSMENT_COLUMNS if c in self.assessment_data.columns
+        ]
+        assess_subset = self.assessment_data[available_cols].copy()
+
+        # Keep only the most recent assessment per RPC
+        assess_subset = assess_subset.drop_duplicates(
+            subset=["realEstatePropertyCode"], keep="last"
+        )
+
+        before_count = len(gdf)
+        enriched = gdf.merge(
+            assess_subset,
+            left_on=parcel_id_col,
+            right_on="realEstatePropertyCode",
+            how="left",
+        )
+        if parcel_id_col != "realEstatePropertyCode":
+            enriched = enriched.drop(columns=["realEstatePropertyCode"], errors="ignore")
+
+        matched = enriched["totalValueAmt"].notna().sum()
+        logger.info(
+            f"Assessment join: {matched}/{before_count} parcels matched "
+            f"({matched / before_count * 100:.1f}%)"
+        )
+
+        return enriched
+
     def process_all(self, output_path: Optional[Path] = None) -> gpd.GeoDataFrame:
         """
         Run full processing pipeline and optionally save results.
-        
+
         Args:
             output_path: Optional path to save processed data (GeoPackage format)
-            
+
         Returns:
             Fully processed and enriched GeoDataFrame
         """
         # Join parcels to zoning
         enriched = self.join_parcels_to_zoning()
-        
+
         # Optionally join to GLUP
         if self.glup is not None:
             enriched = self._join_to_glup(enriched)
-        
+
+        # Join property attributes (building characteristics)
+        enriched = self.join_property_data(enriched)
+
+        # Join assessment values
+        enriched = self.join_assessment_data(enriched)
+
         # Save if path provided
         if output_path is not None:
             output_path = Path(output_path)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             enriched.to_file(output_path, driver='GPKG')
             logger.info(f"Saved processed data to {output_path}")
-        
+
         return enriched
     
     def _join_to_glup(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
@@ -306,25 +451,50 @@ def process_arlington_data(
 ) -> gpd.GeoDataFrame:
     """
     Convenience function to process downloaded Arlington County data.
-    
+
+    Loads all available datasets (GIS and API) from the raw data directory
+    and runs the full processing pipeline.
+
     Args:
-        raw_data_dir: Directory containing downloaded GeoJSON files
+        raw_data_dir: Directory containing downloaded data files
         output_path: Path for output GeoPackage file
-        
+
     Returns:
-        Processed GeoDataFrame with parcels enriched with zoning
+        Processed GeoDataFrame with parcels enriched with zoning,
+        property attributes, and assessment values
     """
+    import json as _json
+
     raw_data_dir = Path(raw_data_dir)
-    
-    # Load datasets
+
+    # Load GIS datasets
     logger.info("Loading datasets...")
     parcels = gpd.read_file(raw_data_dir / "parcels.geojson")
     zoning = gpd.read_file(raw_data_dir / "zoning.geojson")
-    
-    # Try to load GLUP if available
+
+    # Try to load optional GIS datasets
     glup_path = raw_data_dir / "glup.geojson"
     glup = gpd.read_file(glup_path) if glup_path.exists() else None
-    
+
+    # Try to load API datasets
+    property_df = None
+    property_path = raw_data_dir / "property.json"
+    if property_path.exists():
+        logger.info("Loading property data...")
+        with open(property_path, 'r') as f:
+            property_df = pd.DataFrame(_json.load(f))
+
+    assessment_df = None
+    assessment_path = raw_data_dir / "assessment.json"
+    if assessment_path.exists():
+        logger.info("Loading assessment data...")
+        with open(assessment_path, 'r') as f:
+            assessment_df = pd.DataFrame(_json.load(f))
+
     # Process
-    processor = DataProcessor(parcels, zoning, glup)
+    processor = DataProcessor(
+        parcels, zoning, glup,
+        property_df=property_df,
+        assessment_df=assessment_df,
+    )
     return processor.process_all(output_path=output_path)
