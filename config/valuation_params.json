@@ -1,0 +1,38 @@
+{
+  "_metadata": {
+    "source": "Arlington County assessment data and market observations",
+    "last_updated": "2026-02-18",
+    "notes": [
+      "Configurable market parameters for estimating development rights value.",
+      "All dollar values are illustrative defaults and must be calibrated to",
+      "current market conditions before use in policy analysis.",
+      "Parameter source: Arlington County residential land market observations.",
+      "This is NOT a substitute for a formal appraisal."
+    ]
+  },
+  "market_to_assessment_ratio": {
+    "low": 1.0,
+    "high": 1.15,
+    "notes": "Arlington assessments track close to market value. Range accounts for assessment lag and parcel-level variation."
+  },
+  "price_per_available_gfa_sf": {
+    "low": 100,
+    "high": 200,
+    "notes": "Dollars per square foot of unused GFA capacity. Varies by neighborhood, zoning district, and current market conditions. Calibrate from comparable land sales expressed per buildable SF."
+  },
+  "price_per_available_dwelling_unit": {
+    "low": 150000,
+    "high": 350000,
+    "notes": "Dollars per available (unused) dwelling unit of capacity. Reflects land component only, not construction cost. Most applicable for vacant lots where max_dwelling_units > 0."
+  },
+  "land_residual_discount_factor": {
+    "low": 0.6,
+    "high": 0.85,
+    "notes": "Discount applied to the raw land-per-SF rate to account for: entitlement risk, demolition costs (if parcel is not vacant), holding and carry costs, and developer profit margin. Lower bound is more conservative."
+  },
+  "confidence_thresholds": {
+    "high_confidence_min_land_value": 100000,
+    "high_confidence_min_available_gfa_sf": 500,
+    "notes": "Minimum values for 'HIGH' confidence rating. Below these thresholds, assessed land value or available GFA is too small to support a reliable estimate."
+  }
+}
