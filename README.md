@@ -191,6 +191,94 @@ The `DevelopmentPotentialResult` object contains:
 | `max_lot_coverage_sf` | Maximum total lot coverage |
 | `max_dwelling_units` | Maximum dwelling units by-right |
 
+## Neighborhood Validation Runbook
+
+Repeatable process for validating analysis results when adding a new civic association neighborhood. Derived from the Alcova Heights validation.
+
+### Step 1: Run the Analysis
+
+```bash
+python scripts/run_analysis.py --neighborhood "Neighborhood Name"
+```
+
+Review the console summary. Key things to check:
+- **Parcel count**: Does the number of residential parcels seem reasonable for the neighborhood size?
+- **Exclusion counts**: Review each filter's exclusion count in the log output. Large numbers may indicate the neighborhood has unusual zoning or property characteristics.
+- **Neighborhood improvement rate**: Check the derived $/SF rate and sample size. If the fallback ($185/SF) was used, the neighborhood has fewer than 5 homes built in the last 10 years — results should be interpreted with extra caution.
+- **Development status breakdown**: Expect most parcels to be "underdeveloped" in established neighborhoods. A high count of "vacant" or "overdeveloped" parcels warrants investigation.
+
+### Step 2: Run Anomaly Detection
+
+```bash
+python scripts/run_anomaly_check.py --neighborhood "Neighborhood Name"
+```
+
+This produces `anomaly_report.csv` and `anomaly_summary.txt` in the results directory. Review:
+- **auto-exclude tier**: These have disqualifying data problems. The pipeline already handles the most common cases (non-residential classes, remnant parcels, no-GFA-data buildings), but check if any new patterns appear.
+- **flag-for-review tier**: These need manual spot-checking. Common flags:
+  - `building_detected_no_gfa_data` — now auto-excluded by the pipeline
+  - `statistical_outlier` — large/small values relative to the zoning district
+  - `low_improvement_value` — GFA estimate may be unreliable
+  - `unusual_property_type` — HOA common areas or other edge cases
+- **Impact on aggregates**: Compare clean-tier totals vs full analysis. If >10% of aggregate value comes from flagged parcels, the analysis needs more spot-checking before use.
+
+### Step 3: Spot-Check Vacant Parcels
+
+All parcels classified as "vacant" (development_status = "vacant") should be manually verified:
+
+1. Open the analysis CSV and filter to `development_status = vacant`
+2. For each vacant parcel, look up the address on the Arlington County assessor website: `https://propertysearch.arlingtonva.us`
+3. Verify: Is the lot actually vacant? Is it buildable (not a park, utility easement, etc.)?
+4. Check if the parcel meets the 80% conforming lot size threshold for its zoning district
+
+Record results in `data/results/{neighborhood}/spot_checks.csv`:
+```csv
+parcel_id,spot_check_result,spot_check_notes,spot_check_date
+23027001,confirmed,Vacant lot confirmed,2026-02-19
+23003002,excluded,Commercial building in residential zone,2026-02-19
+```
+
+Valid `spot_check_result` values:
+- `confirmed` — parcel analysis is correct; include in results
+- `excluded` — parcel should be removed from analysis (will be auto-excluded on next run)
+- `vacant-confirmed-buildable` — vacant and verified as buildable lot
+- `incorrect` — data issue identified; add details in notes
+
+### Step 4: Spot-Check Flagged Parcels
+
+Review parcels from the anomaly report's "flag-for-review" tier:
+
+1. **Statistical outliers**: Look up parcels with high Z-scores on the assessor website. Large lots in established neighborhoods are typically valid (not data errors). Unusually low values may indicate assessment data lag.
+2. **Low improvement value**: Parcels with improvement value < $30,000 produce unreliable GFA estimates. Verify on the assessor site whether the building is a shed, garage, or legitimate residence.
+3. **Split-zoned parcels**: If the neighborhood has many split-zoned parcels, check a sample to confirm the primary zone assignment is correct.
+
+### Step 5: Re-run and Verify
+
+After adding spot check records:
+
+```bash
+python scripts/run_analysis.py --neighborhood "Neighborhood Name" --skip-download
+python scripts/run_anomaly_check.py --neighborhood "Neighborhood Name"
+```
+
+Verify:
+- Excluded parcels are removed from analysis
+- Anomaly report shows fewer flag-for-review parcels
+- Aggregate values are stable (no large swings from spot-check exclusions)
+
+### Automated Pipeline Filters (applied before analysis)
+
+These filters run automatically on every analysis — no manual intervention needed:
+
+| Filter | What it removes | Rationale |
+|--------|----------------|-----------|
+| Zoning district | Non-R-5/R-6/R-8/R-10/R-20 zones | By-right standards only apply to one-family districts |
+| Property class 201/210 | Commercial vacant land, parking | Non-residential use |
+| Class 510 remnants | Vacant parcels < 80% of min lot size | Alley strips, unbuildable remnants |
+| No property API record | Parcels with no address or class | Administrative parcels, unregistered strips |
+| No GFA data | Building exists but no improvement value | GFA estimation impossible; analysis unreliable |
+| Spot check exclusions | Parcels marked "excluded" in spot_checks.csv | Persistent manual review decisions |
+
 ## Limitations
 
 1. **By-right only**: Does not analyze special exception or site plan scenarios

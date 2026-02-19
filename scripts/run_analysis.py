@@ -336,6 +336,38 @@ def _run_analysis(
                 f"(likely alley remnants or administrative parcels)"
             )
 
+    # Exclude parcels where a building exists (year built recorded) but the
+    # assessment API returned no improvement value — making GFA estimation
+    # impossible.  These parcels produce "building_detected_no_gfa_data" in
+    # the analysis, which means available-rights and valuation cannot be
+    # computed.  Manual spot-checking across Alcova Heights confirmed that
+    # all such parcels should be excluded.
+    n_excluded_no_gfa = 0
+    year_col = "propertyYearBuilt"
+    imp_col = "improvementValueAmt"
+    gfa_col = "grossFloorAreaSquareFeetQty"
+    if year_col in residential.columns and imp_col in residential.columns:
+        import pandas as _pd_filter
+        year_vals = _pd_filter.to_numeric(residential[year_col], errors="coerce")
+        imp_vals = _pd_filter.to_numeric(residential[imp_col], errors="coerce")
+        gfa_vals = _pd_filter.to_numeric(
+            residential[gfa_col], errors="coerce"
+        ) if gfa_col in residential.columns else _pd_filter.Series(0, index=residential.index)
+
+        has_building = year_vals.notna() & (year_vals > 0)
+        no_improvement = imp_vals.isna() | (imp_vals <= 5_000)
+        no_gfa_api = gfa_vals.isna() | (gfa_vals <= 0)
+        no_gfa_data = has_building & no_improvement & no_gfa_api
+
+        before = len(residential)
+        residential = residential[~no_gfa_data].copy()
+        n_excluded_no_gfa = before - len(residential)
+        if n_excluded_no_gfa:
+            logger.info(
+                f"[{label}] Excluded {n_excluded_no_gfa:,} parcel(s) with building "
+                f"but no improvement value (GFA cannot be estimated)"
+            )
+
     # Exclude parcels explicitly marked "excluded" in the persistent spot-checks
     # file.  This allows analysts to record human review decisions (e.g. non-
     # residential use, missing data) and have them automatically applied on
