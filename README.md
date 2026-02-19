@@ -42,48 +42,63 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-### 1. Download Data
+### 1. Set Up Virtual Environment
 
-```python
-from src.data import ArlingtonDataDownloader
+```bash
+# Create virtual environment
+python -m venv venv
 
-# Download all required datasets
-downloader = ArlingtonDataDownloader(data_dir="data/raw")
-downloader.download_all()
+# Activate it
+venv\Scripts\activate     # Windows
+# source venv/bin/activate  # macOS/Linux
+
+# Install dependencies
+pip install -r requirements.txt
 ```
 
-### 2. Process Data
+### 2. Verify Environment
 
-```python
-from src.data import process_arlington_data
-
-# Join parcels to zoning and save enriched data
-enriched_parcels = process_arlington_data(
-    raw_data_dir="data/raw",
-    output_path="data/processed/parcels_enriched.gpkg"
-)
+```bash
+python scripts/verify_env.py
 ```
 
-### 3. Analyze Development Potential
+All checks should pass (the "data not downloaded" warning is expected on first run).
 
-```python
-from src.analysis import analyze_parcel_by_id
-import geopandas as gpd
+### 3. Run the MVP Analysis (single neighborhood)
 
-# Load processed data
-parcels = gpd.read_file("data/processed/parcels_enriched.gpkg")
+```bash
+# Download data + process + analyze a single neighborhood:
+python scripts/run_analysis.py --neighborhood "Lyon Park"
 
-# Analyze a specific parcel
-result = analyze_parcel_by_id(
-    parcel_id="12-345-678",
-    parcels_gdf=parcels,
-    config_dir="config"
-)
+# See all available neighborhoods (after first download+process):
+python scripts/run_analysis.py --list-neighborhoods
 
-print(result.summary())
+# Check how fresh the downloaded data is:
+python scripts/run_analysis.py --check-data
 ```
 
-### 4. Analyze Single Geometry
+Results are saved to `data/results/{neighborhood}/`:
+- `*_analysis.gpkg` — GeoPackage with all analysis columns (open in QGIS)
+- `*_analysis.csv` — Flat CSV for review in Excel
+- `*_summary.txt` — Human-readable statistics
+
+### 4. Batch Processing (all neighborhoods)
+
+```bash
+python scripts/run_analysis.py --all-neighborhoods
+```
+
+This runs every civic association neighborhood sequentially and also saves
+a combined `data/results/all_neighborhoods_combined.csv`.
+
+### 5. Refresh Data
+
+```bash
+# Force re-download of all source datasets:
+python scripts/run_analysis.py --neighborhood "Lyon Park" --force-refresh
+```
+
+### 6. Python API (single parcel)
 
 ```python
 from shapely.geometry import box
@@ -92,7 +107,6 @@ from src.analysis import analyze_development_potential
 # Create a test parcel (60ft x 100ft = 6,000 sf)
 parcel_geometry = box(0, 0, 60, 100)
 
-# Analyze assuming R-6 zoning
 result = analyze_development_potential(
     geometry=parcel_geometry,
     zoning_district="R-6",

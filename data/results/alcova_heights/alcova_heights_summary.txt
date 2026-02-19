@@ -1,0 +1,25 @@
+Analysis Summary: Alcova Heights
+Generated: 2026-02-18 19:24
+============================================================
+
+Total residential parcels analyzed: 608
+
+Zoning district breakdown:
+  R-6             430 parcels
+  R2-7             95 parcels
+  R-5              60 parcels
+  R15-30T          23 parcels
+
+Valuation (parcels with positive available rights):
+  Parcels valued:                 396
+  Aggregate low:      $    61,720,920
+  Aggregate high:     $   402,485,757
+  Confidence levels:
+    high                364
+    not_applicable      212
+    medium               20
+    low                  12
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.

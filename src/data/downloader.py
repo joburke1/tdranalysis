@@ -57,6 +57,12 @@ class ArlingtonDataDownloader:
             "description": "Building footprint outlines with elevation/height data from planimetric updates",
             "url": "https://gisdata-arlgis.opendata.arcgis.com/api/download/v1/items/3248008859c34cfaa7cac22f1273fdd3/geojson?layers=0",
             "filename": "building_heights.geojson"
+        },
+        "civic_associations": {
+            "name": "Civic Association Polygons",
+            "description": "Polygon boundaries for Arlington County civic associations (neighborhoods)",
+            "url": "https://gisdata-arlgis.opendata.arcgis.com/api/download/v1/items/a8259221e70147cdbfe5714725512b50/geojson?layers=0",
+            "filename": "civic_associations.geojson"
         }
     }
 
@@ -72,10 +78,11 @@ class ArlingtonDataDownloader:
         },
         "assessment": {
             "name": "Real Estate Assessment",
-            "description": "Assessment values including land, improvement, and total values",
+            "description": "Assessment values including land, improvement, and total values (current year only)",
             "url": "https://datahub-v2.arlingtonva.us/api/RealEstate/Assessment",
             "filename": "assessment.json",
-            "page_size": 10000
+            "page_size": 10000,
+            "filter": "assessmentDate ge 2025-01-01T00:00:00.000Z"
         }
     }
     
@@ -198,12 +205,15 @@ class ArlingtonDataDownloader:
         logger.info(f"Downloading {dataset['name']} (paginated API)...")
 
         page_size = dataset["page_size"]
+        odata_filter = dataset.get("filter", "")
         all_records = []
         skip = 0
 
         try:
             while True:
                 url = f"{dataset['url']}?$top={page_size}&$skip={skip}"
+                if odata_filter:
+                    url += f"&$filter={odata_filter}"
                 logger.info(f"Fetching records {skip} to {skip + page_size}...")
 
                 response = requests.get(url, timeout=timeout)

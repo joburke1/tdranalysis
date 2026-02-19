@@ -62,6 +62,7 @@ class DataProcessor:
         glup_gdf: Optional[gpd.GeoDataFrame] = None,
         property_df: Optional[pd.DataFrame] = None,
         assessment_df: Optional[pd.DataFrame] = None,
+        civic_associations_gdf: Optional[gpd.GeoDataFrame] = None,
     ):
         """
         Initialize the processor with loaded data.
@@ -72,12 +73,16 @@ class DataProcessor:
             glup_gdf: Optional GeoDataFrame of GLUP designations
             property_df: Optional DataFrame of property attributes from the Arlington Open Data API
             assessment_df: Optional DataFrame of assessment values from the Arlington Open Data API
+            civic_associations_gdf: Optional GeoDataFrame of civic association (neighborhood) polygons
         """
         self.parcels = parcels_gdf.copy()
         self.zoning = zoning_gdf.copy()
         self.glup = glup_gdf.copy() if glup_gdf is not None else None
         self.property_data = property_df.copy() if property_df is not None else None
         self.assessment_data = assessment_df.copy() if assessment_df is not None else None
+        self.civic_associations = (
+            civic_associations_gdf.copy() if civic_associations_gdf is not None else None
+        )
 
         self._ensure_consistent_crs()
         
@@ -108,6 +113,16 @@ class DataProcessor:
             if self.glup.crs != target_crs:
                 logger.info(f"Reprojecting GLUP from {self.glup.crs} to {target_crs}")
                 self.glup = self.glup.to_crs(target_crs)
+
+        if self.civic_associations is not None:
+            if self.civic_associations.crs is None:
+                self.civic_associations = self.civic_associations.set_crs(self.WGS84_CRS)
+            if self.civic_associations.crs != target_crs:
+                logger.info(
+                    f"Reprojecting civic associations from "
+                    f"{self.civic_associations.crs} to {target_crs}"
+                )
+                self.civic_associations = self.civic_associations.to_crs(target_crs)
     
     def identify_zoning_column(self) -> str:
         """
@@ -122,7 +137,9 @@ class DataProcessor:
         # Common column names for zoning codes
         candidates = ['ZONING', 'ZONE', 'ZONE_CODE', 'ZONING_CODE', 'ZONECODE',
                       'zoning', 'zone', 'zone_code', 'zoning_code', 'ZoneCode',
-                      'ZONINGCODE', 'DISTRICT', 'district']
+                      'ZONINGCODE', 'DISTRICT', 'district',
+                      # Arlington-specific column names
+                      'ZN_DESIG', 'zn_desig', 'REA_ZONECODE', 'rea_zonecode']
         
         for col in candidates:
             if col in self.zoning.columns:
@@ -149,9 +166,11 @@ class DataProcessor:
             Name of the parcel ID column
         """
         # Common column names for parcel IDs
-        candidates = ['RPC', 'PARCEL_ID', 'PARCELID', 'APN', 'PIN', 
-                      'parcel_id', 'rpc', 'OBJECTID', 'FID',
-                      'ParcelID', 'Parcel_ID']
+        candidates = ['RPC', 'PARCEL_ID', 'PARCELID', 'APN', 'PIN',
+                      'parcel_id', 'rpc', 'FID',
+                      'ParcelID', 'Parcel_ID',
+                      # Arlington-specific: Real Property Code master field
+                      'RPCMSTR', 'rpcmstr']
         
         for col in candidates:
             if col in self.parcels.columns:
@@ -392,6 +411,10 @@ class DataProcessor:
         if self.glup is not None:
             enriched = self._join_to_glup(enriched)
 
+        # Optionally join civic association (neighborhood) boundaries
+        if self.civic_associations is not None:
+            enriched = self.join_civic_associations(enriched)
+
         # Join property attributes (building characteristics)
         enriched = self.join_property_data(enriched)
 
@@ -407,6 +430,78 @@ class DataProcessor:
 
         return enriched
     
+    def join_civic_associations(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
+        """
+        Join civic association (neighborhood) name to parcels using centroid.
+
+        Adds a 'civic_association' column to the GeoDataFrame. Parcels that
+        do not fall within any civic association boundary get NaN.
+
+        Args:
+            gdf: GeoDataFrame of parcels (must share CRS with civic_associations)
+
+        Returns:
+            GeoDataFrame with added 'civic_association' column
+        """
+        if self.civic_associations is None:
+            logger.info("No civic associations data provided, skipping neighborhood join")
+            return gdf
+
+        logger.info("Joining civic association boundaries to parcels...")
+
+        # Find the name column — try common patterns
+        name_candidates = [
+            "CIVIC_ASSOC", "CIVIC_ASSOCIATION", "NAME", "ASSOC_NAME",
+            "civic_assoc", "civic_association", "name", "assoc_name",
+            "ASSOCIATION", "association",
+            # Arlington-specific column name
+            "CIVIC", "civic", "LABEL", "label",
+        ]
+        name_col = None
+        for col in name_candidates:
+            if col in self.civic_associations.columns:
+                name_col = col
+                break
+
+        if name_col is None:
+            # Use first non-geometry string column
+            for col in self.civic_associations.columns:
+                if col != "geometry" and self.civic_associations[col].dtype == "object":
+                    name_col = col
+                    logger.warning(
+                        f"Could not identify civic association name column; "
+                        f"using '{col}'"
+                    )
+                    break
+
+        if name_col is None:
+            logger.warning("Cannot identify civic association name column; skipping join")
+            return gdf
+
+        # Centroid join
+        gdf_copy = gdf.copy()
+        gdf_copy["_centroid"] = gdf_copy.geometry.centroid
+        centroid_gdf = gdf_copy.set_geometry("_centroid")
+
+        joined = gpd.sjoin(
+            centroid_gdf,
+            self.civic_associations[[name_col, "geometry"]],
+            how="left",
+            predicate="within",
+        )
+
+        joined = joined.set_geometry(gdf_copy.geometry)
+        joined = joined.drop(columns=["_centroid", "index_right"], errors="ignore")
+        joined = joined.rename(columns={name_col: "civic_association"})
+
+        matched = joined["civic_association"].notna().sum()
+        logger.info(
+            f"Civic association join: {matched}/{len(joined)} parcels matched "
+            f"({matched / len(joined) * 100:.1f}%)"
+        )
+
+        return joined
+
     def _join_to_glup(self, gdf: gpd.GeoDataFrame) -> gpd.GeoDataFrame:
         """Join GLUP designation to parcels using centroid."""
         logger.info("Joining GLUP designations...")
@@ -476,6 +571,13 @@ def process_arlington_data(
     glup_path = raw_data_dir / "glup.geojson"
     glup = gpd.read_file(glup_path) if glup_path.exists() else None
 
+    civic_assoc_path = raw_data_dir / "civic_associations.geojson"
+    civic_associations = (
+        gpd.read_file(civic_assoc_path) if civic_assoc_path.exists() else None
+    )
+    if civic_associations is not None:
+        logger.info(f"Loaded {len(civic_associations)} civic association polygons")
+
     # Try to load API datasets
     property_df = None
     property_path = raw_data_dir / "property.json"
@@ -496,5 +598,6 @@ def process_arlington_data(
         parcels, zoning, glup,
         property_df=property_df,
         assessment_df=assessment_df,
+        civic_associations_gdf=civic_associations,
     )
     return processor.process_all(output_path=output_path)

@@ -443,8 +443,8 @@ def analyze_geodataframe(
     # Add results to GeoDataFrame
     import pandas as pd
     results_df = pd.DataFrame(results)
-    
+
     # Concatenate
-    result_gdf = gpd.pd.concat([gdf.reset_index(drop=True), results_df], axis=1)
+    result_gdf = pd.concat([gdf.reset_index(drop=True), results_df], axis=1)
     
     return gpd.GeoDataFrame(result_gdf, geometry='geometry', crs=gdf.crs)
