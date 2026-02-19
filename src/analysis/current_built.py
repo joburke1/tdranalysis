@@ -13,7 +13,9 @@ Key fields used:
 """
 
 import logging
+import statistics
 from dataclasses import dataclass, field, asdict
+from pathlib import Path
 from typing import Optional
 
 import geopandas as gpd
@@ -152,6 +154,149 @@ class CurrentBuiltResult:
 
 _IMPROVEMENT_VALUE_THRESHOLD = 5_000.0
 """Minimum assessed improvement value (dollars) to infer a building exists."""
+
+_DEFAULT_ASSUMED_STORIES = 2.5
+"""Default assumed stories for max GFA calculation (matches available_rights.py)."""
+
+
+@dataclass
+class NeighborhoodRate:
+    """Neighborhood-derived improvement value per SF from recent construction."""
+
+    median: float
+    """Median assessed improvement value per SF across recent builds."""
+
+    low: float
+    """Lower bound (median - 1 std dev, floored at $50/SF)."""
+
+    high: float
+    """Upper bound (median + 1 std dev)."""
+
+    sample_size: int
+    """Number of recently-built properties used to derive the rate."""
+
+    fallback_used: bool
+    """True if insufficient sample; static fallback rate was used instead."""
+
+
+def estimate_neighborhood_improvement_rate(
+    gdf: gpd.GeoDataFrame,
+    config_dir: str | Path = "config",
+    analysis_year: int = 2026,
+    lookback_years: int = 10,
+    assumed_stories: float = _DEFAULT_ASSUMED_STORIES,
+    min_sample_size: int = 5,
+    fallback_rate: float = 185.0,
+) -> NeighborhoodRate:
+    """
+    Derive assessed improvement value per SF from recently-built homes.
+
+    Recently-built homes are assumed to be at 100% of the maximum building
+    envelope. For each qualifying property, we calculate:
+
+        implied_rate = improvement_value / max_gfa
+
+    where max_gfa = max_footprint * assumed_stories.
+
+    The GeoDataFrame should already be filtered to a single neighborhood
+    by the runner.
+
+    Args:
+        gdf: Enriched GeoDataFrame (already filtered to one neighborhood)
+        config_dir: Directory containing zoning rules config
+        analysis_year: Current analysis year
+        lookback_years: How many years back to consider "recent"
+        assumed_stories: Stories multiplier for max GFA calculation
+        min_sample_size: Minimum qualifying properties needed; below this
+            the static fallback_rate is used instead
+        fallback_rate: Static $/SF to use when sample is insufficient
+
+    Returns:
+        NeighborhoodRate with derived median, low, high, and metadata
+    """
+    from .development_potential import DevelopmentPotentialAnalyzer
+
+    cutoff_year = analysis_year - lookback_years
+
+    # Filter to recently-built homes with meaningful improvement values
+    year_col = "propertyYearBuilt"
+    imp_col = "improvementValueAmt"
+
+    if year_col not in gdf.columns or imp_col not in gdf.columns:
+        logger.warning(
+            "Missing columns for neighborhood rate estimation "
+            f"({year_col}, {imp_col}); using fallback ${fallback_rate}/SF"
+        )
+        return NeighborhoodRate(fallback_rate, fallback_rate, fallback_rate, 0, True)
+
+    recent = gdf[
+        (pd.to_numeric(gdf[year_col], errors="coerce") >= cutoff_year)
+        & (pd.to_numeric(gdf[imp_col], errors="coerce") > _IMPROVEMENT_VALUE_THRESHOLD)
+    ].copy()
+
+    if len(recent) < min_sample_size:
+        logger.info(
+            f"Only {len(recent)} recent builds found (need {min_sample_size}); "
+            f"using fallback ${fallback_rate}/SF"
+        )
+        return NeighborhoodRate(
+            fallback_rate, fallback_rate, fallback_rate, len(recent), True
+        )
+
+    analyzer = DevelopmentPotentialAnalyzer(config_dir=config_dir)
+    rates: list[float] = []
+
+    for idx, row in recent.iterrows():
+        zoning = row.get("zoning_district")
+        if not zoning or pd.isna(zoning):
+            continue
+        if row.geometry is None:
+            continue
+
+        try:
+            potential = analyzer.analyze(
+                geometry=row.geometry,
+                zoning_district=str(zoning),
+            )
+        except Exception as e:
+            logger.debug(f"Skipping parcel in rate calc: {e}")
+            continue
+
+        max_footprint = potential.max_building_footprint_sf
+        if not max_footprint or max_footprint <= 0:
+            continue
+
+        max_gfa = max_footprint * assumed_stories
+        imp_value = float(row[imp_col])
+        rate = imp_value / max_gfa
+        rates.append(rate)
+
+    if len(rates) < min_sample_size:
+        logger.info(
+            f"Only {len(rates)} usable rate samples (need {min_sample_size}); "
+            f"using fallback ${fallback_rate}/SF"
+        )
+        return NeighborhoodRate(
+            fallback_rate, fallback_rate, fallback_rate, len(rates), True
+        )
+
+    median_rate = statistics.median(rates)
+    stdev = statistics.stdev(rates)
+    low = max(median_rate - stdev, 50.0)
+    high = median_rate + stdev
+
+    logger.info(
+        f"Neighborhood improvement rate: ${median_rate:,.0f}/SF "
+        f"(range ${low:,.0f}–${high:,.0f}, n={len(rates)})"
+    )
+
+    return NeighborhoodRate(
+        median=round(median_rate, 2),
+        low=round(low, 2),
+        high=round(high, 2),
+        sample_size=len(rates),
+        fallback_used=False,
+    )
 
 
 def analyze_current_built(

@@ -1,5 +1,5 @@
 Analysis Summary: Alcova Heights
-Generated: 2026-02-19 14:35
+Generated: 2026-02-19 15:03
 ============================================================
 
 Total residential parcels analyzed: 295
@@ -10,24 +10,29 @@ Zoning district breakdown:
   R-5              39 parcels
 
 Development status:
-  underdeveloped      275 parcels
-  near-capacity        14 parcels
+  underdeveloped      261 parcels
+  near-capacity        19 parcels
+  overdeveloped        11 parcels
   vacant                4 parcels
-  overdeveloped         2 parcels
 
 Unused GFA Capacity (parcels with positive available rights):
-  Parcels with capacity: 292
-  Total available SF:       1,179,648 sf
-  Median per parcel:            4,439 sf
+  Parcels with capacity: 283
+  Total available SF:       1,083,231 sf
+  Median per parcel:            4,213 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       153
+  Range:           $       137 – $169
+  Sample size:             12 recent builds
 
 Valuation (parcels with positive available rights):
-  Parcels valued:            292
-  Aggregate low:      $    41,708,668
-  Aggregate high:     $   239,154,639
+  Parcels valued:            283
+  Aggregate low:      $    39,656,769
+  Aggregate high:     $   221,677,149
   Confidence levels:
-    high                287
-    medium                5
-    not_applicable        3
+    high                275
+    not_applicable       12
+    medium                8
 
 ============================================================
 DISCLAIMER: Valuation estimates are for policy analysis only,

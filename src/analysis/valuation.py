@@ -34,7 +34,12 @@ from .available_rights import (
     calculate_available_rights,
     DEFAULT_ASSUMED_STORIES,
 )
-from .current_built import CurrentBuiltResult, analyze_current_built
+from .current_built import (
+    CurrentBuiltResult,
+    NeighborhoodRate,
+    analyze_current_built,
+    estimate_neighborhood_improvement_rate,
+)
 from .development_potential import DevelopmentPotentialAnalyzer
 
 logger = logging.getLogger(__name__)
@@ -128,7 +133,8 @@ def load_valuation_params(config_dir: str | Path = "config") -> ValuationParams:
         land_residual_discount_high=data["land_residual_discount_factor"]["high"],
         high_confidence_min_land_value=data["confidence_thresholds"]["high_confidence_min_land_value"],
         high_confidence_min_available_gfa_sf=data["confidence_thresholds"]["high_confidence_min_available_gfa_sf"],
-        residential_improvement_value_per_sf=data.get("residential_improvement_value_per_sf", {}).get("value", 185.0),
+        residential_improvement_value_per_sf=data.get("residential_improvement_value_per_sf", {}).get("fallback_value",
+            data.get("residential_improvement_value_per_sf", {}).get("value", 185.0)),
         params_last_updated=meta.get("last_updated", ""),
     )
 
@@ -746,6 +752,7 @@ def estimate_valuation_geodataframe(
     zoning_column: str = "zoning_district",
     config_dir: str | Path = "config",
     assumed_stories: float = DEFAULT_ASSUMED_STORIES,
+    analysis_year: int = 2026,
 ) -> gpd.GeoDataFrame:
     """
     Estimate development potential value for all parcels in a GeoDataFrame.
@@ -754,18 +761,33 @@ def estimate_valuation_geodataframe(
     analysis pipeline (development potential → current built → available
     rights → valuation) for each parcel.
 
+    Before processing individual parcels, derives a neighborhood-specific
+    improvement value per SF rate from recently-built homes (last 10 years).
+    This replaces the static $185/SF fallback when sufficient data exists.
+
     Args:
         gdf: Enriched GeoDataFrame with zoning and property data
         parcel_id_column: Column with parcel IDs
         zoning_column: Column with zoning district codes
         config_dir: Directory containing zoning rules and valuation config
         assumed_stories: Stories to assume for max GFA estimate
+        analysis_year: Current year for lookback calculation
 
     Returns:
         GeoDataFrame with added valuation columns
     """
     analyzer = DevelopmentPotentialAnalyzer(config_dir=config_dir)
     params = load_valuation_params(config_dir)
+
+    # Derive neighborhood improvement $/SF from recent construction
+    neighborhood_rate = estimate_neighborhood_improvement_rate(
+        gdf,
+        config_dir=config_dir,
+        analysis_year=analysis_year,
+        assumed_stories=assumed_stories,
+        fallback_rate=params.residential_improvement_value_per_sf,
+    )
+    improvement_value_per_sf = neighborhood_rate.median
 
     records = []
     for idx, row in gdf.iterrows():
@@ -792,7 +814,7 @@ def estimate_valuation_geodataframe(
         current = analyze_current_built(
             row,
             parcel_id_column=parcel_id_column,
-            improvement_value_per_sf=params.residential_improvement_value_per_sf,
+            improvement_value_per_sf=improvement_value_per_sf,
         )
         rights = calculate_available_rights(potential, current, assumed_stories)
         valuation = calculate_valuation(rights, params)
@@ -802,6 +824,12 @@ def estimate_valuation_geodataframe(
 
         # Expose key intermediate fields from potential, current, and rights
         record.update(_intermediate_fields(potential, current, rights))
+
+        # Attach neighborhood rate metadata to every row
+        record["neighborhood_imp_rate_median"] = neighborhood_rate.median
+        record["neighborhood_imp_rate_low"] = neighborhood_rate.low
+        record["neighborhood_imp_rate_high"] = neighborhood_rate.high
+        record["neighborhood_imp_rate_sample"] = neighborhood_rate.sample_size
 
         records.append(record)
 
@@ -902,4 +930,9 @@ def _empty_valuation_record() -> dict:
         "is_vacant": None,
         "is_underdeveloped": None,
         "is_overdeveloped": None,
+        # Neighborhood rate
+        "neighborhood_imp_rate_median": None,
+        "neighborhood_imp_rate_low": None,
+        "neighborhood_imp_rate_high": None,
+        "neighborhood_imp_rate_sample": None,
     }

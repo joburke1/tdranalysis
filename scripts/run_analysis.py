@@ -422,6 +422,11 @@ _OUTPUT_SCHEMA = [
     ("estimated_value_low",           "est_value_low"),
     ("estimated_value_high",          "est_value_high"),
     ("valuation_confidence",          "valuation_confidence"),
+    # Neighborhood calibration
+    ("neighborhood_imp_rate_median",  "neighborhood_imp_rate_median"),
+    ("neighborhood_imp_rate_low",     "neighborhood_imp_rate_low"),
+    ("neighborhood_imp_rate_high",    "neighborhood_imp_rate_high"),
+    ("neighborhood_imp_rate_sample",  "neighborhood_imp_rate_sample"),
     # Spot checks (merged from persistent spot_checks.csv)
     ("spot_check_result",             "spot_check_result"),
     ("spot_check_notes",              "spot_check_notes"),
@@ -650,6 +655,21 @@ def _build_summary(result_gdf: "gpd.GeoDataFrame", label: str) -> str:
                 f"  Parcels with capacity: {len(positive):,}",
                 f"  Total available SF:    {positive.sum():>12,.0f} sf",
                 f"  Median per parcel:     {positive.median():>12,.0f} sf",
+            ])
+
+    # Neighborhood improvement rate calibration
+    if "neighborhood_imp_rate_median" in result_gdf.columns:
+        import pandas as _pd_summary
+        rate_median = result_gdf["neighborhood_imp_rate_median"].iloc[0]
+        rate_low = result_gdf["neighborhood_imp_rate_low"].iloc[0]
+        rate_high = result_gdf["neighborhood_imp_rate_high"].iloc[0]
+        rate_sample = result_gdf["neighborhood_imp_rate_sample"].iloc[0]
+        if rate_median is not None and not _pd_summary.isna(rate_median):
+            lines.extend([
+                "\nNeighborhood Improvement Rate Calibration:",
+                f"  Median $/SF:     ${rate_median:>10,.0f}",
+                f"  Range:           ${rate_low:>10,.0f} – ${rate_high:,.0f}",
+                f"  Sample size:     {int(rate_sample):>10,} recent builds",
             ])
 
     # Valuation

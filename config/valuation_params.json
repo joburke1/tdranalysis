@@ -36,7 +36,13 @@
     "notes": "Minimum values for 'HIGH' confidence rating. Below these thresholds, assessed land value or available GFA is too small to support a reliable estimate."
   },
   "residential_improvement_value_per_sf": {
-    "value": 185,
-    "notes": "Assessed improvement value per square foot used to estimate current GFA for residential properties when the property API does not report floor area (which is typical for single-family homes). Arlington residential improvements typically assess at $150–$250/SF depending on age, size, and condition. Calibrate from local sales data before use."
+    "fallback_value": 185,
+    "notes": "Fallback assessed improvement value per SF used when the neighborhood-derived rate has insufficient sample. The pipeline now automatically derives this rate from homes built in the last N years (see neighborhood_rate_calibration). This fallback applies only when fewer than min_sample_size recent builds exist."
+  },
+  "neighborhood_rate_calibration": {
+    "lookback_years": 10,
+    "assumed_envelope_utilization": 1.0,
+    "min_sample_size": 5,
+    "notes": "Parameters for deriving neighborhood-specific improvement $/SF from recent construction. Recent homes are assumed to be built at the specified fraction of the max building envelope. The rate is: improvement_value / (max_footprint * 2.5 stories * utilization). Median and +/- 1 std dev define the neighborhood range."
   }
 }
