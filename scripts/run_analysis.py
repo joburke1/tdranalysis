@@ -262,33 +262,170 @@ def _run_analysis(
     return result_gdf
 
 
+# ---------------------------------------------------------------------------
+# Output schema — ordered list of (raw_col, output_col) pairs
+# ---------------------------------------------------------------------------
+
+# Maps raw pipeline column names → clean output column names.
+# Order determines column order in CSV / GeoJSON.
+_OUTPUT_SCHEMA = [
+    # Identity
+    ("RPCMSTR",                       "parcel_id"),
+    ("street_address",                "street_address"),
+    ("civic_association",             "neighborhood"),
+    # Zoning
+    ("zoning_district",               "zoning_district"),
+    ("is_split_zoned",                "is_split_zoned"),
+    # Lot
+    ("lot_area_sf",                   "lot_area_sf"),
+    ("lot_width_ft",                  "lot_width_ft"),
+    ("is_conforming",                 "is_conforming"),
+    # Current building
+    ("year_built",                    "year_built"),
+    ("propertyClassTypeDsc",          "property_type"),
+    ("current_gfa_sf",                "current_gfa_sf"),
+    ("current_stories",               "current_stories"),
+    ("landValueAmt",                  "land_value"),
+    ("improvementValueAmt",           "improvement_value"),
+    # Max allowed (by-right)
+    ("max_footprint_sf",              "max_footprint_sf"),
+    ("valuation_max_gfa_sf",          "max_gfa_sf"),
+    ("max_height_ft",                 "max_height_ft"),
+    ("max_dwelling_units",            "max_dwelling_units"),
+    # Available rights
+    ("valuation_available_gfa_sf",    "available_gfa_sf"),
+    ("gfa_utilization_pct",           "gfa_utilization_pct"),
+    ("development_status",            "development_status"),   # derived below
+    # Valuation
+    ("estimated_value_low",           "est_value_low"),
+    ("estimated_value_high",          "est_value_high"),
+    ("valuation_confidence",          "valuation_confidence"),
+]
+
+
+def _add_development_status(gdf: "gpd.GeoDataFrame") -> "gpd.GeoDataFrame":
+    """
+    Derive a plain-language development_status column.
+
+    Categories:
+      vacant           — no building on parcel
+      underdeveloped   — built to < 80 % of zoning limit
+      near-capacity    — built to 80–100 % of zoning limit
+      overdeveloped    — existing building exceeds current zoning limit
+      unknown          — insufficient data to determine
+    """
+    def _classify(row) -> str:
+        if row.get("is_vacant") is True:
+            return "vacant"
+        if row.get("is_overdeveloped") is True:
+            return "overdeveloped"
+        util = row.get("gfa_utilization_pct")
+        if util is None:
+            return "unknown"
+        if util < 80:
+            return "underdeveloped"
+        return "near-capacity"
+
+    gdf = gdf.copy()
+    gdf["development_status"] = gdf.apply(_classify, axis=1)
+    return gdf
+
+
+def _curate_output(result_gdf: "gpd.GeoDataFrame") -> "gpd.GeoDataFrame":
+    """
+    Apply the target output schema: select, rename, and order columns.
+
+    Only columns defined in _OUTPUT_SCHEMA are kept. Geometry is preserved.
+    Columns missing from the raw pipeline are silently skipped.
+    """
+    renames = {}
+    ordered = []
+    for raw_col, out_col in _OUTPUT_SCHEMA:
+        if raw_col in result_gdf.columns:
+            renames[raw_col] = out_col
+            ordered.append(out_col)
+
+    curated = result_gdf.rename(columns=renames)
+    keep = [c for c in ordered if c in curated.columns] + ["geometry"]
+    return curated[[c for c in keep if c in curated.columns]]
+
+
+def _save_data_dictionary(output_dir: Path, config_dir: Path, label: str) -> None:
+    """Write a data_dictionary.csv alongside the analysis results."""
+    import csv as _csv
+
+    dict_path = config_dir / "data_dictionary.json"
+    if not dict_path.exists():
+        logger.warning(f"data_dictionary.json not found at {dict_path}; skipping.")
+        return
+
+    with open(dict_path, encoding="utf-8") as f:
+        dd = json.load(f)
+
+    # Build a lookup of field → entry
+    entries = {e["field"]: e for e in dd.get("columns", [])}
+
+    # Write only the fields present in the output schema
+    out_path = output_dir / "data_dictionary.csv"
+    with open(out_path, "w", newline="", encoding="utf-8") as f:
+        writer = _csv.writer(f)
+        writer.writerow(["field", "label", "description", "source", "example"])
+        for _raw, out_col in _OUTPUT_SCHEMA:
+            entry = entries.get(out_col, {})
+            writer.writerow([
+                out_col,
+                entry.get("label", out_col),
+                entry.get("description", ""),
+                entry.get("source", ""),
+                entry.get("example", ""),
+            ])
+
+    logger.info(f"  Saved data dict:  {out_path}")
+
+
 def _save_results(
     result_gdf: "gpd.GeoDataFrame",
     output_dir: Path,
     label: str,
+    config_dir: Path,
 ) -> None:
-    """Save analysis results to GeoPackage and CSV."""
+    """Save curated analysis results to GeoPackage, GeoJSON, CSV, and summary."""
     import pandas as pd
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
     safe_label = label.replace(" ", "_").replace("/", "-").lower()
 
-    gpkg_path = output_dir / f"{safe_label}_analysis.gpkg"
-    csv_path = output_dir / f"{safe_label}_analysis.csv"
+    # --- Derive development_status before curation ---
+    result_gdf = _add_development_status(result_gdf)
+
+    # --- Apply output schema ---
+    curated = _curate_output(result_gdf)
+
+    gpkg_path    = output_dir / f"{safe_label}_analysis.gpkg"
+    geojson_path = output_dir / f"{safe_label}_analysis.geojson"
+    csv_path     = output_dir / f"{safe_label}_analysis.csv"
     summary_path = output_dir / f"{safe_label}_summary.txt"
 
-    # Save GeoPackage
-    result_gdf.to_file(gpkg_path, driver="GPKG")
+    # GeoPackage (keeps original CRS)
+    curated.to_file(gpkg_path, driver="GPKG")
     logger.info(f"  Saved GeoPackage: {gpkg_path}")
 
-    # Save flat CSV (drop geometry for CSV)
-    csv_df = result_gdf.drop(columns=["geometry"], errors="ignore")
+    # GeoJSON (WGS84 — required for web maps)
+    curated_wgs84 = curated.to_crs("EPSG:4326")
+    curated_wgs84.to_file(geojson_path, driver="GeoJSON")
+    logger.info(f"  Saved GeoJSON:    {geojson_path}")
+
+    # CSV (no geometry)
+    csv_df = curated.drop(columns=["geometry"], errors="ignore")
     csv_df.to_csv(csv_path, index=False)
     logger.info(f"  Saved CSV:        {csv_path}")
 
-    # Generate and save summary
-    summary = _build_summary(result_gdf, label)
+    # Data dictionary
+    _save_data_dictionary(output_dir, config_dir, label)
+
+    # Summary
+    summary = _build_summary(curated, label)
     summary_path.write_text(summary, encoding="utf-8")
     logger.info(f"  Saved summary:    {summary_path}")
 
@@ -300,8 +437,6 @@ def _save_results(
 
 def _build_summary(result_gdf: "gpd.GeoDataFrame", label: str) -> str:
     """Build a human-readable summary of analysis results."""
-    import numpy as np
-
     lines = [
         f"Analysis Summary: {label}",
         f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M')}",
@@ -323,43 +458,38 @@ def _build_summary(result_gdf: "gpd.GeoDataFrame", label: str) -> str:
         for zone, count in zones.head(10).items():
             lines.append(f"  {zone:<12} {count:>6,} parcels")
 
+    # Development status
+    if "development_status" in result_gdf.columns:
+        statuses = result_gdf["development_status"].value_counts()
+        lines.append("\nDevelopment status:")
+        for status, count in statuses.items():
+            lines.append(f"  {status:<16} {count:>6,} parcels")
+
     # Available rights
     if "available_gfa_sf" in result_gdf.columns:
         avail = result_gdf["available_gfa_sf"].dropna()
-        if len(avail) > 0:
+        positive = avail[avail > 0]
+        if len(positive) > 0:
             lines.extend([
-                "\nAvailable GFA Capacity (residential parcels with data):",
-                f"  Parcels with data:  {len(avail):,}",
-                f"  Total available SF: {avail.clip(lower=0).sum():>15,.0f} sf",
-                f"  Median per parcel:  {avail.median():>15,.0f} sf",
-                f"  Mean per parcel:    {avail.mean():>15,.0f} sf",
+                "\nUnused GFA Capacity (parcels with positive available rights):",
+                f"  Parcels with capacity: {len(positive):,}",
+                f"  Total available SF:    {positive.sum():>12,.0f} sf",
+                f"  Median per parcel:     {positive.median():>12,.0f} sf",
             ])
 
-        underdeveloped = result_gdf.get("is_underdeveloped", None)
-        if underdeveloped is not None:
-            n_under = (underdeveloped == True).sum()  # noqa: E712
-            lines.append(f"  Underdeveloped:     {n_under:>15,} parcels")
-
-        overdeveloped = result_gdf.get("is_overdeveloped", None)
-        if overdeveloped is not None:
-            n_over = (overdeveloped == True).sum()  # noqa: E712
-            lines.append(f"  Overdeveloped:      {n_over:>15,} parcels")
-
     # Valuation
-    if "estimated_value_low" in result_gdf.columns:
-        valueable = result_gdf[result_gdf.get("valuation_is_valueable", False) == True]  # noqa: E712
-        n_val = len(valueable)
-        if n_val > 0:
-            total_low = valueable["estimated_value_low"].sum()
-            total_high = valueable["estimated_value_high"].sum()
+    if "est_value_low" in result_gdf.columns:
+        valued = result_gdf[result_gdf["est_value_low"].notna()]
+        if len(valued) > 0:
+            total_low = valued["est_value_low"].sum()
+            total_high = valued["est_value_high"].sum()
             lines.extend([
                 "\nValuation (parcels with positive available rights):",
-                f"  Parcels valued:     {n_val:>15,}",
+                f"  Parcels valued:     {len(valued):>10,}",
                 f"  Aggregate low:      ${total_low:>14,.0f}",
                 f"  Aggregate high:     ${total_high:>14,.0f}",
             ])
 
-            # Confidence breakdown
             if "valuation_confidence" in result_gdf.columns:
                 conf_counts = result_gdf["valuation_confidence"].value_counts()
                 lines.append("  Confidence levels:")
@@ -538,7 +668,7 @@ def main() -> None:
 
         logger.info(f"Found {len(subset):,} parcels in '{neighborhood}'")
         result = _run_analysis(subset, config_dir, label=neighborhood)
-        _save_results(result, output_dir / neighborhood.replace(" ", "_").lower(), neighborhood)
+        _save_results(result, output_dir / neighborhood.replace(" ", "_").lower(), neighborhood, config_dir)
 
     elif args.all_neighborhoods:
         # Batch: all neighborhoods
@@ -565,6 +695,7 @@ def main() -> None:
                     result,
                     output_dir / neighborhood.replace(" ", "_").lower(),
                     neighborhood,
+                    config_dir,
                 )
                 all_results.append(result)
             except Exception as e:

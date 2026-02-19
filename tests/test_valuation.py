@@ -5,12 +5,12 @@ Tests for the development potential valuation module.
 import pytest
 from pathlib import Path
 
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from analysis.current_built import CurrentBuiltResult
-from analysis.available_rights import AvailableRightsResult, DEFAULT_ASSUMED_STORIES
-from analysis.valuation import (
+
+
+from src.analysis.current_built import CurrentBuiltResult
+from src.analysis.available_rights import AvailableRightsResult, DEFAULT_ASSUMED_STORIES
+from src.analysis.valuation import (
     ValuationParams,
     ValuationMethodResult,
     ValuationResult,
@@ -730,7 +730,7 @@ class TestEstimateValuationGeoDataFrame:
 
     def test_batch_adds_valuation_columns(self):
         """estimate_valuation_geodataframe adds all expected columns."""
-        from analysis.valuation import estimate_valuation_geodataframe
+        from src.analysis.valuation import estimate_valuation_geodataframe
 
         gdf = self._make_gdf()
         result = estimate_valuation_geodataframe(gdf, config_dir=CONFIG_DIR)
@@ -754,7 +754,7 @@ class TestEstimateValuationGeoDataFrame:
 
     def test_batch_preserves_original_rows(self):
         """Output GeoDataFrame has the same number of rows as input."""
-        from analysis.valuation import estimate_valuation_geodataframe
+        from src.analysis.valuation import estimate_valuation_geodataframe
 
         gdf = self._make_gdf()
         result = estimate_valuation_geodataframe(gdf, config_dir=CONFIG_DIR)
@@ -763,7 +763,7 @@ class TestEstimateValuationGeoDataFrame:
 
     def test_batch_preserves_geometry(self):
         """Output GeoDataFrame retains geometry column and CRS."""
-        from analysis.valuation import estimate_valuation_geodataframe
+        from src.analysis.valuation import estimate_valuation_geodataframe
         import geopandas as gpd
 
         gdf = self._make_gdf()
@@ -775,7 +775,7 @@ class TestEstimateValuationGeoDataFrame:
 
     def test_batch_mixed_parcels_confidence_types(self):
         """Different parcel types produce different confidence levels."""
-        from analysis.valuation import estimate_valuation_geodataframe
+        from src.analysis.valuation import estimate_valuation_geodataframe
 
         gdf = self._make_gdf()
         result = estimate_valuation_geodataframe(gdf, config_dir=CONFIG_DIR)

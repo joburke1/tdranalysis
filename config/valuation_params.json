@@ -34,5 +34,9 @@
     "high_confidence_min_land_value": 100000,
     "high_confidence_min_available_gfa_sf": 500,
     "notes": "Minimum values for 'HIGH' confidence rating. Below these thresholds, assessed land value or available GFA is too small to support a reliable estimate."
+  },
+  "residential_improvement_value_per_sf": {
+    "value": 185,
+    "notes": "Assessed improvement value per square foot used to estimate current GFA for residential properties when the property API does not report floor area (which is typical for single-family homes). Arlington residential improvements typically assess at $150–$250/SF depending on age, size, and condition. Calibrate from local sales data before use."
   }
 }

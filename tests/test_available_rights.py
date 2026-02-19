@@ -7,12 +7,12 @@ from pathlib import Path
 
 import pandas as pd
 
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from analysis.current_built import CurrentBuiltResult
-from analysis.development_potential import DevelopmentPotentialResult
-from analysis.available_rights import (
+
+
+from src.analysis.current_built import CurrentBuiltResult
+from src.analysis.development_potential import DevelopmentPotentialResult
+from src.analysis.available_rights import (
     calculate_available_rights,
     analyze_available_rights_by_id,
     AvailableRightsResult,

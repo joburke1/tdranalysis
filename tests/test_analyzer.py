@@ -8,13 +8,13 @@ import pytest
 from pathlib import Path
 from shapely.geometry import box, Polygon
 
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from rules.engine import ZoningRulesEngine, load_rules
-from rules.validators import ZoningValidator, ConformanceStatus
-from geometry.lot_metrics import LotMetricsCalculator, calculate_lot_metrics
-from analysis.development_potential import (
+
+
+from src.rules.engine import ZoningRulesEngine, load_rules
+from src.rules.validators import ZoningValidator, ConformanceStatus
+from src.geometry.lot_metrics import LotMetricsCalculator, calculate_lot_metrics
+from src.analysis.development_potential import (
     analyze_development_potential,
     DevelopmentPotentialAnalyzer
 )

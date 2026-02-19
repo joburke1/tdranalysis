@@ -83,6 +83,10 @@ class ValuationParams:
     high_confidence_min_available_gfa_sf: float
     """Minimum available GFA (sq ft) for HIGH confidence rating"""
 
+    residential_improvement_value_per_sf: float = 185.0
+    """$/SF used to estimate residential GFA from improvement value when the
+    property API does not report floor area (typical for single-family homes)."""
+
     params_last_updated: str = ""
     """ISO date when these parameters were last calibrated"""
 
@@ -124,6 +128,7 @@ def load_valuation_params(config_dir: str | Path = "config") -> ValuationParams:
         land_residual_discount_high=data["land_residual_discount_factor"]["high"],
         high_confidence_min_land_value=data["confidence_thresholds"]["high_confidence_min_land_value"],
         high_confidence_min_available_gfa_sf=data["confidence_thresholds"]["high_confidence_min_available_gfa_sf"],
+        residential_improvement_value_per_sf=data.get("residential_improvement_value_per_sf", {}).get("value", 185.0),
         params_last_updated=meta.get("last_updated", ""),
     )
 
@@ -784,12 +789,21 @@ def estimate_valuation_geodataframe(
             records.append(_empty_valuation_record())
             continue
 
-        current = analyze_current_built(row, parcel_id_column=parcel_id_column)
+        current = analyze_current_built(
+            row,
+            parcel_id_column=parcel_id_column,
+            improvement_value_per_sf=params.residential_improvement_value_per_sf,
+        )
         rights = calculate_available_rights(potential, current, assumed_stories)
         valuation = calculate_valuation(rights, params)
 
-        records.append({k: v for k, v in valuation.to_dict().items()
-                        if k not in ("parcel_id", "zoning_district")})
+        record = {k: v for k, v in valuation.to_dict().items()
+                  if k not in ("parcel_id", "zoning_district")}
+
+        # Expose key intermediate fields from potential, current, and rights
+        record.update(_intermediate_fields(potential, current, rights))
+
+        records.append(record)
 
     results_df = pd.DataFrame(records)
     result_gdf = pd.concat(
@@ -798,9 +812,51 @@ def estimate_valuation_geodataframe(
     return gpd.GeoDataFrame(result_gdf, geometry="geometry", crs=gdf.crs)
 
 
+def _intermediate_fields(
+    potential: "DevelopmentPotentialResult",
+    current: "CurrentBuiltResult",
+    rights: "AvailableRightsResult",
+) -> dict:
+    """
+    Extract key fields from intermediate analysis results for inclusion
+    in the flat GeoDataFrame output.
+
+    These fields are computed during the pipeline but not included in
+    ValuationResult.to_dict(). Exposing them here allows the runner and
+    downstream consumers to produce a complete, self-contained output.
+    """
+    return {
+        # Lot geometry (from zoning analysis)
+        "lot_area_sf": potential.lot_area_sf,
+        "lot_width_ft": potential.lot_width_ft,
+        "lot_depth_ft": potential.lot_depth_ft,
+        "is_conforming": potential.is_conforming,
+        "conformance_status": potential.conformance_status,
+        # Max development standards (by-right)
+        "max_height_ft": potential.max_height_ft,
+        "max_footprint_sf": potential.max_building_footprint_sf,
+        "max_lot_coverage_sf": potential.max_lot_coverage_sf,
+        "max_dwelling_units": potential.max_dwelling_units,
+        # Current building
+        "current_gfa_sf": current.gross_floor_area_sf,
+        "current_stories": current.story_count,
+        "current_footprint_sf": current.estimated_footprint_sf,
+        "year_built": current.year_built,
+        "has_building": current.has_building,
+        # Available rights
+        "available_footprint_sf": rights.available_footprint_sf,
+        "available_dwelling_units": rights.available_dwelling_units,
+        "gfa_utilization_pct": rights.gfa_utilization_pct,
+        "is_vacant": rights.is_vacant,
+        "is_underdeveloped": rights.is_underdeveloped,
+        "is_overdeveloped": rights.is_overdeveloped,
+    }
+
+
 def _empty_valuation_record() -> dict:
     """Return an empty valuation record for parcels that cannot be analyzed."""
     return {
+        # Valuation
         "estimated_value_low": None,
         "estimated_value_high": None,
         "valuation_confidence": ConfidenceLevel.NOT_APPLICABLE.value,
@@ -823,4 +879,25 @@ def _empty_valuation_record() -> dict:
         "valuation_per_unit_low": None,
         "valuation_per_unit_high": None,
         "valuation_per_unit_applicable": False,
+        # Intermediate fields
+        "lot_area_sf": None,
+        "lot_width_ft": None,
+        "lot_depth_ft": None,
+        "is_conforming": None,
+        "conformance_status": None,
+        "max_height_ft": None,
+        "max_footprint_sf": None,
+        "max_lot_coverage_sf": None,
+        "max_dwelling_units": None,
+        "current_gfa_sf": None,
+        "current_stories": None,
+        "current_footprint_sf": None,
+        "year_built": None,
+        "has_building": None,
+        "available_footprint_sf": None,
+        "available_dwelling_units": None,
+        "gfa_utilization_pct": None,
+        "is_vacant": None,
+        "is_underdeveloped": None,
+        "is_overdeveloped": None,
     }

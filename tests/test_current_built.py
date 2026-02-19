@@ -7,10 +7,10 @@ from pathlib import Path
 
 import pandas as pd
 
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from analysis.current_built import (
+
+
+from src.analysis.current_built import (
     analyze_current_built,
     analyze_current_built_by_id,
     CurrentBuiltResult,
@@ -60,7 +60,7 @@ class TestAnalyzeCurrentBuilt:
         assert result.is_mixed_use is False
 
     def test_vacant_parcel(self):
-        """Test analysis of a vacant parcel (GFA = 0)."""
+        """Test analysis of a truly vacant parcel (GFA = 0, no improvement value)."""
         row = _make_row(
             grossFloorAreaSquareFeetQty=0.0,
             storyHeightCnt=0.0,
@@ -72,11 +72,11 @@ class TestAnalyzeCurrentBuilt:
 
         assert result.data_available is True
         assert result.has_building is False
-        assert result.gross_floor_area_sf == 0.0
-        assert result.estimated_footprint_sf is None  # GFA is 0
+        assert result.gfa_source == "not_available"
+        assert result.estimated_footprint_sf is None
 
     def test_missing_property_data(self):
-        """Test when no property data was joined."""
+        """Test when no property or assessment data was joined."""
         row = pd.Series({"RPC": "99-999-999"})
         result = analyze_current_built(row)
 
@@ -95,17 +95,32 @@ class TestAnalyzeCurrentBuilt:
         assert result.estimated_footprint_sf == 2400.0  # assumes 1 story
         assert any("single story" in n for n in result.notes)
 
-    def test_zero_gfa_with_improvement_value_warns(self):
-        """Test warning when GFA is 0 but improvement value exists."""
+    def test_residential_gfa_estimated_from_improvement_value(self):
+        """When GFA is null but improvement_value is present, GFA is estimated."""
+        row = _make_row(
+            grossFloorAreaSquareFeetQty=None,
+            storyHeightCnt=None,
+            improvementValueAmt=370000.0,
+        )
+        result = analyze_current_built(row, improvement_value_per_sf=200.0)
+
+        assert result.has_building is True
+        assert result.gross_floor_area_sf == pytest.approx(1850.0)  # 370000 / 200
+        assert result.gfa_source == "estimated_from_improvement_value"
+        assert any("estimated" in n for n in result.notes)
+
+    def test_zero_gfa_with_improvement_value_estimates(self):
+        """GFA=0 with improvement value > threshold falls back to estimation."""
         row = _make_row(
             grossFloorAreaSquareFeetQty=0.0,
             storyHeightCnt=0.0,
             improvementValueAmt=200000.0,
         )
-        result = analyze_current_built(row)
+        result = analyze_current_built(row, improvement_value_per_sf=200.0)
 
-        assert result.has_building is False
-        assert any("incomplete" in n for n in result.notes)
+        assert result.has_building is True
+        assert result.gross_floor_area_sf == pytest.approx(1000.0)  # 200000 / 200
+        assert result.gfa_source == "estimated_from_improvement_value"
 
     def test_assessment_values(self):
         """Test that assessment values are extracted."""
@@ -117,15 +132,33 @@ class TestAnalyzeCurrentBuilt:
         assert result.total_assessed_value == 850000.0
 
     def test_nan_values_treated_as_none(self):
-        """Test that NaN values in property data are treated as None."""
+        """NaN property fields fall back to improvement-value estimation."""
         row = _make_row(
             grossFloorAreaSquareFeetQty=float("nan"),
             storyHeightCnt=float("nan"),
             propertyYearBuilt=float("nan"),
+            improvementValueAmt=350000.0,
+        )
+        result = analyze_current_built(row, improvement_value_per_sf=200.0)
+
+        # Assessment data present → data_available, GFA estimated
+        assert result.data_available is True
+        assert result.has_building is True
+        assert result.gfa_source == "estimated_from_improvement_value"
+
+    def test_no_data_when_all_fields_absent(self):
+        """All fields absent (NaN or missing) → data_available False."""
+        row = _make_row(
+            grossFloorAreaSquareFeetQty=float("nan"),
+            storyHeightCnt=float("nan"),
+            propertyYearBuilt=float("nan"),
+            improvementValueAmt=float("nan"),
+            landValueAmt=float("nan"),
+            totalValueAmt=float("nan"),
         )
         result = analyze_current_built(row)
 
-        assert result.data_available is False  # all key fields are NaN
+        assert result.data_available is False
 
     def test_summary_output(self):
         """Test that summary generates without error."""

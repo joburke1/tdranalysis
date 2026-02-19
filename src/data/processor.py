@@ -35,6 +35,11 @@ class DataProcessor:
     # Columns to keep from the property dataset when joining
     PROPERTY_COLUMNS = [
         "realEstatePropertyCode",
+        # Address fields — used to build street_address column
+        "propertyStreetNbrNameText",
+        "propertyUnitNbr",
+        "propertyZipCode",
+        # Building characteristics
         "grossFloorAreaSquareFeetQty",
         "storyHeightCnt",
         "propertyYearBuilt",
@@ -333,13 +338,46 @@ class DataProcessor:
         if parcel_id_col != "realEstatePropertyCode":
             enriched = enriched.drop(columns=["realEstatePropertyCode"], errors="ignore")
 
-        matched = enriched["grossFloorAreaSquareFeetQty"].notna().sum()
+        # Build a single street_address column from the raw address components
+        enriched["street_address"] = self._format_street_address(enriched)
+
+        matched = enriched["propertyStreetNbrNameText"].notna().sum()
         logger.info(
             f"Property join: {matched}/{before_count} parcels matched "
             f"({matched / before_count * 100:.1f}%)"
         )
 
         return enriched
+
+    @staticmethod
+    def _format_street_address(gdf: gpd.GeoDataFrame) -> pd.Series:
+        """
+        Construct a human-readable street address from property join columns.
+
+        Format: "{street_number_name} [Unit {unit}], Arlington VA {zip}"
+
+        Args:
+            gdf: GeoDataFrame after property join (contains address columns)
+
+        Returns:
+            Series of formatted address strings (NaN where address data is missing)
+        """
+        def _build(row) -> Optional[str]:
+            street = row.get("propertyStreetNbrNameText")
+            if not street or pd.isna(street):
+                return None
+            street = str(street).strip().title()
+
+            unit = row.get("propertyUnitNbr")
+            if unit and not pd.isna(unit):
+                street = f"{street} Unit {unit}"
+
+            zip_code = row.get("propertyZipCode")
+            if zip_code and not pd.isna(zip_code):
+                return f"{street}, Arlington VA {zip_code}"
+            return f"{street}, Arlington VA"
+
+        return gdf.apply(_build, axis=1)
 
     def join_assessment_data(
         self, gdf: gpd.GeoDataFrame

@@ -1,0 +1,177 @@
+{
+  "_metadata": {
+    "description": "Plain-language descriptions of every column in the analysis output",
+    "source": "Arlington Zoning Analyzer",
+    "units_note": "All area measurements are in square feet (sf). Dollar amounts are in US dollars. Percentages are 0–100."
+  },
+  "columns": [
+    {
+      "field": "parcel_id",
+      "label": "Parcel ID (RPC)",
+      "description": "The county's Real Property Code — a unique identifier for each parcel in Arlington's tax and property records.",
+      "source": "Arlington County GIS parcels",
+      "example": "23001033"
+    },
+    {
+      "field": "street_address",
+      "label": "Street Address",
+      "description": "The property's mailing address, formatted as street number and name, city, and ZIP code. Useful for looking up the property on a map or in county records.",
+      "source": "Arlington Open Data — Real Estate Property API",
+      "example": "3715 1st Rd S, Arlington VA 22204"
+    },
+    {
+      "field": "neighborhood",
+      "label": "Civic Association / Neighborhood",
+      "description": "The civic association area the parcel falls within. Arlington uses civic associations as its primary neighborhood unit.",
+      "source": "Arlington County GIS — Civic Association Polygons",
+      "example": "Alcova Heights"
+    },
+    {
+      "field": "zoning_district",
+      "label": "Zoning District",
+      "description": "The official zoning code assigned to this parcel. Determines what can be built by-right (without special permits). Residential districts include R-5, R-6, R-8, R-10, R2-7, R15-30T, etc.",
+      "source": "Arlington County GIS — Zoning Polygons",
+      "example": "R-6"
+    },
+    {
+      "field": "is_split_zoned",
+      "label": "Split Zoning?",
+      "description": "True if the parcel straddles two or more zoning districts. Analysis uses the primary (centroid) zone; results should be treated with extra caution for split-zoned parcels.",
+      "source": "Calculated from spatial join",
+      "example": "False"
+    },
+    {
+      "field": "lot_area_sf",
+      "label": "Lot Area (sq ft)",
+      "description": "The total area of the parcel in square feet, calculated from the GIS parcel boundary. This is the authoritative geometric area, which may differ slightly from the county's recorded lot size.",
+      "source": "Calculated from GIS parcel geometry (EPSG:2283)",
+      "example": "6000"
+    },
+    {
+      "field": "lot_width_ft",
+      "label": "Lot Width (ft)",
+      "description": "The estimated width of the parcel in feet, calculated using the minimum bounding rectangle of the parcel shape. For irregular lots this is an approximation.",
+      "source": "Calculated from GIS parcel geometry",
+      "example": "60"
+    },
+    {
+      "field": "is_conforming",
+      "label": "Meets Zoning Minimums?",
+      "description": "True if the lot meets the minimum area and width requirements for its zoning district. Non-conforming lots may have limited by-right development options.",
+      "source": "Calculated from lot metrics vs. zoning rules",
+      "example": "True"
+    },
+    {
+      "field": "year_built",
+      "label": "Year Built",
+      "description": "The year the current structure was built, according to county property records. Blank for vacant parcels.",
+      "source": "Arlington Open Data — Real Estate Property API",
+      "example": "1952"
+    },
+    {
+      "field": "property_type",
+      "label": "Property Type",
+      "description": "The county's classification of the existing use of the property (e.g. Single Family Detached, Townhouse, Vacant Residential).",
+      "source": "Arlington Open Data — Real Estate Property API",
+      "example": "511-Single Family Detached"
+    },
+    {
+      "field": "current_gfa_sf",
+      "label": "Current Building Size (sq ft)",
+      "description": "The gross floor area of the building currently on the parcel, in square feet, from county records. This is total finished floor area across all stories. Blank for vacant parcels.",
+      "source": "Arlington Open Data — Real Estate Property API",
+      "example": "2400"
+    },
+    {
+      "field": "current_stories",
+      "label": "Current Stories",
+      "description": "Number of stories in the existing building. Used to estimate the building footprint when combined with gross floor area.",
+      "source": "Arlington Open Data — Real Estate Property API",
+      "example": "2"
+    },
+    {
+      "field": "land_value",
+      "label": "Assessed Land Value ($)",
+      "description": "The county's most recent assessed value of the land only (not the building). Used as a key input to the valuation estimates.",
+      "source": "Arlington Open Data — Real Estate Assessment API (2025–2026)",
+      "example": "475700"
+    },
+    {
+      "field": "improvement_value",
+      "label": "Assessed Building Value ($)",
+      "description": "The county's most recent assessed value of the building (improvements) on the parcel. A low or zero improvement value often indicates a vacant lot or a teardown candidate.",
+      "source": "Arlington Open Data — Real Estate Assessment API (2025–2026)",
+      "example": "312400"
+    },
+    {
+      "field": "max_footprint_sf",
+      "label": "Max Building Footprint Allowed (sq ft)",
+      "description": "The largest building footprint (ground-floor area) allowed by zoning rules for this parcel, in square feet. Determined by the zoning district's lot coverage and footprint percentage limits.",
+      "source": "Calculated from lot area × zoning district standards",
+      "example": "1800"
+    },
+    {
+      "field": "max_gfa_sf",
+      "label": "Max Buildable Floor Area (sq ft)",
+      "description": "An estimate of the maximum total floor area that could be built on this parcel by-right, in square feet. Calculated as max footprint × 2.5 stories (the typical assumption for 35-ft height limit residential districts). This is an estimate — actual buildable area depends on setbacks and design.",
+      "source": "Calculated: max_footprint_sf × 2.5 stories",
+      "example": "4500"
+    },
+    {
+      "field": "max_height_ft",
+      "label": "Max Height Allowed (ft)",
+      "description": "The maximum building height permitted by zoning, in feet.",
+      "source": "Arlington County Zoning Ordinance — residential district standards",
+      "example": "35"
+    },
+    {
+      "field": "max_dwelling_units",
+      "label": "Max Dwelling Units Allowed",
+      "description": "The maximum number of dwelling units (homes) that can be built on this parcel by-right. Most single-family residential parcels allow 1 unit.",
+      "source": "Calculated from zoning district standards",
+      "example": "1"
+    },
+    {
+      "field": "available_gfa_sf",
+      "label": "Unused Floor Area Capacity (sq ft)",
+      "description": "How much additional floor area could be built on this parcel before reaching the zoning maximum — in square feet. Calculated as max buildable GFA minus current building GFA. Negative values mean the existing building exceeds what current zoning would allow (grandfathered / legal nonconforming).",
+      "source": "Calculated: max_gfa_sf − current_gfa_sf",
+      "example": "2100"
+    },
+    {
+      "field": "gfa_utilization_pct",
+      "label": "How Built-Out Is This Parcel? (%)",
+      "description": "What percentage of the maximum allowed floor area is already built. 0% means vacant; 100% means fully built to the zoning limit; over 100% means the existing building exceeds current zoning (grandfathered).",
+      "source": "Calculated: current_gfa_sf ÷ max_gfa_sf × 100",
+      "example": "53.3"
+    },
+    {
+      "field": "development_status",
+      "label": "Development Status",
+      "description": "A simple classification of how developed this parcel is relative to its zoning potential. 'vacant' = no building; 'underdeveloped' = built to less than 80% of zoning limit; 'near-capacity' = built to 80–100% of limit; 'overdeveloped' = existing building exceeds current zoning limit (grandfathered).",
+      "source": "Derived from gfa_utilization_pct and is_vacant",
+      "example": "underdeveloped"
+    },
+    {
+      "field": "est_value_low",
+      "label": "Estimated Development Value — Low ($)",
+      "description": "The low end of the estimated market value of this parcel's unused development capacity, in dollars. Uses the most conservative assumptions across four valuation methods. This is an estimate for policy analysis, NOT a property appraisal.",
+      "source": "Calculated using land residual, assessment ratio, price-per-SF, and price-per-unit methods",
+      "example": "150000"
+    },
+    {
+      "field": "est_value_high",
+      "label": "Estimated Development Value — High ($)",
+      "description": "The high end of the estimated market value of this parcel's unused development capacity, in dollars. Uses the most optimistic assumptions across applicable valuation methods.",
+      "source": "Calculated using land residual, assessment ratio, price-per-SF, and price-per-unit methods",
+      "example": "402500"
+    },
+    {
+      "field": "valuation_confidence",
+      "label": "Valuation Confidence",
+      "description": "How reliable the valuation estimate is. 'high' = 3 or more methods agree and data quality is good; 'medium' = 2 methods applicable; 'low' = only 1 method; 'not_applicable' = parcel has no unused development capacity to value (vacant data, overdeveloped, or non-residential).",
+      "source": "Derived from number of applicable valuation methods and data quality thresholds",
+      "example": "high"
+    }
+  ]
+}

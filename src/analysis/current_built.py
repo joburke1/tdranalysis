@@ -67,7 +67,10 @@ class CurrentBuiltResult:
     """Estimated building footprint (gross_floor_area / stories)"""
 
     has_building: bool = False
-    """Whether a building exists on the parcel (gross floor area > 0)"""
+    """Whether a building exists on the parcel"""
+
+    gfa_source: Optional[str] = None
+    """Source of the GFA figure: 'property_api', 'estimated_from_improvement_value', or 'not_available'"""
 
     # Assessment values
     improvement_value: Optional[float] = None
@@ -147,9 +150,14 @@ class CurrentBuiltResult:
         return "\n".join(lines)
 
 
+_IMPROVEMENT_VALUE_THRESHOLD = 5_000.0
+"""Minimum assessed improvement value (dollars) to infer a building exists."""
+
+
 def analyze_current_built(
     parcel_row: pd.Series,
     parcel_id_column: str = "RPC",
+    improvement_value_per_sf: float = 185.0,
 ) -> CurrentBuiltResult:
     """
     Analyze what is currently built on a single parcel.
@@ -157,9 +165,20 @@ def analyze_current_built(
     Expects a row from an enriched GeoDataFrame that has been through
     the processor pipeline (property and assessment data joined).
 
+    GFA source priority:
+      1. ``grossFloorAreaSquareFeetQty`` from the property API (when > 0)
+      2. Estimated from ``improvementValueAmt`` ÷ ``improvement_value_per_sf``
+         when the property API does not report floor area (typical for
+         single-family residential in Arlington's dataset)
+      3. Not available (``has_building = False``)
+
     Args:
         parcel_row: Series from an enriched GeoDataFrame
         parcel_id_column: Name of the parcel ID column
+        improvement_value_per_sf: Assessed improvement value per square foot
+            used to estimate GFA when the property API is silent. Default 185
+            reflects typical Arlington residential assessments; calibrate from
+            local sales data before use in policy analysis.
 
     Returns:
         CurrentBuiltResult summarizing existing development
@@ -169,22 +188,27 @@ def analyze_current_built(
     # Parcel ID
     result.parcel_id = _get_value(parcel_row, parcel_id_column)
 
-    # Check if property data was joined
+    # Read all source fields up front so assessment values are available
+    # even when the property join missed this parcel entirely.
     gfa = _get_numeric(parcel_row, "grossFloorAreaSquareFeetQty")
     stories = _get_numeric(parcel_row, "storyHeightCnt")
     year_built = _get_numeric(parcel_row, "propertyYearBuilt")
     units = _get_numeric(parcel_row, "numberOfUnitsCnt")
+    improvement_value = _get_numeric(parcel_row, "improvementValueAmt")
+    land_value = _get_numeric(parcel_row, "landValueAmt")
+    total_value = _get_numeric(parcel_row, "totalValueAmt")
 
-    # If none of the property fields are present, data wasn't joined
-    if gfa is None and stories is None and year_built is None:
+    has_property_data = not (gfa is None and stories is None and year_built is None)
+    has_assessment_data = improvement_value is not None or land_value is not None
+
+    if not has_property_data and not has_assessment_data:
         result.data_available = False
-        result.notes.append("No property data joined to this parcel")
+        result.notes.append("No property or assessment data joined to this parcel")
         return result
 
     result.data_available = True
 
-    # Building characteristics
-    result.gross_floor_area_sf = gfa
+    # Building characteristics from property API
     result.story_count = stories
     result.year_built = int(year_built) if year_built is not None else None
     result.dwelling_units = int(units) if units is not None else None
@@ -196,29 +220,41 @@ def analyze_current_built(
     result.is_mixed_use = _get_bool(parcel_row, "mixedUseInd")
 
     # Assessment values
-    result.improvement_value = _get_numeric(parcel_row, "improvementValueAmt")
-    result.land_value = _get_numeric(parcel_row, "landValueAmt")
-    result.total_assessed_value = _get_numeric(parcel_row, "totalValueAmt")
+    result.improvement_value = improvement_value
+    result.land_value = land_value
+    result.total_assessed_value = total_value
 
-    # Derived: has_building
-    result.has_building = gfa is not None and gfa > 0
+    # GFA: prefer property API; fall back to improvement-value estimate.
+    # Arlington's property API does not report GFA for single-family
+    # residential, so the fallback is essential for that property class.
+    if gfa is not None and gfa > 0:
+        result.gross_floor_area_sf = gfa
+        result.has_building = True
+        result.gfa_source = "property_api"
+    elif improvement_value is not None and improvement_value > _IMPROVEMENT_VALUE_THRESHOLD:
+        estimated_gfa = round(improvement_value / improvement_value_per_sf)
+        result.gross_floor_area_sf = float(estimated_gfa)
+        result.has_building = True
+        result.gfa_source = "estimated_from_improvement_value"
+        result.notes.append(
+            f"GFA estimated from assessed improvement value "
+            f"(${improvement_value:,.0f} ÷ ${improvement_value_per_sf:.0f}/SF "
+            f"= {estimated_gfa:,} SF)"
+        )
+    else:
+        result.has_building = False
+        result.gfa_source = "not_available"
 
     # Derived: estimated footprint
-    if gfa is not None and gfa > 0 and stories is not None and stories > 0:
-        result.estimated_footprint_sf = gfa / stories
-    elif gfa is not None and gfa > 0:
-        # If stories is missing, assume single story as conservative estimate
-        result.estimated_footprint_sf = gfa
-        result.notes.append(
-            "Story count unavailable; estimated footprint assumes single story"
-        )
-
-    # Data quality warnings
-    if gfa is not None and gfa == 0 and result.improvement_value and result.improvement_value > 0:
-        result.notes.append(
-            "Gross floor area is 0 but improvement value is positive; "
-            "building data may be incomplete"
-        )
+    effective_gfa = result.gross_floor_area_sf
+    if effective_gfa and effective_gfa > 0:
+        if stories is not None and stories > 0:
+            result.estimated_footprint_sf = effective_gfa / stories
+        else:
+            result.estimated_footprint_sf = effective_gfa
+            result.notes.append(
+                "Story count unavailable; estimated footprint assumes single story"
+            )
 
     return result
 
@@ -253,6 +289,7 @@ def analyze_current_built_by_id(
 def analyze_current_built_geodataframe(
     gdf: gpd.GeoDataFrame,
     parcel_id_column: Optional[str] = None,
+    improvement_value_per_sf: float = 185.0,
 ) -> gpd.GeoDataFrame:
     """
     Analyze current built area for all parcels in a GeoDataFrame.
@@ -263,6 +300,8 @@ def analyze_current_built_geodataframe(
     Args:
         gdf: Enriched GeoDataFrame with property data joined
         parcel_id_column: Optional column with parcel IDs
+        improvement_value_per_sf: $/SF used to estimate GFA from improvement
+            value when the property API does not report floor area.
 
     Returns:
         GeoDataFrame with added current-built analysis columns
@@ -272,6 +311,7 @@ def analyze_current_built_geodataframe(
         result = analyze_current_built(
             row,
             parcel_id_column=parcel_id_column or "RPC",
+            improvement_value_per_sf=improvement_value_per_sf,
         )
         records.append({
             "current_gfa_sf": result.gross_floor_area_sf,
