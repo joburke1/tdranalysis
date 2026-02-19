@@ -3,3 +3,28 @@ parcel_id,spot_check_result,spot_check_notes,spot_check_date
 23032031,confirmed,Vacant buildable lot confirmed at 3821 9th St S,2026-02-19
 23031036,confirmed,Vacant likely buildable lot confirmed on S Oakland St,2026-02-19
 23030016,confirmed,Vacant likely buildable lot confirmed on S Lincoln St,2026-02-19
+23003002,excluded,Commercial building (4300 Arlington Blvd) confirmed excluded from analysis; non-residential use in residential zone,2026-02-19
+23015001,confirmed,Developed single-family lot confirmed for inclusion; split-zone flag does not affect analysis,2026-02-19
+23033028,confirmed,Developed single-family lot confirmed for inclusion; split-zone flag does not affect analysis,2026-02-19
+23029033,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23039156,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23039158,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23029028,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23031042,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23003048,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23041012,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23029030,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23039159,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23039160,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23029032,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23017022,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23017021,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23032077,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23033286,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23033287,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23033101,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23033100,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23019036,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23019037,excluded,Building confirmed present but GFA not available from property API; cannot compute available rights,2026-02-19
+23029012,confirmed,Large single-family residential lot confirmed for inclusion; lot area outlier flag is not a data quality issue,2026-02-19
+23019008,confirmed,Large single-family residential lot confirmed for inclusion; lot area outlier flag is not a data quality issue,2026-02-19

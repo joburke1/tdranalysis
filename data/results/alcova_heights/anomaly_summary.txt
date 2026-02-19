@@ -1,0 +1,39 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 295
+
+Quality Tier Summary:
+  auto-exclude              4  (1.4%)
+  flag-for-review           3  (1.0%)
+  clean                   288  (97.6%)
+
+Most common anomaly types:
+  statistical_outlier                                        4 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+  dwelling_unit_inconsistency                                1 parcel(s)
+  lot_area_marginal                                          1 parcel(s)
+
+Auto-Exclude Parcels (4):
+  23027016      714 S Monroe St, Arlington VA 22204            nonresidential_property_type:215-Gen Comm - other
+  23029011      3414 8Th St S, Arlington VA 22204              dwelling_unit_inconsistency:max_du=0_but_available_gfa=1362sf
+  23041011      S Lincoln St, Arlington VA 22204               nonresidential_property_type:310-Apartment Parking|lot_area_marginal:1946sf<2000sf_threshold|statistical_outlier:available_gfa_sf_z=-4.0_low_value=-3346
+  23040012      3504 9Th St S, Arlington VA 22204              nonresidential_property_type:200-GenCom VacLand-no siteplan
+
+Flag-for-Review Parcels (3):
+  23029007      815 S Lincoln St, Arlington VA 22204           statistical_outlier:available_gfa_sf_z=-2.7_low_value=123
+  23031041      809 S Oakland St, Arlington VA 22204           statistical_outlier:available_gfa_sf_z=-3.3_low_value=-750
+  23032023      834 S Oakland St, Arlington VA 22204           statistical_outlier:available_gfa_sf_z=-2.5_low_value=427
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    4  total_avail_gfa=       2,678 sf  agg_value_high=$       650,080
+  flag-for-review       parcels=    3  total_avail_gfa=         550 sf  agg_value_high=$       700,000
+  clean                 parcels=  288  total_avail_gfa=   1,176,420 sf  agg_value_high=$   237,804,558
+
+  Clean-tier GFA capacity as % of full analysis: 99.7%
+  Clean-tier value as % of full analysis:        99.4%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

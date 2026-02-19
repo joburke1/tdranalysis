@@ -248,7 +248,30 @@ def _run_analysis(
     #  because it includes both buildable lots AND alley/strip remnants.)
     ALWAYS_EXCLUDED_CLASSES = {"201", "210"}
 
+    # Zoning districts in scope for the analysis.
+    # Limited to pure one-family (and restricted two-family) districts where
+    # by-right development standards are straightforward and unambiguous.
+    # Excluded: R2-7 (two-family/townhouse with sub-minimum lots),
+    #           R15-30T (townhouse district with small parcels along arterials),
+    #           R-10T (townhouse overlay complicates by-right standards).
+    INCLUDED_ZONES = {"R-5", "R-6", "R-8", "R-10", "R-20"}
+
     residential = parcels[parcels.get("is_residential_zoning", False) == True].copy()  # noqa: E712
+
+    # Filter to in-scope zoning districts.
+    n_excluded_zone = 0
+    if "zoning_district" in residential.columns:
+        before = len(residential)
+        residential = residential[
+            residential["zoning_district"].isin(INCLUDED_ZONES)
+        ].copy()
+        n_excluded_zone = before - len(residential)
+        if n_excluded_zone:
+            logger.info(
+                f"[{label}] Excluded {n_excluded_zone:,} parcel(s) in out-of-scope "
+                f"zoning districts (R2-7, R15-30T, R-10T); "
+                f"analysis limited to {', '.join(sorted(INCLUDED_ZONES))}"
+            )
 
     # Exclude commercial/parking classes unconditionally.
     n_excluded_class = 0
@@ -312,6 +335,33 @@ def _run_analysis(
                 f"[{label}] Excluded {n_excluded_no_join:,} parcel(s) with no property API record "
                 f"(likely alley remnants or administrative parcels)"
             )
+
+    # Exclude parcels explicitly marked "excluded" in the persistent spot-checks
+    # file.  This allows analysts to record human review decisions (e.g. non-
+    # residential use, missing data) and have them automatically applied on
+    # every subsequent run without changing pipeline logic.
+    import pandas as _pd
+    _sc_path = (
+        _PROJECT_ROOT / "data" / "results"
+        / label.replace(" ", "_").lower()
+        / "spot_checks.csv"
+    )
+    if _sc_path.exists():
+        _sc = _pd.read_csv(_sc_path, dtype=str)
+        _excluded_ids = set(
+            _sc.loc[_sc["spot_check_result"].str.lower() == "excluded", "parcel_id"]
+        )
+        if _excluded_ids and "RPCMSTR" in residential.columns:
+            before = len(residential)
+            residential = residential[
+                ~residential["RPCMSTR"].astype(str).isin(_excluded_ids)
+            ].copy()
+            n_excluded_spot_check = before - len(residential)
+            if n_excluded_spot_check:
+                logger.info(
+                    f"[{label}] Excluded {n_excluded_spot_check:,} parcel(s) "
+                    f"per spot-check exclusion records"
+                )
 
     total = len(parcels)
     res_count = len(residential)
