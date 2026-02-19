@@ -843,6 +843,7 @@ def _intermediate_fields(
         "current_footprint_sf": current.estimated_footprint_sf,
         "year_built": current.year_built,
         "has_building": current.has_building,
+        "gfa_source": current.gfa_source,
         # Available rights
         "available_footprint_sf": rights.available_footprint_sf,
         "available_dwelling_units": rights.available_dwelling_units,
@@ -894,6 +895,7 @@ def _empty_valuation_record() -> dict:
         "current_footprint_sf": None,
         "year_built": None,
         "has_building": None,
+        "gfa_source": None,
         "available_footprint_sf": None,
         "available_dwelling_units": None,
         "gfa_utilization_pct": None,

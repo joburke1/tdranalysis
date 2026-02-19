@@ -241,7 +241,78 @@ def _run_analysis(
     """Run the full 4-stage analysis pipeline on a parcel GeoDataFrame."""
     from src.analysis import estimate_valuation_geodataframe
 
+    # Property class codes to always exclude from residential analysis.
+    # 201 = "GenCom VacLand-siteplan": commercial vacant land
+    # 210 = "General Comm Parking": commercial parking lots
+    # (510 = "Res - Vacant (SF & Twnhse)" is handled separately below
+    #  because it includes both buildable lots AND alley/strip remnants.)
+    ALWAYS_EXCLUDED_CLASSES = {"201", "210"}
+
     residential = parcels[parcels.get("is_residential_zoning", False) == True].copy()  # noqa: E712
+
+    # Exclude commercial/parking classes unconditionally.
+    n_excluded_class = 0
+    if "propertyClassTypeCode" in residential.columns:
+        before = len(residential)
+        excluded = residential["propertyClassTypeCode"].astype(str).str[:3].isin(ALWAYS_EXCLUDED_CLASSES)
+        residential = residential[~excluded].copy()
+        n_excluded_class = before - len(residential)
+        if n_excluded_class:
+            logger.info(f"[{label}] Excluded {n_excluded_class:,} parcel(s) with non-residential property class (201/210)")
+
+    # For class 510 ("Res - Vacant"), distinguish buildable lots from
+    # alley remnants / strips by parcel size:
+    #   GIS area < 80% of zoning min_lot_area_sf  →  remnant (exclude)
+    #   GIS area >= 80% of zoning min_lot_area_sf →  potentially buildable (keep)
+    n_excluded_510_remnant = 0
+    if "propertyClassTypeCode" in residential.columns:
+        from src.rules.engine import ZoningRulesEngine
+        _rules = ZoningRulesEngine(config_dir)
+
+        def _is_510_remnant(row) -> bool:
+            if str(row.get("propertyClassTypeCode", ""))[:3] != "510":
+                return False
+            district = row.get("zoning_district")
+            if not district:
+                return True  # No zoning info; treat conservatively as remnant
+            standards = _rules.get_standards(str(district))
+            if standards is None or standards.min_lot_area_sf <= 0:
+                return False  # Unknown district; keep it
+            return (row.geometry.area if row.geometry else 0) < 0.80 * standards.min_lot_area_sf
+
+        before = len(residential)
+        is_remnant = residential.apply(_is_510_remnant, axis=1)
+        n_excluded_510_remnant = int(is_remnant.sum())
+        residential = residential[~is_remnant].copy()
+        if n_excluded_510_remnant:
+            logger.info(
+                f"[{label}] Excluded {n_excluded_510_remnant:,} vacant-class (510) parcel(s) "
+                f"below 80% of minimum lot size (likely alley/strip remnants)"
+            )
+
+    # Exclude parcels with no property API record at all.
+    # These parcels have no property class, address, or building data from the
+    # property API — they are likely alley remnants, strips, or administrative
+    # parcels that were not registered in the county property database.
+    # Limitation: a small number of legitimately-developable parcels with
+    # incomplete property API coverage may also be excluded by this rule.
+    n_excluded_no_join = 0
+    property_join_col = "propertyStreetNbrNameText"
+    property_class_col = "propertyClassTypeCode"
+    if property_join_col in residential.columns and property_class_col in residential.columns:
+        before = len(residential)
+        no_join = (
+            residential[property_join_col].isna()
+            & residential[property_class_col].isna()
+        )
+        residential = residential[~no_join].copy()
+        n_excluded_no_join = before - len(residential)
+        if n_excluded_no_join:
+            logger.info(
+                f"[{label}] Excluded {n_excluded_no_join:,} parcel(s) with no property API record "
+                f"(likely alley remnants or administrative parcels)"
+            )
+
     total = len(parcels)
     res_count = len(residential)
 
@@ -296,10 +367,15 @@ _OUTPUT_SCHEMA = [
     ("valuation_available_gfa_sf",    "available_gfa_sf"),
     ("gfa_utilization_pct",           "gfa_utilization_pct"),
     ("development_status",            "development_status"),   # derived below
+    ("gfa_source",                    "gfa_source"),
     # Valuation
     ("estimated_value_low",           "est_value_low"),
     ("estimated_value_high",          "est_value_high"),
     ("valuation_confidence",          "valuation_confidence"),
+    # Spot checks (merged from persistent spot_checks.csv)
+    ("spot_check_result",             "spot_check_result"),
+    ("spot_check_notes",              "spot_check_notes"),
+    ("spot_check_date",               "spot_check_date"),
 ]
 
 
@@ -315,6 +391,8 @@ def _add_development_status(gdf: "gpd.GeoDataFrame") -> "gpd.GeoDataFrame":
       unknown          — insufficient data to determine
     """
     def _classify(row) -> str:
+        if row.get("gfa_source") == "building_detected_no_gfa_data":
+            return "built-no-data"
         if row.get("is_vacant") is True:
             return "vacant"
         if row.get("is_overdeveloped") is True:
@@ -383,6 +461,33 @@ def _save_data_dictionary(output_dir: Path, config_dir: Path, label: str) -> Non
     logger.info(f"  Saved data dict:  {out_path}")
 
 
+def _load_spot_checks(output_dir: Path) -> "pd.DataFrame":
+    """
+    Load the persistent spot-checks file for a neighborhood.
+
+    The file (spot_checks.csv) lives alongside the analysis output and is
+    NEVER overwritten by the analysis pipeline — only read.  Analysts add
+    rows manually or via tooling to record parcel-level verifications.
+
+    Expected columns: parcel_id, spot_check_result, spot_check_notes, spot_check_date
+
+    Returns an empty DataFrame (with those columns) if the file does not exist.
+    """
+    import pandas as pd
+
+    sc_cols = ["parcel_id", "spot_check_result", "spot_check_notes", "spot_check_date"]
+    path = output_dir / "spot_checks.csv"
+    if not path.exists():
+        return pd.DataFrame(columns=sc_cols)
+
+    df = pd.read_csv(path, dtype=str)
+    # Ensure all expected columns are present
+    for col in sc_cols:
+        if col not in df.columns:
+            df[col] = None
+    return df[sc_cols]
+
+
 def _save_results(
     result_gdf: "gpd.GeoDataFrame",
     output_dir: Path,
@@ -398,6 +503,26 @@ def _save_results(
 
     # --- Derive development_status before curation ---
     result_gdf = _add_development_status(result_gdf)
+
+    # --- Merge persistent spot-check records ---
+    spot_checks = _load_spot_checks(output_dir)
+    if not spot_checks.empty:
+        spot_checks["parcel_id"] = spot_checks["parcel_id"].astype(str)
+        # Identify the raw parcel-ID column before renaming
+        raw_id_col = next(
+            (raw for raw, out in _OUTPUT_SCHEMA if out == "parcel_id"),
+            "RPCMSTR",
+        )
+        if raw_id_col in result_gdf.columns:
+            result_gdf = result_gdf.copy()
+            result_gdf[raw_id_col] = result_gdf[raw_id_col].astype(str)
+            result_gdf = result_gdf.merge(
+                spot_checks.rename(columns={"parcel_id": raw_id_col}),
+                on=raw_id_col,
+                how="left",
+            )
+            n_matched = result_gdf["spot_check_result"].notna().sum()
+            logger.info(f"  Merged {n_matched} spot-check record(s) into output")
 
     # --- Apply output schema ---
     curated = _curate_output(result_gdf)
@@ -500,6 +625,12 @@ def _build_summary(result_gdf: "gpd.GeoDataFrame", label: str) -> str:
     lines.append(
         "DISCLAIMER: Valuation estimates are for policy analysis only,\n"
         "not property appraisals. Calibrate market parameters before use."
+    )
+    lines.append(
+        "\nLIMITATION: Parcels with no record in the Arlington property API\n"
+        "(typically alley remnants, strips, or administrative parcels) are\n"
+        "excluded from this analysis. A small number of legitimately\n"
+        "developable parcels with incomplete API coverage may also be excluded."
     )
 
     return "\n".join(lines)

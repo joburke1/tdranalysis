@@ -148,9 +148,16 @@
     {
       "field": "development_status",
       "label": "Development Status",
-      "description": "A simple classification of how developed this parcel is relative to its zoning potential. 'vacant' = no building; 'underdeveloped' = built to less than 80% of zoning limit; 'near-capacity' = built to 80–100% of limit; 'overdeveloped' = existing building exceeds current zoning limit (grandfathered).",
-      "source": "Derived from gfa_utilization_pct and is_vacant",
+      "description": "A simple classification of how developed this parcel is relative to its zoning potential. 'vacant' = no building; 'underdeveloped' = built to less than 80% of zoning limit; 'near-capacity' = built to 80–100% of limit; 'overdeveloped' = existing building exceeds current zoning limit (grandfathered); 'built-no-data' = a building exists (confirmed by year-built record) but floor area cannot be estimated because the assessment API has no record for this parcel — excluded from available-rights and valuation calculations.",
+      "source": "Derived from gfa_utilization_pct, is_vacant, and gfa_source",
       "example": "underdeveloped"
+    },
+    {
+      "field": "gfa_source",
+      "label": "Building Size Data Source",
+      "description": "How the current building floor area was determined. 'property_api' = reported directly by the county property records (typical for commercial); 'estimated_from_improvement_value' = estimated from the county's assessed building value divided by a $/SF rate (typical for single-family residential); 'building_detected_no_gfa_data' = a building is confirmed by year-built records but floor area cannot be estimated because the assessment API has no data for this parcel (data quality issue); 'not_available' = no building data found.",
+      "source": "Derived from Arlington Open Data APIs during analysis",
+      "example": "estimated_from_improvement_value"
     },
     {
       "field": "est_value_low",
@@ -172,6 +179,27 @@
       "description": "How reliable the valuation estimate is. 'high' = 3 or more methods agree and data quality is good; 'medium' = 2 methods applicable; 'low' = only 1 method; 'not_applicable' = parcel has no unused development capacity to value (vacant data, overdeveloped, or non-residential).",
       "source": "Derived from number of applicable valuation methods and data quality thresholds",
       "example": "high"
+    },
+    {
+      "field": "spot_check_result",
+      "label": "Spot Check Result",
+      "description": "The outcome of a manual verification of this parcel's classification. Common values: 'confirmed' = analysis matches ground truth; 'incorrect' = analysis is wrong; 'vacant - confirmed buildable' = empty lot verified as developable. Blank if the parcel has not been spot-checked.",
+      "source": "Manual verification recorded in spot_checks.csv",
+      "example": "confirmed"
+    },
+    {
+      "field": "spot_check_notes",
+      "label": "Spot Check Notes",
+      "description": "Free-text notes from the manual verification of this parcel. May include observations about the property, data discrepancies, or recommended follow-up actions.",
+      "source": "Manual verification recorded in spot_checks.csv",
+      "example": "Large home and outbuilding visible on satellite imagery"
+    },
+    {
+      "field": "spot_check_date",
+      "label": "Spot Check Date",
+      "description": "The date the manual verification was performed (YYYY-MM-DD).",
+      "source": "Manual verification recorded in spot_checks.csv",
+      "example": "2026-02-19"
     }
   ]
 }

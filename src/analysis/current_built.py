@@ -241,6 +241,18 @@ def analyze_current_built(
             f"(${improvement_value:,.0f} ÷ ${improvement_value_per_sf:.0f}/SF "
             f"= {estimated_gfa:,} SF)"
         )
+    elif year_built is not None and year_built > 0:
+        # Building confirmed by year-built record but no GFA can be estimated:
+        # the assessment API returned no improvement value for this parcel.
+        # Mark the building as present but exclude from available-rights and
+        # valuation calculations — the results would be unreliable.
+        result.has_building = True
+        result.gfa_source = "building_detected_no_gfa_data"
+        result.notes.append(
+            f"Building confirmed (year built {int(year_built)}) but GFA cannot "
+            "be estimated: assessment API returned no improvement value for this "
+            "parcel. Excluded from available-rights and valuation calculations."
+        )
     else:
         result.has_building = False
         result.gfa_source = "not_available"

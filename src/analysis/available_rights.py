@@ -271,6 +271,21 @@ def calculate_available_rights(
         )
 
     # -- Current built --
+    # If a building is confirmed via year_built but GFA cannot be estimated
+    # (assessment API gap), treat the parcel as having a building but mark
+    # it non-analyzable to avoid overstating available capacity.
+    if current.has_building and current.gross_floor_area_sf is None:
+        result.is_analyzable = False
+        result.is_vacant = False
+        result.current_dwelling_units = current.dwelling_units
+        for note in current.notes:
+            result.notes.append(note)
+        result.analysis_errors.append(
+            "Building confirmed but GFA not available; "
+            "available-rights calculation skipped to avoid overstating capacity"
+        )
+        return result
+
     result.current_gfa_sf = current.gross_floor_area_sf or 0.0
     result.current_estimated_footprint_sf = current.estimated_footprint_sf
     result.current_dwelling_units = current.dwelling_units

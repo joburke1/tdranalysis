@@ -1,37 +1,42 @@
 Analysis Summary: Alcova Heights
-Generated: 2026-02-18 22:43
+Generated: 2026-02-19 10:03
 ============================================================
 
-Total residential parcels analyzed: 608
-Conforming parcels: 170 (28.0%)
+Total residential parcels analyzed: 403
+Conforming parcels: 123 (30.5%)
 
 Zoning district breakdown:
-  R-6             430 parcels
-  R2-7             95 parcels
-  R-5              60 parcels
-  R15-30T          23 parcels
+  R-6             274 parcels
+  R2-7             71 parcels
+  R-5              42 parcels
+  R15-30T          16 parcels
 
 Development status:
-  underdeveloped      479 parcels
-  vacant               98 parcels
-  near-capacity        18 parcels
-  overdeveloped        13 parcels
+  underdeveloped      347 parcels
+  built-no-data        32 parcels
+  near-capacity        15 parcels
+  overdeveloped         5 parcels
+  vacant                4 parcels
 
 Unused GFA Capacity (parcels with positive available rights):
-  Parcels with capacity: 593
-  Total available SF:       2,010,355 sf
-  Median per parcel:            3,685 sf
+  Parcels with capacity: 364
+  Total available SF:       1,307,646 sf
+  Median per parcel:            3,905 sf
 
 Valuation (parcels with positive available rights):
-  Parcels valued:            593
-  Aggregate low:      $    76,676,135
-  Aggregate high:     $   415,178,718
+  Parcels valued:            364
+  Aggregate low:      $    51,972,106
+  Aggregate high:     $   271,396,784
   Confidence levels:
-    high                497
-    medium               84
-    not_applicable       15
-    low                  12
+    high                359
+    not_applicable       39
+    medium                5
 
 ============================================================
 DISCLAIMER: Valuation estimates are for policy analysis only,
 not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.
