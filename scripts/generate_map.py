@@ -162,7 +162,7 @@ def generate_map_html(geojson_data: dict) -> str:
     <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TDR Analysis: NEIGHBORHOOD_NAME</title>
+    <title>Transfer of Development Rights (TDR) Analysis: NEIGHBORHOOD_NAME</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
           integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
           crossorigin="">
@@ -175,14 +175,14 @@ def generate_map_html(geojson_data: dict) -> str:
 
     #sidebar {
         width: 380px; min-width: 380px; background: #1a1a2e; color: #e0e0e0;
-        overflow-y: auto; padding: 20px; font-size: 13px; line-height: 1.5;
+        overflow-y: auto; padding: 20px; font-size: 14px; line-height: 1.5;
     }
-    #sidebar h1 { font-size: 18px; color: #fff; margin-bottom: 4px; }
+    #sidebar h1 { font-size: 22px; color: #fff; margin-bottom: 4px; }
     #sidebar h2 { font-size: 14px; color: #8ecae6; margin: 16px 0 8px; border-bottom: 1px solid #333; padding-bottom: 4px; }
     #sidebar .subtitle { color: #999; font-size: 12px; margin-bottom: 16px; }
 
     .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-    .stat-box { background: #16213e; border-radius: 6px; padding: 10px; }
+    .stat-box { background: #16213e; border-radius: 6px; padding: 12px; }
     .stat-box .label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
     .stat-box .value { font-size: 18px; font-weight: 700; color: #fff; margin-top: 2px; }
     .stat-box .value.small { font-size: 14px; }
@@ -196,6 +196,21 @@ def generate_map_html(geojson_data: dict) -> str:
     .legend { margin-top: 12px; }
     .legend-item { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 12px; }
     .legend-swatch { width: 20px; height: 14px; border-radius: 2px; border: 1px solid #555; flex-shrink: 0; }
+
+    #selected-parcel {
+        background: #16213e; border: 1px solid #8ecae6; border-radius: 6px;
+        padding: 12px; margin-bottom: 12px; display: none; position: relative;
+    }
+    #selected-parcel .sp-dismiss {
+        position: absolute; top: 6px; right: 8px; cursor: pointer;
+        color: #999; font-size: 16px; line-height: 1; background: none; border: none;
+    }
+    #selected-parcel .sp-dismiss:hover { color: #fff; }
+    #selected-parcel .sp-header { font-weight: 700; font-size: 14px; color: #fff; margin-bottom: 6px; padding-right: 20px; }
+    #selected-parcel .sp-row { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+    #selected-parcel .sp-label { color: #999; font-size: 12px; }
+    #selected-parcel .sp-value { color: #fff; font-weight: 600; font-size: 12px; }
+    #selected-parcel .sp-highlight { color: #8ecae6; font-weight: 700; }
 
     .disclaimer { margin-top: 16px; padding: 10px; background: #2a1a1a; border-left: 3px solid #e63946; border-radius: 4px; font-size: 11px; color: #ccc; }
 
@@ -211,13 +226,15 @@ def generate_map_html(geojson_data: dict) -> str:
     .parcel-tooltip .tt-row { display: flex; justify-content: space-between; gap: 12px; }
     .parcel-tooltip .tt-label { color: #666; }
     .parcel-tooltip .tt-value { font-weight: 600; text-align: right; }
-    .parcel-tooltip .tt-highlight { color: #c1121f; font-weight: 700; }
+    .parcel-tooltip .tt-highlight { color: #084594; font-weight: 700; }
     </style>
     </head>
     <body>
     <div id="sidebar">
         <h1 id="neighborhood-name"></h1>
         <div class="subtitle">Transfer of Development Rights Analysis</div>
+
+        <div id="selected-parcel"></div>
 
         <h2>Overview</h2>
         <div class="stat-grid">
@@ -236,22 +253,6 @@ def generate_map_html(geojson_data: dict) -> str:
             <div class="stat-box">
                 <div class="label">Vacant Buildable</div>
                 <div class="value" id="s-vacant"></div>
-            </div>
-        </div>
-
-        <h2>Assessment Values</h2>
-        <div class="stat-grid">
-            <div class="stat-box">
-                <div class="label">Total Land Value</div>
-                <div class="value small" id="s-land"></div>
-            </div>
-            <div class="stat-box">
-                <div class="label">Total Improvement Value</div>
-                <div class="value small" id="s-improvement"></div>
-            </div>
-            <div class="stat-box wide">
-                <div class="label">Total Assessed Value</div>
-                <div class="value" id="s-assessed"></div>
             </div>
         </div>
 
@@ -291,6 +292,22 @@ def generate_map_html(geojson_data: dict) -> str:
             </div>
         </div>
 
+        <h2>Assessment Values</h2>
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="label">Total Land Value</div>
+                <div class="value small" id="s-land"></div>
+            </div>
+            <div class="stat-box">
+                <div class="label">Total Improvement Value</div>
+                <div class="value small" id="s-improvement"></div>
+            </div>
+            <div class="stat-box wide">
+                <div class="label">Total Assessed Value</div>
+                <div class="value" id="s-assessed"></div>
+            </div>
+        </div>
+
         <h2>Zoning Districts</h2>
         <div class="breakdown" id="zoning-breakdown"></div>
 
@@ -302,11 +319,11 @@ def generate_map_html(geojson_data: dict) -> str:
 
         <h2>Legend</h2>
         <div class="legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#67000d"></div> High development potential</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#fb6a4a"></div> Moderate potential</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#fcbba1"></div> Low potential</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#4292c6"></div> Near-capacity / overdeveloped</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#08519c"></div> Overdeveloped</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#084594"></div> High development potential</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#4292c6"></div> Moderate potential</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#c6dbef"></div> Low potential</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#4292c6"></div> Near capacity</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#d94801"></div> Overdeveloped</div>
             <div class="legend-item"><div class="legend-swatch" style="background:#2d6a4f; border: 2px solid #40916c"></div> Vacant buildable</div>
             <div class="legend-item"><div class="legend-swatch" style="background:#888"></div> Excluded / no data</div>
         </div>
@@ -328,26 +345,33 @@ def generate_map_html(geojson_data: dict) -> str:
     // --- Helpers ---
     function fmt(n) { return n == null ? 'N/A' : n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
     function fmtD(n) { return n == null ? 'N/A' : '$' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+    function fmtM(n) {
+        if (n == null) return 'N/A';
+        if (Math.abs(n) >= 1e9) return '$' + (n/1e9).toFixed(1) + 'B';
+        if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+        if (Math.abs(n) >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+        return '$' + n.toFixed(0);
+    }
     function fmtPct(n) { return n == null ? 'N/A' : n.toFixed(1) + '%'; }
 
     // --- Populate sidebar ---
     document.getElementById('neighborhood-name').textContent = summary.neighborhood || 'Unknown';
-    document.title = 'TDR Analysis: ' + (summary.neighborhood || 'Unknown');
+    document.title = 'Transfer of Development Rights (TDR) Analysis: ' + (summary.neighborhood || 'Unknown');
     document.getElementById('s-total').textContent = fmt(summary.total_parcels);
     document.getElementById('s-with-capacity').textContent = fmt(summary.parcels_with_capacity);
     document.getElementById('s-pct-underdev').textContent = fmtPct(summary.pct_underdeveloped);
     document.getElementById('s-vacant').textContent = fmt(summary.vacant_count);
-    document.getElementById('s-land').textContent = fmtD(summary.total_land_value);
-    document.getElementById('s-improvement').textContent = fmtD(summary.total_improvement_value);
-    document.getElementById('s-assessed').textContent = fmtD(summary.total_assessed_value);
+    document.getElementById('s-land').textContent = fmtM(summary.total_land_value);
+    document.getElementById('s-improvement').textContent = fmtM(summary.total_improvement_value);
+    document.getElementById('s-assessed').textContent = fmtM(summary.total_assessed_value);
     document.getElementById('s-avail-gfa').textContent = fmt(summary.total_available_gfa) + ' SF';
     document.getElementById('s-median-gfa').textContent = fmt(summary.median_available_gfa) + ' SF';
     document.getElementById('s-valued').textContent = fmt(summary.parcels_with_value);
-    document.getElementById('s-val-low').textContent = fmtD(summary.total_est_low);
-    document.getElementById('s-val-high').textContent = fmtD(summary.total_est_high);
+    document.getElementById('s-val-low').textContent = fmtM(summary.total_est_low);
+    document.getElementById('s-val-high').textContent = fmtM(summary.total_est_high);
     document.getElementById('s-rate').textContent = summary.neighborhood_rate_median != null
         ? fmtD(summary.neighborhood_rate_median) + '/SF'
-        : '$185/SF (fallback)';
+        : '$185/SF (estimated \u2014 limited local data)';
     document.getElementById('s-rate-sample').textContent = fmt(summary.neighborhood_rate_sample) + ' homes';
 
     function fillBreakdown(id, obj) {
@@ -359,7 +383,13 @@ def generate_map_html(geojson_data: dict) -> str:
     }
     fillBreakdown('zoning-breakdown', summary.zoning_counts);
     fillBreakdown('status-breakdown', summary.status_counts);
-    fillBreakdown('confidence-breakdown', summary.confidence_counts);
+    // Map jargon labels to user-friendly text
+    const friendlyConfidence = {};
+    const confLabels = {'not_applicable': 'No unused capacity', 'low': 'Low', 'medium': 'Medium', 'high': 'High'};
+    for (const [k, v] of Object.entries(summary.confidence_counts)) {
+        friendlyConfidence[confLabels[k] || k] = v;
+    }
+    fillBreakdown('confidence-breakdown', friendlyConfidence);
 
     // --- Map ---
     const map = L.map('map', { zoomControl: true });
@@ -387,8 +417,8 @@ def generate_map_html(geojson_data: dict) -> str:
         // Vacant = green
         if (status === 'vacant') return '#2d6a4f';
 
-        // Overdeveloped = dark blue
-        if (status === 'overdeveloped') return '#08519c';
+        // Overdeveloped = amber/orange (warning)
+        if (status === 'overdeveloped') return '#d94801';
 
         // Near-capacity = medium blue
         if (status === 'near-capacity') return '#4292c6';
@@ -396,13 +426,12 @@ def generate_map_html(geojson_data: dict) -> str:
         // No data
         if (avail == null) return '#888';
 
-        // Red gradient for underdeveloped (more potential = darker red)
+        // Blue gradient for underdeveloped (more potential = darker blue)
         if (avail <= 0) return '#4292c6';
         const t = Math.min(avail / maxGfa, 1);
-        // Interpolate from light pink (#fcbba1) to dark red (#67000d)
-        if (t < 0.33) return '#fcbba1';
-        if (t < 0.66) return '#fb6a4a';
-        return '#67000d';
+        if (t < 0.33) return '#c6dbef';
+        if (t < 0.66) return '#4292c6';
+        return '#084594';
     }
 
     function getWeight(props) {
@@ -466,6 +495,39 @@ def generate_map_html(geojson_data: dict) -> str:
         return html;
     }
 
+    // --- Selected parcel panel ---
+    let selectedLayer = null;
+    function selectParcel(props, layer) {
+        // Reset previous selection
+        if (selectedLayer) geojsonLayer.resetStyle(selectedLayer);
+        selectedLayer = layer;
+        layer.setStyle({ weight: 3, color: '#ffd700', fillOpacity: 0.9 });
+        layer.bringToFront();
+
+        const el = document.getElementById('selected-parcel');
+        const addr = props.street_address || 'No address';
+        let html = '<button class="sp-dismiss" onclick="dismissSelection()">&times;</button>';
+        html += '<div class="sp-header">' + addr + '</div>';
+        html += '<div class="sp-row"><span class="sp-label">Parcel ID</span><span class="sp-value">' + (props.parcel_id || '') + '</span></div>';
+        html += '<div class="sp-row"><span class="sp-label">Zoning</span><span class="sp-value">' + (props.zoning_district || '') + '</span></div>';
+        html += '<div class="sp-row"><span class="sp-label">Status</span><span class="sp-value">' + (props.development_status || '') + '</span></div>';
+        if (props.available_gfa_sf != null) {
+            html += '<div class="sp-row"><span class="sp-label">Available GFA</span><span class="sp-value sp-highlight">' + fmt(Math.round(props.available_gfa_sf)) + ' SF</span></div>';
+        }
+        if (props.est_value_low != null) {
+            html += '<div class="sp-row"><span class="sp-label">Est. Value</span><span class="sp-value sp-highlight">' + fmtD(props.est_value_low) + ' \u2013 ' + fmtD(props.est_value_high) + '</span></div>';
+        }
+        el.innerHTML = html;
+        el.style.display = 'block';
+    }
+    function dismissSelection() {
+        if (selectedLayer) geojsonLayer.resetStyle(selectedLayer);
+        selectedLayer = null;
+        const el = document.getElementById('selected-parcel');
+        el.style.display = 'none';
+        el.innerHTML = '';
+    }
+
     // --- Add GeoJSON layer ---
     const geojsonLayer = L.geoJSON(geojsonData, {
         style: function(feature) {
@@ -485,18 +547,25 @@ def generate_map_html(geojson_data: dict) -> str:
             });
 
             layer.on('mouseover', function() {
-                this.setStyle({ weight: 3, color: '#fff', fillOpacity: 0.85 });
+                if (this !== selectedLayer) {
+                    this.setStyle({ weight: 3, color: '#fff', fillOpacity: 0.85 });
+                }
                 this.bringToFront();
             });
             layer.on('mouseout', function() {
-                geojsonLayer.resetStyle(this);
+                if (this !== selectedLayer) {
+                    geojsonLayer.resetStyle(this);
+                }
+            });
+            layer.on('click', function() {
+                selectParcel(feature.properties, this);
             });
         }
     }).addTo(map);
 
     // Fit map to data bounds
     if (geojsonLayer.getBounds().isValid()) {
-        map.fitBounds(geojsonLayer.getBounds(), { padding: [20, 20] });
+        map.fitBounds(geojsonLayer.getBounds(), { padding: [40, 40] });
     }
     </script>
     </body>
