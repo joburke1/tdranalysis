@@ -641,6 +641,14 @@ def _save_results(
     summary_path.write_text(summary, encoding="utf-8")
     logger.info(f"  Saved summary:    {summary_path}")
 
+    # Interactive map (self-contained HTML with embedded GeoJSON)
+    try:
+        from generate_map import generate_map
+        map_path = generate_map(geojson_path)
+        logger.info(f"  Saved map:        {map_path}")
+    except Exception as e:
+        logger.warning(f"  Map generation failed: {e}")
+
     print(f"\n{'='*60}")
     print(f"  Results for: {label}")
     print(f"{'='*60}")

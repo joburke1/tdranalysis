@@ -1,5 +1,5 @@
 Analysis Summary: Alcova Heights
-Generated: 2026-02-19 15:11
+Generated: 2026-02-19 15:24
 ============================================================
 
 Total residential parcels analyzed: 295
