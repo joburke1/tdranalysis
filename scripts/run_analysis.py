@@ -530,12 +530,26 @@ def _apply_spot_check_exclusions(
     return residential
 
 
+def _track_exclusion(
+    before: "gpd.GeoDataFrame",
+    after: "gpd.GeoDataFrame",
+    reason: str,
+    excluded_parts: list,
+) -> None:
+    """Identify parcels removed between *before* and *after*, tag with *reason*."""
+    removed_idx = before.index.difference(after.index)
+    if len(removed_idx) > 0:
+        removed = before.loc[removed_idx].copy()
+        removed["exclusion_reason"] = reason
+        excluded_parts.append(removed)
+
+
 def _run_analysis(
     parcels: "gpd.GeoDataFrame",
     config_dir: Path,
     output_dir: Path,
     label: str,
-) -> "gpd.GeoDataFrame":
+) -> tuple["gpd.GeoDataFrame", "gpd.GeoDataFrame"]:
     """Run the full 4-stage analysis pipeline on a parcel GeoDataFrame.
 
     Parameters
@@ -545,43 +559,77 @@ def _run_analysis(
     output_dir: Neighborhood-specific output directory; used to locate the
                 persistent spot_checks.csv for exclusion decisions.
     label:      Human-readable neighborhood name used in log messages.
+
+    Returns
+    -------
+    (result_gdf, excluded_gdf) — the analysis results and the excluded parcels.
     """
+    import pandas as pd
     from src.analysis import estimate_valuation_geodataframe
+
+    excluded_parts: list = []
 
     # Step 1 — keep only residentially-zoned parcels.
     if "is_residential_zoning" in parcels.columns:
         residential = parcels[
             parcels["is_residential_zoning"].fillna(False).astype(bool)
         ].copy()
+        _track_exclusion(parcels, residential, "Non-residential zoning", excluded_parts)
     else:
         residential = parcels.iloc[:0].copy()  # empty GDF preserving schema
 
     # Steps 2–6 — sequential exclusion filters.
+    prev = residential
     residential = _exclude_non_residential_zoning(residential, label)
+    _track_exclusion(prev, residential, "Zoning district out of scope (not R-5/R-6/R-8/R-10/R-20)", excluded_parts)
+
+    prev = residential
     residential = _exclude_always_excluded_classes(residential, label)
+    _track_exclusion(prev, residential, "Commercial property class (201/210)", excluded_parts)
+
+    prev = residential
     residential = _exclude_510_remnants(residential, config_dir, label)
+    _track_exclusion(prev, residential, "Vacant lot below minimum size (likely remnant)", excluded_parts)
+
+    prev = residential
     residential = _exclude_no_property_record(residential, label)
+    _track_exclusion(prev, residential, "No property record in county database", excluded_parts)
+
+    prev = residential
     residential = _exclude_no_gfa_data(residential, label)
+    _track_exclusion(prev, residential, "Building present but no floor area data available", excluded_parts)
+
+    prev = residential
     residential = _apply_spot_check_exclusions(residential, output_dir, label)
+    _track_exclusion(prev, residential, "Manually excluded via spot check", excluded_parts)
+
+    # Build excluded GeoDataFrame
+    if excluded_parts:
+        import geopandas as gpd
+        excluded_gdf = pd.concat(excluded_parts, ignore_index=True)
+        excluded_gdf = gpd.GeoDataFrame(excluded_gdf, geometry="geometry", crs=parcels.crs)
+    else:
+        excluded_gdf = parcels.iloc[:0].copy()
 
     total = len(parcels)
     res_count = len(residential)
+    exc_count = len(excluded_gdf)
 
     logger.info(
-        "[%s] Analyzing %d residential parcels (of %d total)...",
-        label, res_count, total,
+        "[%s] Analyzing %d residential parcels (of %d total, %d excluded)...",
+        label, res_count, total, exc_count,
     )
 
     if res_count == 0:
         logger.warning("[%s] No residential parcels found; skipping analysis.", label)
-        return parcels
+        return parcels, excluded_gdf
 
     result_gdf = estimate_valuation_geodataframe(
         gdf=residential,
         config_dir=config_dir,
     )
     logger.info("[%s] Analysis complete.", label)
-    return result_gdf
+    return result_gdf, excluded_gdf
 
 
 def _add_development_status(gdf: "gpd.GeoDataFrame") -> "gpd.GeoDataFrame":
@@ -698,6 +746,7 @@ def _save_results(
     output_dir: Path,
     label: str,
     config_dir: Path,
+    excluded_gdf: "gpd.GeoDataFrame | None" = None,
 ) -> None:
     """Save curated analysis results to GeoPackage, GeoJSON, CSV, and summary."""
     import pandas as pd
@@ -759,12 +808,27 @@ def _save_results(
     summary_path.write_text(summary, encoding="utf-8")
     logger.info("  Saved summary:    %s", summary_path)
 
+    # --- Save excluded parcels GeoJSON ---
+    excluded_geojson_path = None
+    if excluded_gdf is not None and len(excluded_gdf) > 0:
+        excluded_geojson_path = output_dir / f"{safe_label}_excluded.geojson"
+        # Keep minimal columns for the excluded parcels
+        exc_cols = ["RPCMSTR", "street_address", "zoning_district",
+                    "civic_association", "exclusion_reason", "geometry"]
+        exc_keep = [c for c in exc_cols if c in excluded_gdf.columns]
+        exc_out = excluded_gdf[exc_keep].copy()
+        exc_rename = {"RPCMSTR": "parcel_id", "civic_association": "neighborhood"}
+        exc_out = exc_out.rename(columns={k: v for k, v in exc_rename.items() if k in exc_out.columns})
+        exc_wgs84 = exc_out.to_crs("EPSG:4326")
+        exc_wgs84.to_file(excluded_geojson_path, driver="GeoJSON")
+        logger.info("  Saved excluded:   %s (%d parcels)", excluded_geojson_path, len(exc_out))
+
     # Interactive map (self-contained HTML with embedded GeoJSON).
     # generate_map.py is a sibling script in the scripts/ directory,
     # which Python adds to sys.path automatically when run as __main__.
     try:
         from generate_map import generate_map as _generate_map
-        map_path = _generate_map(geojson_path)
+        map_path = _generate_map(geojson_path, excluded_geojson_path=excluded_geojson_path)
         logger.info("  Saved map:        %s", map_path)
     except ImportError:
         logger.debug("generate_map module not available; skipping map generation.")
@@ -1036,10 +1100,10 @@ def main() -> None:
 
         logger.info("Found %d parcels in '%s'", len(subset), neighborhood)
         neighborhood_output_dir = output_dir / _safe_label(neighborhood)
-        result = _run_analysis(
+        result, excluded = _run_analysis(
             subset, config_dir, output_dir=neighborhood_output_dir, label=neighborhood
         )
-        _save_results(result, neighborhood_output_dir, neighborhood, config_dir)
+        _save_results(result, neighborhood_output_dir, neighborhood, config_dir, excluded)
 
     elif args.all_neighborhoods:
         # Batch: all neighborhoods
@@ -1062,10 +1126,10 @@ def main() -> None:
             try:
                 subset = _filter_to_neighborhood(enriched, neighborhood)
                 neighborhood_output_dir = output_dir / _safe_label(neighborhood)
-                result = _run_analysis(
+                result, excluded = _run_analysis(
                     subset, config_dir, output_dir=neighborhood_output_dir, label=neighborhood
                 )
-                _save_results(result, neighborhood_output_dir, neighborhood, config_dir)
+                _save_results(result, neighborhood_output_dir, neighborhood, config_dir, excluded)
                 all_results.append(result)
             except Exception as e:
                 logger.error("Failed to process '%s': %s", neighborhood, e)

@@ -150,10 +150,15 @@ def _compute_summary(geojson_data: dict) -> dict:
     }
 
 
-def generate_map_html(geojson_data: dict) -> str:
+def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> str:
     """Generate a self-contained HTML string with embedded map."""
     summary = _compute_summary(geojson_data)
+    if excluded_data:
+        summary["excluded_count"] = len(excluded_data.get("features", []))
+    else:
+        summary["excluded_count"] = 0
     geojson_str = json.dumps(geojson_data)
+    excluded_str = json.dumps(excluded_data) if excluded_data else "null"
     summary_str = json.dumps(summary)
 
     html = textwrap.dedent("""\
@@ -254,6 +259,10 @@ def generate_map_html(geojson_data: dict) -> str:
                 <div class="label">Vacant Buildable</div>
                 <div class="value" id="s-vacant"></div>
             </div>
+            <div class="stat-box" id="s-excluded-box" style="display:none">
+                <div class="label">Excluded</div>
+                <div class="value" id="s-excluded"></div>
+            </div>
         </div>
 
         <h2>Unused Development Potential</h2>
@@ -340,6 +349,7 @@ def generate_map_html(geojson_data: dict) -> str:
     <script>
     // --- Embedded data ---
     const geojsonData = GEOJSON_DATA_PLACEHOLDER;
+    const excludedData = EXCLUDED_DATA_PLACEHOLDER;
     const summary = SUMMARY_DATA_PLACEHOLDER;
 
     // --- Helpers ---
@@ -361,6 +371,10 @@ def generate_map_html(geojson_data: dict) -> str:
     document.getElementById('s-with-capacity').textContent = fmt(summary.parcels_with_capacity);
     document.getElementById('s-pct-underdev').textContent = fmtPct(summary.pct_underdeveloped);
     document.getElementById('s-vacant').textContent = fmt(summary.vacant_count);
+    if (summary.excluded_count > 0) {
+        document.getElementById('s-excluded').textContent = fmt(summary.excluded_count);
+        document.getElementById('s-excluded-box').style.display = '';
+    }
     document.getElementById('s-land').textContent = fmtM(summary.total_land_value);
     document.getElementById('s-improvement').textContent = fmtM(summary.total_improvement_value);
     document.getElementById('s-assessed').textContent = fmtM(summary.total_assessed_value);
@@ -563,6 +577,62 @@ def generate_map_html(geojson_data: dict) -> str:
         }
     }).addTo(map);
 
+    // --- Excluded parcels layer ---
+    if (excludedData && excludedData.features && excludedData.features.length > 0) {
+        function makeExcludedTooltip(props) {
+            const addr = props.street_address || 'No address';
+            let html = '<div class="parcel-tooltip">';
+            html += '<div class="tt-header">' + addr + '</div>';
+            if (props.parcel_id) html += '<div class="tt-row"><span class="tt-label">Parcel ID</span><span class="tt-value">' + props.parcel_id + '</span></div>';
+            if (props.zoning_district) html += '<div class="tt-row"><span class="tt-label">Zoning</span><span class="tt-value">' + props.zoning_district + '</span></div>';
+            html += '<div class="tt-section"><div class="tt-section-title">Excluded</div>';
+            html += '<div style="color:#e63946;font-weight:600">' + (props.exclusion_reason || 'Unknown reason') + '</div>';
+            html += '</div></div>';
+            return html;
+        }
+
+        const excludedLayer = L.geoJSON(excludedData, {
+            style: function() {
+                return { fillColor: '#888', fillOpacity: 0.35, color: '#666', weight: 0.5, opacity: 0.6 };
+            },
+            onEachFeature: function(feature, layer) {
+                layer.bindTooltip(makeExcludedTooltip(feature.properties), {
+                    sticky: true, direction: 'top', className: ''
+                });
+                layer.on('mouseover', function() {
+                    if (this !== selectedLayer) {
+                        this.setStyle({ weight: 2, color: '#fff', fillOpacity: 0.5 });
+                    }
+                    this.bringToFront();
+                });
+                layer.on('mouseout', function() {
+                    if (this !== selectedLayer) {
+                        excludedLayer.resetStyle(this);
+                    }
+                });
+                layer.on('click', function() {
+                    const p = feature.properties;
+                    if (selectedLayer) geojsonLayer.resetStyle(selectedLayer);
+                    selectedLayer = this;
+                    this.setStyle({ weight: 3, color: '#ffd700', fillOpacity: 0.6 });
+                    this.bringToFront();
+                    const el = document.getElementById('selected-parcel');
+                    let html = '<button class="sp-dismiss" onclick="dismissSelection()">&times;</button>';
+                    html += '<div class="sp-header">' + (p.street_address || 'No address') + '</div>';
+                    if (p.parcel_id) html += '<div class="sp-row"><span class="sp-label">Parcel ID</span><span class="sp-value">' + p.parcel_id + '</span></div>';
+                    if (p.zoning_district) html += '<div class="sp-row"><span class="sp-label">Zoning</span><span class="sp-value">' + p.zoning_district + '</span></div>';
+                    html += '<div class="sp-row"><span class="sp-label">Status</span><span class="sp-value" style="color:#e63946">Excluded</span></div>';
+                    html += '<div class="sp-row"><span class="sp-label">Reason</span><span class="sp-value" style="color:#e63946">' + (p.exclusion_reason || 'Unknown') + '</span></div>';
+                    el.innerHTML = html;
+                    el.style.display = 'block';
+                });
+            }
+        }).addTo(map);
+
+        // Ensure analyzed parcels render on top of excluded
+        geojsonLayer.bringToFront();
+    }
+
     // Fit map to data bounds
     if (geojsonLayer.getBounds().isValid()) {
         map.fitBounds(geojsonLayer.getBounds(), { padding: [40, 40] });
@@ -575,18 +645,25 @@ def generate_map_html(geojson_data: dict) -> str:
     # Replace placeholders with actual data
     html = html.replace("NEIGHBORHOOD_NAME", summary.get("neighborhood", "Unknown"))
     html = html.replace("GEOJSON_DATA_PLACEHOLDER", geojson_str)
+    html = html.replace("EXCLUDED_DATA_PLACEHOLDER", excluded_str)
     html = html.replace("SUMMARY_DATA_PLACEHOLDER", summary_str)
 
     return html
 
 
-def generate_map(geojson_path: Path, output_path: Path | None = None) -> Path:
+def generate_map(
+    geojson_path: Path,
+    output_path: Path | None = None,
+    excluded_geojson_path: Path | None = None,
+) -> Path:
     """
     Generate an HTML map from a GeoJSON analysis file.
 
     Args:
         geojson_path: Path to the analysis GeoJSON file
         output_path: Optional output path; defaults to map.html in same directory
+        excluded_geojson_path: Optional path to excluded parcels GeoJSON.
+            If None, auto-detects *_excluded.geojson in the same directory.
 
     Returns:
         Path to the generated HTML file
@@ -598,7 +675,19 @@ def generate_map(geojson_path: Path, output_path: Path | None = None) -> Path:
     n_features = len(geojson_data.get("features", []))
     logger.info(f"Loaded {n_features:,} features")
 
-    html = generate_map_html(geojson_data)
+    # Auto-detect excluded parcels GeoJSON
+    excluded_data = None
+    if excluded_geojson_path is None:
+        candidates = list(geojson_path.parent.glob("*_excluded.geojson"))
+        if candidates:
+            excluded_geojson_path = candidates[0]
+    if excluded_geojson_path is not None and excluded_geojson_path.exists():
+        with open(excluded_geojson_path, "r", encoding="utf-8") as f:
+            excluded_data = json.load(f)
+        n_excluded = len(excluded_data.get("features", []))
+        logger.info(f"Loaded {n_excluded:,} excluded parcels from: {excluded_geojson_path}")
+
+    html = generate_map_html(geojson_data, excluded_data)
 
     if output_path is None:
         output_path = geojson_path.parent / "map.html"
