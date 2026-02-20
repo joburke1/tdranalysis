@@ -1,0 +1,36 @@
+Files added since last scan (new — no previous codemaps existed):
+  docs/CODEMAPS/architecture.md
+  docs/CODEMAPS/data.md
+  docs/CODEMAPS/dependencies.md
+
+Source files scanned: 15
+  scripts/run_analysis.py
+  scripts/run_anomaly_check.py
+  scripts/generate_map.py
+  scripts/verify_env.py
+  src/data/downloader.py
+  src/data/processor.py
+  src/geometry/lot_metrics.py
+  src/rules/engine.py
+  src/rules/validators.py
+  src/analysis/development_potential.py
+  src/analysis/current_built.py
+  src/analysis/available_rights.py
+  src/analysis/valuation.py
+  src/analysis/anomaly_detection.py
+  src/analysis/__init__.py
+
+Architecture summary:
+  - CLI data pipeline (no web server, no database)
+  - 4-stage analysis: development_potential -> current_built -> available_rights -> valuation
+  - 6 sequential exclusion filters before analysis
+  - Multi-method valuation (4 methods) with HIGH/MEDIUM/LOW confidence rating
+  - Neighborhood calibration from recent construction improvement rates
+  - Tiered anomaly detection (auto-exclude / flag-for-review / clean)
+
+New dependencies detected vs README (not previously documented):
+  - folium / Leaflet (interactive HTML map generation)
+  - pyogrio (fast GeoPackage backend)
+
+README.md: updated 2026-02-20 (in sync with codebase)
+Codemaps: generated 2026-02-20 (new — no staleness risk)

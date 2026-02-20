@@ -4,13 +4,15 @@ A Python tool for analyzing maximum by-right residential development potential f
 
 ## Overview
 
-This tool determines what can be built on a residential parcel "by-right" (without special permits) based on:
+This tool determines what can be built on a residential parcel "by-right" (without special permits) and estimates the monetary value of unused development rights. Analysis is based on:
 
 - **Zoning District**: R-20, R-10, R-10T, R-8, R-6, R-5, R15-30T, R2-7
 - **Lot Dimensions**: Area, width, depth calculated from parcel geometry
 - **Development Standards**: Height, coverage, and footprint limits from the Zoning Ordinance
+- **Current Built Conditions**: Year built, GFA, dwelling units from property and assessment records
+- **Market Parameters**: Configurable valuation inputs for estimating rights value
 
-Disclaimer: The analysis is based on **Article 5 (Residential Districts)** and **Article 3 (Density and Dimensional Standards)** of the Arlington County Zoning Ordinance.  A copy of the zoning code downloaded from https://www.arlingtonva.us/Government/Programs/Building/Codes-Ordinances/Zoning on October 1, 2025 is provided for reference, however the code may have changed. This project is a point in time implementation intended to support policy analysis.  Do not use for other purposes.
+Disclaimer: The analysis is based on **Article 5 (Residential Districts)** and **Article 3 (Density and Dimensional Standards)** of the Arlington County Zoning Ordinance. A copy of the zoning code downloaded from https://www.arlingtonva.us/Government/Programs/Building/Codes-Ordinances/Zoning on October 1, 2025 is provided for reference, however the code may have changed. This project is a point in time implementation intended to support policy analysis. Do not use for other purposes.
 
 ## Features
 
@@ -18,8 +20,13 @@ Disclaimer: The analysis is based on **Article 5 (Residential Districts)** and *
 - Spatial join of parcels to zoning districts
 - Calculate lot metrics (area, width, depth) from geometry
 - Validate conformance against zoning requirements
-- Determine maximum building footprint, lot coverage, and height
+- **4-stage analysis pipeline**: Development Potential → Current Built → Available Rights → Valuation
 - Identify limiting factors for development
+- Estimate unused development rights (GFA, footprint, dwelling units)
+- **Multi-method valuation**: Four independent methods with confidence ratings
+- **Neighborhood calibration**: Derives local improvement rates from recent construction
+- Automated anomaly detection with tiered data quality flags
+- Interactive HTML maps, GeoPackage/GeoJSON for GIS, CSV exports
 
 ## Requirements
 
@@ -64,7 +71,7 @@ python scripts/verify_env.py
 
 All checks should pass (the "data not downloaded" warning is expected on first run).
 
-### 3. Run the MVP Analysis (single neighborhood)
+### 3. Run the Analysis (single neighborhood)
 
 ```bash
 # Download data + process + analyze a single neighborhood:
@@ -79,10 +86,28 @@ python scripts/run_analysis.py --check-data
 
 Results are saved to `data/results/{neighborhood}/`:
 - `*_analysis.gpkg` — GeoPackage with all analysis columns (open in QGIS)
+- `*_analysis.geojson` — GeoJSON for web mapping
 - `*_analysis.csv` — Flat CSV for review in Excel
 - `*_summary.txt` — Human-readable statistics
+- `*_data_dictionary.csv` — Column definitions for the analysis output
+- `map.html` — Self-contained interactive HTML map (no web server required)
 
-### 4. Batch Processing (all neighborhoods)
+### 4. Generate a Standalone Map
+
+```bash
+# Generate map for a neighborhood (also runs automatically after analysis):
+python scripts/generate_map.py --neighborhood "Lyon Park"
+
+# Generate from a specific GeoJSON file:
+python scripts/generate_map.py --geojson data/results/Lyon\ Park/lyon_park_analysis.geojson
+
+# Specify output location:
+python scripts/generate_map.py --neighborhood "Lyon Park" --output my_map.html
+```
+
+The map is color-coded by development status and capacity, with tooltips showing full parcel details and a sidebar with neighborhood statistics.
+
+### 5. Batch Processing (all neighborhoods)
 
 ```bash
 python scripts/run_analysis.py --all-neighborhoods
@@ -91,14 +116,31 @@ python scripts/run_analysis.py --all-neighborhoods
 This runs every civic association neighborhood sequentially and also saves
 a combined `data/results/all_neighborhoods_combined.csv`.
 
-### 5. Refresh Data
+### 6. Refresh Data
 
 ```bash
 # Force re-download of all source datasets:
 python scripts/run_analysis.py --neighborhood "Lyon Park" --force-refresh
 ```
 
-### 6. Python API (single parcel)
+### 7. Advanced Options
+
+```bash
+# Skip download, use cached data:
+python scripts/run_analysis.py --neighborhood "Lyon Park" --skip-download
+
+# Skip processing, load from pre-processed file:
+python scripts/run_analysis.py --neighborhood "Lyon Park" --skip-process
+
+# Custom directories:
+python scripts/run_analysis.py --neighborhood "Lyon Park" \
+  --data-dir data/raw --output-dir data/results --config-dir config
+
+# Verbose logging:
+python scripts/run_analysis.py --neighborhood "Lyon Park" --log-level DEBUG
+```
+
+### 8. Python API (single parcel)
 
 ```python
 from shapely.geometry import box
@@ -125,12 +167,20 @@ arlington-zoning-analyzer/
 ├── calculation proceedures/     # Calculation methodology documentation
 │   ├── maximum development potential human.md
 │   └── maximum development potential llm.md
-├── config/                      # Zoning rules configuration
-│   ├── residential_districts.json
-│   └── setback_rules.json
+├── config/                      # Zoning rules and market parameters
+│   ├── residential_districts.json  # By-right development standards by zone
+│   ├── setback_rules.json          # Setback and yard requirements
+│   ├── data_dictionary.json        # Output column definitions (40 fields)
+│   └── valuation_params.json       # Market parameters for rights valuation
 ├── data/                        # Data directory (gitignored)
 │   ├── raw/                     # Downloaded GeoJSON files
-│   └── processed/               # Enriched GeoPackage files
+│   ├── processed/               # Enriched GeoPackage files
+│   └── results/                 # Analysis outputs by neighborhood
+├── scripts/
+│   ├── run_analysis.py          # Main analysis pipeline runner
+│   ├── run_anomaly_check.py     # Data quality anomaly detection
+│   ├── generate_map.py          # Interactive HTML map generator
+│   └── verify_env.py            # Environment/dependency checker
 ├── src/
 │   ├── data/                    # Data download and processing
 │   │   ├── downloader.py
@@ -140,13 +190,47 @@ arlington-zoning-analyzer/
 │   ├── rules/                   # Zoning rules engine
 │   │   ├── engine.py
 │   │   └── validators.py
-│   └── analysis/                # Development potential analysis
-│       └── development_potential.py
+│   └── analysis/                # 4-stage analysis pipeline
+│       ├── development_potential.py  # Stage 1: Maximum by-right potential
+│       ├── current_built.py          # Stage 2: Current building conditions
+│       ├── available_rights.py       # Stage 3: Remaining development capacity
+│       ├── valuation.py              # Stage 4: Monetary value of rights
+│       └── anomaly_detection.py      # Data quality QA
 ├── tests/                       # Unit tests
 ├── notebooks/                   # Jupyter notebooks
 ├── requirements.txt
 └── README.md
 ```
+
+## Analysis Pipeline
+
+The pipeline runs four stages sequentially for each parcel:
+
+### Stage 1: Development Potential (`development_potential.py`)
+Calculates the maximum allowable building based on zoning rules:
+- Validates lot conformance (area, width)
+- Applies height, coverage, and footprint limits from the Zoning Ordinance
+- Identifies limiting factors (what constrains development)
+
+### Stage 2: Current Built (`current_built.py`)
+Extracts what is currently built from property and assessment records:
+- GFA source priority: (1) property API, (2) estimated from improvement value, (3) not available
+- Falls back to GFA estimation from improvement value when property API is silent (common for Arlington residential)
+- Derives a **neighborhood improvement rate** ($/SF) from homes built in the last 10 years; falls back to $185/SF when sample is insufficient
+
+### Stage 3: Available Rights (`available_rights.py`)
+Computes remaining unused development capacity:
+- `Available Rights = Maximum Potential − Current Built`
+- Classifies parcels as `vacant`, `underdeveloped` (<80% GFA utilization), or `overdeveloped` (grandfathered above limit)
+
+### Stage 4: Valuation (`valuation.py`)
+Estimates monetary value of unused rights using four independent methods:
+1. **Land Residual** — Land $/SF (from assessed value) × available GFA × discount factor
+2. **Assessment Ratio** — Assessed land value × market-to-assessment ratio × availability fraction
+3. **Price Per SF** — Configurable $/SF × available GFA
+4. **Price Per Unit** — Configurable $/unit × available dwelling units
+
+Returns a composite range (min low → max high of applicable methods) with a HIGH/MEDIUM/LOW confidence rating.
 
 ## Calculation Procedures
 
@@ -159,7 +243,7 @@ These documents serve as the authoritative reference for the analysis logic impl
 
 ## Configuration
 
-Zoning rules are stored in JSON configuration files in the `config/` directory. These can be updated when the Zoning Ordinance changes without modifying code.
+Zoning rules and market parameters are stored in JSON configuration files in the `config/` directory. These can be updated without modifying code.
 
 ### residential_districts.json
 
@@ -174,22 +258,67 @@ Contains by-right development standards for each residential district:
 
 Contains setback and yard requirements from Article 3, §3.2.
 
+### valuation_params.json
+
+Contains configurable market parameters that should be calibrated to current conditions:
+
+| Parameter | Description |
+|-----------|-------------|
+| `market_to_assessment_ratio` | low: 1.0 / high: 1.15 — converts assessed value to market value |
+| `price_per_available_gfa_sf` | low: $100 / high: $200 per SF of available GFA |
+| `price_per_available_dwelling_unit` | low: $150,000 / high: $350,000 per available unit |
+| `land_residual_discount_factor` | low: 0.6 / high: 0.85 — accounts for risk, demolition, carrying costs |
+| `residential_improvement_value_per_sf` | Fallback $185/SF (used when neighborhood rate has insufficient sample) |
+| `confidence_thresholds` | Min land value ($100k) and min available GFA (500 SF) for HIGH confidence |
+| `neighborhood_rate_calibration` | lookback_years: 10, min_sample: 5 homes for local rate derivation |
+
+### data_dictionary.json
+
+Defines all 40 output columns with labels, descriptions, data sources, and examples. Also exported as `*_data_dictionary.csv` alongside each analysis run.
+
 ## Output
 
-The `DevelopmentPotentialResult` object contains:
+### Output Fields
 
 | Field | Description |
 |-------|-------------|
 | `parcel_id` | Parcel identifier |
+| `street_address` | Street address |
+| `neighborhood` | Civic association neighborhood |
 | `zoning_district` | Zoning district code |
+| `is_split_zoned` | Whether parcel spans multiple zones |
 | `lot_area_sf` | Calculated lot area (sq ft) |
 | `lot_width_ft` | Calculated lot width (ft) |
-| `is_conforming` | Whether lot meets minimum requirements |
-| `limiting_factors` | What's constraining development |
+| `lot_depth_ft` | Calculated lot depth (ft) |
+| `is_conforming` | Whether lot meets zoning minimums |
+| `conformance_status` | conforming / nonconforming / unknown |
+| `limiting_factors` | What constrains development |
+| `year_built` | Year existing structure was built |
+| `property_type` | Property class code from assessor |
+| `current_gfa_sf` | Current gross floor area (sq ft) |
+| `current_stories` | Story count of existing structure |
+| `land_value` | Assessed land value ($) |
+| `improvement_value` | Assessed improvement value ($) |
+| `gfa_source` | How GFA was determined (property_api / estimated_from_improvement_value / not_available) |
+| `max_footprint_sf` | Maximum allowable building footprint |
+| `max_gfa_sf` | Maximum allowable gross floor area |
 | `max_height_ft` | Maximum building height |
-| `max_building_footprint_sf` | Maximum main building footprint |
-| `max_lot_coverage_sf` | Maximum total lot coverage |
 | `max_dwelling_units` | Maximum dwelling units by-right |
+| `available_gfa_sf` | Remaining GFA capacity (negative = overdeveloped) |
+| `available_footprint_sf` | Remaining footprint capacity |
+| `available_dwelling_units` | Remaining unit capacity |
+| `gfa_utilization_pct` | Percentage of max GFA currently used |
+| `development_status` | vacant / underdeveloped / overdeveloped |
+| `est_value_low` | Lower bound estimated value of unused rights ($) |
+| `est_value_high` | Upper bound estimated value of unused rights ($) |
+| `valuation_confidence` | HIGH / MEDIUM / LOW / not_applicable |
+| `neighborhood_imp_rate_median` | Median $/SF from recent neighborhood construction |
+| `neighborhood_imp_rate_low` | Low end of neighborhood improvement rate range |
+| `neighborhood_imp_rate_high` | High end of neighborhood improvement rate range |
+| `neighborhood_imp_rate_sample` | Number of recent homes used to derive rate |
+| `spot_check_result` | Manual review result (confirmed / excluded / incorrect) |
+| `spot_check_notes` | Notes from manual spot check |
+| `spot_check_date` | Date of manual spot check |
 
 ## Neighborhood Validation Runbook
 
@@ -279,6 +408,16 @@ These filters run automatically on every analysis — no manual intervention nee
 | No GFA data | Building exists but no improvement value | GFA estimation impossible; analysis unreliable |
 | Spot check exclusions | Parcels marked "excluded" in spot_checks.csv | Persistent manual review decisions |
 
+### Anomaly Detection Thresholds
+
+| Threshold | Value | Use |
+|-----------|-------|-----|
+| `LOT_AREA_REMNANT` | 1,000 SF | Auto-exclude: unbuildable lot |
+| `LOT_AREA_MARGINAL` | 2,000 SF | Flag: marginal buildability |
+| `LOT_WIDTH_REMNANT` | 15 ft | Auto-exclude: too narrow |
+| `IMPROVEMENT_VALUE_UNRELIABLE` | $30,000 | Flag: GFA estimate unreliable |
+| `ZSCORE_THRESHOLD` | 2.5 | Flag: statistical outlier |
+
 ## Limitations
 
 1. **By-right only**: Does not analyze special exception or site plan scenarios
@@ -286,6 +425,7 @@ These filters run automatically on every analysis — no manual intervention nee
 3. **Lot width calculation**: Uses minimum bounding rectangle method, which may not match legal definition for irregular lots
 4. **Split zoning**: Parcels spanning multiple zones are flagged but use primary zone
 5. **Setbacks**: Setback calculations are not yet implemented (requires street geometry)
+6. **Valuation**: Market parameter estimates are approximate; calibrate `valuation_params.json` to current conditions before use
 
 ## Data Sources
 
