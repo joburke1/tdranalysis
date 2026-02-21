@@ -795,6 +795,10 @@ def estimate_valuation_geodataframe(
         zoning = row.get(zoning_column)
         is_split = row.get("is_split_zoned", False)
 
+        # Use assessor's lot size when available
+        lot_size_qty = pd.to_numeric(row.get("lotSizeQty"), errors="coerce")
+        lot_size_override = lot_size_qty if pd.notna(lot_size_qty) and lot_size_qty > 0 else None
+
         if zoning is None:
             records.append(_empty_valuation_record())
             continue
@@ -805,6 +809,7 @@ def estimate_valuation_geodataframe(
                 zoning_district=zoning,
                 parcel_id=parcel_id,
                 is_split_zoned=is_split,
+                lot_size_override=lot_size_override,
             )
         except Exception as e:
             logger.warning(f"Error analyzing potential for {parcel_id}: {e}")
@@ -856,6 +861,7 @@ def _intermediate_fields(
     return {
         # Lot geometry (from zoning analysis)
         "lot_area_sf": potential.lot_area_sf,
+        "lot_area_source": potential.lot_area_source,
         "lot_width_ft": potential.lot_width_ft,
         "lot_depth_ft": potential.lot_depth_ft,
         "is_conforming": potential.is_conforming,

@@ -423,6 +423,10 @@ def inspect_parcel(
     zoning = row.get(zoning_column)
     is_split = row.get("is_split_zoned", False)
 
+    # Use assessor's lot size when available
+    lot_size_qty = pd.to_numeric(row.get("lotSizeQty"), errors="coerce")
+    lot_size_override = lot_size_qty if pd.notna(lot_size_qty) and lot_size_qty > 0 else None
+
     if zoning is not None and not pd.isna(zoning):
         analyzer = DevelopmentPotentialAnalyzer(config_dir=config_dir)
         try:
@@ -431,6 +435,7 @@ def inspect_parcel(
                 zoning_district=str(zoning),
                 parcel_id=parcel_id,
                 is_split_zoned=bool(is_split),
+                lot_size_override=lot_size_override,
             )
             result.stage1_potential = potential
 
@@ -547,6 +552,7 @@ def _format_report(r: ParcelInspectionResult) -> str:
         "storyHeightCnt",
         "propertyYearBuilt",
         "numberOfUnitsCnt",
+        "lotSizeQty",
         "improvementValueAmt",
         "landValueAmt",
         "totalValueAmt",
@@ -583,9 +589,12 @@ def _format_report(r: ParcelInspectionResult) -> str:
             lines.append(f"  ERROR: {err}")
     elif pot:
         lines.append("  Lot Metrics:")
-        lines.append(f"    Area:             {_fmt(pot.lot_area_sf, ',.0f', suffix=' sf')}")
-        lines.append(f"    Width:            {_fmt(pot.lot_width_ft, '.1f', suffix=' ft')}")
-        lines.append(f"    Depth:            {_fmt(pot.lot_depth_ft, '.1f', suffix=' ft')}")
+        area_src = pot.lot_area_source
+        width_src = pot.lot_width_source
+        depth_src = pot.lot_depth_source
+        lines.append(f"    Area:             {_fmt(pot.lot_area_sf, ',.0f', suffix=' sf')} [{area_src}]")
+        lines.append(f"    Width:            {_fmt(pot.lot_width_ft, '.1f', suffix=' ft')} [{width_src}]")
+        lines.append(f"    Depth:            {_fmt(pot.lot_depth_ft, '.1f', suffix=' ft')} [{depth_src}]")
 
         cfg = r.stage1_config_used
         if cfg:

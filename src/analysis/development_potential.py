@@ -49,15 +49,25 @@ class DevelopmentPotentialResult:
     is_split_zoned: bool = False
     """Whether parcel spans multiple zoning districts"""
     
-    # Lot metrics (calculated from geometry)
+    # Lot metrics
     lot_area_sf: Optional[float] = None
     """Lot area in square feet"""
-    
+
     lot_width_ft: Optional[float] = None
     """Lot width in feet"""
-    
+
     lot_depth_ft: Optional[float] = None
     """Lot depth in feet"""
+
+    # Data source annotations for lot metrics
+    lot_area_source: str = "geometry"
+    """Source of lot area: 'assessor' or 'geometry'"""
+
+    lot_width_source: str = "geometry"
+    """Source of lot width: 'derived' (area/depth) or 'geometry' (MBR)"""
+
+    lot_depth_source: str = "geometry"
+    """Source of lot depth: always 'geometry' (MBR long dimension)"""
     
     # Conformance
     is_conforming: bool = False
@@ -182,18 +192,22 @@ class DevelopmentPotentialAnalyzer:
         zoning_district: str,
         parcel_id: Optional[str] = None,
         is_split_zoned: bool = False,
-        glup_designation: Optional[str] = None
+        glup_designation: Optional[str] = None,
+        lot_size_override: Optional[float] = None,
     ) -> DevelopmentPotentialResult:
         """
         Analyze development potential for a single parcel.
-        
+
         Args:
             geometry: Parcel geometry (Shapely Polygon or MultiPolygon)
             zoning_district: Zoning district code
             parcel_id: Optional parcel identifier
             is_split_zoned: Whether parcel spans multiple zoning districts
             glup_designation: Optional GLUP designation
-            
+            lot_size_override: Optional authoritative lot area in sq ft
+                (e.g. assessor's lotSizeQty).  When provided, used instead
+                of the geometry-derived area.
+
         Returns:
             DevelopmentPotentialResult with complete analysis
         """
@@ -221,13 +235,19 @@ class DevelopmentPotentialAnalyzer:
                 "Manual review recommended."
             )
         
-        # Calculate lot metrics from geometry
+        # Calculate lot metrics from geometry, with optional assessor override
         try:
-            metrics = self.geometry_calculator.calculate(geometry)
+            metrics = self.geometry_calculator.calculate(
+                geometry,
+                authoritative_area_sf=lot_size_override,
+            )
             result.lot_area_sf = metrics.area_sf
             result.lot_width_ft = metrics.width_ft
             result.lot_depth_ft = metrics.depth_ft
-            
+            result.lot_area_source = metrics.area_source
+            result.lot_width_source = metrics.width_source
+            result.lot_depth_source = metrics.depth_source
+
             if metrics.is_irregular:
                 result.notes.append(
                     f"Lot shape is irregular (shape efficiency: {metrics.shape_efficiency:.1%}). "
@@ -285,23 +305,25 @@ def analyze_development_potential(
     zoning_district: str,
     parcel_id: Optional[str] = None,
     config_dir: str | Path = "config",
+    lot_size_override: Optional[float] = None,
     **kwargs
 ) -> DevelopmentPotentialResult:
     """
     Analyze development potential for a parcel.
-    
+
     This is the main entry point for single-parcel analysis.
-    
+
     Args:
         geometry: Parcel geometry (Shapely Polygon or MultiPolygon)
         zoning_district: Zoning district code (e.g., 'R-6')
         parcel_id: Optional parcel identifier
         config_dir: Directory containing zoning rules configuration
+        lot_size_override: Optional authoritative lot area in sq ft
         **kwargs: Additional arguments passed to analyzer
-        
+
     Returns:
         DevelopmentPotentialResult with complete analysis
-        
+
     Example:
         >>> from shapely.geometry import box
         >>> parcel = box(0, 0, 60, 100)  # 6000 sf lot, 60ft x 100ft
@@ -316,6 +338,7 @@ def analyze_development_potential(
         geometry=geometry,
         zoning_district=zoning_district,
         parcel_id=parcel_id,
+        lot_size_override=lot_size_override,
         **kwargs
     )
 

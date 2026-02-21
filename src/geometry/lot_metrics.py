@@ -26,30 +26,39 @@ logger = logging.getLogger(__name__)
 @dataclass
 class LotMetrics:
     """Container for calculated lot metrics."""
-    
+
     area_sf: float
     """Lot area in square feet"""
-    
+
     width_ft: float
     """Lot width in feet (shorter dimension of bounding rectangle)"""
-    
+
     depth_ft: float
     """Lot depth in feet (longer dimension of bounding rectangle)"""
-    
+
     perimeter_ft: float
     """Lot perimeter in feet"""
-    
+
     frontage_ft: Optional[float] = None
     """Street frontage in feet (if calculable)"""
-    
+
     is_irregular: bool = False
     """Flag indicating if lot shape is highly irregular"""
-    
+
     bounding_rect_area_sf: Optional[float] = None
     """Area of minimum bounding rectangle (for shape analysis)"""
-    
+
     shape_efficiency: Optional[float] = None
     """Ratio of lot area to bounding rectangle area (1.0 = perfect rectangle)"""
+
+    area_source: str = "geometry"
+    """Source of area_sf: 'assessor' (from lotSizeQty) or 'geometry' (from polygon)"""
+
+    width_source: str = "geometry"
+    """Source of width_ft: 'derived' (area/depth) or 'geometry' (from MBR)"""
+
+    depth_source: str = "geometry"
+    """Source of depth_ft: always 'geometry' (from MBR long dimension)"""
 
 
 class LotMetricsCalculator:
@@ -85,44 +94,69 @@ class LotMetricsCalculator:
             self.to_sf = 1.0
             self.to_ft = 1.0
     
-    def calculate(self, geometry: Polygon | MultiPolygon) -> LotMetrics:
+    def calculate(
+        self,
+        geometry: Polygon | MultiPolygon,
+        authoritative_area_sf: Optional[float] = None,
+    ) -> LotMetrics:
         """
         Calculate all lot metrics for a parcel geometry.
-        
+
         Args:
             geometry: Shapely Polygon or MultiPolygon representing the parcel
-            
+            authoritative_area_sf: Optional lot area from an authoritative source
+                (e.g. assessor's lotSizeQty).  When provided, this value is used
+                for area_sf instead of the polygon geometry area, and width_ft is
+                derived as area / depth so all three values are consistent.
+
         Returns:
             LotMetrics object containing calculated values
-            
+
         Raises:
             ValueError: If geometry is invalid or empty
         """
         if geometry is None or geometry.is_empty:
             raise ValueError("Cannot calculate metrics for empty geometry")
-        
+
         if not geometry.is_valid:
             # Try to fix invalid geometry
             geometry = geometry.buffer(0)
             if not geometry.is_valid:
                 raise ValueError("Invalid geometry that cannot be repaired")
-        
+
         # Handle MultiPolygon by using the largest polygon
         if isinstance(geometry, MultiPolygon):
             geometry = max(geometry.geoms, key=lambda g: g.area)
-        
-        # Calculate basic metrics
-        area_sf = geometry.area * self.to_sf
+
+        # Calculate basic metrics from geometry
+        geom_area_sf = geometry.area * self.to_sf
         perimeter_ft = geometry.length * self.to_ft
-        
+
         # Calculate width and depth using minimum rotated bounding rectangle
-        width_ft, depth_ft, bounding_rect = self._calculate_dimensions(geometry)
-        
-        # Calculate shape metrics
+        geom_width_ft, depth_ft, bounding_rect = self._calculate_dimensions(geometry)
+
+        # Decide which area to use and derive consistent width
+        if authoritative_area_sf is not None and authoritative_area_sf > 0:
+            area_sf = authoritative_area_sf
+            area_source = "assessor"
+            # Derive width from authoritative area / MBR depth for consistency
+            if depth_ft > 0:
+                width_ft = area_sf / depth_ft
+                width_source = "derived"
+            else:
+                width_ft = geom_width_ft
+                width_source = "geometry"
+        else:
+            area_sf = geom_area_sf
+            area_source = "geometry"
+            width_ft = geom_width_ft
+            width_source = "geometry"
+
+        # Calculate shape metrics (always based on geometry for shape analysis)
         bounding_area = bounding_rect.area * self.to_sf if bounding_rect else None
-        shape_efficiency = area_sf / bounding_area if bounding_area else None
+        shape_efficiency = geom_area_sf / bounding_area if bounding_area else None
         is_irregular = shape_efficiency < self.IRREGULAR_THRESHOLD if shape_efficiency else False
-        
+
         return LotMetrics(
             area_sf=round(area_sf, 1),
             width_ft=round(width_ft, 1),
@@ -130,7 +164,10 @@ class LotMetricsCalculator:
             perimeter_ft=round(perimeter_ft, 1),
             bounding_rect_area_sf=round(bounding_area, 1) if bounding_area else None,
             shape_efficiency=round(shape_efficiency, 3) if shape_efficiency else None,
-            is_irregular=is_irregular
+            is_irregular=is_irregular,
+            area_source=area_source,
+            width_source=width_source,
+            depth_source="geometry",
         )
     
     def _calculate_dimensions(
