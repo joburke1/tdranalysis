@@ -885,6 +885,7 @@ def _intermediate_fields(
         "is_vacant": rights.is_vacant,
         "is_underdeveloped": rights.is_underdeveloped,
         "is_overdeveloped": rights.is_overdeveloped,
+        "tdr_potential": rights.tdr_potential,
     }
 
 
@@ -936,6 +937,7 @@ def _empty_valuation_record() -> dict:
         "is_vacant": None,
         "is_underdeveloped": None,
         "is_overdeveloped": None,
+        "tdr_potential": None,
         # Neighborhood rate
         "neighborhood_imp_rate_median": None,
         "neighborhood_imp_rate_low": None,

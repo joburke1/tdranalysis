@@ -719,18 +719,16 @@ def _format_report(r: ParcelInspectionResult) -> str:
                     f"= {rts.available_gfa_sf:,.0f})"
                 )
 
+            _tdr_labels = {
+                "full": "FULL (vacant lot)",
+                "substantial": "SUBSTANTIAL (< 80% utilized)",
+                "limited": "LIMITED (80–100% utilized)",
+                "none": "NONE (> 100%; nonconforming)",
+            }
+            tdr_label = _tdr_labels.get(rts.tdr_potential or "", "Unknown")
             lines.append("")
+            lines.append(f"  TDR Potential:      {tdr_label}")
             lines.append(f"  Utilization:        {_fmt(rts.gfa_utilization_pct, '.1f', suffix='%')}")
-            status_parts = []
-            if rts.is_vacant:
-                status_parts.append("VACANT")
-            elif rts.is_overdeveloped:
-                status_parts.append("OVERDEVELOPED (> 100%)")
-            elif rts.is_underdeveloped:
-                status_parts.append("UNDERDEVELOPED (< 80%)")
-            else:
-                status_parts.append("NEAR-CAPACITY (80-100%)")
-            lines.append(f"  Status:             {', '.join(status_parts)}")
 
             lines.append("")
             lines.append(f"  Available footprint: {_fmt(rts.available_footprint_sf, ',.0f', suffix=' sf')}")

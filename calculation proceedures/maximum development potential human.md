@@ -1,106 +1,328 @@
-# How Big Can I Build? A Plain-Language Guide for Arlington County R Districts
+# Arlington County R-District Development Rights Analysis: Methodology Guide
 
-## The Short Answer
+## Purpose and Context
 
-Arlington County doesn't tell you "you can build X square feet." Instead, it limits how much of your lot you can cover with building, then caps how tall you can go. Your maximum house size is basically:
+This document describes the methodology used in the Arlington County TDR (Transfer of Development Rights) analysis pipeline. The pipeline analyzes residential parcels in Arlington's R zoning districts to estimate:
 
-**Footprint × Number of Stories = Total Square Footage**
+1. The maximum building size allowed by current by-right zoning (development potential)
+2. What is currently built on each parcel (current built)
+3. How much unused building capacity exists (available rights)
+4. The estimated market value of those unused rights (TDR valuation)
 
-## The Three Rules That Limit Your House
+This is a **policy analysis tool**, not a permit guide. Results inform TDR program design, neighborhood capacity assessments, and advocacy analysis. They are not appraisals or legal determinations.
 
-### Rule 1: Main Building Footprint
-This is the ground-floor area of your house. You get the **smaller** of two limits:
+---
 
-- A percentage of your lot (16% to 37% depending on your district)
-- A hard cap in square feet (2,380 to 5,320 depending on your district)
+## Analysis Pipeline Overview
 
-On smaller lots, the percentage gives you less. On larger lots, you hit the cap. Either way, you can't exceed both.
+The pipeline runs four sequential stages for each parcel:
 
-**Bonus:** Adding a real front porch (at least 60 square feet) bumps up both limits by about 3 percentage points.
+| Stage | Question | Key Inputs | Output |
+|-------|----------|------------|--------|
+| 1. Development Potential | What can be built by-right? | Lot area, zoning district | Max footprint, max GFA |
+| 2. Current Built | What is actually built? | Property records, assessments | Current GFA |
+| 3. Available Rights | What capacity is unused? | Stage 1 minus Stage 2 | Available GFA, utilization % |
+| 4. Valuation | What are those rights worth? | Available rights, assessed land value | Estimated value range |
 
-### Rule 2: Lot Coverage
-This limits everything paved or built on your property—not just the house. It includes your driveway, patio, detached garage, deck, and the house itself.
+Stage 1 results are available for all R-district parcels. Stages 3 and 4 require both zoning and property records for the parcel.
 
-The limit ranges from 25% to 53% of your lot depending on your district and whether you have a front porch and/or detached rear garage.
+## Data Sources
 
-### Rule 3: Height
-All R districts cap height at 35 feet. For most construction, this allows 2 to 3 stories depending on your floor heights and roof style.
+| Data | Source | Coverage |
+|------|--------|----------|
+| Parcel geometry | Arlington County GIS | All parcels |
+| Lot area | Property API `lotSizeQty` → geometry fallback | ~92.8% have assessor-recorded area |
+| Zoning district | Arlington zoning GIS layer | All parcels |
+| Zoning rules | `config/residential_districts.json` | By-right standards, ACZO effective 10/1/2025 |
+| Gross floor area | Property API `grossFloorAreaSquareFeetQty` → improvement value estimate | Varies by parcel |
+| Assessed land value | Assessment API `landValueAmt` | Used for valuation methods 1 and 2 |
+| Improvement value | Assessment API `improvementValueAmt` | Used to estimate GFA when direct measure unavailable |
+| Market parameters | `config/valuation_params.json` | Must be calibrated to current conditions |
 
-## Which District Are You In?
+Parcel geometry is projected in EPSG:2283 (Virginia State Plane North, feet). All spatial calculations use this projection directly.
 
-Your zoning district determines your limits. The number roughly corresponds to the minimum lot size in thousands of square feet:
+---
 
-| District | Minimum Lot | Character |
-|----------|-------------|-----------|
-| R-20 | 20,000 sf | Largest lots, most restrictive coverage |
-| R-10 | 10,000 sf | Large suburban lots |
-| R-8 | 8,000 sf | Medium suburban lots |
-| R-6 | 6,000 sf | Typical Arlington single-family |
-| R-5 | 5,000 sf | Smallest lots, most generous coverage |
+## Stage 1: Maximum Development Potential
 
-Look up your zoning on Arlington County's property search or your deed.
+### What This Measures
 
-## A Real Example
+The maximum gross floor area (GFA) that could be built on a parcel under Arlington's current by-right zoning rules — without requiring a special exception, site plan, or variance.
 
-Let's say you have a 7,200 square foot lot in R-6, and your architect includes a 65 square foot front porch.
+Arlington's residential districts do **not** use Floor-Area Ratio (FAR). Instead, building size is constrained by three independent limits applied simultaneously:
 
-**Step 1: Figure out your footprint limit**
-- Percentage method: 7,200 × 33% = 2,376 sf
-- Cap method: 2,772 sf
-- Your limit: 2,376 sf (the smaller number)
+- **Main building footprint** — the ground-floor area of the main structure
+- **Lot coverage** — total impervious surface across the entire lot
+- **Height** — capped at 35 feet in all R districts
 
-**Step 2: Figure out your lot coverage budget**
-- 7,200 × 43% = 3,096 sf total for house + driveway + patio + everything else
+### Footprint Calculation
 
-**Step 3: Estimate total house size**
-- If you build 2.5 stories within the 35-foot height limit:
-- 2,376 × 2.5 = roughly 5,900 square feet maximum
+The allowable main building footprint is the **lesser** of a percentage of lot area and a hard square-footage cap:
 
-**Step 4: Plan the rest of your lot**
-- Coverage budget: 3,096 sf
-- House footprint: 2,376 sf
-- Remaining for driveway, patio, etc.: 720 sf
+```
+MAX_FOOTPRINT = MIN(LOT_AREA × footprint_pct, footprint_cap_sf)
+```
 
-## What Counts as "Footprint"?
+**Footprint Limits by District (ACZO §3.2.5.A):**
 
-Your house footprint includes everything attached that touches the ground:
-- The house itself
-- Attached garage
-- Porches and covered entries
-- Decks more than 4 feet off the ground
-- Bay windows if they have floor space
+| District | Min Lot Area | Base % | Base Cap | +Front Porch % | +Front Porch Cap |
+|----------|-------------|--------|----------|----------------|-----------------|
+| R-20 | 20,000 sf | 16% | 4,480 sf | 19% | 5,320 sf |
+| R-10 | 10,000 sf | 25% | 3,500 sf | 28% | 3,920 sf |
+| R-8 | 8,000 sf | 25% | 2,800 sf | 28% | 3,136 sf |
+| R-6 | 6,000 sf | 30% | 2,520 sf | 33% | 2,772 sf |
+| R-5 | 5,000 sf | 34% | 2,380 sf | 37% | 2,590 sf |
 
-## What Counts as "Coverage"?
+A front porch bonus applies when a qualifying front porch of at least 60 square feet is present on the front elevation. In bulk analysis, the pipeline uses base limits (no porch bonus) as a conservative estimate.
 
-Everything in the footprint, plus:
-- Driveways and parking areas
-- Detached garages and sheds over 150 square feet
-- Patios raised 8+ inches
-- Pools (in-ground)
-- Gazebos and pergolas
+On smaller lots, the percentage calculation governs (lot × pct < cap). On larger lots, the hard cap governs. The cap represents an absolute ceiling regardless of lot size.
 
-**Not counted:** Sidewalks, small sheds under 150 sf, air conditioners, play equipment, hot tubs.
+### Lot Coverage Limits
 
-## Common Questions
+Lot coverage limits the total impervious surface including the house, driveway, patios, detached structures, and decks. These limits vary by district and whether a front porch and/or detached rear garage is present.
 
-**What about my basement?**
-Basements don't count toward coverage since they're underground. They do count toward your total livable square footage if that matters for other purposes.
+**Lot Coverage Limits (ACZO §3.2.5.A, % of lot area):**
 
-**My lot is smaller than the minimum for my district. Am I stuck?**
-No—you get the same square footage cap as a standard-sized lot. You might actually be able to cover a higher percentage of your smaller lot than your neighbors can.
+| District | Base | +Front Porch | +Detached Garage | +Both |
+|----------|------|-------------|-----------------|-------|
+| R-20 | 25% | 28% | 30% | 33% |
+| R-10 | 32% | 35% | 37% | 40% |
+| R-8 | 35% | 38% | 40% | 43% |
+| R-6 | 40% | 43% | 45% | 48% |
+| R-5 | 45% | 48% | 50% | 53% |
 
-**Can I build bigger with a variance?**
-These are by-right limits. You'd need to go through a special exception process with the County Board, which is time-consuming and uncertain.
+**What counts toward coverage:** main building footprint, plus accessory buildings over 150 sf or two or more stories, driveways, patios raised 8 or more inches above grade, detached decks 4 or more feet above grade, gazebos and pergolas, stoops 4 or more feet above grade, and in-ground pools.
 
-**What if I already have a house that exceeds these limits?**
-Existing nonconforming structures can remain. If destroyed by fire or natural disaster, you can rebuild to the same footprint if you start within two years.
+**Not counted:** HVAC equipment, above-ground pools, sidewalks, basement steps, small accessory buildings at or under 150 sf with fewer than two stories, play equipment, hot tubs.
 
-## Next Steps
+### GFA Estimation
 
-1. Confirm your zoning district through Arlington County records
-2. Get a survey showing your exact lot area
-3. Sketch out what you want to build
-4. Check that footprint and total coverage both fit within limits
-5. Don't forget setbacks—your building also can't be too close to property lines
+The pipeline estimates maximum GFA by multiplying the max footprint by an assumed story count. R districts allow a maximum height of 35 feet, which typically accommodates 2 to 3 stories depending on construction type and roof pitch. The pipeline uses 2.5 stories as a standard assumption:
 
-This guide covers the basics for a typical single-family home. Two-family homes, townhouses, and projects requiring special approval have different rules.
+```
+MAX_GFA = MAX_FOOTPRINT × 2.5
+```
+
+This is an approximation. A fully maximized parcel could support anywhere from 2 to 3 finished stories within the height limit.
+
+### Lot Dimensions and Conformance
+
+**Lot area** is taken from the Arlington County property API (`lotSizeQty`) when available, as this reflects the legal lot area recorded by the assessor. When not available, area is computed from the parcel polygon geometry.
+
+**Lot depth** is measured as the longest dimension of the minimum rotated bounding rectangle fitted to the parcel polygon. **Lot width** is derived as `lot_area / lot_depth` rather than measured directly from geometry — this ensures the product of width and depth equals the authoritative lot area.
+
+The `lot_area_source` field in outputs indicates whether area came from the assessor (`assessor`) or was computed from geometry (`geometry`). Width is labeled `derived` or `geometry` accordingly.
+
+**Conformance** is assessed against district minimums:
+
+| Status | Condition |
+|--------|-----------|
+| Conforming | Meets or exceeds both minimum lot area and minimum lot width |
+| Undersized | Below minimum lot area |
+| Narrow | Meets area requirement but below minimum width |
+| Both deficient | Below both minimums |
+
+---
+
+## Stage 2: Current Built Estimate
+
+### What This Measures
+
+The gross floor area (GFA) of the building currently on the parcel, drawn from county property records. GFA is the total finished interior floor area across all stories.
+
+### GFA Source Priority
+
+The pipeline uses the most authoritative available source in this order:
+
+**1. Property API direct measurement** (`grossFloorAreaSquareFeetQty`): Floor area reported directly by the assessor. Most reliable. Labeled `property_api` in outputs.
+
+**2. Improvement value estimate**: When the property API does not report floor area — common for single-family homes — GFA is estimated from the assessed improvement value:
+
+```
+ESTIMATED_GFA = IMPROVEMENT_VALUE / NEIGHBORHOOD_IMPROVEMENT_RATE
+```
+
+Labeled `estimated` in outputs. Accuracy depends on how well the neighborhood rate is calibrated.
+
+**3. Not available**: If neither source is available, GFA is left blank and the parcel is excluded from Stage 3 and Stage 4 analysis. If a building is confirmed by a year-built record but GFA cannot be estimated, the parcel is marked non-analyzable to avoid overstating available capacity.
+
+### Neighborhood Improvement Rate Calibration
+
+The improvement rate — dollars per square foot of GFA — is calibrated from recently-built homes in the analysis dataset before individual parcel analysis runs:
+
+- **Sample**: homes built within the last 10 years with both an improvement value and a property API floor area
+- **Minimum**: 5 parcels required; falls back to a static $185/sf if fewer are available
+- **Rate per parcel**: `improvement_value / (max_footprint × assumed_stories)`
+- **Point estimate**: median of sample rates
+- **Range**: median ± 1 standard deviation, floored at $50/sf to exclude extreme outliers
+
+This neighborhood-calibrated rate replaces a static fallback, reducing systematic bias in areas with significant recent construction activity.
+
+---
+
+## Stage 3: Available Development Rights
+
+### What This Measures
+
+The remaining unused development capacity on a parcel — the difference between what zoning allows and what is currently built. This is the core quantity for TDR analysis: available rights represent what could theoretically be transferred to a receiving site.
+
+### Calculation
+
+```
+AVAILABLE_GFA       = MAX_GFA - CURRENT_GFA
+AVAILABLE_FOOTPRINT = MAX_FOOTPRINT - CURRENT_FOOTPRINT
+AVAILABLE_UNITS     = MAX_DWELLING_UNITS - CURRENT_DWELLING_UNITS
+GFA_UTILIZATION     = CURRENT_GFA / MAX_GFA × 100%
+```
+
+Negative values indicate the existing building exceeds what current zoning would allow by-right — a legal nonconforming condition.
+
+### Parcel Classification
+
+| TDR Potential | Condition | Interpretation |
+|--------------|-----------|----------------|
+| Full | No building on parcel | All development rights potentially available |
+| Substantial | GFA utilization below 80% | Significant unused capacity; likely TDR candidate |
+| Limited | GFA utilization 80%–100% | Substantially built out; limited remaining capacity |
+| None | GFA utilization above 100% | Nonconforming use; no TDR value in current analysis |
+
+### Data Limitation: Lot Coverage
+
+Available lot coverage is **not computed**. The pipeline reports the allowable lot coverage limit for each parcel but cannot determine how much impervious surface is actually present, because that data is not available from county property records. Computing actual lot coverage would require GIS analysis of aerial imagery or permit records.
+
+---
+
+## Stage 4: TDR Value Estimation
+
+### What This Measures
+
+The estimated market value of a parcel's available development rights if sold as TDR credits. This is a policy estimate, **not a property appraisal or formal valuation**. Results represent an order-of-magnitude range useful for program design and should not be used as a basis for individual transactions.
+
+Market parameters must be calibrated to current conditions before analysis. See `config/valuation_params.json`.
+
+### Four Valuation Methods
+
+The pipeline applies four independent methods and combines their results into a composite range. Not all methods are applicable to every parcel; methods are skipped when required inputs are missing.
+
+#### 1. Land Residual Method
+Derives a land value rate per square foot of buildable GFA from the county's assessed land value, then applies that rate to unused capacity with a discount factor.
+
+```
+land_rate  = assessed_land_value / max_gfa_sf
+value_low  = available_gfa_sf × land_rate × discount_low
+value_high = available_gfa_sf × land_rate × discount_high
+```
+
+Requires: assessed land value > 0, max GFA > 0, available GFA > 0.
+
+**How inputs are determined:**
+
+- **`assessed_land_value`**: Arlington's assessed value of the land only, separate from any structure. Taken directly from the county assessment API field `landValueAmt`. Arlington assessments target 100% of market value, though this may lag in a rapidly rising market.
+
+- **`max_gfa_sf`** and **`available_gfa_sf`**: Computed in Stages 1 and 3 respectively. Dividing assessed land value by total allowable GFA yields an implied land cost per buildable square foot; multiplying by available GFA isolates the unused portion.
+
+- **`discount_low` / `discount_high`** (`land_residual_discount_factor` in `config/valuation_params.json`): A fraction between 0 and 1 representing what a TDR buyer would actually pay relative to that implied land rate. The discount accounts for the fact that TDR rights convey only the right to build additional floor area — not fee-simple land ownership — and for negotiation, transaction costs, and market uncertainty. A discount of 0.65 means the buyer pays $0.65 for each dollar of implied land value. This is the most judgment-intensive parameter in the model. In the absence of observed TDR transactions, values typically range from 0.50 to 0.85; calibrate from comparable TDR markets or developer interviews.
+
+#### 2. Assessment Ratio Method
+Scales the assessed land value by the fraction of GFA capacity that is currently unused, then adjusts for any gap between assessed value and actual market value.
+
+```
+available_fraction = available_gfa_sf / max_gfa_sf  (capped at 1.0)
+value_low  = assessed_land_value × market_ratio_low × available_fraction
+value_high = assessed_land_value × market_ratio_high × available_fraction
+```
+
+Requires: assessed land value > 0, max GFA > 0, available GFA > 0.
+
+**How inputs are determined:**
+
+- **`assessed_land_value`**: Same source as Method 1 (`landValueAmt`).
+
+- **`available_fraction`**: Computed directly from Stage 3 results. A parcel using 70% of its maximum GFA has an available fraction of 0.30. This is capped at 1.0 to handle minor data inconsistencies.
+
+- **`market_ratio_low` / `market_ratio_high`** (`market_to_assessment_ratio` in `config/valuation_params.json`): A multiplier reflecting the relationship between market value and assessed value. Arlington assessments target 100% of market value (ratio = 1.0), but in a rising market assessments can lag. Calibrate from recent arm's-length sales: divide the sale price by the concurrent assessed land value for comparable properties. A ratio above 1.0 indicates market prices are running ahead of assessments. A ratio of 1.0 treats assessed value as equal to market value; 1.15 means market is estimated 15% above assessment.
+
+#### 3. Price Per Square Foot Method
+Applies a market-rate range directly to available GFA, bypassing assessment data. This is the broadest method — it applies to every parcel with available GFA — and represents a direct estimate of what a buyer would pay per square foot of transferable buildable area.
+
+```
+value_low  = available_gfa_sf × price_per_sf_low
+value_high = available_gfa_sf × price_per_sf_high
+```
+
+Requires: available GFA > 0.
+
+**How inputs are determined:**
+
+- **`available_gfa_sf`**: From Stage 3.
+
+- **`price_per_sf_low` / `price_per_sf_high`** (`price_per_available_gfa_sf` in `config/valuation_params.json`): The market rate in dollars per square foot of transferable development capacity. In an active TDR program, calibrate directly from observed TDR transaction prices. In a nascent or proposed program such as Arlington's, estimate from: (a) transaction prices in comparable TDR programs in similar markets, (b) developer pro forma analysis of the marginal value of additional floor area in this submarket, or (c) the cost to obtain equivalent density through alternative means such as rezoning or variances. Because this method requires only available GFA, it serves as the baseline estimate for all parcels with unused capacity.
+
+#### 4. Price Per Dwelling Unit Method
+Values available rights in terms of dwelling units rather than floor area. More intuitive for housing-focused policy analysis, but in one-family districts it typically applies only to vacant lots.
+
+```
+value_low  = available_units × price_per_unit_low
+value_high = available_units × price_per_unit_high
+```
+
+Requires: available dwelling units > 0.
+
+**How inputs are determined:**
+
+- **`available_units`**: Computed in Stage 3 as `max_dwelling_units − current_dwelling_units`. For all R districts currently in scope, by-right zoning allows a maximum of 1 dwelling unit per lot. A vacant lot has 1 available unit; a developed single-family lot has 0. In practice this method produces a result primarily for vacant parcels.
+
+- **`price_per_unit_low` / `price_per_unit_high`** (`price_per_available_dwelling_unit` in `config/valuation_params.json`): The market price per transferable dwelling unit. Calibrate from comparable density-bonus in-lieu fees, inclusionary zoning per-unit contributions, or TDR transaction prices expressed on a per-unit basis. This benchmark is sometimes more accessible than a per-sf rate when comparable programs report prices in terms of units of additional density.
+
+### Composite Range
+
+The composite LOW/HIGH range is the **envelope** of all applicable method estimates:
+
+```
+ESTIMATED_VALUE_LOW  = minimum of all applicable method lows
+ESTIMATED_VALUE_HIGH = maximum of all applicable method highs
+```
+
+This produces a wide range by design, capturing the spread across different approaches to valuing development capacity.
+
+### Confidence Rating
+
+| Rating | Conditions |
+|--------|------------|
+| HIGH | 3 or more methods applicable; assessed land value and available GFA both meet quality thresholds |
+| MEDIUM | 2 or more methods applicable, but quality thresholds not fully met |
+| LOW | Only 1 method applicable |
+| NOT APPLICABLE | Overdeveloped, no available rights, or no applicable methods |
+
+Quality thresholds are set in `config/valuation_params.json` under `confidence_thresholds`.
+
+### Configurable Market Parameters
+
+All market parameters are stored in `config/valuation_params.json` and must be calibrated to current conditions before use. The parameter file itself documents the current values and the date they were last updated.
+
+| Parameter | Used In | What It Represents | How to Calibrate |
+|-----------|---------|-------------------|-----------------|
+| `land_residual_discount_factor` (low/high) | Method 1 | Fraction of the implied land rate a TDR buyer would pay. Reflects that TDR rights are not fee-simple ownership and that transaction costs and negotiation reduce achievable prices. | Observed TDR transaction prices divided by the pipeline's implied land rate for the same parcels. In the absence of local transactions, use comparable TDR markets (0.50–0.85 is a common range). |
+| `market_to_assessment_ratio` (low/high) | Method 2 | Multiplier converting assessed land value to market value. A value of 1.0 treats assessment as equal to market; 1.15 means market is 15% above assessment. | Divide recent arm's-length sale prices for comparable lots by their concurrent assessed land value. Update annually or after significant market movements. |
+| `price_per_available_gfa_sf` (low/high) | Method 3 | Market price per square foot of transferable development capacity, independent of any individual parcel's assessed value. | Observed TDR transaction prices per sf; or comparable program benchmarks; or developer pro forma analysis of the marginal value of additional floor area in the submarket. |
+| `price_per_available_dwelling_unit` (low/high) | Method 4 | Market price per transferable dwelling unit of capacity. | Density-bonus in-lieu fees, inclusionary zoning per-unit contributions, or TDR transaction prices expressed per unit. |
+| `confidence_thresholds` | Confidence rating | Minimum assessed land value and minimum available GFA required for HIGH confidence. Parcels below either threshold are rated MEDIUM even if 3+ methods apply. | Set based on the minimum data quality considered reliable for policy use; review if the dataset's typical land value or GFA distribution changes significantly. |
+| `residential_improvement_value_per_sf` (fallback) | Stage 2 GFA estimate | Static $/sf used to estimate GFA from improvement value when neighborhood calibration has fewer than 5 recent-build samples. | Current replacement cost per sf for residential construction in the area; consult local construction cost indices or assessor documentation. |
+
+---
+
+## Assumptions and Known Simplifications
+
+See the [README](../README.md#assumptions-and-limitations) for the authoritative list. Key items:
+
+1. **GFA estimation uses a fixed story multiplier (2.5).** Actual stories depend on floor heights, ceiling heights, and roof configuration. Some parcels may support more or fewer stories within the 35-foot height limit.
+
+2. **The §3.2.5.A.2 undersized lot footprint allowance is not implemented.** Undersized lots are legally entitled to the same footprint SF cap as a standard-sized lot in their district, which could allow a higher footprint percentage on a small lot than the pipeline calculates. Implementing this provision requires setback analysis to verify the standard footprint physically fits on the smaller lot.
+
+3. **Lot coverage available rights are not computed.** Actual impervious coverage data is not available from county records.
+
+4. **By-right analysis only.** Special exceptions, site plans, and variances are not modeled.
+
+5. **Porch and garage bonuses are not applied in bulk analysis.** The pipeline uses base coverage and footprint limits as a conservative estimate.
+
+6. **Lot area uses the assessor's recorded area** (`lotSizeQty`) when available. Lot width is derived from `area / depth` rather than measured from geometry directly.

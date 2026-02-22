@@ -105,6 +105,14 @@ class AvailableRightsResult:
     is_analyzable: bool = False
     """True if both max potential and current built data are available"""
 
+    tdr_potential: Optional[str] = None
+    """TDR potential classification: 'full' | 'substantial' | 'limited' | 'none'
+    full        — vacant lot; all rights available
+    substantial — GFA utilization < 80%; significant unused capacity
+    limited     — GFA utilization 80–100%; substantially built out
+    none        — GFA utilization > 100%; legal nonconforming use
+    """
+
     # Component results
     potential: Optional[DevelopmentPotentialResult] = None
     """Full development potential analysis result"""
@@ -184,12 +192,16 @@ class AvailableRightsResult:
                 f"GFA Utilization: {self.gfa_utilization_pct:.1f}%",
             ])
 
-        if self.is_vacant:
-            lines.append("Status: VACANT (no building on parcel)")
-        elif self.is_overdeveloped:
-            lines.append("Status: OVERDEVELOPED (exceeds current zoning by-right)")
-        elif self.is_underdeveloped:
-            lines.append("Status: UNDERDEVELOPED (significant unused capacity)")
+        _tdr_labels = {
+            "full": "FULL (vacant lot; all rights available)",
+            "substantial": "SUBSTANTIAL (significant unused capacity)",
+            "limited": "LIMITED (80–100% built out)",
+            "none": "NONE (exceeds by-right limits; legal nonconforming)",
+        }
+        if self.tdr_potential:
+            lines.append(
+                f"TDR Potential: {_tdr_labels.get(self.tdr_potential, self.tdr_potential.upper())}"
+            )
 
         if self.notes:
             lines.extend(["", "Notes:"])
@@ -357,6 +369,18 @@ def calculate_available_rights(
             "may be legal nonconforming (grandfathered) use"
         )
 
+    # -- TDR Potential classification --
+    if result.is_vacant:
+        result.tdr_potential = "full"
+    elif result.is_overdeveloped:
+        result.tdr_potential = "none"
+    elif result.is_underdeveloped:
+        result.tdr_potential = "substantial"
+    elif result.is_underdeveloped is not None:
+        # Explicitly False: 80–100% utilization range
+        result.tdr_potential = "limited"
+    # else: remains None (utilization indeterminate; insufficient data)
+
     return result
 
 
@@ -492,5 +516,6 @@ def _empty_rights_record() -> dict:
         "is_vacant": None,
         "is_underdeveloped": None,
         "is_overdeveloped": None,
+        "tdr_potential": None,
         "rights_analyzable": False,
     }
