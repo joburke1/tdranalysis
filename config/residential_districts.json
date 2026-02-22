@@ -1,9 +1,9 @@
 {
   "_metadata": {
-    "source": "Arlington County Zoning Ordinance, Article 5 - Residential (R) Districts",
+    "source": "Arlington County Zoning Ordinance, Article 5 (Residential Districts) for density/height, Article 3 §3.2.5 for coverage/footprint",
     "effective_date": "2025-10-01",
-    "last_updated": "2025-01-23",
-    "notes": "By-right standards for one-family dwellings only. Special exception and site plan standards not included."
+    "last_updated": "2025-02-22",
+    "notes": "By-right standards for one-family dwellings only. Special exception and site plan standards not included. Coverage and footprint limits are from Article 3 §3.2.5.A, which applies to all one-family dwelling lots in R, RA, C, and M districts. The undersized lot provision (§3.2.5.A.2) is not implemented in the pipeline — see README Assumptions and Limitations."
   },
   "districts": {
     "R-20": {

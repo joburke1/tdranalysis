@@ -64,7 +64,8 @@ R-5: 5000 | R-6: 6000 | R-8: 8000 | R-10: 10000 | R-20: 20000
 **Excluded from coverage:** HVAC equipment, above-ground pools, sidewalks, basement steps/areaways, temporary structures, play equipment, furniture, hot tubs, small accessory buildings (≤150sf and <2 stories).
 
 ## Special Rules
-- **Undersized lots:** Get same sq ft cap as standard lot in district (§3.2.5.A.2)
+- **Undersized lots:** Get same sq ft cap as standard lot in district (§3.2.5.A.2).
+  *Pipeline simplification:* This provision is NOT currently implemented. The pipeline calculates `LOT_AREA × pct` for all lots, which understates the allowable footprint for undersized lots. Correct implementation requires setback analysis to confirm the standard footprint physically fits on the smaller lot.
 - **Non-one-family uses:** 56% max coverage unless modified by district/permit (§3.2.5.B)
 - **100+ acre lots:** May get 55ft height by use permit if 150ft setback from all lines (§5.x.x.C)
 

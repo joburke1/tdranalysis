@@ -418,14 +418,16 @@ These filters run automatically on every analysis — no manual intervention nee
 | `IMPROVEMENT_VALUE_UNRELIABLE` | $30,000 | Flag: GFA estimate unreliable |
 | `ZSCORE_THRESHOLD` | 2.5 | Flag: statistical outlier |
 
-## Limitations
+## Assumptions and Limitations
 
 1. **By-right only**: Does not analyze special exception or site plan scenarios
 2. **One-family focus**: Currently analyzes one-family dwelling potential only
-3. **Lot width calculation**: Uses minimum bounding rectangle method, which may not match legal definition for irregular lots
-4. **Split zoning**: Parcels spanning multiple zones are flagged but use primary zone
-5. **Setbacks**: Setback calculations are not yet implemented (requires street geometry)
-6. **Valuation**: Market parameter estimates are approximate; calibrate `valuation_params.json` to current conditions before use
+3. **Lot area source**: When the assessor's `lotSizeQty` is available (92.8% of residential parcels), it is used as the authoritative lot area. The remaining parcels fall back to polygon geometry area, which may differ from the legal survey by 1-3%.
+4. **Lot width and depth**: Lot depth is the long dimension of the minimum rotated bounding rectangle (MBR) of the parcel polygon. Lot width is derived from `lot area / depth` when assessor area is available, or from the MBR short dimension otherwise. These are geometric approximations and may not match legal lot dimensions.
+5. **Undersized lot footprint provision not implemented**: Per §3.2.5.A.2, nonconforming (undersized) lots are entitled to the same maximum building footprint in square feet as a standard-sized lot in their zoning district. The pipeline does not implement this provision — it calculates max footprint as `lot_area × footprint_pct`, which **understates** the allowable footprint for undersized lots. Implementing this correctly would also require setback analysis to confirm the standard footprint physically fits on the smaller lot, which is not yet available. Parcels meeting or exceeding the minimum lot area for their district are not affected.
+6. **Split zoning**: Parcels spanning multiple zones are flagged but use primary zone only
+7. **Setbacks**: Setback calculations are not yet implemented (requires street geometry)
+8. **Valuation**: Market parameter estimates are approximate; calibrate `valuation_params.json` to current conditions before use
 
 ## Data Sources
 
