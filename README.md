@@ -20,10 +20,10 @@ Disclaimer: The analysis is based on **Article 5 (Residential Districts)** and *
 - Spatial join of parcels to zoning districts
 - Calculate lot metrics (area, width, depth) from geometry
 - Validate conformance against zoning requirements
-- **4-stage analysis pipeline**: Development Potential → Current Built → Available Rights → Valuation
+- **4-stage analysis pipeline**: Development Potential → Current Built → Available Rights → Valuation (3-method)
 - Identify limiting factors for development
 - Estimate unused development rights (GFA, footprint, dwelling units)
-- **Multi-method valuation**: Four independent methods with confidence ratings
+- **Multi-method valuation**: Three independent methods with confidence ratings
 - **Neighborhood calibration**: Derives local improvement rates from recent construction
 - Automated anomaly detection with tiered data quality flags
 - Interactive HTML maps, GeoPackage/GeoJSON for GIS, CSV exports
@@ -224,11 +224,10 @@ Computes remaining unused development capacity:
 - Classifies parcels as `vacant`, `underdeveloped` (<80% GFA utilization), or `overdeveloped` (grandfathered above limit)
 
 ### Stage 4: Valuation (`valuation.py`)
-Estimates monetary value of unused rights using four independent methods:
+Estimates monetary value of unused rights using three independent methods:
 1. **Land Residual** — Land $/SF (from assessed value) × available GFA × discount factor
 2. **Assessment Ratio** — Assessed land value × market-to-assessment ratio × availability fraction
 3. **Price Per SF** — Configurable $/SF × available GFA
-4. **Price Per Unit** — Configurable $/unit × available dwelling units
 
 Returns a composite range (min low → max high of applicable methods) with a HIGH/MEDIUM/LOW confidence rating.
 
@@ -266,7 +265,6 @@ Contains configurable market parameters that should be calibrated to current con
 |-----------|-------------|
 | `market_to_assessment_ratio` | low: 1.0 / high: 1.15 — converts assessed value to market value |
 | `price_per_available_gfa_sf` | low: $100 / high: $200 per SF of available GFA |
-| `price_per_available_dwelling_unit` | low: $150,000 / high: $350,000 per available unit |
 | `land_residual_discount_factor` | low: 0.6 / high: 0.85 — accounts for risk, demolition, carrying costs |
 | `residential_improvement_value_per_sf` | Fallback $185/SF (used when neighborhood rate has insufficient sample) |
 | `confidence_thresholds` | Min land value ($100k) and min available GFA (500 SF) for HIGH confidence |

@@ -20,11 +20,6 @@
     "high": 200,
     "notes": "Dollars per square foot of unused GFA capacity. Varies by neighborhood, zoning district, and current market conditions. Calibrate from comparable land sales expressed per buildable SF."
   },
-  "price_per_available_dwelling_unit": {
-    "low": 150000,
-    "high": 350000,
-    "notes": "Dollars per available (unused) dwelling unit of capacity. Reflects land component only, not construction cost. Most applicable for vacant lots where max_dwelling_units > 0."
-  },
   "land_residual_discount_factor": {
     "low": 0.6,
     "high": 0.85,

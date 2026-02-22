@@ -342,8 +342,6 @@ class ParcelInspectionResult:
                 "market_to_assessment_ratio_high": self.stage4_params_used.market_to_assessment_ratio_high,
                 "price_per_gfa_sf_low": self.stage4_params_used.price_per_gfa_sf_low,
                 "price_per_gfa_sf_high": self.stage4_params_used.price_per_gfa_sf_high,
-                "price_per_unit_low": self.stage4_params_used.price_per_unit_low,
-                "price_per_unit_high": self.stage4_params_used.price_per_unit_high,
                 "land_residual_discount_low": self.stage4_params_used.land_residual_discount_low,
                 "land_residual_discount_high": self.stage4_params_used.land_residual_discount_high,
                 "residential_improvement_value_per_sf": self.stage4_params_used.residential_improvement_value_per_sf,
@@ -756,8 +754,6 @@ def _format_report(r: ParcelInspectionResult) -> str:
             _format_method(lines, "Method 2 - Assessment Ratio", val.assessment_ratio)
             lines.append("")
             _format_method(lines, "Method 3 - Price Per SF", val.price_per_sf)
-            lines.append("")
-            _format_method(lines, "Method 4 - Price Per Unit", val.price_per_unit)
 
             if val.estimated_value_low is not None and val.estimated_value_high is not None:
                 lines.append("")

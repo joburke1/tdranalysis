@@ -262,23 +262,6 @@ Input sources:
   submarket. This method applies to all parcels with available GFA; it is the broadest
   applicable method and serves as the baseline estimate when assessed value is unavailable.
 
-### Method 4: Price Per Dwelling Unit
-```
-REQUIRES: available_dwelling_units > 0
-
-value_low  = available_dwelling_units × price_per_unit_low
-value_high = available_dwelling_units × price_per_unit_high
-```
-
-Input sources:
-- `available_dwelling_units` = Stage 3 output: max_dwelling_units − current_dwelling_units
-  For all R districts in scope, max_dwelling_units = 1 (one-family by-right).
-  current_dwelling_units = from property API `numberOfUnitsCnt` (typically 1 for SFH).
-  In practice, this method produces results primarily for vacant parcels (1 − 0 = 1).
-- `price_per_unit_low/high` = calibrated parameter in `config/valuation_params.json`
-  Market price per transferable dwelling unit. Calibrate from density-bonus in-lieu fees,
-  inclusionary zoning per-unit contributions, or TDR transaction prices expressed per unit.
-
 ### Composite Range
 ```
 ESTIMATED_VALUE_LOW  = MIN(all applicable method lows)
@@ -310,7 +293,6 @@ ELSE:
 | `land_residual_discount_factor.low/high` | float (0–1) | Method 1 | Fraction of implied land rate a TDR buyer pays. Accounts for non-fee-simple nature of TDR rights, transaction costs, and negotiation. Calibrate: observed TDR price ÷ pipeline's implied land_rate for same parcel. Typical range 0.50–0.85. |
 | `market_to_assessment_ratio.low/high` | float | Method 2 | Market value ÷ assessed land value. 1.0 = assessment equals market; 1.15 = market is 15% above. Calibrate: arm's-length sale price ÷ concurrent assessed land value for comparable lots. Update annually. |
 | `price_per_available_gfa_sf.low/high` | float | Method 3 | Market $/sf of transferable GFA capacity. Calibrate from observed TDR transactions, comparable program benchmarks, or developer pro forma marginal GFA value. |
-| `price_per_available_dwelling_unit.low/high` | float | Method 4 | Market $/unit of transferable dwelling capacity. Calibrate from density-bonus in-lieu fees, inclusionary in-lieu fees per unit, or per-unit TDR transaction prices. |
 | `confidence_thresholds.high_confidence_min_land_value` | float | Confidence | Minimum assessed land value (dollars) for HIGH confidence. Parcels below this threshold are rated MEDIUM even with 3+ methods applicable. |
 | `confidence_thresholds.high_confidence_min_available_gfa_sf` | float | Confidence | Minimum available GFA (sf) for HIGH confidence. Reflects that very small available rights produce unreliable estimates. |
 | `residential_improvement_value_per_sf.fallback_value` | float | Stage 2 | Static $/sf used when neighborhood calibration has < 5 recent-build samples. Calibrate from current residential construction cost indices or assessor documentation. |

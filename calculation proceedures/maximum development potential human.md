@@ -258,22 +258,6 @@ Requires: available GFA > 0.
 
 - **`price_per_sf_low` / `price_per_sf_high`** (`price_per_available_gfa_sf` in `config/valuation_params.json`): The market rate in dollars per square foot of transferable development capacity. In an active TDR program, calibrate directly from observed TDR transaction prices. In a nascent or proposed program such as Arlington's, estimate from: (a) transaction prices in comparable TDR programs in similar markets, (b) developer pro forma analysis of the marginal value of additional floor area in this submarket, or (c) the cost to obtain equivalent density through alternative means such as rezoning or variances. Because this method requires only available GFA, it serves as the baseline estimate for all parcels with unused capacity.
 
-#### 4. Price Per Dwelling Unit Method
-Values available rights in terms of dwelling units rather than floor area. More intuitive for housing-focused policy analysis, but in one-family districts it typically applies only to vacant lots.
-
-```
-value_low  = available_units × price_per_unit_low
-value_high = available_units × price_per_unit_high
-```
-
-Requires: available dwelling units > 0.
-
-**How inputs are determined:**
-
-- **`available_units`**: Computed in Stage 3 as `max_dwelling_units − current_dwelling_units`. For all R districts currently in scope, by-right zoning allows a maximum of 1 dwelling unit per lot. A vacant lot has 1 available unit; a developed single-family lot has 0. In practice this method produces a result primarily for vacant parcels.
-
-- **`price_per_unit_low` / `price_per_unit_high`** (`price_per_available_dwelling_unit` in `config/valuation_params.json`): The market price per transferable dwelling unit. Calibrate from comparable density-bonus in-lieu fees, inclusionary zoning per-unit contributions, or TDR transaction prices expressed on a per-unit basis. This benchmark is sometimes more accessible than a per-sf rate when comparable programs report prices in terms of units of additional density.
-
 ### Composite Range
 
 The composite LOW/HIGH range is the **envelope** of all applicable method estimates:
@@ -289,9 +273,9 @@ This produces a wide range by design, capturing the spread across different appr
 
 | Rating | Conditions |
 |--------|------------|
-| HIGH | 3 or more methods applicable; assessed land value and available GFA both meet quality thresholds |
-| MEDIUM | 2 or more methods applicable, but quality thresholds not fully met |
-| LOW | Only 1 method applicable |
+| HIGH | All 3 methods applicable; assessed land value and available GFA both meet quality thresholds |
+| MEDIUM | 2 of 3 methods applicable, but quality thresholds not fully met |
+| LOW | Only 1 of 3 methods applicable |
 | NOT APPLICABLE | Overdeveloped, no available rights, or no applicable methods |
 
 Quality thresholds are set in `config/valuation_params.json` under `confidence_thresholds`.
@@ -305,7 +289,6 @@ All market parameters are stored in `config/valuation_params.json` and must be c
 | `land_residual_discount_factor` (low/high) | Method 1 | Fraction of the implied land rate a TDR buyer would pay. Reflects that TDR rights are not fee-simple ownership and that transaction costs and negotiation reduce achievable prices. | Observed TDR transaction prices divided by the pipeline's implied land rate for the same parcels. In the absence of local transactions, use comparable TDR markets (0.50–0.85 is a common range). |
 | `market_to_assessment_ratio` (low/high) | Method 2 | Multiplier converting assessed land value to market value. A value of 1.0 treats assessment as equal to market; 1.15 means market is 15% above assessment. | Divide recent arm's-length sale prices for comparable lots by their concurrent assessed land value. Update annually or after significant market movements. |
 | `price_per_available_gfa_sf` (low/high) | Method 3 | Market price per square foot of transferable development capacity, independent of any individual parcel's assessed value. | Observed TDR transaction prices per sf; or comparable program benchmarks; or developer pro forma analysis of the marginal value of additional floor area in the submarket. |
-| `price_per_available_dwelling_unit` (low/high) | Method 4 | Market price per transferable dwelling unit of capacity. | Density-bonus in-lieu fees, inclusionary zoning per-unit contributions, or TDR transaction prices expressed per unit. |
 | `confidence_thresholds` | Confidence rating | Minimum assessed land value and minimum available GFA required for HIGH confidence. Parcels below either threshold are rated MEDIUM even if 3+ methods apply. | Set based on the minimum data quality considered reliable for policy use; review if the dataset's typical land value or GFA distribution changes significantly. |
 | `residential_improvement_value_per_sf` (fallback) | Stage 2 GFA estimate | Static $/sf used to estimate GFA from improvement value when neighborhood calibration has fewer than 5 recent-build samples. | Current replacement cost per sf for residential construction in the area; consult local construction cost indices or assessor documentation. |
 
