@@ -632,6 +632,11 @@ def _format_report(r: ParcelInspectionResult) -> str:
         lines.append(f"  Max footprint: {_fmt(pot.max_building_footprint_sf, ',.0f', suffix=' sf')}")
         lines.append(f"  Max dwelling units: {pot.max_dwelling_units}")
 
+        if pot.notes:
+            lines.append("")
+            for note in pot.notes:
+                lines.append(f"  Note: {note}")
+
     # -- STAGE 2 --
     lines.append("")
     lines.append("STAGE 2: CURRENT BUILT")
@@ -693,6 +698,11 @@ def _format_report(r: ParcelInspectionResult) -> str:
             lines.append(f"    Range:            ${rate.low:,.0f} - ${rate.high:,.0f}/sf")
             lines.append(f"    Fallback used:    {'Yes' if rate.fallback_used else 'No'}")
 
+        if cur and cur.notes:
+            lines.append("")
+            for note in cur.notes:
+                lines.append(f"  Note: {note}")
+
     # -- STAGE 3 --
     lines.append("")
     lines.append("STAGE 3: AVAILABLE RIGHTS")
@@ -726,11 +736,17 @@ def _format_report(r: ParcelInspectionResult) -> str:
             tdr_label = _tdr_labels.get(rts.tdr_potential or "", "Unknown")
             lines.append("")
             lines.append(f"  TDR Potential:      {tdr_label}")
-            lines.append(f"  Utilization:        {_fmt(rts.gfa_utilization_pct, '.1f', suffix='%')}")
+            lines.append(f"  GFA utilization:    {_fmt(rts.gfa_utilization_pct, '.1f', suffix='%')}")
+            lines.append(f"  Footprint util.:    {_fmt(rts.footprint_utilization_pct, '.1f', suffix='%')}")
 
             lines.append("")
             lines.append(f"  Available footprint: {_fmt(rts.available_footprint_sf, ',.0f', suffix=' sf')}")
             lines.append(f"  Available units:     {_fmt(rts.available_dwelling_units)}")
+
+            if rts.notes:
+                lines.append("")
+                for note in rts.notes:
+                    lines.append(f"  Note: {note}")
 
     # -- STAGE 4 --
     lines.append("")
@@ -747,6 +763,25 @@ def _format_report(r: ParcelInspectionResult) -> str:
             lines.append(f"    Available units:  {_fmt(val.available_dwelling_units)}")
             lines.append(f"    Land value:       {_fmt(val.assessed_land_value, ',.0f', prefix='$')}")
             lines.append(f"    Max GFA:          {_fmt(val.max_gfa_sf, ',.0f', suffix=' sf')}")
+
+            params = r.stage4_params_used
+            if params:
+                lines.append("")
+                lines.append("  Parameters Used (from config/valuation_params.json):")
+                lines.append(
+                    f"    Land residual discount:     "
+                    f"{params.land_residual_discount_low:.0%}–{params.land_residual_discount_high:.0%}"
+                )
+                lines.append(
+                    f"    Assessment market ratio:    "
+                    f"{params.market_to_assessment_ratio_low:.2f}x–{params.market_to_assessment_ratio_high:.2f}x"
+                )
+                lines.append(
+                    f"    Price per available GFA SF: "
+                    f"${params.price_per_gfa_sf_low:,.0f}–${params.price_per_gfa_sf_high:,.0f}/sf"
+                )
+                if params.params_last_updated:
+                    lines.append(f"    Params last updated:        {params.params_last_updated}")
 
             lines.append("")
             _format_method(lines, "Method 1 - Land Residual", val.land_residual)
@@ -765,6 +800,11 @@ def _format_report(r: ParcelInspectionResult) -> str:
             lines.append(f"  Confidence: {val.confidence.value.upper()}")
             for factor in val.confidence_factors:
                 lines.append(f"    - {factor}")
+
+            if val.notes:
+                lines.append("")
+                for note in val.notes:
+                    lines.append(f"  Note: {note}")
 
     lines.append("")
     lines.append(sep)
