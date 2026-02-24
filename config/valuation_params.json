@@ -1,12 +1,17 @@
 {
   "_metadata": {
     "source": "Arlington County assessment data and market observations",
-    "last_updated": "2026-02-18",
+    "last_updated": "2026-02-23",
     "notes": [
       "Configurable market parameters for estimating development rights value.",
       "All dollar values are illustrative defaults and must be calibrated to",
       "current market conditions before use in policy analysis.",
       "Parameter source: Arlington County residential land market observations.",
+      "land_residual_discount_factor parameters are anchored in 'Valuation of",
+      "Development Rights.md': supply-side conservation easement data (adjusted",
+      "for partial-severance context), demand-side developer economics (Arlington",
+      "site plan process costs 2023-2025), and cross-validation against comparable",
+      "TDR programs. See that document for full derivation.",
       "This is NOT a substitute for a formal appraisal."
     ]
   },
@@ -21,9 +26,9 @@
     "notes": "Dollars per square foot of unused GFA capacity. Varies by neighborhood, zoning district, and current market conditions. Calibrate from comparable land sales expressed per buildable SF."
   },
   "land_residual_discount_factor": {
-    "low": 0.6,
-    "high": 0.85,
-    "notes": "Discount applied to the raw land-per-SF rate to account for: entitlement risk, demolition costs (if parcel is not vacant), holding and carry costs, and developer profit margin. Lower bound is more conservative."
+    "low": 0.55,
+    "high": 0.75,
+    "notes": "Fraction of assessed residential land value attributable to severable development rights. Anchored by three independent lines of evidence: (1) supply-side — conservation easement transaction data (NJ SADC 230k+ acres, MD MALPF 350k+ acres) adjusted downward from 60-80% for Arlington's partial-severance context (unused increment only, not total restriction); (2) demand-side — receiving-zone developer economics showing TDR credits at $51-70/sf fall well below the $122-193/sf all-in cost of Arlington's special exception site plan process; (3) comparable programs — tax court rulings (40-75% for genuine development restrictions), Montgomery County BLT, NYC TDR mechanisms. The 0.55-0.75 range reflects that severed rights represent ~15-30% of total property value, which redenominates to ~40-70% of assessed land value (itself ~35-45% of total assessed value). Source: 'supporting documentation/Valuation of Development Rights.md'."
   },
   "confidence_thresholds": {
     "high_confidence_min_land_value": 100000,
