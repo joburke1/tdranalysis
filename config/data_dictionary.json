@@ -125,13 +125,6 @@
       "example": "35"
     },
     {
-      "field": "max_dwelling_units",
-      "label": "Max Dwelling Units Allowed",
-      "description": "The maximum number of dwelling units (homes) that can be built on this parcel by-right. Most single-family residential parcels allow 1 unit.",
-      "source": "Calculated from zoning district standards",
-      "example": "1"
-    },
-    {
       "field": "available_gfa_sf",
       "label": "Unused Floor Area Capacity (sq ft)",
       "description": "How much additional floor area could be built on this parcel before reaching the zoning maximum — in square feet. Calculated as max buildable GFA minus current building GFA. Negative values mean the existing building exceeds what current zoning would allow (grandfathered / legal nonconforming).",

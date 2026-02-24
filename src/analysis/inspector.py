@@ -630,7 +630,6 @@ def _format_report(r: ParcelInspectionResult) -> str:
             for issue in pot.conformance_issues:
                 lines.append(f"    - {issue}")
         lines.append(f"  Max footprint: {_fmt(pot.max_building_footprint_sf, ',.0f', suffix=' sf')}")
-        lines.append(f"  Max dwelling units: {pot.max_dwelling_units}")
 
         if pot.notes:
             lines.append("")
@@ -675,7 +674,6 @@ def _format_report(r: ParcelInspectionResult) -> str:
         lines.append(f"  Current GFA:        {_fmt(cur.gross_floor_area_sf, ',.0f', suffix=' sf')} ({cur.gfa_source})")
         lines.append(f"  Stories:            {_fmt(cur.story_count)}")
         lines.append(f"  Year built:         {_fmt(cur.year_built)}")
-        lines.append(f"  Dwelling units:     {_fmt(cur.dwelling_units)}")
         if cur.estimated_footprint_sf:
             if cur.story_count and cur.story_count > 0 and cur.gross_floor_area_sf:
                 lines.append(
@@ -737,11 +735,6 @@ def _format_report(r: ParcelInspectionResult) -> str:
             lines.append("")
             lines.append(f"  TDR Potential:      {tdr_label}")
             lines.append(f"  GFA utilization:    {_fmt(rts.gfa_utilization_pct, '.1f', suffix='%')}")
-            lines.append(f"  Footprint util.:    {_fmt(rts.footprint_utilization_pct, '.1f', suffix='%')}")
-
-            lines.append("")
-            lines.append(f"  Available footprint: {_fmt(rts.available_footprint_sf, ',.0f', suffix=' sf')}")
-            lines.append(f"  Available units:     {_fmt(rts.available_dwelling_units)}")
 
             if rts.notes:
                 lines.append("")
@@ -760,7 +753,6 @@ def _format_report(r: ParcelInspectionResult) -> str:
         else:
             lines.append("  Inputs:")
             lines.append(f"    Available GFA:    {_fmt(val.available_gfa_sf, ',.0f', suffix=' sf')}")
-            lines.append(f"    Available units:  {_fmt(val.available_dwelling_units)}")
             lines.append(f"    Land value:       {_fmt(val.assessed_land_value, ',.0f', prefix='$')}")
             lines.append(f"    Max GFA:          {_fmt(val.max_gfa_sf, ',.0f', suffix=' sf')}")
 

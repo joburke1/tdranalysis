@@ -125,7 +125,6 @@ _OUTPUT_SCHEMA = (
     ("max_footprint_sf",              "max_footprint_sf"),
     ("valuation_max_gfa_sf",          "max_gfa_sf"),
     ("max_height_ft",                 "max_height_ft"),
-    ("max_dwelling_units",            "max_dwelling_units"),
     # Available rights
     ("valuation_available_gfa_sf",    "available_gfa_sf"),
     ("gfa_utilization_pct",           "gfa_utilization_pct"),
