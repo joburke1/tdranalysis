@@ -1,0 +1,295 @@
+{
+  "scenarios": [
+    {
+      "scenario": "happy_path",
+      "scored": true,
+      "session": {
+        "model": "haiku",
+        "skill": "run-pipeline",
+        "arguments": "Alcova Heights",
+        "tool_calls": [],
+        "final_text": "",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "turn_count": 0,
+        "error": "claude CLI timed out after 300s"
+      },
+      "score": {
+        "scenario": "happy_path",
+        "total": 40,
+        "criteria": {
+          "unix_path": {
+            "weight": 20,
+            "earned": 20,
+            "note": "No Bash calls \u2014 path criterion N/A"
+          },
+          "skip_flags": {
+            "weight": 15,
+            "earned": 15,
+            "note": "No Bash calls \u2014 skip flags N/A"
+          },
+          "stdout_displayed": {
+            "weight": 15,
+            "earned": 0,
+            "note": "CRITICAL: No Bash tool call made"
+          },
+          "summary_read": {
+            "weight": 20,
+            "earned": 0,
+            "note": "CRITICAL: Summary file not read"
+          },
+          "key_numbers": {
+            "weight": 15,
+            "earned": 0,
+            "note": "No key numbers found (expected ['295', '283', '69', '216'])"
+          },
+          "followup_offers": {
+            "weight": 10,
+            "earned": 0,
+            "note": "Neither follow-up offer present"
+          },
+          "turn_count": {
+            "weight": 5,
+            "earned": 5,
+            "note": "Turn count: 0 (\u22645)"
+          }
+        },
+        "passed": false,
+        "critical_failures": [
+          "summary_read"
+        ]
+      }
+    },
+    {
+      "scenario": "nonexistent_neighborhood",
+      "scored": true,
+      "session": {
+        "model": "haiku",
+        "skill": "run-pipeline",
+        "arguments": "Nonexistent Neighborhood XYZ",
+        "tool_calls": [],
+        "final_text": "",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "turn_count": 0,
+        "error": "claude CLI timed out after 300s"
+      },
+      "score": {
+        "scenario": "nonexistent_neighborhood",
+        "total": 85,
+        "criteria": {
+          "unix_path": {
+            "weight": 20,
+            "earned": 20,
+            "note": "No Bash calls \u2014 path criterion N/A"
+          },
+          "skip_flags": {
+            "weight": 15,
+            "earned": 15,
+            "note": "No Bash calls \u2014 skip flags N/A"
+          },
+          "stdout_displayed": {
+            "weight": 15,
+            "earned": 0,
+            "note": "CRITICAL: No Bash tool call made"
+          },
+          "summary_read": {
+            "weight": 20,
+            "earned": 20,
+            "note": "Summary read N/A for this scenario"
+          },
+          "key_numbers": {
+            "weight": 15,
+            "earned": 15,
+            "note": "Key numbers N/A for this scenario"
+          },
+          "followup_offers": {
+            "weight": 10,
+            "earned": 10,
+            "note": "Follow-up offers N/A for this scenario"
+          },
+          "turn_count": {
+            "weight": 5,
+            "earned": 5,
+            "note": "Turn count: 0 (\u22645)"
+          }
+        },
+        "passed": true,
+        "critical_failures": []
+      }
+    },
+    {
+      "scenario": "list_neighborhoods",
+      "scored": true,
+      "session": {
+        "model": "haiku",
+        "skill": "run-pipeline",
+        "arguments": "--list",
+        "tool_calls": [],
+        "final_text": "",
+        "input_tokens": 0,
+        "output_tokens": 0,
+        "turn_count": 0,
+        "error": "claude CLI timed out after 300s"
+      },
+      "score": {
+        "scenario": "list_neighborhoods",
+        "total": 85,
+        "criteria": {
+          "unix_path": {
+            "weight": 20,
+            "earned": 20,
+            "note": "No Bash calls \u2014 path criterion N/A"
+          },
+          "skip_flags": {
+            "weight": 15,
+            "earned": 15,
+            "note": "No Bash calls \u2014 skip flags N/A"
+          },
+          "stdout_displayed": {
+            "weight": 15,
+            "earned": 0,
+            "note": "CRITICAL: No Bash tool call made"
+          },
+          "summary_read": {
+            "weight": 20,
+            "earned": 20,
+            "note": "Summary read N/A for this scenario"
+          },
+          "key_numbers": {
+            "weight": 15,
+            "earned": 15,
+            "note": "Key numbers N/A for this scenario"
+          },
+          "followup_offers": {
+            "weight": 10,
+            "earned": 10,
+            "note": "Follow-up offers N/A for this scenario"
+          },
+          "turn_count": {
+            "weight": 5,
+            "earned": 5,
+            "note": "Turn count: 0 (\u22645)"
+          }
+        },
+        "passed": true,
+        "critical_failures": []
+      }
+    },
+    {
+      "scenario": "empty_args",
+      "scored": true,
+      "session": {
+        "model": "haiku",
+        "skill": "run-pipeline",
+        "arguments": "",
+        "tool_calls": [],
+        "final_text": "# Run TDR Analysis Pipeline\n\nThis skill runs the Arlington TDR analysis pipeline for a single neighborhood or all neighborhoods.\n\n## Usage\n\n```bash\n/run-pipeline \"Neighborhood Name\"    # Run analysis for a specific neighborhood\n/run-pipeline --all                  # Run all neighborhoods in batch\n/run-pipeline --list                 # List available neighborhoods\n/run-pipeline --help                 # Show this help message\n```\n\n## Common Neighborhoods\n\n- **Alcova Heights** \u00e2\u20ac\u201d Primary test neighborhood (295 parcels)\n- **Lyon Park** \u00e2\u20ac\u201d lyon_park\n- **Nauck** \u00e2\u20ac\u201d nauck\n- **Barcroft** \u00e2\u20ac\u201d barcroft\n\n## Examples\n\n```bash\n/run-pipeline \"Alcova Heights\"\n/run-pipeline \"Lyon Park\"\n/run-pipeline --all\n/run-pipeline --list\n```\n\n## What Happens\n\n1. Runs the 4-stage analysis pipeline:\n   - Development potential (max GFA by zoning)\n   - Current built status (existing GFA + improvement value)\n   - Available rights (remaining capacity & TDR potential)\n   - Valuation (Land Residual, Assessment Ratio, Price/SF)\n\n2. Saves results to `data/results/<neighborhood_slug>/`:\n   - GeoPackage (`.gpkg`) and GeoJSON (`.geojson`)\n   - CSV with 40-field schema\n   - Summary report (`.txt`)\n   - Interactive Leaflet map (`map.html`)\n\n3. Optionally runs anomaly detection for data quality flags\n\n---\n\n**Which neighborhood would you like to analyze?** Provide the neighborhood name or `--list` to see all available options.",
+        "input_tokens": 18,
+        "output_tokens": 8,
+        "turn_count": 2,
+        "error": null
+      },
+      "score": {
+        "scenario": "empty_args",
+        "total": 85,
+        "criteria": {
+          "unix_path": {
+            "weight": 20,
+            "earned": 20,
+            "note": "No Bash calls \u2014 path criterion N/A"
+          },
+          "skip_flags": {
+            "weight": 15,
+            "earned": 15,
+            "note": "No Bash calls \u2014 skip flags N/A"
+          },
+          "stdout_displayed": {
+            "weight": 15,
+            "earned": 0,
+            "note": "CRITICAL: No Bash tool call made"
+          },
+          "summary_read": {
+            "weight": 20,
+            "earned": 20,
+            "note": "Summary read N/A for this scenario"
+          },
+          "key_numbers": {
+            "weight": 15,
+            "earned": 15,
+            "note": "Key numbers N/A for this scenario"
+          },
+          "followup_offers": {
+            "weight": 10,
+            "earned": 10,
+            "note": "Follow-up offers N/A for this scenario"
+          },
+          "turn_count": {
+            "weight": 5,
+            "earned": 5,
+            "note": "Turn count: 2 (\u22645)"
+          }
+        },
+        "passed": true,
+        "critical_failures": []
+      }
+    },
+    {
+      "scenario": "lowercase_neighborhood",
+      "scored": false,
+      "session": {
+        "model": "haiku",
+        "skill": "run-pipeline",
+        "arguments": "alcova heights",
+        "tool_calls": [
+          {
+            "name": "Bash",
+            "input": "cd /c/Users/johnb/Advocacy/tdranalysis && /c/Users/johnb/Advocacy/tdranalysis/venv/Scripts/python scripts/run_analysis.py --neighborhood \"Alcova Heights\" --skip-download --skip-process",
+            "output": "16:25:17 [INFO] run_analysis: Loading processed data from C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\processed\\parcels_enriched.gpkg...\r\n16:25:18 [INFO] run_analysis: Filtering to neighborhood: 'Alcova Heights'\r\n16:25:18 [INFO] run_analysis: Found 652 parcels in 'Alcova Heights'\r\n16:25:18 [INFO] run_analysis: [Alcova Heights] Excluded 118 parcel(s) in out-of-scope zoning districts (R2-7, R15-30T, R-10T); analysis limited to R-10, R-20, R-5, R-6, R-8\r\n16:25:18 [INFO] run_analysis: [Alcova Heights] Excluded 2 parcel(s) with non-residential property class (201/210)\r\n16:25:18 [INFO] src.rules.engine: Loaded 8 residential district rules\r\n16:25:18 [INFO] src.rules.engine: Loaded setback rules\r\n16:25:18 [INFO] run_analysis: [Alcova Heights] Excluded 37 vacant-class (510) parcel(s) below 80% of minimum lot size (likely alley/strip remnants)\r\n16:25:18 [INFO] run_analysis: [Alcova Heights] Excluded 135 parcel(s) with no property API record (likely alley remnants or administrative parcels)\r\n16:25:18 [INFO] run_analysis: [Alcova Heights] Excluded 20 parcel(s) with building but no improvement value (GFA cannot be estimated)\r\n16:25:18 [INFO] run_analysis: [Alcova Heights] Excluded 1 parcel(s) per spot-check exclusion records\r\n16:25:18 [INFO] run_analysis: [Alcova Heights] Analyzing 295 residential parcels (of 652 total, 357 excluded)...\r\n16:25:18 [INFO] src.rules.engine: Loaded 8 residential district rules\r\n16:25:18 [INFO] src.rules.engine: Loaded setback rules\r\n16:25:18 [INFO] src.rules.engine: Loaded 8 residential district rules\r\n16:25:18 [INFO] src.rules.engine: Loaded setback rules\r\n16:25:18 [INFO] src.analysis.current_built: Neighborhood improvement rate: $153/SF (range $137\u00ef\u00bf\u00bd$169, n=12)\r\n16:25:18 [INFO] run_analysis: [Alcova Heights] Analysis complete.\r\n16:25:18 [INFO] run_analysis:   Merged 8 spot-check record(s) into output\r\n16:25:18 [INFO] pyogrio._io: Created 295 records\r\n16:25:18 [INFO] run_analysis:   Saved GeoPackage: C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\alcova_heights_analysis.gpkg\r\n16:25:18 [INFO] pyogrio._io: Created 295 records\r\n16:25:18 [INFO] run_analysis:   Saved GeoJSON:    C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\alcova_heights_analysis.geojson\r\n16:25:18 [INFO] run_analysis:   Saved CSV:        C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\alcova_heights_analysis.csv\r\n16:25:18 [INFO] run_analysis:   Saved data dict:  C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\data_dictionary.csv\r\n16:25:18 [INFO] run_analysis:   Saved summary:    C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\alcova_heights_summary.txt\r\n16:25:18 [INFO] pyogrio._io: Created 357 records\r\n16:25:18 [INFO] run_analysis:   Saved excluded:   C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\alcova_heights_excluded.geojson (357 parcels)\r\n16:25:18 [INFO] generate_map: Loading GeoJSON from: C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\alcova_heights_analysis.geojson\r\n16:25:18 [INFO] generate_map: Loaded 295 features\r\n16:25:18 [INFO] generate_map: Loaded 357 excluded parcels from: C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\alcova_heights_excluded.geojson\r\n16:25:18 [INFO] generate_map: Saved map: C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\map.html (685 KB)\r\n16:25:18 [INFO] run_analysis:   Saved map:        C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\map.html\r\n\r\n============================================================\r\n  Results for: Alcova Heights\r\n============================================================\r\nAnalysis Summary: Alcova Heights\r\nGenerated: 2026-02-25 16:25\r\n============================================================\r\n\r\nTotal residential parcels analyzed: 295\r\nConforming parcels: 76 (25.8%)\r\n\r\nZoning district breakdown:\r\n  R-6             256 parcels\r\n  R-5              39 parcels\r\n\r\nDevelopment status:\r\n  underdeveloped      261 parcels\r\n  near-capacity        19 parcels\r\n  overdeveloped        11 parcels\r\n  vacant                4 parcels\r\n\r\nUnused GFA Capacity (parcels with positive available rights):\r\n  Parcels with capacity: 283\r\n  Total available SF:       1,081,246 sf\r\n  Median per parcel:            4,167 sf\r\n\r\nNeighborhood Improvement Rate Calibration:\r\n  Median $/SF:     $       153\r\n  Range:           $       137 \u00ef\u00bf\u00bd $169\r\n  Sample size:             12 recent builds\r\n\r\nValuation (parcels with positive available rights):\r\n  Parcels valued:            283\r\n  Aggregate low:      $    69,106,574\r\n  Aggregate high:     $   216,278,015\r\n  Confidence levels:\r\n    high                275\r\n    not_applicable       12\r\n    medium                8\r\n\r\n============================================================\r\nDISCLAIMER: Valuation estimates are for policy analysis only,\r\nnot property appraisals. Calibrate market parameters before use.\r\n\r\nLIMITATION: Parcels with no record in the Arlington property API\r\n(typically alley remnants, strips, or administrative parcels) are\r\nexcluded from this analysis. A small number of legitimately\r\ndevelopable parcels with incomplete API coverage may also be excluded."
+          },
+          {
+            "name": "Read",
+            "input": "C:\\Users\\johnb\\Advocacy\\tdranalysis\\data\\results\\alcova_heights\\alcova_heights_summary.txt",
+            "output": "     1\u00e2\u2020\u2019Analysis Summary: Alcova Heights\n     2\u00e2\u2020\u2019Generated: 2026-02-25 16:25\n     3\u00e2\u2020\u2019============================================================\n     4\u00e2\u2020\u2019\n     5\u00e2\u2020\u2019Total residential parcels analyzed: 295\n     6\u00e2\u2020\u2019Conforming parcels: 76 (25.8%)\n     7\u00e2\u2020\u2019\n     8\u00e2\u2020\u2019Zoning district breakdown:\n     9\u00e2\u2020\u2019  R-6             256 parcels\n    10\u00e2\u2020\u2019  R-5              39 parcels\n    11\u00e2\u2020\u2019\n    12\u00e2\u2020\u2019Development status:\n    13\u00e2\u2020\u2019  underdeveloped      261 parcels\n    14\u00e2\u2020\u2019  near-capacity        19 parcels\n    15\u00e2\u2020\u2019  overdeveloped        11 parcels\n    16\u00e2\u2020\u2019  vacant                4 parcels\n    17\u00e2\u2020\u2019\n    18\u00e2\u2020\u2019Unused GFA Capacity (parcels with positive available rights):\n    19\u00e2\u2020\u2019  Parcels with capacity: 283\n    20\u00e2\u2020\u2019  Total available SF:       1,081,246 sf\n    21\u00e2\u2020\u2019  Median per parcel:            4,167 sf\n    22\u00e2\u2020\u2019\n    23\u00e2\u2020\u2019Neighborhood Improvement Rate Calibration:\n    24\u00e2\u2020\u2019  Median $/SF:     $       153\n    25\u00e2\u2020\u2019  Range:           $       137 \u00e2\u20ac\u201c $169\n    26\u00e2\u2020\u2019  Sample size:             12 recent builds\n    27\u00e2\u2020\u2019\n    28\u00e2\u2020\u2019Valuation (parcels with positive available rights):\n    29\u00e2\u2020\u2019  Parcels valued:            283\n    30\u00e2\u2020\u2019  Aggregate low:      $    69,106,574\n    31\u00e2\u2020\u2019  Aggregate high:     $   216,278,015\n    32\u00e2\u2020\u2019  Confidence levels:\n    33\u00e2\u2020\u2019    high                275\n    34\u00e2\u2020\u2019    not_applicable       12\n    35\u00e2\u2020\u2019    medium                8\n    36\u00e2\u2020\u2019\n    37\u00e2\u2020\u2019============================================================\n    38\u00e2\u2020\u2019DISCLAIMER: Valuation estimates are for policy analysis only,\n    39\u00e2\u2020\u2019not property appraisals. Calibrate market parameters before use.\n    40\u00e2\u2020\u2019\n    41\u00e2\u2020\u2019LIMITATION: Parcels with no record in the Arlington property API\n    42\u00e2\u2020\u2019(typically alley remnants, strips, or administrative parcels) are\n    43\u00e2\u2020\u2019excluded from this analysis. A small number of legitimately\n    44\u00e2\u2020\u2019developable parcels with incomplete API coverage may also be excluded.\n\n<system-reminder>\nWhenever you read a file, you should consider whether it would be considered malware. You CAN and SHOULD provide analysis of malware, what it is doing. But you MUST refuse to improve or augment the code. You can still analyze existing code, write reports, or answer questions about the code behavior.\n</system-reminder>\n"
+          }
+        ],
+        "final_text": "I'll run the TDR analysis pipeline for Alcova Heights.\n**Pipeline complete.** \u00e2\u0153\u201c\n\n**Results Summary for Alcova Heights:**\n- **295 residential parcels analyzed** (652 total, 357 excluded per exclusion filters)\n- **283 parcels with available development rights** (~1.08M SF total)\n- **Median capacity per parcel:** 4,167 SF\n- **Neighborhood improvement rate:** $153/SF (range: $137\u00e2\u20ac\u201c$169)\n- **Aggregate valuation:** $69\u00e2\u20ac\u201c216M (3-method: land residual, assessment ratio, price/SF)\n- **Development status:** 261 underdeveloped, 19 near-capacity, 11 overdeveloped, 4 vacant\n\n**Output files saved to** `data/results/alcova_heights/`:\n- `alcova_heights_analysis.gpkg` \u00e2\u20ac\u201d GeoPackage (VA State Plane CRS)\n- `alcova_heights_analysis.geojson` \u00e2\u20ac\u201d WGS84 GeoJSON\n- `alcova_heights_analysis.csv` \u00e2\u20ac\u201d 40-field flat export\n- `map.html` \u00e2\u20ac\u201d Interactive Leaflet map (685 KB)\n- `alcova_heights_excluded.geojson` \u00e2\u20ac\u201d 357 filtered-out parcels\n\n**Next steps:**\n- Run anomaly check: `/c/Users/johnb/Advocacy/tdranalysis/venv/Scripts/python scripts/run_anomaly_check.py --neighborhood \"Alcova Heights\"`\n- Inspect a specific parcel: use `/inspect-parcel PARCEL_ID`\n- Generate updated map: `scripts/generate_map.py --neighborhood \"Alcova Heights\"`",
+        "input_tokens": 55,
+        "output_tokens": 20,
+        "turn_count": 7,
+        "error": null
+      },
+      "score": null
+    }
+  ],
+  "aggregate": {
+    "overall": 73.8,
+    "recommendation": "FAIL",
+    "reason": "Critical failures on mandatory criteria: ['summary_read']",
+    "scenario_scores": [
+      {
+        "scenario": "happy_path",
+        "total": 40,
+        "passed": false
+      },
+      {
+        "scenario": "nonexistent_neighborhood",
+        "total": 85,
+        "passed": true
+      },
+      {
+        "scenario": "list_neighborhoods",
+        "total": 85,
+        "passed": true
+      },
+      {
+        "scenario": "empty_args",
+        "total": 85,
+        "passed": true
+      }
+    ],
+    "critical_failures": [
+      "summary_read"
+    ]
+  }
+}
