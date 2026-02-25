@@ -11,9 +11,36 @@ counts in the same session dict schema as the original SDK-based runner.
 import json
 import os
 import re
+import shutil
 import subprocess
+import sys
 from pathlib import Path
 from typing import Any
+
+def _claude_direct_cmd() -> list[str] | None:
+    """
+    On Windows, resolve node.exe + cli.js directly from claude.CMD so that
+    subprocess can kill the actual node process (not just a cmd.exe wrapper).
+    Returns None on non-Windows or if resolution fails.
+    """
+    if sys.platform != "win32":
+        return None
+    claude_cmd = shutil.which("claude")
+    if claude_cmd is None:
+        return None
+    npm_bin = Path(claude_cmd).parent
+    # npm places node.exe next to claude.CMD; fall back to system node
+    node_exe = npm_bin / "node.exe"
+    if not node_exe.exists():
+        node_path = shutil.which("node")
+        if node_path is None:
+            return None
+        node_exe = Path(node_path)
+    cli_js = npm_bin / "node_modules" / "@anthropic-ai" / "claude-code" / "cli.js"
+    if not cli_js.exists():
+        return None
+    return [str(node_exe), str(cli_js)]
+
 
 PROJECT_ROOT = Path(__file__).parent.parent.parent.resolve()
 COMMANDS_DIR = PROJECT_ROOT / ".claude" / "commands"
@@ -86,13 +113,24 @@ def run_skill(
     }
 
     prompt = f"/{skill_name} {arguments}".strip()
-    cmd = [
+    claude_args = [
         "claude", "--print",
+        "--verbose",
         "--model", model,
         "--output-format", "stream-json",
         "--no-session-persistence",
         prompt,
     ]
+    # On Windows, invoke node.exe + cli.js directly (bypasses cmd.exe wrapper)
+    # so Python holds a direct handle to the Claude process and can kill it
+    # cleanly on timeout without pipe deadlocks.
+    direct = _claude_direct_cmd()
+    if direct is not None:
+        cmd = direct + claude_args[1:]  # drop "claude" from the front of claude_args
+    elif sys.platform == "win32":
+        cmd = ["cmd", "/c"] + claude_args  # fallback if resolution fails
+    else:
+        cmd = claude_args
 
     # Strip CLAUDECODE so the CLI doesn't refuse to run inside a Claude Code session.
     env = os.environ.copy()

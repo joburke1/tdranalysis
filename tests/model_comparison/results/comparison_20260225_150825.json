@@ -1,0 +1,570 @@
+{
+  "sonnet": {
+    "scenarios": [
+      {
+        "scenario": "happy_path",
+        "scored": true,
+        "session": {
+          "model": "sonnet",
+          "skill": "run-pipeline",
+          "arguments": "Alcova Heights",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": {
+          "scenario": "happy_path",
+          "total": 40,
+          "criteria": {
+            "unix_path": {
+              "weight": 20,
+              "earned": 20,
+              "note": "No Bash calls \u2014 path criterion N/A"
+            },
+            "skip_flags": {
+              "weight": 15,
+              "earned": 15,
+              "note": "No Bash calls \u2014 skip flags N/A"
+            },
+            "stdout_displayed": {
+              "weight": 15,
+              "earned": 0,
+              "note": "CRITICAL: No Bash tool call made"
+            },
+            "summary_read": {
+              "weight": 20,
+              "earned": 0,
+              "note": "CRITICAL: Summary file not read"
+            },
+            "key_numbers": {
+              "weight": 15,
+              "earned": 0,
+              "note": "No key numbers found (expected ['295', '283', '69', '216'])"
+            },
+            "followup_offers": {
+              "weight": 10,
+              "earned": 0,
+              "note": "Neither follow-up offer present"
+            },
+            "turn_count": {
+              "weight": 5,
+              "earned": 5,
+              "note": "Turn count: 0 (\u22645)"
+            }
+          },
+          "passed": false,
+          "critical_failures": [
+            "summary_read"
+          ]
+        }
+      },
+      {
+        "scenario": "nonexistent_neighborhood",
+        "scored": true,
+        "session": {
+          "model": "sonnet",
+          "skill": "run-pipeline",
+          "arguments": "Nonexistent Neighborhood XYZ",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": {
+          "scenario": "nonexistent_neighborhood",
+          "total": 85,
+          "criteria": {
+            "unix_path": {
+              "weight": 20,
+              "earned": 20,
+              "note": "No Bash calls \u2014 path criterion N/A"
+            },
+            "skip_flags": {
+              "weight": 15,
+              "earned": 15,
+              "note": "No Bash calls \u2014 skip flags N/A"
+            },
+            "stdout_displayed": {
+              "weight": 15,
+              "earned": 0,
+              "note": "CRITICAL: No Bash tool call made"
+            },
+            "summary_read": {
+              "weight": 20,
+              "earned": 20,
+              "note": "Summary read N/A for this scenario"
+            },
+            "key_numbers": {
+              "weight": 15,
+              "earned": 15,
+              "note": "Key numbers N/A for this scenario"
+            },
+            "followup_offers": {
+              "weight": 10,
+              "earned": 10,
+              "note": "Follow-up offers N/A for this scenario"
+            },
+            "turn_count": {
+              "weight": 5,
+              "earned": 5,
+              "note": "Turn count: 0 (\u22645)"
+            }
+          },
+          "passed": true,
+          "critical_failures": []
+        }
+      },
+      {
+        "scenario": "list_neighborhoods",
+        "scored": true,
+        "session": {
+          "model": "sonnet",
+          "skill": "run-pipeline",
+          "arguments": "--list",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": {
+          "scenario": "list_neighborhoods",
+          "total": 85,
+          "criteria": {
+            "unix_path": {
+              "weight": 20,
+              "earned": 20,
+              "note": "No Bash calls \u2014 path criterion N/A"
+            },
+            "skip_flags": {
+              "weight": 15,
+              "earned": 15,
+              "note": "No Bash calls \u2014 skip flags N/A"
+            },
+            "stdout_displayed": {
+              "weight": 15,
+              "earned": 0,
+              "note": "CRITICAL: No Bash tool call made"
+            },
+            "summary_read": {
+              "weight": 20,
+              "earned": 20,
+              "note": "Summary read N/A for this scenario"
+            },
+            "key_numbers": {
+              "weight": 15,
+              "earned": 15,
+              "note": "Key numbers N/A for this scenario"
+            },
+            "followup_offers": {
+              "weight": 10,
+              "earned": 10,
+              "note": "Follow-up offers N/A for this scenario"
+            },
+            "turn_count": {
+              "weight": 5,
+              "earned": 5,
+              "note": "Turn count: 0 (\u22645)"
+            }
+          },
+          "passed": true,
+          "critical_failures": []
+        }
+      },
+      {
+        "scenario": "empty_args",
+        "scored": true,
+        "session": {
+          "model": "sonnet",
+          "skill": "run-pipeline",
+          "arguments": "",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": {
+          "scenario": "empty_args",
+          "total": 85,
+          "criteria": {
+            "unix_path": {
+              "weight": 20,
+              "earned": 20,
+              "note": "No Bash calls \u2014 path criterion N/A"
+            },
+            "skip_flags": {
+              "weight": 15,
+              "earned": 15,
+              "note": "No Bash calls \u2014 skip flags N/A"
+            },
+            "stdout_displayed": {
+              "weight": 15,
+              "earned": 0,
+              "note": "CRITICAL: No Bash tool call made"
+            },
+            "summary_read": {
+              "weight": 20,
+              "earned": 20,
+              "note": "Summary read N/A for this scenario"
+            },
+            "key_numbers": {
+              "weight": 15,
+              "earned": 15,
+              "note": "Key numbers N/A for this scenario"
+            },
+            "followup_offers": {
+              "weight": 10,
+              "earned": 10,
+              "note": "Follow-up offers N/A for this scenario"
+            },
+            "turn_count": {
+              "weight": 5,
+              "earned": 5,
+              "note": "Turn count: 0 (\u22645)"
+            }
+          },
+          "passed": true,
+          "critical_failures": []
+        }
+      },
+      {
+        "scenario": "lowercase_neighborhood",
+        "scored": false,
+        "session": {
+          "model": "sonnet",
+          "skill": "run-pipeline",
+          "arguments": "alcova heights",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": null
+      }
+    ],
+    "aggregate": {
+      "overall": 73.8,
+      "recommendation": "FAIL",
+      "reason": "Critical failures on mandatory criteria: ['summary_read']",
+      "scenario_scores": [
+        {
+          "scenario": "happy_path",
+          "total": 40,
+          "passed": false
+        },
+        {
+          "scenario": "nonexistent_neighborhood",
+          "total": 85,
+          "passed": true
+        },
+        {
+          "scenario": "list_neighborhoods",
+          "total": 85,
+          "passed": true
+        },
+        {
+          "scenario": "empty_args",
+          "total": 85,
+          "passed": true
+        }
+      ],
+      "critical_failures": [
+        "summary_read"
+      ]
+    }
+  },
+  "haiku": {
+    "scenarios": [
+      {
+        "scenario": "happy_path",
+        "scored": true,
+        "session": {
+          "model": "haiku",
+          "skill": "run-pipeline",
+          "arguments": "Alcova Heights",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": {
+          "scenario": "happy_path",
+          "total": 40,
+          "criteria": {
+            "unix_path": {
+              "weight": 20,
+              "earned": 20,
+              "note": "No Bash calls \u2014 path criterion N/A"
+            },
+            "skip_flags": {
+              "weight": 15,
+              "earned": 15,
+              "note": "No Bash calls \u2014 skip flags N/A"
+            },
+            "stdout_displayed": {
+              "weight": 15,
+              "earned": 0,
+              "note": "CRITICAL: No Bash tool call made"
+            },
+            "summary_read": {
+              "weight": 20,
+              "earned": 0,
+              "note": "CRITICAL: Summary file not read"
+            },
+            "key_numbers": {
+              "weight": 15,
+              "earned": 0,
+              "note": "No key numbers found (expected ['295', '283', '69', '216'])"
+            },
+            "followup_offers": {
+              "weight": 10,
+              "earned": 0,
+              "note": "Neither follow-up offer present"
+            },
+            "turn_count": {
+              "weight": 5,
+              "earned": 5,
+              "note": "Turn count: 0 (\u22645)"
+            }
+          },
+          "passed": false,
+          "critical_failures": [
+            "summary_read"
+          ]
+        }
+      },
+      {
+        "scenario": "nonexistent_neighborhood",
+        "scored": true,
+        "session": {
+          "model": "haiku",
+          "skill": "run-pipeline",
+          "arguments": "Nonexistent Neighborhood XYZ",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": {
+          "scenario": "nonexistent_neighborhood",
+          "total": 85,
+          "criteria": {
+            "unix_path": {
+              "weight": 20,
+              "earned": 20,
+              "note": "No Bash calls \u2014 path criterion N/A"
+            },
+            "skip_flags": {
+              "weight": 15,
+              "earned": 15,
+              "note": "No Bash calls \u2014 skip flags N/A"
+            },
+            "stdout_displayed": {
+              "weight": 15,
+              "earned": 0,
+              "note": "CRITICAL: No Bash tool call made"
+            },
+            "summary_read": {
+              "weight": 20,
+              "earned": 20,
+              "note": "Summary read N/A for this scenario"
+            },
+            "key_numbers": {
+              "weight": 15,
+              "earned": 15,
+              "note": "Key numbers N/A for this scenario"
+            },
+            "followup_offers": {
+              "weight": 10,
+              "earned": 10,
+              "note": "Follow-up offers N/A for this scenario"
+            },
+            "turn_count": {
+              "weight": 5,
+              "earned": 5,
+              "note": "Turn count: 0 (\u22645)"
+            }
+          },
+          "passed": true,
+          "critical_failures": []
+        }
+      },
+      {
+        "scenario": "list_neighborhoods",
+        "scored": true,
+        "session": {
+          "model": "haiku",
+          "skill": "run-pipeline",
+          "arguments": "--list",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": {
+          "scenario": "list_neighborhoods",
+          "total": 85,
+          "criteria": {
+            "unix_path": {
+              "weight": 20,
+              "earned": 20,
+              "note": "No Bash calls \u2014 path criterion N/A"
+            },
+            "skip_flags": {
+              "weight": 15,
+              "earned": 15,
+              "note": "No Bash calls \u2014 skip flags N/A"
+            },
+            "stdout_displayed": {
+              "weight": 15,
+              "earned": 0,
+              "note": "CRITICAL: No Bash tool call made"
+            },
+            "summary_read": {
+              "weight": 20,
+              "earned": 20,
+              "note": "Summary read N/A for this scenario"
+            },
+            "key_numbers": {
+              "weight": 15,
+              "earned": 15,
+              "note": "Key numbers N/A for this scenario"
+            },
+            "followup_offers": {
+              "weight": 10,
+              "earned": 10,
+              "note": "Follow-up offers N/A for this scenario"
+            },
+            "turn_count": {
+              "weight": 5,
+              "earned": 5,
+              "note": "Turn count: 0 (\u22645)"
+            }
+          },
+          "passed": true,
+          "critical_failures": []
+        }
+      },
+      {
+        "scenario": "empty_args",
+        "scored": true,
+        "session": {
+          "model": "haiku",
+          "skill": "run-pipeline",
+          "arguments": "",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": {
+          "scenario": "empty_args",
+          "total": 85,
+          "criteria": {
+            "unix_path": {
+              "weight": 20,
+              "earned": 20,
+              "note": "No Bash calls \u2014 path criterion N/A"
+            },
+            "skip_flags": {
+              "weight": 15,
+              "earned": 15,
+              "note": "No Bash calls \u2014 skip flags N/A"
+            },
+            "stdout_displayed": {
+              "weight": 15,
+              "earned": 0,
+              "note": "CRITICAL: No Bash tool call made"
+            },
+            "summary_read": {
+              "weight": 20,
+              "earned": 20,
+              "note": "Summary read N/A for this scenario"
+            },
+            "key_numbers": {
+              "weight": 15,
+              "earned": 15,
+              "note": "Key numbers N/A for this scenario"
+            },
+            "followup_offers": {
+              "weight": 10,
+              "earned": 10,
+              "note": "Follow-up offers N/A for this scenario"
+            },
+            "turn_count": {
+              "weight": 5,
+              "earned": 5,
+              "note": "Turn count: 0 (\u22645)"
+            }
+          },
+          "passed": true,
+          "critical_failures": []
+        }
+      },
+      {
+        "scenario": "lowercase_neighborhood",
+        "scored": false,
+        "session": {
+          "model": "haiku",
+          "skill": "run-pipeline",
+          "arguments": "alcova heights",
+          "tool_calls": [],
+          "final_text": "",
+          "input_tokens": 0,
+          "output_tokens": 0,
+          "turn_count": 0,
+          "error": "claude CLI not found \u2014 ensure it is installed and on PATH"
+        },
+        "score": null
+      }
+    ],
+    "aggregate": {
+      "overall": 73.8,
+      "recommendation": "FAIL",
+      "reason": "Critical failures on mandatory criteria: ['summary_read']",
+      "scenario_scores": [
+        {
+          "scenario": "happy_path",
+          "total": 40,
+          "passed": false
+        },
+        {
+          "scenario": "nonexistent_neighborhood",
+          "total": 85,
+          "passed": true
+        },
+        {
+          "scenario": "list_neighborhoods",
+          "total": 85,
+          "passed": true
+        },
+        {
+          "scenario": "empty_args",
+          "total": 85,
+          "passed": true
+        }
+      ],
+      "critical_failures": [
+        "summary_read"
+      ]
+    }
+  }
+}
