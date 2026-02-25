@@ -24,7 +24,14 @@ Key numbers expected in happy-path final text:
 """
 
 import re
-from typing import Any
+from typing import Any, TypedDict
+
+
+class CriterionResult(TypedDict):
+    weight: int
+    earned: float
+    note: str
+
 
 # Criteria weights
 WEIGHTS = {
@@ -40,18 +47,19 @@ WEIGHTS = {
 # Mandatory criteria — critical failure on these → overall fail regardless of score
 MANDATORY_CRITERIA = {"unix_path", "summary_read"}
 
-PASS_THRESHOLD = 75          # per-scenario pass bar
+PASS_THRESHOLD = 75            # per-scenario pass bar
 AGGREGATE_PASS_THRESHOLD = 80  # aggregate pass bar (haiku recommendation)
+CONDITIONAL_THRESHOLD = 65     # aggregate score below PASS but at/above this → CONDITIONAL
+MIN_FINAL_TEXT_CHARS = 200     # below this, stdout is considered not shown in final text
 
 # Numbers expected in Alcova Heights final text
 ALCOVA_KEY_NUMBERS = ["295", "283", "69", "216"]
 
 WINDOWS_PATH_PATTERN = re.compile(
     r"(?:"
-    r"C:\\\\|"           # C:\\ (escaped backslash in strings)
-    r"C:\\|"             # C:\
+    r"C:\\|"                    # C:\ (single backslash, as it appears in shell text)
     r"C:/Users.*?python\.exe|"  # Windows-style quoted path ending in python.exe
-    r'"C:/'              # quoted Windows path
+    r'"C:/'                     # quoted Windows path
     r")",
     re.IGNORECASE,
 )
@@ -65,15 +73,23 @@ FOLLOWUP_ANOMALY = re.compile(r"anomaly", re.IGNORECASE)
 FOLLOWUP_PARCEL = re.compile(r"parcel\s+inspector|inspect.*parcel", re.IGNORECASE)
 
 
+def _c(key: str, earned: float, note: str) -> CriterionResult:
+    """Build a criterion result dict for the given scoring key."""
+    return {"weight": WEIGHTS[key], "earned": earned, "note": note}
+
+
 def _bash_commands(session: dict[str, Any]) -> list[str]:
+    """Return inputs of all Bash tool calls in the session."""
     return [tc["input"] for tc in session["tool_calls"] if tc["name"] == "Bash"]
 
 
 def _read_paths(session: dict[str, Any]) -> list[str]:
+    """Return inputs of all Read tool calls in the session."""
     return [tc["input"] for tc in session["tool_calls"] if tc["name"] == "Read"]
 
 
 def _all_bash_outputs(session: dict[str, Any]) -> str:
+    """Return all Bash tool outputs joined into a single string."""
     return "\n".join(tc["output"] for tc in session["tool_calls"] if tc["name"] == "Bash")
 
 
@@ -97,7 +113,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
     bash_outputs = _all_bash_outputs(session)
     is_happy_path = scenario_name == "happy_path"
 
-    criteria: dict[str, dict] = {}
+    criteria: dict[str, CriterionResult] = {}
 
     # ── 1. Unix-style Python path (weight 20) ──────────────────────────────
     # Check all bash commands for path usage
@@ -120,7 +136,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
         # Bash called but no python invocation (e.g. list command)
         unix_earned = WEIGHTS["unix_path"]
         unix_note = "No Python invocation in bash (acceptable for this scenario)"
-    criteria["unix_path"] = {"weight": WEIGHTS["unix_path"], "earned": unix_earned, "note": unix_note}
+    criteria["unix_path"] = _c("unix_path", unix_earned, unix_note)
 
     # ── 2. --skip flags (weight 15) ────────────────────────────────────────
     has_skip_dl = any(SKIP_DOWNLOAD in cmd for cmd in bash_cmds)
@@ -134,24 +150,26 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
         skip_note = "Both --skip-download and --skip-process present"
     elif has_skip_dl or has_skip_proc:
         skip_earned = WEIGHTS["skip_flags"] * 0.5
-        skip_note = f"Only one skip flag: skip-download={has_skip_dl}, skip-process={has_skip_proc}"
+        skip_note = (
+            f"Only one skip flag: skip-download={has_skip_dl}, skip-process={has_skip_proc}"
+        )
     else:
         skip_earned = 0
         skip_note = "CRITICAL: Both skip flags absent"
-    criteria["skip_flags"] = {"weight": WEIGHTS["skip_flags"], "earned": skip_earned, "note": skip_note}
+    criteria["skip_flags"] = _c("skip_flags", skip_earned, skip_note)
 
     # ── 3. Script stdout displayed (weight 15) ─────────────────────────────
     # Check that model made a bash call and that stdout appears in final text
     if not bash_cmds:
         stdout_earned = 0
         stdout_note = "CRITICAL: No Bash tool call made"
-    elif bash_outputs.strip() and len(final_text) > 200:
+    elif bash_outputs.strip() and len(final_text) > MIN_FINAL_TEXT_CHARS:
         stdout_earned = WEIGHTS["stdout_displayed"]
         stdout_note = "Bash called and final text is substantial"
     else:
         stdout_earned = WEIGHTS["stdout_displayed"] * 0.5
         stdout_note = "Bash called but output may not be shown in final text"
-    criteria["stdout_displayed"] = {"weight": WEIGHTS["stdout_displayed"], "earned": stdout_earned, "note": stdout_note}
+    criteria["stdout_displayed"] = _c("stdout_displayed", stdout_earned, stdout_note)
 
     # ── 4. Summary file read and displayed (weight 20) ────────────────────
     # Only apply strictly on happy path; for other scenarios relax
@@ -173,7 +191,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
     else:
         summary_earned = 0
         summary_note = "CRITICAL: Summary file not read"
-    criteria["summary_read"] = {"weight": WEIGHTS["summary_read"], "earned": summary_earned, "note": summary_note}
+    criteria["summary_read"] = _c("summary_read", summary_earned, summary_note)
 
     # ── 5. Key numbers in final text (weight 15) ──────────────────────────
     if not is_happy_path:
@@ -186,11 +204,13 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
             numbers_note = f"All key numbers found: {found}"
         elif len(found) >= 2:
             numbers_earned = WEIGHTS["key_numbers"] * 0.5
-            numbers_note = f"Partial key numbers found: {found} (expected all of {ALCOVA_KEY_NUMBERS})"
+            numbers_note = (
+                f"Partial key numbers found: {found} (expected all of {ALCOVA_KEY_NUMBERS})"
+            )
         else:
             numbers_earned = 0
             numbers_note = f"No key numbers found (expected {ALCOVA_KEY_NUMBERS})"
-    criteria["key_numbers"] = {"weight": WEIGHTS["key_numbers"], "earned": numbers_earned, "note": numbers_note}
+    criteria["key_numbers"] = _c("key_numbers", numbers_earned, numbers_note)
 
     # ── 6. Follow-up offers (weight 10) ───────────────────────────────────
     has_anomaly_offer = bool(FOLLOWUP_ANOMALY.search(final_text))
@@ -204,11 +224,13 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
         followup_note = "Both anomaly check and parcel inspector offers present"
     elif has_anomaly_offer or has_parcel_offer:
         followup_earned = WEIGHTS["followup_offers"] * 0.5
-        followup_note = f"Only one follow-up: anomaly={has_anomaly_offer}, parcel={has_parcel_offer}"
+        followup_note = (
+            f"Only one follow-up: anomaly={has_anomaly_offer}, parcel={has_parcel_offer}"
+        )
     else:
         followup_earned = 0
         followup_note = "Neither follow-up offer present"
-    criteria["followup_offers"] = {"weight": WEIGHTS["followup_offers"], "earned": followup_earned, "note": followup_note}
+    criteria["followup_offers"] = _c("followup_offers", followup_earned, followup_note)
 
     # ── 7. Turn count ≤ 5 (weight 5) ──────────────────────────────────────
     if turn_count <= 5:
@@ -220,7 +242,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
     else:
         turn_earned = 0
         turn_note = f"Turn count: {turn_count} (>10, critical)"
-    criteria["turn_count"] = {"weight": WEIGHTS["turn_count"], "earned": turn_earned, "note": turn_note}
+    criteria["turn_count"] = _c("turn_count", turn_earned, turn_note)
 
     # ── Totals ─────────────────────────────────────────────────────────────
     total = sum(v["earned"] for v in criteria.values())
@@ -264,20 +286,30 @@ def aggregate_scores(scored_scenarios: list[dict[str, Any]]) -> dict[str, Any]:
         reason = f"Critical failures on mandatory criteria: {mandatory_critical}"
     elif overall >= AGGREGATE_PASS_THRESHOLD:
         recommendation = "PASS"
-        reason = f"Overall score {overall} ≥ {AGGREGATE_PASS_THRESHOLD} with no mandatory critical failures"
-    elif overall >= 65:
+        reason = (
+            f"Overall score {overall} ≥ {AGGREGATE_PASS_THRESHOLD}"
+            " with no mandatory critical failures"
+        )
+    elif overall >= CONDITIONAL_THRESHOLD:
         recommendation = "CONDITIONAL"
-        reason = f"Overall score {overall} is 65–79; review degraded criteria"
+        reason = (
+            f"Overall score {overall} is {CONDITIONAL_THRESHOLD}–"
+            f"{AGGREGATE_PASS_THRESHOLD - 1}; review degraded criteria"
+        )
     else:
         recommendation = "FAIL"
-        reason = f"Overall score {overall} < 65"
+        reason = f"Overall score {overall} < {CONDITIONAL_THRESHOLD}"
 
     return {
         "overall": overall,
         "recommendation": recommendation,
         "reason": reason,
         "scenario_scores": [
-            {"scenario": s["scenario"], "total": s["score"]["total"], "passed": s["score"]["passed"]}
+            {
+                "scenario": s["scenario"],
+                "total": s["score"]["total"],
+                "passed": s["score"]["passed"],
+            }
             for s in scored_scenarios
         ],
         "critical_failures": all_critical,

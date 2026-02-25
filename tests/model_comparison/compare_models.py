@@ -4,8 +4,11 @@ compare_models.py — Entry point for model comparison test.
 Runs all run-pipeline scenarios against both Sonnet and Haiku,
 scores the results, and writes a JSON + Markdown report.
 
+Uses the `claude` CLI (must be on PATH) with the user's existing Pro
+credentials — no ANTHROPIC_API_KEY required.
+
 Usage:
-    ANTHROPIC_API_KEY=sk-... python tests/model_comparison/compare_models.py
+    python tests/model_comparison/compare_models.py
 
 Guard: this file is not importable as a test module (no test_ prefix, no
 pytest markers), but also has an explicit __name__ == "__main__" guard to
@@ -13,23 +16,35 @@ prevent accidental collection.
 """
 
 import json
-import os
+import logging
 import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-# Make sure project root is on the path when run directly
+# Make sure project root is on the path when run directly.
+# Use append rather than insert(0) to avoid shadowing stdlib modules.
 PROJECT_ROOT = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
 
 from tests.model_comparison.scenarios_run_pipeline import SCENARIOS
 from tests.model_comparison.scoring import aggregate_scores, score_session
 from tests.model_comparison.skill_runner import run_skill
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s",
+    datefmt="%H:%M:%S",
+)
+logger = logging.getLogger(__name__)
+
+# Define HAIKU_MODEL as an explicit constant so the recommendation block
+# does not rely on fragile substring matching over the MODELS list.
+HAIKU_MODEL = "haiku"
 MODELS = [
-    "claude-sonnet-latest",
-    "claude-haiku-latest",
+    "sonnet",
+    HAIKU_MODEL,
 ]
 
 RESULTS_DIR = Path(__file__).parent / "results"
@@ -37,7 +52,14 @@ SKILL_NAME = "run-pipeline"
 
 
 def _shorten(text: str, max_chars: int = 800) -> str:
-    """Truncate long text for the markdown report."""
+    """
+    Truncate long text for the markdown report.
+
+    Note: the result may contain triple-backtick sequences.  Callers that
+    embed this output inside a markdown code block should use tilde fences
+    (~~~) rather than backtick fences so the content cannot close the block
+    prematurely.
+    """
     if len(text) <= max_chars:
         return text
     half = max_chars // 2
@@ -59,7 +81,8 @@ def _build_markdown_report(all_results: dict[str, dict[str, Any]], timestamp: st
     for model, data in all_results.items():
         agg = data["aggregate"]
         lines.append(
-            f"| `{model}` | {agg['overall']} | **{agg['recommendation']}** — {agg.get('reason', '')} |"
+            f"| `{model}` | {agg['overall']} | **{agg['recommendation']}**"
+            f" — {agg.get('reason', '')} |"
         )
 
     lines += ["", "---", ""]
@@ -124,12 +147,13 @@ def _build_markdown_report(all_results: dict[str, dict[str, Any]], timestamp: st
                         "",
                     ]
 
-            # Final text
+            # Final text — use tilde fences so backtick sequences in the content
+            # cannot prematurely close the code block.
             lines += [
                 "**Final text** (truncated to 800 chars):",
-                "```",
+                "~~~",
                 _shorten(session.get("final_text", "(none)")),
-                "```",
+                "~~~",
                 "",
             ]
 
@@ -144,9 +168,9 @@ def _build_markdown_report(all_results: dict[str, dict[str, Any]], timestamp: st
         if happy:
             lines += [
                 f"### `{model}`",
-                "```",
+                "~~~",
                 _shorten(happy["session"].get("final_text", "(none)"), 1200),
-                "```",
+                "~~~",
                 "",
             ]
 
@@ -154,46 +178,44 @@ def _build_markdown_report(all_results: dict[str, dict[str, Any]], timestamp: st
 
 
 def main() -> None:
-    api_key = os.environ.get("ANTHROPIC_API_KEY")
-    if not api_key:
-        print("ERROR: ANTHROPIC_API_KEY environment variable not set.")
-        sys.exit(1)
-
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    print(f"Starting model comparison at {timestamp}")
-    print(f"Skill: {SKILL_NAME}")
-    print(f"Models: {MODELS}")
-    print(f"Scenarios: {[s['name'] for s in SCENARIOS]}")
-    print()
+    logger.info("Starting model comparison at %s", timestamp)
+    logger.info("Skill: %s", SKILL_NAME)
+    logger.info("Models: %s", MODELS)
+    logger.info("Scenarios: %s", [s["name"] for s in SCENARIOS])
+
+    # Create results directory before running so per-model checkpoints can be
+    # written immediately rather than waiting until all models have finished.
+    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
     all_results: dict[str, dict[str, Any]] = {}
 
     for model in MODELS:
-        print(f"\n{'='*60}")
-        print(f"Model: {model}")
-        print(f"{'='*60}")
+        logger.info("=" * 60)
+        logger.info("Model: %s", model)
+        logger.info("=" * 60)
         model_scenarios = []
 
         for scenario in SCENARIOS:
             name = scenario["name"]
             args = scenario["arguments"]
             scored = scenario["scored"]
-            print(f"  Running scenario: {name!r} (args={args!r}) ...", end=" ", flush=True)
+            logger.info("  Running scenario: %r (args=%r) ...", name, args)
 
             session = run_skill(
                 skill_name=SKILL_NAME,
                 arguments=args,
                 model=model,
-                api_key=api_key,
             )
 
-            print(
-                f"done. Turns={session['turn_count']}, "
-                f"Tokens={session['input_tokens']+session['output_tokens']}, "
-                f"Error={session.get('error')}"
+            logger.info(
+                "  Done. Turns=%d, Tokens=%d, Error=%s",
+                session["turn_count"],
+                session["input_tokens"] + session["output_tokens"],
+                session.get("error"),
             )
 
-            result = {
+            result: dict[str, Any] = {
                 "scenario": name,
                 "scored": scored,
                 "session": session,
@@ -203,15 +225,17 @@ def main() -> None:
                 result["score"] = score_session(session, name)
                 total = result["score"]["total"]
                 passed = result["score"]["passed"]
-                print(f"    Score: {total}/100  {'PASS' if passed else 'FAIL'}")
+                logger.info("    Score: %s/100  %s", total, "PASS" if passed else "FAIL")
                 if result["score"]["critical_failures"]:
-                    print(f"    Critical failures: {result['score']['critical_failures']}")
+                    logger.info(
+                        "    Critical failures: %s", result["score"]["critical_failures"]
+                    )
             else:
                 result["score"] = None
 
             model_scenarios.append(result)
 
-        # Build aggregate (only scored scenarios)
+        # Build aggregate (only scored scenarios).
         scored_scenarios = [s for s in model_scenarios if s["scored"]]
         aggregate = aggregate_scores(scored_scenarios)
         all_results[model] = {
@@ -219,47 +243,63 @@ def main() -> None:
             "aggregate": aggregate,
         }
 
-        print(f"\n  >> {model} AGGREGATE: {aggregate['overall']}/100 — {aggregate['recommendation']}")
+        logger.info(
+            "  >> %s AGGREGATE: %s/100 — %s",
+            model,
+            aggregate["overall"],
+            aggregate["recommendation"],
+        )
 
-    # Write JSON
-    RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+        # Checkpoint: write per-model JSON immediately so results are not lost
+        # if a subsequent model run fails or times out.
+        checkpoint_path = RESULTS_DIR / f"comparison_{timestamp}_{model}.json"
+        with open(checkpoint_path, "w", encoding="utf-8") as f:
+            json.dump(all_results[model], f, indent=2, default=str)
+        logger.info("  Checkpoint written: %s", checkpoint_path)
+
+    # Write combined JSON and Markdown reports.
     json_path = RESULTS_DIR / f"comparison_{timestamp}.json"
     md_path = RESULTS_DIR / f"comparison_{timestamp}.md"
 
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=2, default=str)
-    print(f"\nJSON report written: {json_path}")
+    logger.info("JSON report written: %s", json_path)
 
     md_content = _build_markdown_report(all_results, timestamp)
     with open(md_path, "w", encoding="utf-8") as f:
         f.write(md_content)
-    print(f"Markdown report written: {md_path}")
+    logger.info("Markdown report written: %s", md_path)
 
-    # Print final recommendations
-    print("\n" + "=" * 60)
-    print("FINAL RECOMMENDATIONS")
-    print("=" * 60)
+    # Final recommendations
+    logger.info("=" * 60)
+    logger.info("FINAL RECOMMENDATIONS")
+    logger.info("=" * 60)
     for model, data in all_results.items():
         agg = data["aggregate"]
-        print(f"  {model}: {agg['recommendation']} (score={agg['overall']}) — {agg.get('reason', '')}")
+        logger.info(
+            "  %s: %s (score=%s) — %s",
+            model,
+            agg["recommendation"],
+            agg["overall"],
+            agg.get("reason", ""),
+        )
 
-    haiku_model = next((m for m in MODELS if "haiku" in m), None)
-    haiku_agg = all_results.get(haiku_model or "", {}).get("aggregate", {})
+    haiku_agg = all_results.get(HAIKU_MODEL, {}).get("aggregate", {})
     rec = haiku_agg.get("recommendation", "FAIL")
-    print()
     if rec == "PASS":
-        print(
-            f"ACTION: Haiku PASSED ({haiku_model}). "
+        logger.info(
+            "ACTION: Haiku PASSED (%s). "
             "Consider adding 'model: claude-haiku-latest' frontmatter to "
-            ".claude/commands/run-pipeline.md (verify frontmatter support first)."
+            ".claude/commands/run-pipeline.md (verify frontmatter support first).",
+            HAIKU_MODEL,
         )
     elif rec == "CONDITIONAL":
-        print(
+        logger.info(
             "ACTION: Haiku CONDITIONAL. "
             "Review degraded criteria in the markdown report and tighten skill instructions."
         )
     else:
-        print(
+        logger.info(
             "ACTION: Haiku FAILED. "
             "Review critical failures in the markdown report. "
             "If path criterion failed, Haiku is not suitable for this skill."

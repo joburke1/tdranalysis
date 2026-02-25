@@ -1,137 +1,54 @@
 """
-Core agentic loop for running a slash-command skill against a real Claude model.
+Core runner for executing a slash-command skill via the `claude` CLI.
 
-Loads the skill .md file, substitutes $ARGUMENTS, then drives a multi-turn
-tool-use loop until the model reaches end_turn or the turn limit is hit.
-Real Bash and Read tool calls are executed via subprocess / file I/O.
+Invokes `claude --print --output-format stream-json` as a subprocess, which
+uses the user's existing Claude Pro credentials — no API key required.
 
-SECURITY NOTE: This runner executes bash commands emitted by the model. Only
-commands whose first token matches _BASH_ALLOWLIST are permitted, which limits
-the blast radius of prompt-injection attacks. Do not run with elevated privileges.
+Parses the JSONL event stream to reconstruct tool call records and token
+counts in the same session dict schema as the original SDK-based runner.
 """
 
+import json
+import os
+import re
 import subprocess
 from pathlib import Path
 from typing import Any
 
-import anthropic
-
 PROJECT_ROOT = Path(__file__).parent.parent.parent.resolve()
 COMMANDS_DIR = PROJECT_ROOT / ".claude" / "commands"
-MAX_TURNS = 20
-BASH_TIMEOUT = 120  # seconds
-MAX_TOKENS = 4096
 
-# Allow only commands that invoke the project Python interpreter or project scripts.
-# Commands not starting with one of these prefixes are blocked.
-_BASH_ALLOWLIST = (
-    "/c/Users/johnb/Advocacy/tdranalysis/venv/Scripts/python",
-    "python ",
-    "python3 ",
-)
+# Maximum wall-clock seconds to wait for the CLI session to complete.
+SESSION_TIMEOUT = 300
 
+# Allowlist for model identifiers accepted by run_skill.
+_ALLOWED_MODELS: frozenset[str] = frozenset({
+    "sonnet",
+    "haiku",
+    "opus",
+    "claude-sonnet-latest",
+    "claude-haiku-latest",
+    "claude-opus-latest",
+})
 
-def _load_skill(skill_name: str, arguments: str) -> str:
-    """Load skill .md and substitute $ARGUMENTS."""
-    skill_path = COMMANDS_DIR / f"{skill_name}.md"
-    content = skill_path.read_text(encoding="utf-8")
-    return content.replace("$ARGUMENTS", arguments)
+# Skill names may only contain word characters and hyphens.
+_SAFE_SKILL_NAME = re.compile(r"^[\w\-]+$")
 
-
-def _execute_bash(command: str) -> str:
-    """Execute a bash command and return combined stdout+stderr.
-
-    Only commands matching _BASH_ALLOWLIST prefixes are executed; all others
-    are blocked and return an error string.
-    """
-    stripped = command.strip()
-    if not any(stripped.startswith(prefix) for prefix in _BASH_ALLOWLIST):
-        return f"[BLOCKED] Command not in allowlist: {stripped[:120]!r}"
-
-    try:
-        result = subprocess.run(
-            command,
-            shell=True,
-            capture_output=True,
-            text=True,
-            timeout=BASH_TIMEOUT,
-            cwd=str(PROJECT_ROOT),
-        )
-        output = result.stdout
-        if result.stderr:
-            output += "\n[stderr]\n" + result.stderr
-        return output or "(no output)"
-    except subprocess.TimeoutExpired:
-        return f"[ERROR] Command timed out after {BASH_TIMEOUT}s"
-    except OSError as e:
-        return f"[ERROR] OS error running command: {e}"
-
-
-def _execute_read(file_path: str) -> str:
-    """Read a file and return its contents.
-
-    Resolves relative paths against PROJECT_ROOT and rejects paths that
-    resolve outside the project tree to prevent path traversal.
-    """
-    try:
-        p = Path(file_path)
-        if not p.is_absolute():
-            p = PROJECT_ROOT / p
-        resolved = p.resolve()
-        if not str(resolved).startswith(str(PROJECT_ROOT)):
-            return f"[BLOCKED] Path outside project root: {file_path!r}"
-        return resolved.read_text(encoding="utf-8")
-    except (FileNotFoundError, PermissionError) as e:
-        return f"[ERROR reading {file_path}] {e}"
-    except UnicodeDecodeError as e:
-        return f"[ERROR reading {file_path}] Encoding error: {e}"
-
-
-def _make_tools() -> list[dict[str, Any]]:
-    """Return the tool definitions sent to the model."""
-    return [
-        {
-            "name": "Bash",
-            "description": (
-                f"Execute a bash command in the project root ({PROJECT_ROOT}). "
-                "Returns stdout and stderr."
-            ),
-            "input_schema": {
-                "type": "object",
-                "properties": {
-                    "command": {
-                        "type": "string",
-                        "description": "The bash command to execute.",
-                    }
-                },
-                "required": ["command"],
-            },
-        },
-        {
-            "name": "Read",
-            "description": "Read a file from the filesystem and return its contents.",
-            "input_schema": {
-                "type": "object",
-                "properties": {
-                    "file_path": {
-                        "type": "string",
-                        "description": "Absolute or project-relative path to the file.",
-                    }
-                },
-                "required": ["file_path"],
-            },
-        },
-    ]
+# Arguments may contain word characters, whitespace, hyphens, dots, commas,
+# and single/double quotes — sufficient for all current scenarios.
+_SAFE_ARGUMENTS = re.compile(r'^[\w\s\-\.,\'"]*$')
 
 
 def run_skill(
     skill_name: str,
     arguments: str,
     model: str,
-    api_key: str,
 ) -> dict[str, Any]:
     """
-    Run a skill against the given model and return a session dict.
+    Run a skill via the `claude` CLI and return a session dict.
+
+    Invokes: claude --print --model <model> --output-format stream-json
+                    --no-session-persistence /<skill_name> [arguments]
 
     Returns:
         {
@@ -145,14 +62,16 @@ def run_skill(
             "turn_count": int,
             "error": str | None,
         }
-    """
-    client = anthropic.Anthropic(api_key=api_key)
-    system_prompt = _load_skill(skill_name, arguments)
-    tools = _make_tools()
 
-    messages: list[dict[str, Any]] = [
-        {"role": "user", "content": f"Run the skill with arguments: {arguments!r}"}
-    ]
+    Raises:
+        ValueError: if skill_name, arguments, or model fail validation.
+    """
+    if not _SAFE_SKILL_NAME.match(skill_name):
+        raise ValueError(f"Invalid skill_name: {skill_name!r}")
+    if arguments and not _SAFE_ARGUMENTS.match(arguments):
+        raise ValueError(f"Unsafe characters in arguments: {arguments!r}")
+    if model not in _ALLOWED_MODELS:
+        raise ValueError(f"Model not in allowlist: {model!r}")
 
     session: dict[str, Any] = {
         "model": model,
@@ -166,76 +85,146 @@ def run_skill(
         "error": None,
     }
 
+    prompt = f"/{skill_name} {arguments}".strip()
+    cmd = [
+        "claude", "--print",
+        "--model", model,
+        "--output-format", "stream-json",
+        "--no-session-persistence",
+        prompt,
+    ]
+
+    # Strip CLAUDECODE so the CLI doesn't refuse to run inside a Claude Code session.
+    env = os.environ.copy()
+    env.pop("CLAUDECODE", None)
+
     try:
-        for _turn in range(MAX_TURNS):
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=SESSION_TIMEOUT,
+            cwd=str(PROJECT_ROOT),
+            env=env,
+        )
+        stdout = result.stdout
+        if result.returncode != 0:
+            stderr_msg = result.stderr.strip()
+            if not stdout:
+                session["error"] = (
+                    f"claude CLI exited with code {result.returncode}: {stderr_msg}"
+                )
+                return session
+            # Partial output — record warning but continue parsing.
+            session["error"] = (
+                f"claude CLI exited with code {result.returncode}"
+                f" (partial output): {stderr_msg}"
+            )
+    except subprocess.TimeoutExpired:
+        session["error"] = f"claude CLI timed out after {SESSION_TIMEOUT}s"
+        return session
+    except FileNotFoundError:
+        session["error"] = "claude CLI not found — ensure it is installed and on PATH"
+        return session
+    except OSError as e:
+        session["error"] = f"OS error launching claude CLI: {e}"
+        return session
+
+    # Keyed by tool_use id; cleared once the matching tool_result is seen.
+    pending_tool_uses: dict[str, dict[str, Any]] = {}
+
+    for line in stdout.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            # Non-JSON lines (e.g. progress dots) are silently skipped.
+            continue
+
+        event_type = event.get("type")
+
+        if event_type == "assistant":
+            message = event.get("message", {})
+            content = message.get("content", [])
+            usage = message.get("usage", {})
+
+            session["input_tokens"] += usage.get("input_tokens", 0)
+            session["output_tokens"] += usage.get("output_tokens", 0)
             session["turn_count"] += 1
 
-            response = client.messages.create(
-                model=model,
-                max_tokens=MAX_TOKENS,
-                system=system_prompt,
-                tools=tools,
-                messages=messages,
-            )
+            for block in content:
+                block_type = block.get("type")
+                if block_type == "tool_use":
+                    pending_tool_uses[block["id"]] = {
+                        "id": block["id"],
+                        "name": block.get("name", ""),
+                        "input": block.get("input", {}),
+                    }
+                elif block_type == "text":
+                    # Accumulate text across all turns; overwriting would discard
+                    # earlier reasoning and key numbers from multi-turn sessions.
+                    text = block.get("text", "")
+                    if text:
+                        if session["final_text"]:
+                            session["final_text"] += "\n" + text
+                        else:
+                            session["final_text"] = text
 
-            session["input_tokens"] += response.usage.input_tokens
-            session["output_tokens"] += response.usage.output_tokens
+        elif event_type == "user":
+            message = event.get("message", {})
+            content = message.get("content", [])
 
-            # Collect assistant message content
-            assistant_content = []
-            tool_use_blocks = []
+            for block in content:
+                if block.get("type") == "tool_result":
+                    tool_use_id = block.get("tool_use_id", "")
+                    pending = pending_tool_uses.pop(tool_use_id, None)
+                    if pending is not None:
+                        tool_input = pending["input"]
+                        # Normalise input to a plain string for the report.
+                        if isinstance(tool_input, dict):
+                            # Bash → command field; Read → file_path; fallback to repr
+                            input_str = (
+                                tool_input.get("command")
+                                or tool_input.get("file_path")
+                                or str(tool_input)
+                            )
+                        else:
+                            input_str = str(tool_input)
 
-            for block in response.content:
-                if block.type == "tool_use":
-                    tool_use_blocks.append(block)
-                    assistant_content.append(block)
-                elif block.type == "text":
-                    assistant_content.append(block)
-                    session["final_text"] = block.text  # keep last text block
+                        raw_output = block.get("content", "")
+                        if isinstance(raw_output, list):
+                            # content can be a list of text blocks
+                            output_str = "\n".join(
+                                b.get("text", "") for b in raw_output if isinstance(b, dict)
+                            )
+                        else:
+                            output_str = str(raw_output)
 
-            # Add assistant turn to messages
-            messages.append({"role": "assistant", "content": assistant_content})
-
-            if response.stop_reason == "end_turn":
-                break
-
-            if response.stop_reason == "tool_use":
-                # Execute each tool call and collect results
-                tool_results = []
-                for tu in tool_use_blocks:
-                    tool_input = tu.input if isinstance(tu.input, dict) else {}
-                    if tu.name == "Bash":
-                        cmd = tool_input.get("command", "")
-                        output = _execute_bash(cmd)
                         session["tool_calls"].append(
-                            {"name": "Bash", "input": cmd, "output": output}
-                        )
-                    elif tu.name == "Read":
-                        fp = tool_input.get("file_path", "")
-                        output = _execute_read(fp)
-                        session["tool_calls"].append(
-                            {"name": "Read", "input": fp, "output": output}
-                        )
-                    else:
-                        output = f"[Unknown tool: {tu.name}]"
-                        session["tool_calls"].append(
-                            {"name": tu.name, "input": str(tool_input), "output": output}
+                            {
+                                "name": pending["name"],
+                                "input": input_str,
+                                "output": output_str,
+                            }
                         )
 
-                    tool_results.append(
-                        {
-                            "type": "tool_result",
-                            "tool_use_id": tu.id,
-                            "content": output,
-                        }
-                    )
+        elif event_type == "result":
+            if event.get("subtype") == "error":
+                session["error"] = event.get("error", "Unknown CLI error")
 
-                messages.append({"role": "user", "content": tool_results})
-
-        else:
-            session["error"] = f"Reached max turns ({MAX_TURNS}) without end_turn"
-
-    except Exception as e:  # noqa: BLE001 — intentional: capture all API/network errors into session
-        session["error"] = str(e)
+    # Drain any tool_use blocks whose tool_result was never received (e.g. truncated
+    # stream or premature CLI exit).  Record them so scoring counts them correctly.
+    for orphan in pending_tool_uses.values():
+        session["tool_calls"].append({
+            "name": orphan["name"],
+            "input": str(orphan["input"]),
+            "output": "[INCOMPLETE — no tool_result received]",
+        })
+    if pending_tool_uses and session["error"] is None:
+        session["error"] = (
+            f"Stream ended with {len(pending_tool_uses)} unmatched tool_use block(s)"
+        )
 
     return session

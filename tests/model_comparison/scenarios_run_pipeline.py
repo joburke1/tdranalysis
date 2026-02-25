@@ -8,7 +8,17 @@ Each scenario is a dict with:
   - scored: whether the rubric is applied (False = human-review only)
 """
 
-SCENARIOS: list[dict] = [
+from typing import TypedDict
+
+
+class Scenario(TypedDict):
+    name: str
+    arguments: str
+    description: str
+    scored: bool
+
+
+SCENARIOS: list[Scenario] = [
     {
         "name": "happy_path",
         "arguments": "Alcova Heights",
