@@ -7,3 +7,4 @@ requires-python = ">=3.11"
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
+markers = ["api: marks tests as making real API calls (skip with -m 'not api')"]
