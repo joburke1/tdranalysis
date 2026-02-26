@@ -17,6 +17,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+
 def _claude_direct_cmd() -> list[str] | None:
     """
     On Windows, resolve node.exe + cli.js directly from claude.CMD so that
@@ -46,24 +47,26 @@ PROJECT_ROOT = Path(__file__).parent.parent.parent.resolve()
 COMMANDS_DIR = PROJECT_ROOT / ".claude" / "commands"
 
 # Maximum wall-clock seconds to wait for the CLI session to complete.
-SESSION_TIMEOUT = 300
+SESSION_TIMEOUT = 600
 
 # Allowlist for model identifiers accepted by run_skill.
-_ALLOWED_MODELS: frozenset[str] = frozenset({
-    "sonnet",
-    "haiku",
-    "opus",
-    "claude-sonnet-latest",
-    "claude-haiku-latest",
-    "claude-opus-latest",
-})
+_ALLOWED_MODELS: frozenset[str] = frozenset(
+    {
+        "sonnet",
+        "haiku",
+        "opus",
+        "claude-sonnet-latest",
+        "claude-haiku-latest",
+        "claude-opus-latest",
+    }
+)
 
 # Skill names may only contain word characters and hyphens.
 _SAFE_SKILL_NAME = re.compile(r"^[\w\-]+$")
 
-# Arguments may contain word characters, whitespace, hyphens, dots, commas,
-# and single/double quotes — sufficient for all current scenarios.
-_SAFE_ARGUMENTS = re.compile(r'^[\w\s\-\.,\'"]*$')
+# Arguments may contain ASCII word characters, whitespace, hyphens, and dots/commas.
+# Quotes are not needed by any current scenario and are excluded to minimise the allowlist.
+_SAFE_ARGUMENTS = re.compile(r"^[\w\s\-\.,]*$", re.ASCII)
 
 
 def run_skill(
@@ -114,10 +117,13 @@ def run_skill(
 
     prompt = f"/{skill_name} {arguments}".strip()
     claude_args = [
-        "claude", "--print",
+        "claude",
+        "--print",
         "--verbose",
-        "--model", model,
-        "--output-format", "stream-json",
+        "--model",
+        model,
+        "--output-format",
+        "stream-json",
         "--no-session-persistence",
         prompt,
     ]
@@ -141,9 +147,11 @@ def run_skill(
             cmd,
             capture_output=True,
             text=True,
+            encoding="utf-8",
             timeout=SESSION_TIMEOUT,
             cwd=str(PROJECT_ROOT),
             env=env,
+            stdin=subprocess.DEVNULL,
         )
         stdout = result.stdout
         if result.returncode != 0:
@@ -235,7 +243,9 @@ def run_skill(
                         if isinstance(raw_output, list):
                             # content can be a list of text blocks
                             output_str = "\n".join(
-                                b.get("text", "") for b in raw_output if isinstance(b, dict)
+                                b.get("text", "")
+                                for b in raw_output
+                                if isinstance(b, dict)
                             )
                         else:
                             output_str = str(raw_output)
@@ -255,11 +265,13 @@ def run_skill(
     # Drain any tool_use blocks whose tool_result was never received (e.g. truncated
     # stream or premature CLI exit).  Record them so scoring counts them correctly.
     for orphan in pending_tool_uses.values():
-        session["tool_calls"].append({
-            "name": orphan["name"],
-            "input": str(orphan["input"]),
-            "output": "[INCOMPLETE — no tool_result received]",
-        })
+        session["tool_calls"].append(
+            {
+                "name": orphan["name"],
+                "input": str(orphan["input"]),
+                "output": "[INCOMPLETE — no tool_result received]",
+            }
+        )
     if pending_tool_uses and session["error"] is None:
         session["error"] = (
             f"Stream ended with {len(pending_tool_uses)} unmatched tool_use block(s)"

@@ -28,13 +28,13 @@ from typing import Any, TypedDict
 
 
 class CriterionResult(TypedDict):
-    weight: int
+    weight: float
     earned: float
     note: str
 
 
-# Criteria weights
-WEIGHTS = {
+# Criteria weights — typed as float so half-credit arithmetic (weight * 0.5) stays float.
+WEIGHTS: dict[str, float] = {
     "unix_path": 20,
     "skip_flags": 15,
     "stdout_displayed": 15,
@@ -47,24 +47,26 @@ WEIGHTS = {
 # Mandatory criteria — critical failure on these → overall fail regardless of score
 MANDATORY_CRITERIA = {"unix_path", "summary_read"}
 
-PASS_THRESHOLD = 75            # per-scenario pass bar
+PASS_THRESHOLD = 75  # per-scenario pass bar
 AGGREGATE_PASS_THRESHOLD = 80  # aggregate pass bar (haiku recommendation)
-CONDITIONAL_THRESHOLD = 65     # aggregate score below PASS but at/above this → CONDITIONAL
-MIN_FINAL_TEXT_CHARS = 200     # below this, stdout is considered not shown in final text
+CONDITIONAL_THRESHOLD = 65  # aggregate score below PASS but at/above this → CONDITIONAL
+MIN_FINAL_TEXT_CHARS = 200  # below this, stdout is considered not shown in final text
 
 # Numbers expected in Alcova Heights final text
 ALCOVA_KEY_NUMBERS = ["295", "283", "69", "216"]
 
 WINDOWS_PATH_PATTERN = re.compile(
     r"(?:"
-    r"C:\\|"                    # C:\ (single backslash, as it appears in shell text)
+    r"C:\\|"  # C:\ (single backslash, as it appears in shell text)
     r"C:/Users.*?python\.exe|"  # Windows-style quoted path ending in python.exe
-    r'"C:/'                     # quoted Windows path
+    r'"C:/'  # quoted Windows path
     r")",
     re.IGNORECASE,
 )
 
-UNIX_PATH_PATTERN = re.compile(r"/c/Users/johnb/Advocacy/tdranalysis/venv/Scripts/python")
+UNIX_PATH_PATTERN = re.compile(
+    r"/c/Users/johnb/Advocacy/tdranalysis/venv/Scripts/python"
+)
 
 SKIP_DOWNLOAD = "--skip-download"
 SKIP_PROCESS = "--skip-process"
@@ -90,7 +92,9 @@ def _read_paths(session: dict[str, Any]) -> list[str]:
 
 def _all_bash_outputs(session: dict[str, Any]) -> str:
     """Return all Bash tool outputs joined into a single string."""
-    return "\n".join(tc["output"] for tc in session["tool_calls"] if tc["name"] == "Bash")
+    return "\n".join(
+        tc["output"] for tc in session["tool_calls"] if tc["name"] == "Bash"
+    )
 
 
 def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]:
@@ -150,9 +154,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
         skip_note = "Both --skip-download and --skip-process present"
     elif has_skip_dl or has_skip_proc:
         skip_earned = WEIGHTS["skip_flags"] * 0.5
-        skip_note = (
-            f"Only one skip flag: skip-download={has_skip_dl}, skip-process={has_skip_proc}"
-        )
+        skip_note = f"Only one skip flag: skip-download={has_skip_dl}, skip-process={has_skip_proc}"
     else:
         skip_earned = 0
         skip_note = "CRITICAL: Both skip flags absent"
@@ -161,7 +163,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
     # ── 3. Script stdout displayed (weight 15) ─────────────────────────────
     # Check that model made a bash call and that stdout appears in final text
     if not bash_cmds:
-        stdout_earned = 0
+        stdout_earned: float = 0
         stdout_note = "CRITICAL: No Bash tool call made"
     elif bash_outputs.strip() and len(final_text) > MIN_FINAL_TEXT_CHARS:
         stdout_earned = WEIGHTS["stdout_displayed"]
@@ -204,9 +206,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
             numbers_note = f"All key numbers found: {found}"
         elif len(found) >= 2:
             numbers_earned = WEIGHTS["key_numbers"] * 0.5
-            numbers_note = (
-                f"Partial key numbers found: {found} (expected all of {ALCOVA_KEY_NUMBERS})"
-            )
+            numbers_note = f"Partial key numbers found: {found} (expected all of {ALCOVA_KEY_NUMBERS})"
         else:
             numbers_earned = 0
             numbers_note = f"No key numbers found (expected {ALCOVA_KEY_NUMBERS})"
@@ -224,9 +224,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
         followup_note = "Both anomaly check and parcel inspector offers present"
     elif has_anomaly_offer or has_parcel_offer:
         followup_earned = WEIGHTS["followup_offers"] * 0.5
-        followup_note = (
-            f"Only one follow-up: anomaly={has_anomaly_offer}, parcel={has_parcel_offer}"
-        )
+        followup_note = f"Only one follow-up: anomaly={has_anomaly_offer}, parcel={has_parcel_offer}"
     else:
         followup_earned = 0
         followup_note = "Neither follow-up offer present"
@@ -247,9 +245,7 @@ def score_session(session: dict[str, Any], scenario_name: str) -> dict[str, Any]
     # ── Totals ─────────────────────────────────────────────────────────────
     total = sum(v["earned"] for v in criteria.values())
 
-    critical_failures = [
-        k for k in MANDATORY_CRITERIA if criteria[k]["earned"] == 0
-    ]
+    critical_failures = [k for k in MANDATORY_CRITERIA if criteria[k]["earned"] == 0]
 
     passed = total >= PASS_THRESHOLD and not critical_failures
 
@@ -270,7 +266,11 @@ def aggregate_scores(scored_scenarios: list[dict[str, Any]]) -> dict[str, Any]:
     Returns overall score (mean), any critical failures, and a recommendation string.
     """
     if not scored_scenarios:
-        return {"overall": 0, "recommendation": "FAIL", "details": "No scored scenarios"}
+        return {
+            "overall": 0,
+            "recommendation": "FAIL",
+            "details": "No scored scenarios",
+        }
 
     total_scores = [s["score"]["total"] for s in scored_scenarios]
     overall = round(sum(total_scores) / len(total_scores), 1)

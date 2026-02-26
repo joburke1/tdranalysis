@@ -1,14 +1,14 @@
 """
-compare_models.py — Entry point for model comparison test.
+compare_models_inspect_parcel.py — Entry point for inspect-parcel model comparison.
 
-Runs all run-pipeline scenarios against both Sonnet and Haiku,
+Runs all inspect-parcel scenarios against both Sonnet and Haiku,
 scores the results, and writes a JSON + Markdown report.
 
 Uses the `claude` CLI (must be on PATH) with the user's existing Pro
 credentials — no ANTHROPIC_API_KEY required.
 
 Usage:
-    python tests/model_comparison/compare_models.py
+    python tests/model_comparison/compare_models_inspect_parcel.py
 
 Guard: this file is not importable as a test module (no test_ prefix, no
 pytest markers), but also has an explicit __name__ == "__main__" guard to
@@ -23,13 +23,15 @@ from pathlib import Path
 from typing import Any
 
 # Make sure project root is on the path when run directly.
-# Use append rather than insert(0) to avoid shadowing stdlib modules.
 PROJECT_ROOT = Path(__file__).parent.parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
-from tests.model_comparison.scenarios_run_pipeline import SCENARIOS  # noqa: E402
-from tests.model_comparison.scoring import aggregate_scores, score_session  # noqa: E402
+from tests.model_comparison.scenarios_inspect_parcel import SCENARIOS  # noqa: E402
+from tests.model_comparison.scoring_inspect_parcel import (  # noqa: E402
+    aggregate_scores,
+    score_session,
+)
 from tests.model_comparison.skill_runner import run_skill  # noqa: E402
 
 logging.basicConfig(
@@ -39,8 +41,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Define HAIKU_MODEL as an explicit constant so the recommendation block
-# does not rely on fragile substring matching over the MODELS list.
 HAIKU_MODEL = "haiku"
 MODELS = [
     "sonnet",
@@ -48,17 +48,14 @@ MODELS = [
 ]
 
 RESULTS_DIR = Path(__file__).parent / "results"
-SKILL_NAME = "run-pipeline"
+SKILL_NAME = "inspect-parcel"
 
 
 def _shorten(text: str, max_chars: int = 800) -> str:
     """
     Truncate long text for the markdown report.
 
-    Note: the result may contain triple-backtick sequences.  Callers that
-    embed this output inside a markdown code block should use tilde fences
-    (~~~) rather than backtick fences so the content cannot close the block
-    prematurely.
+    Uses tilde-fenced blocks at call sites to avoid backtick conflicts.
     """
     if len(text) <= max_chars:
         return text
@@ -149,8 +146,6 @@ def _build_markdown_report(
                         "",
                     ]
 
-            # Final text — use tilde fences so backtick sequences in the content
-            # cannot prematurely close the code block.
             lines += [
                 "**Final text** (truncated to 800 chars):",
                 "~~~",
@@ -186,8 +181,6 @@ def main() -> None:
     logger.info("Models: %s", MODELS)
     logger.info("Scenarios: %s", [s["name"] for s in SCENARIOS])
 
-    # Create results directory before running so per-model checkpoints can be
-    # written immediately rather than waiting until all models have finished.
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
 
     all_results: dict[str, dict[str, Any]] = {}
@@ -264,16 +257,17 @@ def main() -> None:
             aggregate["recommendation"],
         )
 
-        # Checkpoint: write per-model JSON immediately so results are not lost
-        # if a subsequent model run fails or times out.
-        checkpoint_path = RESULTS_DIR / f"comparison_{timestamp}_{model}.json"
+        # Checkpoint: write per-model JSON immediately
+        checkpoint_path = (
+            RESULTS_DIR / f"comparison_inspect_parcel_{timestamp}_{model}.json"
+        )
         with open(checkpoint_path, "w", encoding="utf-8") as f:
             json.dump(all_results[model], f, indent=2, default=str)
         logger.info("  Checkpoint written: %s", checkpoint_path)
 
     # Write combined JSON and Markdown reports.
-    json_path = RESULTS_DIR / f"comparison_{timestamp}.json"
-    md_path = RESULTS_DIR / f"comparison_{timestamp}.md"
+    json_path = RESULTS_DIR / f"comparison_inspect_parcel_{timestamp}.json"
+    md_path = RESULTS_DIR / f"comparison_inspect_parcel_{timestamp}.md"
 
     with open(json_path, "w", encoding="utf-8") as f:
         json.dump(all_results, f, indent=2, default=str)
@@ -302,10 +296,9 @@ def main() -> None:
     rec = haiku_agg.get("recommendation", "FAIL")
     if rec == "PASS":
         logger.info(
-            "ACTION: Haiku PASSED (%s). "
+            "ACTION: Haiku PASSED. "
             "Consider adding 'model: claude-haiku-latest' frontmatter to "
-            ".claude/commands/run-pipeline.md (verify frontmatter support first).",
-            HAIKU_MODEL,
+            ".claude/commands/inspect-parcel.md (verify frontmatter support first)."
         )
     elif rec == "CONDITIONAL":
         logger.info(
@@ -316,7 +309,7 @@ def main() -> None:
         logger.info(
             "ACTION: Haiku FAILED. "
             "Review critical failures in the markdown report. "
-            "If path criterion failed, Haiku is not suitable for this skill."
+            "If path or calc_trace criterion failed, Haiku is not suitable for this skill."
         )
 
 

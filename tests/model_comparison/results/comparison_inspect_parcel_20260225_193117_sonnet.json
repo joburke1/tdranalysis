@@ -1,0 +1,282 @@
+{
+  "scenarios": [
+    {
+      "scenario": "happy_path",
+      "scored": true,
+      "session": {
+        "model": "sonnet",
+        "skill": "inspect-parcel",
+        "arguments": "23026006 Alcova Heights",
+        "tool_calls": [
+          {
+            "name": "Bash",
+            "input": "cd /c/Users/johnb/Advocacy/tdranalysis && /c/Users/johnb/Advocacy/tdranalysis/venv/Scripts/python scripts/inspect_parcel.py --parcel-id \"23026006\" --neighborhood \"Alcova Heights\" --output-dir data/results",
+            "output": "================================================================================\r\nPARCEL INSPECTION REPORT: 23026006\r\nGenerated: 2026-02-25 19:31\r\n================================================================================\r\n\r\nIDENTITY\r\n  Parcel ID:      23026006\r\n  Address:        3916 7Th St S, Arlington VA 22204\r\n  Neighborhood:   Alcova Heights\r\n  Zoning:         R-6\r\n  Split Zoned:    Yes\r\n\r\nRAW INPUT DATA\r\n  grossFloorAreaSquareFeetQty:         None\r\n  storyHeightCnt:                      None\r\n  propertyYearBuilt:                   1,938.0\r\n  numberOfUnitsCnt:                    None\r\n  lotSizeQty:                          7,678.0\r\n  improvementValueAmt:                 610,800.0\r\n  landValueAmt:                        651,800.0\r\n  totalValueAmt:                       1,262,600.0\r\n  propertyClassTypeCode:               511\r\n  propertyClassTypeDsc:                511-Single Family Detached\r\n\r\nEXCLUSION FILTER CHECKS\r\n  [PASS] Residential zoning: R-6 is in scope\r\n  [PASS] Property class: 511 is not excluded (201/210)\r\n  [PASS] Class 510 remnant: Not class 510 (class=511)\r\n  [PASS] Property record: Has property data (address='3916 7th ST S', class=511)\r\n  [PASS] GFA data: GFA estimable (improvement=$610,800)\r\n  [PASS] Spot check: Not in spot_checks.csv as excluded\r\n\r\nSTAGE 1: DEVELOPMENT POTENTIAL\r\n  Lot Metrics:\r\n    Area:             7,678 sf [assessor]\r\n    Width:            45.8 ft [derived]\r\n    Depth:            167.6 ft [geometry]\r\n\r\n  Zoning Standards (R-6 from config/residential_districts.json):\r\n    Min lot area:     6,000 sf -> CONFORMING (7,678 >= 6,000)\r\n    Min lot width:    60 ft -> NONCONFORMING (45.8 < 60)\r\n    Max height:       35 ft\r\n    Max lot coverage: 40%\r\n    Max footprint:    30% (cap 2,520 sf)\r\n\r\n  Conformance: NONCONFORMING\r\n  Limiting factors: lot_width\r\n    - Lot width (45.8 ft) is less than minimum required (60 ft)\r\n  Max footprint: 2,303 sf\r\n\r\nSTAGE 2: CURRENT BUILT\r\n  GFA Source Priority:\r\n    1. Property API (grossFloorAreaSquareFeetQty): None -> SKIP\r\n    2. Improvement value estimate: $610,800 / $153/sf = 3,997 sf -> USED\r\n\r\n  Current GFA:        3,997 sf (estimated_from_improvement_value)\r\n  Stories:            N/A\r\n  Year built:         1938\r\n  Est. footprint:     3,997 sf\r\n\r\n  Assessment:\r\n    Land value:       $651,800\r\n    Improvement:      $610,800\r\n    Total:            $1,262,600\r\n\r\n  Neighborhood Calibration:\r\n    Median rate:      $153/sf (n=12)\r\n    Range:            $137 - $169/sf\r\n    Fallback used:    No\r\n\r\n  Note: GFA estimated from assessed improvement value ($610,800 \u00ef\u00bf\u00bd $153/SF = 3,997 SF)\r\n  Note: Story count unavailable; estimated footprint assumes single story\r\n\r\nSTAGE 3: AVAILABLE RIGHTS\r\n  Max GFA:            5,758 sf\r\n                      (2,303 sf footprint x 2.5 stories)\r\n  Current GFA:        3,997 sf\r\n  Available GFA:      1,762 sf\r\n                      (5,758 - 3,997 = 1,762)\r\n\r\n  TDR Potential:      SUBSTANTIAL (< 80% utilized)\r\n  GFA utilization:    69.4%\r\n\r\n  Note: Max GFA estimated as footprint x 2.5 stories (R districts use footprint limits, not FAR)\r\n  Note: Lot coverage availability not computed; actual impervious coverage data not available from property records\r\n\r\nSTAGE 4: VALUATION\r\n  Inputs:\r\n    Available GFA:    1,762 sf\r\n    Land value:       $651,800\r\n    Max GFA:          5,758 sf\r\n\r\n  Parameters Used (from config/valuation_params.json):\r\n    Land residual discount:     55%\u00ef\u00bf\u00bd75%\r\n    Assessment market ratio:    1.00x\u00ef\u00bf\u00bd1.15x\r\n    Price per available GFA SF: $100\u00ef\u00bf\u00bd$200/sf\r\n    Params last updated:        2026-02-23\r\n\r\n  Method 1 - Land Residual:\r\n    Low:  $109,661\r\n    High: $149,537\r\n    (Derived land rate: $113.19/sf of max buildable GFA)\r\n    (Discount factors applied: 55%\u00ef\u00bf\u00bd75%)\r\n    -> APPLICABLE\r\n\r\n  Method 2 - Assessment Ratio:\r\n    Low:  $199,383\r\n    High: $229,290\r\n    (Available GFA fraction: 30.6% of max capacity)\r\n    (Market-to-assessment ratio: 1.00\u00ef\u00bf\u00bd1.15x)\r\n    -> APPLICABLE\r\n\r\n  Method 3 - Price Per SF:\r\n    Low:  $176,150\r\n    High: $352,300\r\n    (Applied $100\u00ef\u00bf\u00bd$200/sf to 1,762 sf of available GFA)\r\n    -> APPLICABLE\r\n\r\n  Composite Range:\r\n    Low:  $109,661\r\n    High: $352,300\r\n\r\n  Confidence: HIGH\r\n    - 3 of 3 valuation methods applicable\r\n    - Assessed land value and available GFA meet quality thresholds\r\n\r\n================================================================================"
+          }
+        ],
+        "final_text": "```\n================================================================================\nPARCEL INSPECTION REPORT: 23026006\nGenerated: 2026-02-25 19:31\n================================================================================\n\nIDENTITY\n  Parcel ID:      23026006\n  Address:        3916 7Th St S, Arlington VA 22204\n  Neighborhood:   Alcova Heights\n  Zoning:         R-6\n  Split Zoned:    Yes\n\nRAW INPUT DATA\n  grossFloorAreaSquareFeetQty:         None\n  storyHeightCnt:                      None\n  propertyYearBuilt:                   1,938.0\n  numberOfUnitsCnt:                    None\n  lotSizeQty:                          7,678.0\n  improvementValueAmt:                 610,800.0\n  landValueAmt:                        651,800.0\n  totalValueAmt:                       1,262,600.0\n  propertyClassTypeCode:               511\n  propertyClassTypeDsc:                511-Single Family Detached\n\nEXCLUSION FILTER CHECKS\n  [PASS] Residential zoning: R-6 is in scope\n  [PASS] Property class: 511 is not excluded (201/210)\n  [PASS] Class 510 remnant: Not class 510 (class=511)\n  [PASS] Property record: Has property data (address='3916 7th ST S', class=511)\n  [PASS] GFA data: GFA estimable (improvement=$610,800)\n  [PASS] Spot check: Not in spot_checks.csv as excluded\n\nSTAGE 1: DEVELOPMENT POTENTIAL\n  Lot Metrics:\n    Area:             7,678 sf [assessor]\n    Width:            45.8 ft [derived]\n    Depth:            167.6 ft [geometry]\n\n  Zoning Standards (R-6 from config/residential_districts.json):\n    Min lot area:     6,000 sf -> CONFORMING (7,678 >= 6,000)\n    Min lot width:    60 ft -> NONCONFORMING (45.8 < 60)\n    Max height:       35 ft\n    Max lot coverage: 40%\n    Max footprint:    30% (cap 2,520 sf)\n\n  Conformance: NONCONFORMING\n  Limiting factors: lot_width\n    - Lot width (45.8 ft) is less than minimum required (60 ft)\n  Max footprint: 2,303 sf\n\nSTAGE 2: CURRENT BUILT\n  GFA Source Priority:\n    1. Property API (grossFloorAreaSquareFeetQty): None -> SKIP\n    2. Improvement value estimate: $610,800 / $153/sf = 3,997 sf -> USED\n\n  Current GFA:        3,997 sf (estimated_from_improvement_value)\n  Stories:            N/A\n  Year built:         1938\n  Est. footprint:     3,997 sf\n\n  Assessment:\n    Land value:       $651,800\n    Improvement:      $610,800\n    Total:            $1,262,600\n\n  Neighborhood Calibration:\n    Median rate:      $153/sf (n=12)\n    Range:            $137 - $169/sf\n    Fallback used:    No\n\n  Note: GFA estimated from assessed improvement value ($610,800 / $153/SF = 3,997 SF)\n  Note: Story count unavailable; estimated footprint assumes single story\n\nSTAGE 3: AVAILABLE RIGHTS\n  Max GFA:            5,758 sf\n                      (2,303 sf footprint x 2.5 stories)\n  Current GFA:        3,997 sf\n  Available GFA:      1,762 sf\n                      (5,758 - 3,997 = 1,762)\n\n  TDR Potential:      SUBSTANTIAL (< 80% utilized)\n  GFA utilization:    69.4%\n\n  Note: Max GFA estimated as footprint x 2.5 stories (R districts use footprint limits, not FAR)\n  Note: Lot coverage availability not computed; actual impervious coverage data not available from property records\n\nSTAGE 4: VALUATION\n  Inputs:\n    Available GFA:    1,762 sf\n    Land value:       $651,800\n    Max GFA:          5,758 sf\n\n  Parameters Used (from config/valuation_params.json):\n    Land residual discount:     55%\u00e2\u20ac\u201c75%\n    Assessment market ratio:    1.00x\u00e2\u20ac\u201c1.15x\n    Price per available GFA SF: $100\u00e2\u20ac\u201c$200/sf\n    Params last updated:        2026-02-23\n\n  Method 1 - Land Residual:\n    Low:  $109,661\n    High: $149,537\n    (Derived land rate: $113.19/sf of max buildable GFA)\n    (Discount factors applied: 55%\u00e2\u20ac\u201c75%)\n    -> APPLICABLE\n\n  Method 2 - Assessment Ratio:\n    Low:  $199,383\n    High: $229,290\n    (Available GFA fraction: 30.6% of max capacity)\n    (Market-to-assessment ratio: 1.00\u00e2\u20ac\u201c1.15x)\n    -> APPLICABLE\n\n  Method 3 - Price Per SF:\n    Low:  $176,150\n    High: $352,300\n    (Applied $100\u00e2\u20ac\u201c$200/sf to 1,762 sf of available GFA)\n    -> APPLICABLE\n\n  Composite Range:\n    Low:  $109,661\n    High: $352,300\n\n  Confidence: HIGH\n    - 3 of 3 valuation methods applicable\n    - Assessed land value and available GFA meet quality thresholds\n\n================================================================================\n```\n\n---\n\n## Calculation Trace\n\n### Stage 1 \u00e2\u20ac\u201d Development Potential\n\n- **Lot area:** 7,678 sf [assessor `lotSizeQty`]\n- **Lot width:** 45.8 ft [derived from geometry]\n- **Lot depth:** 167.6 ft [geometry]\n\nConformance checks (R-6 standards):\n- Area: `7,678 >= 6,000` \u00e2\u2020\u2019 PASS\n- Width: `45.8 < 60` \u00e2\u2020\u2019 FAIL \u00e2\u20ac\u201d **nonconforming lot**\n\nMax footprint: `7,678 \u00c3\u2014 30% = 2,303 sf`; cap = 2,520 sf \u00e2\u2020\u2019 uses **2,303 sf** (percentage is binding)\n\nMax GFA: `2,303 sf \u00c3\u2014 2.5 stories = 5,758 sf`\n\n---\n\n### Stage 2 \u00e2\u20ac\u201d Current Built\n\n- **Tier 1** (Property API `grossFloorAreaSquareFeetQty`): `None` \u00e2\u2020\u2019 SKIP\n- **Tier 2** (improvement value estimate): `$610,800 \u00c3\u00b7 $153/sf = 3,997 sf` \u00e2\u2020\u2019 USED\n\nNeighborhood rate: median $153/sf, range $137\u00e2\u20ac\u201c$169/sf, n=12, no fallback.\n\n---\n\n### Stage 3 \u00e2\u20ac\u201d Available Rights\n\n```\nmax_gfa       = 2,303 \u00c3\u2014 2.5 = 5,758 sf\ncurrent_gfa   = 3,997 sf\navailable_gfa = 5,758 - 3,997 = 1,762 sf\nutilization   = 3,997 / 5,758 = 69.4%\n```\n\n69.4% < 80% \u00e2\u2020\u2019 **SUBSTANTIAL**\n\n---\n\n### Stage 4 \u00e2\u20ac\u201d Valuation\n\n**Method 1 \u00e2\u20ac\u201d Land Residual:**\n- Land rate: `$651,800 \u00c3\u00b7 5,758 sf = $113.19/sf`\n- Low: `1,762 \u00c3\u2014 $113.19 \u00c3\u2014 55% = $109,661`\n- High: `1,762 \u00c3\u2014 $113.19 \u00c3\u2014 75% = $149,537`\n\n**Method 2 \u00e2\u20ac\u201d Assessment Ratio:**\n- Available fraction: `1,762 / 5,758 = 30.6%`\n- Low: `$651,800 \u00c3\u2014 1.00 \u00c3\u2014 30.6% = $199,383`\n- High: `$651,800 \u00c3\u2014 1.15 \u00c3\u2014 30.6% = $229,290`\n\n**Method 3 \u00e2\u20ac\u201d Price Per SF:**\n- Low: `1,762 \u00c3\u2014 $100 = $176,150`\n- High: `1,762 \u00c3\u2014 $200 = $352,300`\n\n**Composite:** Low = `min($109,661, $199,383, $176,150)` = **$109,661**; High = `max($149,537, $229,290, $352,300)` = **$352,300**\n\n---\n\n## Validation Flags\n\n| Flag | Status |\n|------|--------|\n| GFA source | **Tier 2 (estimated)** \u00e2\u20ac\u201d no API GFA available |\n| Fallback rate | Not used |\n| Sample size | OK (n=12) |\n| Valuation spread | **WIDE**: $352,300 / $109,661 = **3.2x** (threshold 2.5x) |\n| Nonconforming lot | **YES** \u00e2\u20ac\u201d lot width 45.8 ft < required 60 ft |\n\nTwo flags worth noting: GFA is estimated (not measured), and the valuation spread of 3.2x exceeds the 2.5x threshold, driven by Method 3's $200/sf ceiling pulling the high end up. The land residual and assessment ratio methods cluster more tightly ($110k\u00e2\u20ac\u201c$229k).\n\n---\n\n**Follow-up options:**\n- Look up this parcel in `data/results/alcova_heights/alcova_heights_analysis.csv`\n- Check `spot_checks.csv` or `anomaly_report.csv` for any prior flags\n- Compare against other nonconforming-lot parcels in Alcova Heights",
+        "input_tokens": 5,
+        "output_tokens": 17,
+        "turn_count": 3,
+        "error": null
+      },
+      "score": {
+        "scenario": "happy_path",
+        "total": 100,
+        "criteria": {
+          "unix_path": {
+            "weight": 20,
+            "earned": 20,
+            "note": "Unix-style /c/ path used correctly"
+          },
+          "parcel_id_flag": {
+            "weight": 15,
+            "earned": 15,
+            "note": "inspect_parcel.py called with --parcel-id flag"
+          },
+          "stdout_displayed": {
+            "weight": 15,
+            "earned": 15,
+            "note": "Final text is substantial (6705 chars)"
+          },
+          "calc_trace": {
+            "weight": 20,
+            "earned": 20,
+            "note": "All 4 stages present in final text"
+          },
+          "key_terms": {
+            "weight": 15,
+            "earned": 15,
+            "note": "All 5 key terms found"
+          },
+          "validation_flags": {
+            "weight": 10,
+            "earned": 10,
+            "note": "5/5 validation flag terms found"
+          },
+          "turn_count": {
+            "weight": 5,
+            "earned": 5,
+            "note": "Turn count: 3 (\u22645)"
+          }
+        },
+        "passed": true,
+        "critical_failures": []
+      }
+    },
+    {
+      "scenario": "parcel_only",
+      "scored": true,
+      "session": {
+        "model": "sonnet",
+        "skill": "inspect-parcel",
+        "arguments": "23026006",
+        "tool_calls": [
+          {
+            "name": "Bash",
+            "input": "cd /c/Users/johnb/Advocacy/tdranalysis && /c/Users/johnb/Advocacy/tdranalysis/venv/Scripts/python scripts/inspect_parcel.py --parcel-id \"23026006\" --output-dir data/results 2>&1",
+            "output": "================================================================================\r\nPARCEL INSPECTION REPORT: 23026006\r\nGenerated: 2026-02-25 19:33\r\n================================================================================\r\n\r\nIDENTITY\r\n  Parcel ID:      23026006\r\n  Address:        3916 7Th St S, Arlington VA 22204\r\n  Neighborhood:   Alcova Heights\r\n  Zoning:         R-6\r\n  Split Zoned:    Yes\r\n\r\nRAW INPUT DATA\r\n  grossFloorAreaSquareFeetQty:         None\r\n  storyHeightCnt:                      None\r\n  propertyYearBuilt:                   1,938.0\r\n  numberOfUnitsCnt:                    None\r\n  lotSizeQty:                          7,678.0\r\n  improvementValueAmt:                 610,800.0\r\n  landValueAmt:                        651,800.0\r\n  totalValueAmt:                       1,262,600.0\r\n  propertyClassTypeCode:               511\r\n  propertyClassTypeDsc:                511-Single Family Detached\r\n\r\nEXCLUSION FILTER CHECKS\r\n  [PASS] Residential zoning: R-6 is in scope\r\n  [PASS] Property class: 511 is not excluded (201/210)\r\n  [PASS] Class 510 remnant: Not class 510 (class=511)\r\n  [PASS] Property record: Has property data (address='3916 7th ST S', class=511)\r\n  [PASS] GFA data: GFA estimable (improvement=$610,800)\r\n  [PASS] Spot check: Not in spot_checks.csv as excluded\r\n\r\nSTAGE 1: DEVELOPMENT POTENTIAL\r\n  Lot Metrics:\r\n    Area:             7,678 sf [assessor]\r\n    Width:            45.8 ft [derived]\r\n    Depth:            167.6 ft [geometry]\r\n\r\n  Zoning Standards (R-6 from config/residential_districts.json):\r\n    Min lot area:     6,000 sf -> CONFORMING (7,678 >= 6,000)\r\n    Min lot width:    60 ft -> NONCONFORMING (45.8 < 60)\r\n    Max height:       35 ft\r\n    Max lot coverage: 40%\r\n    Max footprint:    30% (cap 2,520 sf)\r\n\r\n  Conformance: NONCONFORMING\r\n  Limiting factors: lot_width\r\n    - Lot width (45.8 ft) is less than minimum required (60 ft)\r\n  Max footprint: 2,303 sf\r\n\r\nSTAGE 2: CURRENT BUILT\r\n  GFA Source Priority:\r\n    1. Property API (grossFloorAreaSquareFeetQty): None -> SKIP\r\n    2. Improvement value estimate: $610,800 / $153/sf = 3,997 sf -> USED\r\n\r\n  Current GFA:        3,997 sf (estimated_from_improvement_value)\r\n  Stories:            N/A\r\n  Year built:         1938\r\n  Est. footprint:     3,997 sf\r\n\r\n  Assessment:\r\n    Land value:       $651,800\r\n    Improvement:      $610,800\r\n    Total:            $1,262,600\r\n\r\n  Neighborhood Calibration:\r\n    Median rate:      $153/sf (n=12)\r\n    Range:            $137 - $169/sf\r\n    Fallback used:    No\r\n\r\n  Note: GFA estimated from assessed improvement value ($610,800 \u00ef\u00bf\u00bd $153/SF = 3,997 SF)\r\n  Note: Story count unavailable; estimated footprint assumes single story\r\n\r\nSTAGE 3: AVAILABLE RIGHTS\r\n  Max GFA:            5,758 sf\r\n                      (2,303 sf footprint x 2.5 stories)\r\n  Current GFA:        3,997 sf\r\n  Available GFA:      1,762 sf\r\n                      (5,758 - 3,997 = 1,762)\r\n\r\n  TDR Potential:      SUBSTANTIAL (< 80% utilized)\r\n  GFA utilization:    69.4%\r\n\r\n  Note: Max GFA estimated as footprint x 2.5 stories (R districts use footprint limits, not FAR)\r\n  Note: Lot coverage availability not computed; actual impervious coverage data not available from property records\r\n\r\nSTAGE 4: VALUATION\r\n  Inputs:\r\n    Available GFA:    1,762 sf\r\n    Land value:       $651,800\r\n    Max GFA:          5,758 sf\r\n\r\n  Parameters Used (from config/valuation_params.json):\r\n    Land residual discount:     55%\u00ef\u00bf\u00bd75%\r\n    Assessment market ratio:    1.00x\u00ef\u00bf\u00bd1.15x\r\n    Price per available GFA SF: $100\u00ef\u00bf\u00bd$200/sf\r\n    Params last updated:        2026-02-23\r\n\r\n  Method 1 - Land Residual:\r\n    Low:  $109,661\r\n    High: $149,537\r\n    (Derived land rate: $113.19/sf of max buildable GFA)\r\n    (Discount factors applied: 55%\u00ef\u00bf\u00bd75%)\r\n    -> APPLICABLE\r\n\r\n  Method 2 - Assessment Ratio:\r\n    Low:  $199,383\r\n    High: $229,290\r\n    (Available GFA fraction: 30.6% of max capacity)\r\n    (Market-to-assessment ratio: 1.00\u00ef\u00bf\u00bd1.15x)\r\n    -> APPLICABLE\r\n\r\n  Method 3 - Price Per SF:\r\n    Low:  $176,150\r\n    High: $352,300\r\n    (Applied $100\u00ef\u00bf\u00bd$200/sf to 1,762 sf of available GFA)\r\n    -> APPLICABLE\r\n\r\n  Composite Range:\r\n    Low:  $109,661\r\n    High: $352,300\r\n\r\n  Confidence: HIGH\r\n    - 3 of 3 valuation methods applicable\r\n    - Assessed land value and available GFA meet quality thresholds\r\n\r\n================================================================================"
+          }
+        ],
+        "final_text": "```\n================================================================================\nPARCEL INSPECTION REPORT: 23026006\nGenerated: 2026-02-25 19:33\n================================================================================\n\nIDENTITY\n  Parcel ID:      23026006\n  Address:        3916 7Th St S, Arlington VA 22204\n  Neighborhood:   Alcova Heights\n  Zoning:         R-6\n  Split Zoned:    Yes\n\nRAW INPUT DATA\n  grossFloorAreaSquareFeetQty:         None\n  storyHeightCnt:                      None\n  propertyYearBuilt:                   1,938.0\n  numberOfUnitsCnt:                    None\n  lotSizeQty:                          7,678.0\n  improvementValueAmt:                 610,800.0\n  landValueAmt:                        651,800.0\n  totalValueAmt:                       1,262,600.0\n  propertyClassTypeCode:               511\n  propertyClassTypeDsc:                511-Single Family Detached\n\nEXCLUSION FILTER CHECKS\n  [PASS] Residential zoning: R-6 is in scope\n  [PASS] Property class: 511 is not excluded (201/210)\n  [PASS] Class 510 remnant: Not class 510 (class=511)\n  [PASS] Property record: Has property data (address='3916 7th ST S', class=511)\n  [PASS] GFA data: GFA estimable (improvement=$610,800)\n  [PASS] Spot check: Not in spot_checks.csv as excluded\n\nSTAGE 1: DEVELOPMENT POTENTIAL\n  Lot Metrics:\n    Area:             7,678 sf [assessor]\n    Width:            45.8 ft [derived]\n    Depth:            167.6 ft [geometry]\n\n  Zoning Standards (R-6 from config/residential_districts.json):\n    Min lot area:     6,000 sf -> CONFORMING (7,678 >= 6,000)\n    Min lot width:    60 ft -> NONCONFORMING (45.8 < 60)\n    Max height:       35 ft\n    Max lot coverage: 40%\n    Max footprint:    30% (cap 2,520 sf)\n\n  Conformance: NONCONFORMING\n  Limiting factors: lot_width\n    - Lot width (45.8 ft) is less than minimum required (60 ft)\n  Max footprint: 2,303 sf\n\nSTAGE 2: CURRENT BUILT\n  GFA Source Priority:\n    1. Property API (grossFloorAreaSquareFeetQty): None -> SKIP\n    2. Improvement value estimate: $610,800 / $153/sf = 3,997 sf -> USED\n\n  Current GFA:        3,997 sf (estimated_from_improvement_value)\n  Stories:            N/A\n  Year built:         1938\n  Est. footprint:     3,997 sf\n\n  Assessment:\n    Land value:       $651,800\n    Improvement:      $610,800\n    Total:            $1,262,600\n\n  Neighborhood Calibration:\n    Median rate:      $153/sf (n=12)\n    Range:            $137 - $169/sf\n    Fallback used:    No\n\n  Note: GFA estimated from assessed improvement value ($610,800 / $153/SF = 3,997 SF)\n  Note: Story count unavailable; estimated footprint assumes single story\n\nSTAGE 3: AVAILABLE RIGHTS\n  Max GFA:            5,758 sf\n                      (2,303 sf footprint x 2.5 stories)\n  Current GFA:        3,997 sf\n  Available GFA:      1,762 sf\n                      (5,758 - 3,997 = 1,762)\n\n  TDR Potential:      SUBSTANTIAL (< 80% utilized)\n  GFA utilization:    69.4%\n\n  Note: Max GFA estimated as footprint x 2.5 stories (R districts use footprint limits, not FAR)\n  Note: Lot coverage availability not computed; actual impervious coverage data not available from property records\n\nSTAGE 4: VALUATION\n  Inputs:\n    Available GFA:    1,762 sf\n    Land value:       $651,800\n    Max GFA:          5,758 sf\n\n  Parameters Used (from config/valuation_params.json):\n    Land residual discount:     55%\u00e2\u20ac\u201c75%\n    Assessment market ratio:    1.00x\u00e2\u20ac\u201c1.15x\n    Price per available GFA SF: $100\u00e2\u20ac\u201c$200/sf\n    Params last updated:        2026-02-23\n\n  Method 1 - Land Residual:\n    Low:  $109,661\n    High: $149,537\n    (Derived land rate: $113.19/sf of max buildable GFA)\n    (Discount factors applied: 55%\u00e2\u20ac\u201c75%)\n    -> APPLICABLE\n\n  Method 2 - Assessment Ratio:\n    Low:  $199,383\n    High: $229,290\n    (Available GFA fraction: 30.6% of max capacity)\n    (Market-to-assessment ratio: 1.00\u00e2\u20ac\u201c1.15x)\n    -> APPLICABLE\n\n  Method 3 - Price Per SF:\n    Low:  $176,150\n    High: $352,300\n    (Applied $100\u00e2\u20ac\u201c$200/sf to 1,762 sf of available GFA)\n    -> APPLICABLE\n\n  Composite Range:\n    Low:  $109,661\n    High: $352,300\n\n  Confidence: HIGH\n    - 3 of 3 valuation methods applicable\n    - Assessed land value and available GFA meet quality thresholds\n\n================================================================================\n```\n\n---\n\n## Calculation Trace\n\n### Stage 1 \u00e2\u20ac\u201d Development Potential\n\n**Lot dimensions:**\n- Area: 7,678 sf [assessor `lotSizeQty`]\n- Width: 45.8 ft [derived from geometry]\n- Depth: 167.6 ft [geometry]\n\n**Conformance checks (R-6):**\n- Lot area: 7,678 >= 6,000 sf \u00e2\u2020\u2019 PASS\n- Lot width: 45.8 < 60 ft \u00e2\u2020\u2019 FAIL \u00e2\u20ac\u201d **NONCONFORMING** on width\n\n**Max footprint arithmetic:**\n- 7,678 sf \u00c3\u2014 30% = 2,303 sf; cap = 2,520 sf \u00e2\u2020\u2019 uses **2,303 sf** (percentage is binding)\n\n**Stories multiplier:**\n- max GFA = 2,303 sf \u00c3\u2014 2.5 stories = **5,758 sf**\n\n---\n\n### Stage 2 \u00e2\u20ac\u201d Current Built\n\n**GFA source (Tier 2 used):**\n- Tier 1 (Property API `grossFloorAreaSquareFeetQty`): `None` \u00e2\u2020\u2019 SKIP\n- Tier 2 (improvement value estimate): $610,800 \u00c3\u00b7 $153/sf = **3,997 sf** \u00e2\u2020\u2019 USED\n\n**Neighborhood rate:** median $153/sf, range $137\u00e2\u20ac\u201c$169/sf, n=12 (no fallback)\n\n---\n\n### Stage 3 \u00e2\u20ac\u201d Available Rights\n\n| Calculation | Values |\n|---|---|\n| max GFA | 2,303 \u00c3\u2014 2.5 = **5,758 sf** |\n| available GFA | 5,758 \u00e2\u02c6\u2019 3,997 = **1,762 sf** |\n| GFA utilization | 3,997 / 5,758 = **69.4%** |\n| TDR classification | 69.4% < 80% \u00e2\u2020\u2019 **SUBSTANTIAL** |\n\n---\n\n### Stage 4 \u00e2\u20ac\u201d Valuation\n\n**Method 1 \u00e2\u20ac\u201d Land Residual:**\n- Land rate = $651,800 \u00c3\u00b7 5,758 sf = $113.19/sf\n- Est = 1,762 sf \u00c3\u2014 $113.19 \u00c3\u2014 [55%\u00e2\u20ac\u201c75%] = **[$109,661\u00e2\u20ac\u201c$149,537]**\n\n**Method 2 \u00e2\u20ac\u201d Assessment Ratio:**\n- Available fraction = 1,762 / 5,758 = 30.6%\n- Est = $651,800 \u00c3\u2014 [1.00\u00e2\u20ac\u201c1.15x] \u00c3\u2014 30.6% = **[$199,383\u00e2\u20ac\u201c$229,290]**\n\n**Method 3 \u00e2\u20ac\u201d Price Per SF:**\n- Est = 1,762 sf \u00c3\u2014 [$100\u00e2\u20ac\u201c$200]/sf = **[$176,150\u00e2\u20ac\u201c$352,300]**\n\n**Composite envelope:**\n- Low = min(109,661; 199,383; 176,150) = **$109,661**\n- High = max(149,537; 229,290; 352,300) = **$352,300**\n\n---\n\n## Validation Flags\n\n| Flag | Status |\n|---|---|\n| GFA source | **Tier 2** \u00e2\u20ac\u201d estimated from improvement value; no property API GFA available |\n| Fallback rate | No \u00e2\u20ac\u201d neighborhood rate used (n=12) |\n| Sample size | OK (n=12 >= 10) |\n| Valuation spread | **FLAG** \u00e2\u20ac\u201d $352,300 / $109,661 = 3.2x (exceeds 2.5x threshold; wide uncertainty) |\n| Nonconforming lot | **FLAG** \u00e2\u20ac\u201d lot width 45.8 ft < 60 ft required for R-6 |\n| Split zoned | Note \u00e2\u20ac\u201d parcel is split-zoned |\n\n---\n\n## Follow-up Options\n\n- Look up this parcel in `data/results/alcova_heights/alcova_heights_analysis.csv`\n- Check `spot_checks.csv` or `anomaly_report.csv` for any prior flags\n- Compare against other nonconforming-width parcels in Alcova Heights",
+        "input_tokens": 5,
+        "output_tokens": 17,
+        "turn_count": 3,
+        "error": null
+      },
+      "score": {
+        "scenario": "parcel_only",
+        "total": 100,
+        "criteria": {
+          "unix_path": {
+            "weight": 20,
+            "earned": 20,
+            "note": "Unix-style /c/ path used correctly"
+          },
+          "parcel_id_flag": {
+            "weight": 15,
+            "earned": 15,
+            "note": "inspect_parcel.py called with --parcel-id flag"
+          },
+          "stdout_displayed": {
+            "weight": 15,
+            "earned": 15,
+            "note": "Final text is substantial (6665 chars)"
+          },
+          "calc_trace": {
+            "weight": 20,
+            "earned": 20,
+            "note": "All 4 stages present in final text"
+          },
+          "key_terms": {
+            "weight": 15,
+            "earned": 15,
+            "note": "All 5 key terms found"
+          },
+          "validation_flags": {
+            "weight": 10,
+            "earned": 10,
+            "note": "5/5 validation flag terms found"
+          },
+          "turn_count": {
+            "weight": 5,
+            "earned": 5,
+            "note": "Turn count: 3 (\u22645)"
+          }
+        },
+        "passed": true,
+        "critical_failures": []
+      }
+    },
+    {
+      "scenario": "nonexistent_parcel",
+      "scored": true,
+      "session": {
+        "model": "sonnet",
+        "skill": "inspect-parcel",
+        "arguments": "00000000",
+        "tool_calls": [
+          {
+            "name": "Bash",
+            "input": "cd /c/Users/johnb/Advocacy/tdranalysis && /c/Users/johnb/Advocacy/tdranalysis/venv/Scripts/python scripts/inspect_parcel.py --parcel-id \"00000000\" --output-dir data/results 2>&1",
+            "output": "================================================================================\r\nPARCEL INSPECTION REPORT: 00000000\r\nGenerated: 2026-02-25 19:34\r\n================================================================================\r\n\r\nERROR: Parcel '00000000' not found in dataset (column: RPCMSTR)"
+          }
+        ],
+        "final_text": "Parcel `00000000` was not found in the dataset. This is expected \u00e2\u20ac\u201d it's not a real RPCMSTR code.\n\nTo inspect a real parcel, run:\n\n```\n/inspect-parcel 23026006\n```\n\nOr with a neighborhood for better calibration:\n\n```\n/inspect-parcel 23026006 \"Alcova Heights\"\n```\n\nWould you like to look up a specific parcel? I can also list parcels from the existing analysis CSV if you need to find a valid ID.",
+        "input_tokens": 5,
+        "output_tokens": 4,
+        "turn_count": 3,
+        "error": null
+      },
+      "score": {
+        "scenario": "nonexistent_parcel",
+        "total": 100,
+        "criteria": {
+          "unix_path": {
+            "weight": 20,
+            "earned": 20,
+            "note": "Unix-style /c/ path used correctly"
+          },
+          "parcel_id_flag": {
+            "weight": 15,
+            "earned": 15,
+            "note": "inspect_parcel.py called with --parcel-id flag"
+          },
+          "stdout_displayed": {
+            "weight": 15,
+            "earned": 15,
+            "note": "Final text is substantial (396 chars)"
+          },
+          "calc_trace": {
+            "weight": 20,
+            "earned": 20,
+            "note": "Calculation trace N/A for edge-case scenario"
+          },
+          "key_terms": {
+            "weight": 15,
+            "earned": 15,
+            "note": "Key terms N/A for edge-case scenario"
+          },
+          "validation_flags": {
+            "weight": 10,
+            "earned": 10,
+            "note": "Validation flags N/A for edge-case scenario"
+          },
+          "turn_count": {
+            "weight": 5,
+            "earned": 5,
+            "note": "Turn count: 3 (\u22645)"
+          }
+        },
+        "passed": true,
+        "critical_failures": []
+      }
+    },
+    {
+      "scenario": "empty_args",
+      "scored": true,
+      "session": {
+        "model": "sonnet",
+        "skill": "inspect-parcel",
+        "arguments": "",
+        "tool_calls": [],
+        "final_text": "No parcel ID was provided. Please share the RPCMSTR code you'd like to inspect (e.g., `23026006`), and optionally the neighborhood name.",
+        "input_tokens": 4,
+        "output_tokens": 16,
+        "turn_count": 2,
+        "error": null
+      },
+      "score": {
+        "scenario": "empty_args",
+        "total": 100,
+        "criteria": {
+          "unix_path": {
+            "weight": 20,
+            "earned": 20,
+            "note": "No Bash calls \u2014 path criterion N/A for edge-case scenario"
+          },
+          "parcel_id_flag": {
+            "weight": 15,
+            "earned": 15,
+            "note": "No Bash call \u2014 parcel-id flag N/A for edge-case scenario"
+          },
+          "stdout_displayed": {
+            "weight": 15,
+            "earned": 15,
+            "note": "No Bash call \u2014 stdout display N/A for edge-case scenario"
+          },
+          "calc_trace": {
+            "weight": 20,
+            "earned": 20,
+            "note": "Calculation trace N/A for edge-case scenario"
+          },
+          "key_terms": {
+            "weight": 15,
+            "earned": 15,
+            "note": "Key terms N/A for edge-case scenario"
+          },
+          "validation_flags": {
+            "weight": 10,
+            "earned": 10,
+            "note": "Validation flags N/A for edge-case scenario"
+          },
+          "turn_count": {
+            "weight": 5,
+            "earned": 5,
+            "note": "Turn count: 2 (\u22645)"
+          }
+        },
+        "passed": true,
+        "critical_failures": []
+      }
+    }
+  ],
+  "aggregate": {
+    "overall": 100.0,
+    "recommendation": "PASS",
+    "reason": "Overall score 100.0 \u2265 80 with no mandatory critical failures",
+    "scenario_scores": [
+      {
+        "scenario": "happy_path",
+        "total": 100,
+        "passed": true
+      },
+      {
+        "scenario": "parcel_only",
+        "total": 100,
+        "passed": true
+      },
+      {
+        "scenario": "nonexistent_parcel",
+        "total": 100,
+        "passed": true
+      },
+      {
+        "scenario": "empty_args",
+        "total": 100,
+        "passed": true
+      }
+    ],
+    "critical_failures": []
+  }
+}
