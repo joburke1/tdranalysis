@@ -1,0 +1,4 @@
+[skill]
+name = "run-pipeline"
+description = "Full neighborhood analysis pipeline"
+models = ["sonnet", "haiku"]

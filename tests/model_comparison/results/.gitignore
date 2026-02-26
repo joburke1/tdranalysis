@@ -1,0 +1,4 @@
+# Ignore all model comparison run results.
+# Results are generated locally on demand and should not be committed.
+*
+!.gitignore

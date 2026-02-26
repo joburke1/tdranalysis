@@ -1,0 +1,4 @@
+[skill]
+name = "inspect-parcel"
+description = "Single parcel debug inspection report"
+models = ["sonnet", "haiku"]
