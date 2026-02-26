@@ -59,6 +59,7 @@ class Orchestrator:
         self,
         filter_models: list[str] | None = None,
         filter_scenarios: list[str] | None = None,
+        timestamp: str | None = None,
     ) -> RunResult:
         """
         Execute the full comparison run.
@@ -66,13 +67,16 @@ class Orchestrator:
         Args:
             filter_models:    If provided, only run these models.
             filter_scenarios: If provided, only run scenarios whose name is in this list.
+            timestamp:        If provided, use this timestamp for the run directory name.
+                              Pass from run.py so the log file can be created before the run.
 
         Returns:
             RunResult with all model results populated.
         """
         import datetime
 
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        if timestamp is None:
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
         effective_models = filter_models or self._models
         effective_scenarios = (

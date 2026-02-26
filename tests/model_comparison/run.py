@@ -28,6 +28,7 @@ Usage:
 """
 
 import argparse
+import datetime
 import logging
 import sys
 from pathlib import Path
@@ -164,6 +165,22 @@ def main() -> None:
         pass  # handled in the loop
 
     for cfg in configs:
+        # Pre-generate the timestamp so we can create the run directory (and
+        # log file) before the orchestrator starts — ensuring all output is
+        # captured in run.log even if the calling terminal times out.
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        run_dir = RESULTS_DIR / cfg.name / timestamp
+        run_dir.mkdir(parents=True, exist_ok=True)
+
+        # Add a file handler for this run so output is always preserved.
+        log_path = run_dir / "run.log"
+        file_handler = logging.FileHandler(log_path, encoding="utf-8")
+        file_handler.setFormatter(
+            logging.Formatter("%(asctime)s %(levelname)s %(message)s", "%H:%M:%S")
+        )
+        logging.getLogger().addHandler(file_handler)
+        logger.info("Log file: %s", log_path)
+
         logger.info("=" * 60)
         logger.info("Skill: %s", cfg.name)
         logger.info("=" * 60)
@@ -191,10 +208,16 @@ def main() -> None:
         run_result = orchestrator.run(
             filter_models=filter_models,
             filter_scenarios=effective_filter,
+            timestamp=timestamp,
         )
 
         run_dir = report_builder.write(run_result)
         logger.info("Reports written to: %s", run_dir)
+
+        # Close and remove the per-run file handler so it doesn't bleed into
+        # subsequent skill runs when comparing multiple skills in one invocation.
+        logging.getLogger().removeHandler(file_handler)
+        file_handler.close()
 
         # Final recommendations
         logger.info("=" * 60)
