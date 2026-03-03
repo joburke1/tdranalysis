@@ -20,10 +20,10 @@ Disclaimer: The analysis is based on **Article 5 (Residential Districts)** and *
 - Spatial join of parcels to zoning districts
 - Calculate lot metrics (area, width, depth) from geometry
 - Validate conformance against zoning requirements
-- **4-stage analysis pipeline**: Development Potential → Current Built → Available Rights → Valuation (3-method)
+- **4-stage analysis pipeline**: Development Potential → Current Built → Available Rights → Valuation (land residual)
 - Identify limiting factors for development
 - Estimate unused development rights (GFA, footprint, dwelling units)
-- **Multi-method valuation**: Three independent methods with confidence ratings
+- **Land residual valuation**: Derives value from assessed land rate applied to available GFA
 - **Neighborhood calibration**: Derives local improvement rates from recent construction
 - Automated anomaly detection with tiered data quality flags
 - Interactive HTML maps, GeoPackage/GeoJSON for GIS, CSV exports
@@ -224,12 +224,10 @@ Computes remaining unused development capacity:
 - Classifies parcels as `vacant`, `underdeveloped` (<80% GFA utilization), or `overdeveloped` (grandfathered above limit)
 
 ### Stage 4: Valuation (`valuation.py`)
-Estimates monetary value of unused rights using three independent methods:
-1. **Land Residual** — Land $/SF (from assessed value) × available GFA × discount factor
-2. **Assessment Ratio** — Assessed land value × market-to-assessment ratio × availability fraction
-3. **Price Per SF** — Configurable $/SF × available GFA
+Estimates monetary value of unused rights using the Land Residual method:
+- **Land Residual** — Derives a land $/SF rate from assessed value (land value ÷ max GFA), then applies it to available GFA scaled by a discount factor reflecting the partial-severance TDR context.
 
-Returns a composite range (min low → max high of applicable methods) with a HIGH/MEDIUM/LOW confidence rating.
+Returns a LOW/HIGH price range with a HIGH/MEDIUM/NOT_APPLICABLE confidence rating based on data quality thresholds.
 
 ## Calculation Procedures
 
@@ -263,9 +261,7 @@ Contains configurable market parameters that should be calibrated to current con
 
 | Parameter | Description |
 |-----------|-------------|
-| `market_to_assessment_ratio` | low: 1.0 / high: 1.15 — converts assessed value to market value |
-| `price_per_available_gfa_sf` | low: $100 / high: $200 per SF of available GFA |
-| `land_residual_discount_factor` | low: 0.6 / high: 0.85 — accounts for risk, demolition, carrying costs |
+| `land_residual_discount_factor` | low: 0.55 / high: 0.75 — fraction of the implied land rate attributable to severable development rights |
 | `residential_improvement_value_per_sf` | Fallback $185/SF (used when neighborhood rate has insufficient sample) |
 | `confidence_thresholds` | Min land value ($100k) and min available GFA (500 SF) for HIGH confidence |
 | `neighborhood_rate_calibration` | lookback_years: 10, min_sample: 5 homes for local rate derivation |

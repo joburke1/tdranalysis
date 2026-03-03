@@ -155,22 +155,22 @@
     {
       "field": "est_value_low",
       "label": "Estimated Development Value — Low ($)",
-      "description": "The low end of the estimated market value of this parcel's unused development capacity, in dollars. Uses the most conservative assumptions across four valuation methods. This is an estimate for policy analysis, NOT a property appraisal.",
-      "source": "Calculated using land residual, assessment ratio, price-per-SF, and price-per-unit methods",
+      "description": "The low end of the estimated market value of this parcel's unused development capacity, in dollars. Uses the conservative discount factor from the land residual method. This is an estimate for policy analysis, NOT a property appraisal.",
+      "source": "Calculated using the land residual method",
       "example": "150000"
     },
     {
       "field": "est_value_high",
       "label": "Estimated Development Value — High ($)",
-      "description": "The high end of the estimated market value of this parcel's unused development capacity, in dollars. Uses the most optimistic assumptions across applicable valuation methods.",
-      "source": "Calculated using land residual, assessment ratio, price-per-SF, and price-per-unit methods",
+      "description": "The high end of the estimated market value of this parcel's unused development capacity, in dollars. Uses the aggressive discount factor from the land residual method.",
+      "source": "Calculated using the land residual method",
       "example": "402500"
     },
     {
       "field": "valuation_confidence",
       "label": "Valuation Confidence",
-      "description": "How reliable the valuation estimate is. 'high' = 3 or more methods agree and data quality is good; 'medium' = 2 methods applicable; 'low' = only 1 method; 'not_applicable' = parcel has no unused development capacity to value (vacant data, overdeveloped, or non-residential).",
-      "source": "Derived from number of applicable valuation methods and data quality thresholds",
+      "description": "How reliable the valuation estimate is. 'high' = land residual applicable and both assessed land value and available GFA meet quality thresholds; 'medium' = land residual applicable but data quality is below threshold; 'not_applicable' = parcel has no valueable development capacity (no land value data, overdeveloped, or no available GFA).",
+      "source": "Derived from data quality thresholds for assessed land value and available GFA",
       "example": "high"
     },
     {

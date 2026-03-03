@@ -68,10 +68,7 @@ Yard and setback requirements from Article 3, §3.2 (keyed by district):
 
 ### config/valuation_params.json
 Market parameters for rights valuation:
-- `market_to_assessment_ratio`: {low, high} — default 1.0 / 1.15
-- `price_per_available_gfa_sf`: {low, high} — default $100 / $200
-- `price_per_available_dwelling_unit`: {low, high} — default $150k / $350k
-- `land_residual_discount_factor`: {low, high} — default 0.6 / 0.85
+- `land_residual_discount_factor`: {low, high} — default 0.55 / 0.75
 - `residential_improvement_value_per_sf`: fallback $185/SF
 - `confidence_thresholds`: min_land_value, min_available_gfa for HIGH confidence
 - `neighborhood_rate_calibration`: lookback_years=10, min_sample=5

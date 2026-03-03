@@ -228,72 +228,32 @@ Input sources:
   for transaction costs and negotiation. Calibrate from observed TDR transaction prices
   divided by the pipeline's implied land rate for the same parcels. Typical range: 0.50–0.85.
 
-### Method 2: Assessment Ratio
+### Estimated Value Range
 ```
-REQUIRES: assessed_land_value > 0, max_gfa_sf > 0, available_gfa_sf > 0
-
-available_fraction = MIN(available_gfa_sf / max_gfa_sf, 1.0)
-value_low  = assessed_land_value × market_to_assessment_ratio_low × available_fraction
-value_high = assessed_land_value × market_to_assessment_ratio_high × available_fraction
-```
-
-Input sources:
-- `assessed_land_value` = `landValueAmt` (same as Method 1)
-- `available_fraction` = Stage 3 output, capped at 1.0 for data consistency
-- `market_to_assessment_ratio_low/high` = calibrated parameter in `config/valuation_params.json`
-  Adjusts assessed land value to market value. Ratio = 1.0 means assessed equals market;
-  ratio > 1.0 means market exceeds assessment. Calibrate from recent arm's-length sales:
-  sale_price / concurrent_assessed_land_value for comparable lots. Update annually.
-
-### Method 3: Price Per SF
-```
-REQUIRES: available_gfa_sf > 0
-
-value_low  = available_gfa_sf × price_per_gfa_sf_low
-value_high = available_gfa_sf × price_per_gfa_sf_high
-```
-
-Input sources:
-- `available_gfa_sf` = Stage 3 output
-- `price_per_gfa_sf_low/high` = calibrated parameter in `config/valuation_params.json`
-  Market rate per sf of transferable development capacity, independent of assessed value.
-  Calibrate from: (1) observed TDR transaction prices per sf; (2) comparable program
-  benchmarks; (3) developer pro forma marginal value of additional floor area in the
-  submarket. This method applies to all parcels with available GFA; it is the broadest
-  applicable method and serves as the baseline estimate when assessed value is unavailable.
-
-### Composite Range
-```
-ESTIMATED_VALUE_LOW  = MIN(all applicable method lows)
-ESTIMATED_VALUE_HIGH = MAX(all applicable method highs)
+ESTIMATED_VALUE_LOW  = land_residual.low_estimate
+ESTIMATED_VALUE_HIGH = land_residual.high_estimate
 ```
 
 ### Confidence Rating
 ```
-n = count of applicable methods
 has_good_land = assessed_land_value >= high_confidence_min_land_value
 has_good_gfa  = available_gfa_sf >= high_confidence_min_available_gfa_sf
 
-IF n >= 3 AND has_good_land AND has_good_gfa:
+IF land_residual NOT APPLICABLE:
+    confidence = NOT_APPLICABLE
+
+ELIF has_good_land AND has_good_gfa:
     confidence = HIGH
 
-ELIF n >= 2:
-    confidence = MEDIUM
-
-ELIF n == 1:
-    confidence = LOW
-
 ELSE:
-    confidence = NOT_APPLICABLE
+    confidence = MEDIUM
 ```
 
 ### Configurable Parameters (config/valuation_params.json)
 | Key | Type | Used In | Description and Calibration |
 |-----|------|---------|----------------------------|
-| `land_residual_discount_factor.low/high` | float (0–1) | Method 1 | Fraction of implied land rate a TDR buyer pays. Accounts for non-fee-simple nature of TDR rights, transaction costs, and negotiation. Calibrate: observed TDR price ÷ pipeline's implied land_rate for same parcel. Typical range 0.50–0.85. |
-| `market_to_assessment_ratio.low/high` | float | Method 2 | Market value ÷ assessed land value. 1.0 = assessment equals market; 1.15 = market is 15% above. Calibrate: arm's-length sale price ÷ concurrent assessed land value for comparable lots. Update annually. |
-| `price_per_available_gfa_sf.low/high` | float | Method 3 | Market $/sf of transferable GFA capacity. Calibrate from observed TDR transactions, comparable program benchmarks, or developer pro forma marginal GFA value. |
-| `confidence_thresholds.high_confidence_min_land_value` | float | Confidence | Minimum assessed land value (dollars) for HIGH confidence. Parcels below this threshold are rated MEDIUM even with 3+ methods applicable. |
+| `land_residual_discount_factor.low/high` | float (0–1) | Land Residual | Fraction of implied land rate a TDR buyer pays. Accounts for non-fee-simple nature of TDR rights, transaction costs, and negotiation. Calibrate: observed TDR price ÷ pipeline's implied land_rate for same parcel. Typical range 0.50–0.85. |
+| `confidence_thresholds.high_confidence_min_land_value` | float | Confidence | Minimum assessed land value (dollars) for HIGH confidence. Parcels below this threshold are rated MEDIUM. |
 | `confidence_thresholds.high_confidence_min_available_gfa_sf` | float | Confidence | Minimum available GFA (sf) for HIGH confidence. Reflects that very small available rights produce unreliable estimates. |
 | `residential_improvement_value_per_sf.fallback_value` | float | Stage 2 | Static $/sf used when neighborhood calibration has < 5 recent-build samples. Calibrate from current residential construction cost indices or assessor documentation. |
 

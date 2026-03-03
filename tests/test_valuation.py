@@ -7,7 +7,6 @@ from pathlib import Path
 
 
 
-
 from src.analysis.current_built import CurrentBuiltResult
 from src.analysis.available_rights import AvailableRightsResult, DEFAULT_ASSUMED_STORIES
 from src.analysis.valuation import (
@@ -19,9 +18,6 @@ from src.analysis.valuation import (
     calculate_valuation,
     estimate_valuation_by_id,
     _land_residual_method,
-    _assessment_ratio_method,
-    _price_per_sf_method,
-    _price_per_unit_method,
     _determine_confidence,
 )
 
@@ -35,12 +31,6 @@ CONFIG_DIR = Path(__file__).parent.parent / "config"
 def _make_params(**kwargs) -> ValuationParams:
     """Create a ValuationParams with sensible test defaults."""
     defaults = dict(
-        market_to_assessment_ratio_low=1.0,
-        market_to_assessment_ratio_high=1.15,
-        price_per_gfa_sf_low=100.0,
-        price_per_gfa_sf_high=200.0,
-        price_per_unit_low=150_000.0,
-        price_per_unit_high=350_000.0,
         land_residual_discount_low=0.60,
         land_residual_discount_high=0.85,
         high_confidence_min_land_value=100_000.0,
@@ -116,12 +106,6 @@ class TestValuationParams:
         params = load_valuation_params(CONFIG_DIR)
 
         assert isinstance(params, ValuationParams)
-        assert params.market_to_assessment_ratio_low > 0
-        assert params.market_to_assessment_ratio_high >= params.market_to_assessment_ratio_low
-        assert params.price_per_gfa_sf_low > 0
-        assert params.price_per_gfa_sf_high >= params.price_per_gfa_sf_low
-        assert params.price_per_unit_low > 0
-        assert params.price_per_unit_high >= params.price_per_unit_low
         assert 0 < params.land_residual_discount_low <= 1.0
         assert params.land_residual_discount_low <= params.land_residual_discount_high <= 1.0
         assert params.high_confidence_min_land_value > 0
@@ -198,143 +182,51 @@ class TestLandResidualMethod:
 
 
 # ---------------------------------------------------------------------------
-# TestAssessmentRatioMethod
+# TestDetermineConfidence
 # ---------------------------------------------------------------------------
 
-class TestAssessmentRatioMethod:
-    """Tests for _assessment_ratio_method."""
+class TestDetermineConfidence:
+    """Tests for _determine_confidence."""
 
-    def test_basic_calculation(self):
-        """Known inputs produce expected low/high estimates."""
+    def test_high_when_both_thresholds_met(self):
+        """Returns HIGH when land value and available GFA both meet thresholds."""
         params = _make_params(
-            market_to_assessment_ratio_low=1.0,
-            market_to_assessment_ratio_high=1.15,
+            high_confidence_min_land_value=100_000.0,
+            high_confidence_min_available_gfa_sf=500.0,
         )
-        # available_fraction = 2_550 / 4_950 ≈ 0.5152
-        # low  = 500_000 × 1.00 × 0.5152 ≈ 257_576
-        # high = 500_000 × 1.15 × 0.5152 ≈ 296_212
-        result = _assessment_ratio_method(500_000.0, 4_950.0, 2_550.0, params)
+        level, factors = _determine_confidence(500_000.0, 2_550.0, params)
+        assert level == ConfidenceLevel.HIGH
+        assert len(factors) > 0
 
-        assert result.is_applicable is True
-        fraction = min(2_550.0 / 4_950.0, 1.0)
-        assert result.low_estimate == pytest.approx(500_000.0 * 1.0 * fraction, rel=1e-6)
-        assert result.high_estimate == pytest.approx(500_000.0 * 1.15 * fraction, rel=1e-6)
-
-    def test_fully_utilized_parcel(self):
-        """When available GFA is zero, method returns not-applicable."""
-        result = _assessment_ratio_method(500_000.0, 4_950.0, 0.0, _make_params())
-        assert result.is_applicable is False
-
-    def test_vacant_lot_full_fraction(self):
-        """Vacant lot: available == max, so fraction = 1.0 and full land value used."""
+    def test_medium_when_land_value_below_threshold(self):
+        """Returns MEDIUM when land value is below threshold."""
         params = _make_params(
-            market_to_assessment_ratio_low=1.0,
-            market_to_assessment_ratio_high=1.0,
+            high_confidence_min_land_value=100_000.0,
+            high_confidence_min_available_gfa_sf=500.0,
         )
-        # available_fraction = 4_950 / 4_950 = 1.0
-        result = _assessment_ratio_method(500_000.0, 4_950.0, 4_950.0, params)
+        level, factors = _determine_confidence(50_000.0, 2_550.0, params)
+        assert level == ConfidenceLevel.MEDIUM
+        assert any("land value" in f.lower() for f in factors)
 
-        assert result.is_applicable is True
-        assert result.low_estimate == pytest.approx(500_000.0, rel=1e-6)
-        assert result.high_estimate == pytest.approx(500_000.0, rel=1e-6)
-
-    def test_fraction_capped_at_one(self):
-        """Available GFA slightly over max is capped at fraction = 1.0."""
+    def test_medium_when_gfa_below_threshold(self):
+        """Returns MEDIUM when available GFA is below threshold."""
         params = _make_params(
-            market_to_assessment_ratio_low=1.0,
-            market_to_assessment_ratio_high=1.0,
+            high_confidence_min_land_value=100_000.0,
+            high_confidence_min_available_gfa_sf=500.0,
         )
-        result = _assessment_ratio_method(500_000.0, 4_950.0, 5_100.0, params)
-        # fraction capped at 1.0
-        assert result.is_applicable is True
-        assert result.low_estimate == pytest.approx(500_000.0, rel=1e-6)
+        level, factors = _determine_confidence(500_000.0, 200.0, params)
+        assert level == ConfidenceLevel.MEDIUM
+        assert any("gfa" in f.lower() for f in factors)
 
-    def test_no_land_value_not_applicable(self):
-        result = _assessment_ratio_method(None, 4_950.0, 2_550.0, _make_params())
-        assert result.is_applicable is False
-
-    def test_zero_max_gfa_not_applicable(self):
-        result = _assessment_ratio_method(500_000.0, 0.0, 2_550.0, _make_params())
-        assert result.is_applicable is False
-
-    def test_method_name(self):
-        result = _assessment_ratio_method(500_000.0, 4_950.0, 2_550.0, _make_params())
-        assert result.method_name == "assessment_ratio"
-
-
-# ---------------------------------------------------------------------------
-# TestPricePerSfMethod
-# ---------------------------------------------------------------------------
-
-class TestPricePerSfMethod:
-    """Tests for _price_per_sf_method."""
-
-    def test_basic_calculation(self):
-        """Known inputs produce expected low/high estimates."""
-        params = _make_params(price_per_gfa_sf_low=100.0, price_per_gfa_sf_high=200.0)
-        result = _price_per_sf_method(2_550.0, params)
-
-        assert result.is_applicable is True
-        assert result.low_estimate == pytest.approx(255_000.0)
-        assert result.high_estimate == pytest.approx(510_000.0)
-
-    def test_zero_available_gfa_not_applicable(self):
-        result = _price_per_sf_method(0.0, _make_params())
-        assert result.is_applicable is False
-
-    def test_none_available_gfa_not_applicable(self):
-        result = _price_per_sf_method(None, _make_params())
-        assert result.is_applicable is False
-
-    def test_negative_available_gfa_not_applicable(self):
-        """Overdeveloped parcel (negative available GFA) is not applicable."""
-        result = _price_per_sf_method(-100.0, _make_params())
-        assert result.is_applicable is False
-
-    def test_method_name(self):
-        result = _price_per_sf_method(2_550.0, _make_params())
-        assert result.method_name == "price_per_sf"
-
-
-# ---------------------------------------------------------------------------
-# TestPricePerUnitMethod
-# ---------------------------------------------------------------------------
-
-class TestPricePerUnitMethod:
-    """Tests for _price_per_unit_method."""
-
-    def test_basic_calculation(self):
-        """Known inputs produce expected low/high estimates."""
-        params = _make_params(price_per_unit_low=150_000.0, price_per_unit_high=350_000.0)
-        result = _price_per_unit_method(1, params)
-
-        assert result.is_applicable is True
-        assert result.low_estimate == pytest.approx(150_000.0)
-        assert result.high_estimate == pytest.approx(350_000.0)
-
-    def test_two_units(self):
-        """Multiple available units scale the estimate."""
-        params = _make_params(price_per_unit_low=150_000.0, price_per_unit_high=350_000.0)
-        result = _price_per_unit_method(2, params)
-
-        assert result.low_estimate == pytest.approx(300_000.0)
-        assert result.high_estimate == pytest.approx(700_000.0)
-
-    def test_zero_units_not_applicable(self):
-        result = _price_per_unit_method(0, _make_params())
-        assert result.is_applicable is False
-
-    def test_none_units_not_applicable(self):
-        result = _price_per_unit_method(None, _make_params())
-        assert result.is_applicable is False
-
-    def test_negative_units_not_applicable(self):
-        result = _price_per_unit_method(-1, _make_params())
-        assert result.is_applicable is False
-
-    def test_method_name(self):
-        result = _price_per_unit_method(1, _make_params())
-        assert result.method_name == "price_per_unit"
+    def test_medium_when_both_below_threshold(self):
+        """Returns MEDIUM when both inputs are below threshold."""
+        params = _make_params(
+            high_confidence_min_land_value=100_000.0,
+            high_confidence_min_available_gfa_sf=500.0,
+        )
+        level, factors = _determine_confidence(50_000.0, 200.0, params)
+        assert level == ConfidenceLevel.MEDIUM
+        assert len(factors) == 2
 
 
 # ---------------------------------------------------------------------------
@@ -346,10 +238,10 @@ class TestCalculateValuation:
 
     def test_typical_underdeveloped_parcel(self):
         """
-        Typical underdeveloped R-6 parcel with no available dwelling units.
-        3 methods applicable (land_residual, assessment_ratio, price_per_sf).
+        Typical underdeveloped R-6 parcel with good assessment data.
+        Land Residual method is applicable and confidence is HIGH.
         """
-        rights = _make_rights()  # available_dwelling_units=0 → per_unit not applicable
+        rights = _make_rights()  # land_value=500k, available_gfa=2550
         params = _make_params()
 
         result = calculate_valuation(rights, params)
@@ -361,13 +253,10 @@ class TestCalculateValuation:
         assert result.estimated_value_high is not None
         assert result.estimated_value_low < result.estimated_value_high
         assert result.land_residual.is_applicable is True
-        assert result.assessment_ratio.is_applicable is True
-        assert result.price_per_sf.is_applicable is True
-        assert result.price_per_unit.is_applicable is False  # no available units
         assert result.confidence == ConfidenceLevel.HIGH
 
-    def test_vacant_parcel_all_four_methods(self):
-        """Vacant lot with 1 available dwelling unit: all 4 methods run."""
+    def test_vacant_parcel(self):
+        """Vacant lot: land residual is applicable and confidence is HIGH."""
         rights = _make_rights(
             current_gfa_sf=0.0,
             current_dwelling_units=0,
@@ -389,9 +278,6 @@ class TestCalculateValuation:
 
         assert result.is_valueable is True
         assert result.land_residual.is_applicable is True
-        assert result.assessment_ratio.is_applicable is True
-        assert result.price_per_sf.is_applicable is True
-        assert result.price_per_unit.is_applicable is True
         assert result.confidence == ConfidenceLevel.HIGH
 
     def test_overdeveloped_parcel(self):
@@ -428,10 +314,10 @@ class TestCalculateValuation:
         assert result.confidence == ConfidenceLevel.NOT_APPLICABLE
         assert len(result.notes) > 0
 
-    def test_no_property_data_only_per_sf_applicable(self):
+    def test_no_land_value_not_valueable(self):
         """
-        When current property data is absent, land-value-dependent methods
-        are not applicable, but price_per_sf still runs.
+        When current property data is absent (no land value), Land Residual is
+        not applicable and the parcel is marked as not valueable.
         """
         rights = _make_rights(
             current=None,   # no current built result attached
@@ -442,13 +328,12 @@ class TestCalculateValuation:
 
         result = calculate_valuation(rights, params)
 
-        assert result.is_valueable is True
+        assert result.is_valueable is False
         assert result.assessed_land_value is None
         assert result.land_residual.is_applicable is False
-        assert result.assessment_ratio.is_applicable is False
-        assert result.price_per_sf.is_applicable is True
-        # Only 1 method applicable
-        assert result.confidence == ConfidenceLevel.LOW
+        assert result.confidence == ConfidenceLevel.NOT_APPLICABLE
+        assert result.estimated_value_low is None
+        assert result.estimated_value_high is None
 
     def test_no_available_rights_at_all(self):
         """Parcel at exactly 100% capacity has nothing to value."""
@@ -465,32 +350,22 @@ class TestCalculateValuation:
         assert result.is_valueable is False
         assert result.confidence == ConfidenceLevel.NOT_APPLICABLE
 
-    def test_composite_range_is_envelope(self):
-        """
-        Composite low = min of method lows; composite high = max of method highs.
-        """
+    def test_value_equals_land_residual(self):
+        """estimated_value_low/high match the Land Residual method output directly."""
         rights = _make_rights()
         params = _make_params()
 
         result = calculate_valuation(rights, params)
 
-        applicable_methods = [
-            m for m in (
-                result.land_residual,
-                result.assessment_ratio,
-                result.price_per_sf,
-                result.price_per_unit,
-            )
-            if m is not None and m.is_applicable
-        ]
-        expected_low = min(m.low_estimate for m in applicable_methods)
-        expected_high = max(m.high_estimate for m in applicable_methods)
-
-        assert result.estimated_value_low == pytest.approx(expected_low, rel=1e-9)
-        assert result.estimated_value_high == pytest.approx(expected_high, rel=1e-9)
+        assert result.estimated_value_low == pytest.approx(
+            result.land_residual.low_estimate, rel=1e-9
+        )
+        assert result.estimated_value_high == pytest.approx(
+            result.land_residual.high_estimate, rel=1e-9
+        )
 
     def test_confidence_high_with_good_data(self):
-        """3+ methods + good land value + good available GFA → HIGH confidence."""
+        """Land value and available GFA above thresholds → HIGH confidence."""
         rights = _make_rights(available_gfa_sf=2_000.0)  # > 500 sf threshold
         params = _make_params(
             high_confidence_min_land_value=100_000.0,  # land_value=500k passes
@@ -501,41 +376,36 @@ class TestCalculateValuation:
 
         assert result.confidence == ConfidenceLevel.HIGH
 
-    def test_confidence_medium_only_two_methods(self):
-        """2 methods applicable → MEDIUM confidence."""
-        # No land value → land_residual and assessment_ratio not applicable
-        # No available units → price_per_unit not applicable
-        # Only price_per_sf applicable -- that's just 1, so let's give units too
+    def test_confidence_medium_low_land_value(self):
+        """Land value below threshold → MEDIUM confidence."""
         rights = _make_rights(
-            current=None,  # no land value
+            current=_make_current(land_value=50_000.0),  # < 100k threshold
             available_gfa_sf=2_000.0,
-            available_dwelling_units=1,  # price_per_unit applicable
         )
-        params = _make_params()
+        params = _make_params(
+            high_confidence_min_land_value=100_000.0,
+            high_confidence_min_available_gfa_sf=500.0,
+        )
 
         result = calculate_valuation(rights, params)
 
-        # per_sf + per_unit = 2 methods
-        assert result.price_per_sf.is_applicable is True
-        assert result.price_per_unit.is_applicable is True
-        assert result.land_residual.is_applicable is False
-        assert result.assessment_ratio.is_applicable is False
+        assert result.is_valueable is True
+        assert result.land_residual.is_applicable is True
         assert result.confidence == ConfidenceLevel.MEDIUM
 
-    def test_confidence_low_one_method(self):
-        """Only 1 method applicable → LOW confidence."""
-        rights = _make_rights(
-            current=None,  # no land value → land_residual and assessment_ratio not applicable
-            available_gfa_sf=2_000.0,
-            available_dwelling_units=0,  # price_per_unit not applicable
+    def test_confidence_medium_low_gfa(self):
+        """Available GFA below threshold → MEDIUM confidence."""
+        rights = _make_rights(available_gfa_sf=200.0)  # < 500 sf threshold
+        params = _make_params(
+            high_confidence_min_land_value=100_000.0,
+            high_confidence_min_available_gfa_sf=500.0,
         )
-        params = _make_params()
 
         result = calculate_valuation(rights, params)
 
-        # Only price_per_sf
-        assert result.price_per_sf.is_applicable is True
-        assert result.confidence == ConfidenceLevel.LOW
+        assert result.is_valueable is True
+        assert result.land_residual.is_applicable is True
+        assert result.confidence == ConfidenceLevel.MEDIUM
 
     def test_summary_output_contains_key_fields(self):
         """summary() returns a string with parcel ID, range, and disclaimer."""
@@ -586,18 +456,26 @@ class TestCalculateValuation:
             "valuation_land_residual_low",
             "valuation_land_residual_high",
             "valuation_land_residual_applicable",
+        }
+        for key in expected_keys:
+            assert key in d, f"Missing expected key: '{key}'"
+
+    def test_to_dict_no_removed_columns(self):
+        """to_dict() does not include assessment_ratio or per_sf columns."""
+        rights = _make_rights()
+        result = calculate_valuation(rights, _make_params())
+        d = result.to_dict()
+
+        removed_keys = {
             "valuation_assessment_ratio_low",
             "valuation_assessment_ratio_high",
             "valuation_assessment_ratio_applicable",
             "valuation_per_sf_low",
             "valuation_per_sf_high",
             "valuation_per_sf_applicable",
-            "valuation_per_unit_low",
-            "valuation_per_unit_high",
-            "valuation_per_unit_applicable",
         }
-        for key in expected_keys:
-            assert key in d, f"Missing expected key: '{key}'"
+        for key in removed_keys:
+            assert key not in d, f"Unexpected key still present: '{key}'"
 
     def test_to_dict_confidence_is_string(self):
         """to_dict() serializes confidence as a plain string, not an enum."""
@@ -606,7 +484,7 @@ class TestCalculateValuation:
         d = result.to_dict()
 
         assert isinstance(d["valuation_confidence"], str)
-        assert d["valuation_confidence"] in ("high", "medium", "low", "not_applicable")
+        assert d["valuation_confidence"] in ("high", "medium", "not_applicable")
 
     def test_input_fields_populated_in_result(self):
         """Key input data is stored on the result for traceability."""
@@ -742,15 +620,26 @@ class TestEstimateValuationGeoDataFrame:
             "valuation_is_valueable",
             "valuation_land_residual_low",
             "valuation_land_residual_high",
+            "valuation_land_residual_applicable",
+        ]
+        for col in expected_columns:
+            assert col in result.columns, f"Missing column: '{col}'"
+
+    def test_batch_no_removed_columns(self):
+        """estimate_valuation_geodataframe does not add assessment_ratio or per_sf columns."""
+        from src.analysis.valuation import estimate_valuation_geodataframe
+
+        gdf = self._make_gdf()
+        result = estimate_valuation_geodataframe(gdf, config_dir=CONFIG_DIR)
+
+        removed_columns = [
             "valuation_assessment_ratio_low",
             "valuation_assessment_ratio_high",
             "valuation_per_sf_low",
             "valuation_per_sf_high",
-            "valuation_per_unit_low",
-            "valuation_per_unit_high",
         ]
-        for col in expected_columns:
-            assert col in result.columns, f"Missing column: '{col}'"
+        for col in removed_columns:
+            assert col not in result.columns, f"Unexpected column still present: '{col}'"
 
     def test_batch_preserves_original_rows(self):
         """Output GeoDataFrame has the same number of rows as input."""
@@ -784,6 +673,22 @@ class TestEstimateValuationGeoDataFrame:
         # Should have a mix — not all the same
         # At minimum, overdeveloped parcel should be 'not_applicable'
         assert "not_applicable" in confidence_values or len(confidence_values) >= 1
+
+    def test_value_matches_land_residual_for_valueable_parcels(self):
+        """For valueable parcels, est_value_low == land_residual_low."""
+        from src.analysis.valuation import estimate_valuation_geodataframe
+
+        gdf = self._make_gdf()
+        result = estimate_valuation_geodataframe(gdf, config_dir=CONFIG_DIR)
+
+        valueable = result[result["valuation_is_valueable"] == True]
+        for _, row in valueable.iterrows():
+            assert row["estimated_value_low"] == pytest.approx(
+                row["valuation_land_residual_low"], rel=1e-6
+            ), f"Parcel {row.get('RPC')}: estimated_value_low != valuation_land_residual_low"
+            assert row["estimated_value_high"] == pytest.approx(
+                row["valuation_land_residual_high"], rel=1e-6
+            ), f"Parcel {row.get('RPC')}: estimated_value_high != valuation_land_residual_high"
 
 
 if __name__ == "__main__":

@@ -2,20 +2,16 @@
 Sales Price Range Estimation: Development Potential
 
 Estimates the monetary value of a parcel's unused development rights
-by applying four independent valuation methods and combining them into
-a LOW/HIGH price range.
+using the Land Residual method.
 
-    Estimated Value = f(available rights, assessed land value, market parameters)
+    Estimated Value = f(available rights, assessed land value, discount factors)
 
 This module is intended for Transfer of Development Rights (TDR) policy
 analysis. Results are estimates, NOT appraisals.
 
-Valuation methods:
-  1. Land Residual:     Derive land $/sf from assessed value, apply to available GFA
-  2. Assessment Ratio:  Scale assessed land value by availability fraction and market ratio
-  3. Price Per SF:      Apply configurable $/sf range to available GFA
-
-The composite price range is the envelope (min low, max high) of all applicable methods.
+Valuation method:
+  Land Residual:  Derive land $/sf from assessed value, apply to available GFA
+                  with a discount factor reflecting the partial-severance context.
 """
 
 import json
@@ -35,11 +31,10 @@ from .available_rights import (
 )
 from .current_built import (
     CurrentBuiltResult,
-    NeighborhoodRate,
     analyze_current_built,
     estimate_neighborhood_improvement_rate,
 )
-from .development_potential import DevelopmentPotentialAnalyzer
+from .development_potential import DevelopmentPotentialAnalyzer, DevelopmentPotentialResult
 
 logger = logging.getLogger(__name__)
 
@@ -56,18 +51,6 @@ class ValuationParams:
     Loaded from config/valuation_params.json. All dollar values must be
     calibrated to current market conditions before use in policy analysis.
     """
-
-    market_to_assessment_ratio_low: float
-    """Low-end market-to-assessment ratio (e.g. 1.0 = market equals assessment)"""
-
-    market_to_assessment_ratio_high: float
-    """High-end market-to-assessment ratio (e.g. 1.15 = 15% above assessment)"""
-
-    price_per_gfa_sf_low: float
-    """Low-end price per sq ft of available GFA capacity (dollars)"""
-
-    price_per_gfa_sf_high: float
-    """High-end price per sq ft of available GFA capacity (dollars)"""
 
     land_residual_discount_low: float
     """Conservative discount applied to raw land rate (0.0–1.0)"""
@@ -116,10 +99,6 @@ def load_valuation_params(config_dir: str | Path = "config") -> ValuationParams:
     meta = data.get("_metadata", {})
 
     return ValuationParams(
-        market_to_assessment_ratio_low=data["market_to_assessment_ratio"]["low"],
-        market_to_assessment_ratio_high=data["market_to_assessment_ratio"]["high"],
-        price_per_gfa_sf_low=data["price_per_available_gfa_sf"]["low"],
-        price_per_gfa_sf_high=data["price_per_available_gfa_sf"]["high"],
         land_residual_discount_low=data["land_residual_discount_factor"]["low"],
         land_residual_discount_high=data["land_residual_discount_factor"]["high"],
         high_confidence_min_land_value=data["confidence_thresholds"]["high_confidence_min_land_value"],
@@ -138,16 +117,13 @@ class ConfidenceLevel(str, Enum):
     """Reliability of the valuation estimate."""
 
     HIGH = "high"
-    """All 3 methods applicable, assessed land value and available GFA meet quality thresholds."""
+    """Land Residual applicable; assessed land value and available GFA meet quality thresholds."""
 
     MEDIUM = "medium"
-    """2 of 3 methods applicable, or data quality is below the HIGH threshold."""
-
-    LOW = "low"
-    """Only 1 of 3 methods applicable, or key inputs (land value, GFA) are missing."""
+    """Land Residual applicable, but assessed land value or available GFA is below threshold."""
 
     NOT_APPLICABLE = "not_applicable"
-    """No applicable methods, parcel is overdeveloped, or has no available rights."""
+    """Land Residual not applicable, parcel is overdeveloped, or has no available rights."""
 
 
 @dataclass
@@ -179,8 +155,9 @@ class ValuationResult:
     """
     Estimated sales price range of a parcel's development potential.
 
-    Combines three valuation methods into a composite LOW/HIGH price range.
-    Includes a confidence indicator reflecting data quality and method coverage.
+    Uses the Land Residual method to derive a LOW/HIGH price range from the
+    assessed land value, maximum GFA, available GFA, and a discount factor.
+    Includes a confidence indicator reflecting data quality.
 
     DISCLAIMER: This is an estimate for policy analysis only, not a property
     appraisal or formal valuation. Calibrate market parameters to current
@@ -196,20 +173,14 @@ class ValuationResult:
 
     # Composite price range
     estimated_value_low: Optional[float] = None
-    """Low end of estimated value range (dollars) — minimum of all applicable method lows"""
+    """Low end of estimated value range (dollars) — Land Residual method low estimate"""
 
     estimated_value_high: Optional[float] = None
-    """High end of estimated value range (dollars) — maximum of all applicable method highs"""
+    """High end of estimated value range (dollars) — Land Residual method high estimate"""
 
     # Per-method results
     land_residual: Optional[ValuationMethodResult] = None
     """Land residual method: derived land $/sf × available GFA × discount"""
-
-    assessment_ratio: Optional[ValuationMethodResult] = None
-    """Assessment ratio method: assessed land value × market ratio × availability fraction"""
-
-    price_per_sf: Optional[ValuationMethodResult] = None
-    """Price per SF method: configurable $/sf × available GFA"""
 
     # Confidence
     confidence: ConfidenceLevel = ConfidenceLevel.NOT_APPLICABLE
@@ -264,20 +235,15 @@ class ValuationResult:
             "valuation_notes": "; ".join(self.notes),
         }
 
-        for method_attr, prefix in (
-            ("land_residual", "valuation_land_residual"),
-            ("assessment_ratio", "valuation_assessment_ratio"),
-            ("price_per_sf", "valuation_per_sf"),
-        ):
-            method: Optional[ValuationMethodResult] = getattr(self, method_attr)
-            if method is not None:
-                d[f"{prefix}_low"] = method.low_estimate
-                d[f"{prefix}_high"] = method.high_estimate
-                d[f"{prefix}_applicable"] = method.is_applicable
-            else:
-                d[f"{prefix}_low"] = None
-                d[f"{prefix}_high"] = None
-                d[f"{prefix}_applicable"] = False
+        method = self.land_residual
+        if method is not None:
+            d["valuation_land_residual_low"] = method.low_estimate
+            d["valuation_land_residual_high"] = method.high_estimate
+            d["valuation_land_residual_applicable"] = method.is_applicable
+        else:
+            d["valuation_land_residual_low"] = None
+            d["valuation_land_residual_high"] = None
+            d["valuation_land_residual_applicable"] = False
 
         return d
 
@@ -310,19 +276,16 @@ class ValuationResult:
                 for factor in self.confidence_factors:
                     lines.append(f"  ({factor})")
 
-        lines.extend(["", "Valuation Methods:"])
+        lines.extend(["", "Valuation Method (Land Residual):"])
 
-        def _fmt_method(label: str, method: Optional[ValuationMethodResult]) -> str:
-            if method is None or not method.is_applicable:
-                return f"  {label:<22} N/A"
-            return (
-                f"  {label:<22} ${method.low_estimate:>10,.0f} – "
-                f"${method.high_estimate:>10,.0f}"
+        if self.land_residual is None or not self.land_residual.is_applicable:
+            lines.append("  Land Residual:         N/A")
+        else:
+            lines.append(
+                f"  Land Residual:         "
+                f"${self.land_residual.low_estimate:>10,.0f} – "
+                f"${self.land_residual.high_estimate:>10,.0f}"
             )
-
-        lines.append(_fmt_method("Land Residual:", self.land_residual))
-        lines.append(_fmt_method("Assessment Ratio:", self.assessment_ratio))
-        lines.append(_fmt_method("Price Per SF:", self.price_per_sf))
 
         lines.extend(["", "Input Data:"])
         if self.assessed_land_value is not None:
@@ -402,98 +365,16 @@ def _land_residual_method(
     )
 
 
-def _assessment_ratio_method(
-    land_value: Optional[float],
-    max_gfa_sf: Optional[float],
-    available_gfa_sf: Optional[float],
-    params: ValuationParams,
-) -> ValuationMethodResult:
-    """
-    Assessment Ratio Method: scale assessed land value by availability fraction and market ratio.
-
-    available_fraction = available_gfa_sf / max_gfa_sf
-    estimate = assessed_land_value × market_ratio × available_fraction
-    """
-    if not land_value or land_value <= 0:
-        return ValuationMethodResult(
-            method_name="assessment_ratio",
-            is_applicable=False,
-            notes=["Requires assessed land value"],
-        )
-    if not max_gfa_sf or max_gfa_sf <= 0:
-        return ValuationMethodResult(
-            method_name="assessment_ratio",
-            is_applicable=False,
-            notes=["Max GFA is zero or unknown; cannot compute availability fraction"],
-        )
-    if not available_gfa_sf or available_gfa_sf <= 0:
-        return ValuationMethodResult(
-            method_name="assessment_ratio",
-            is_applicable=False,
-            notes=["No available GFA capacity"],
-        )
-
-    # Cap fraction at 1.0 to handle minor data inconsistencies
-    available_fraction = min(available_gfa_sf / max_gfa_sf, 1.0)
-    low = land_value * params.market_to_assessment_ratio_low * available_fraction
-    high = land_value * params.market_to_assessment_ratio_high * available_fraction
-
-    return ValuationMethodResult(
-        method_name="assessment_ratio",
-        is_applicable=True,
-        low_estimate=low,
-        high_estimate=high,
-        notes=[
-            f"Available GFA fraction: {available_fraction:.1%} of max capacity",
-            f"Market-to-assessment ratio: "
-            f"{params.market_to_assessment_ratio_low:.2f}–{params.market_to_assessment_ratio_high:.2f}x",
-        ],
-    )
-
-
-def _price_per_sf_method(
-    available_gfa_sf: Optional[float],
-    params: ValuationParams,
-) -> ValuationMethodResult:
-    """
-    Price Per SF Method: apply configurable $/sf range to available GFA.
-
-    estimate = available_gfa_sf × $/sf
-    """
-    if not available_gfa_sf or available_gfa_sf <= 0:
-        return ValuationMethodResult(
-            method_name="price_per_sf",
-            is_applicable=False,
-            notes=["No available GFA capacity"],
-        )
-
-    low = available_gfa_sf * params.price_per_gfa_sf_low
-    high = available_gfa_sf * params.price_per_gfa_sf_high
-
-    return ValuationMethodResult(
-        method_name="price_per_sf",
-        is_applicable=True,
-        low_estimate=low,
-        high_estimate=high,
-        notes=[
-            f"Applied ${params.price_per_gfa_sf_low:.0f}–${params.price_per_gfa_sf_high:.0f}/sf "
-            f"to {available_gfa_sf:,.0f} sf of available GFA",
-        ],
-    )
-
-
 def _determine_confidence(
-    applicable_methods: list[ValuationMethodResult],
     land_value: Optional[float],
     available_gfa_sf: Optional[float],
     params: ValuationParams,
 ) -> tuple[ConfidenceLevel, list[str]]:
-    """Determine confidence level based on method coverage and data quality."""
-    n = len(applicable_methods)
+    """Determine confidence level based on data quality thresholds.
 
-    if n == 0:
-        return ConfidenceLevel.NOT_APPLICABLE, ["No applicable valuation methods"]
-
+    Called only when Land Residual is applicable (land_value > 0, available_gfa > 0).
+    Returns HIGH when both inputs meet the minimum thresholds, MEDIUM otherwise.
+    """
     has_good_land_value = (
         land_value is not None
         and land_value >= params.high_confidence_min_land_value
@@ -505,37 +386,23 @@ def _determine_confidence(
 
     factors = []
 
-    if n >= 3 and has_good_land_value and has_good_gfa:
-        factors.append(f"{n} of 3 valuation methods applicable")
+    if has_good_land_value and has_good_gfa:
         factors.append(
             "Assessed land value and available GFA meet quality thresholds"
         )
         return ConfidenceLevel.HIGH, factors
 
-    if n >= 2:
-        factors.append(f"{n} of 3 valuation methods applicable")
-        if not has_good_land_value:
-            factors.append(
-                f"Assessed land value below threshold "
-                f"(${params.high_confidence_min_land_value:,.0f})"
-            )
-        if not has_good_gfa:
-            factors.append(
-                f"Available GFA below threshold "
-                f"({params.high_confidence_min_available_gfa_sf:,.0f} sf)"
-            )
-        return ConfidenceLevel.MEDIUM, factors
-
-    # n == 1
-    factors.append(f"Only {n} of 3 valuation methods applicable")
     if not has_good_land_value:
-        factors.append("Assessed land value unavailable or below threshold")
+        factors.append(
+            f"Assessed land value below threshold "
+            f"(${params.high_confidence_min_land_value:,.0f})"
+        )
     if not has_good_gfa:
         factors.append(
             f"Available GFA below threshold "
             f"({params.high_confidence_min_available_gfa_sf:,.0f} sf)"
         )
-    return ConfidenceLevel.LOW, factors
+    return ConfidenceLevel.MEDIUM, factors
 
 
 # ---------------------------------------------------------------------------
@@ -549,17 +416,17 @@ def calculate_valuation(
     """
     Estimate the sales price range of a parcel's development potential.
 
-    Applies three valuation methods to the available development rights and
-    combines them into a composite LOW/HIGH price range.
+    Uses the Land Residual method: derives a land $/sf rate from assessed value
+    and applies it to available GFA with a discount factor.
 
     Args:
         rights: Available development rights result for the parcel.
                 Must have rights.current populated with assessment data
-                for assessment-based methods to be applicable.
+                for the Land Residual method to be applicable.
         params: Market parameters loaded from valuation_params.json
 
     Returns:
-        ValuationResult with composite price range and per-method results
+        ValuationResult with estimated price range from the Land Residual method
     """
     result = ValuationResult(
         parcel_id=rights.parcel_id,
@@ -609,44 +476,30 @@ def calculate_valuation(
         result.notes.append("No available development rights to value")
         return result
 
-    result.is_valueable = True
-
-    # Run all three methods independently
+    # Run Land Residual method
     result.land_residual = _land_residual_method(
         land_value, max_gfa_sf, available_gfa_sf, params
     )
-    result.assessment_ratio = _assessment_ratio_method(
-        land_value, max_gfa_sf, available_gfa_sf, params
-    )
-    result.price_per_sf = _price_per_sf_method(available_gfa_sf, params)
 
-    # Collect applicable methods
-    all_methods = [
-        result.land_residual,
-        result.assessment_ratio,
-        result.price_per_sf,
-    ]
-    applicable = [m for m in all_methods if m.is_applicable]
-
-    if not applicable:
+    if not result.land_residual.is_applicable:
+        result.is_valueable = False
         result.confidence = ConfidenceLevel.NOT_APPLICABLE
         result.notes.append(
-            "No valuation methods produced applicable results; "
-            "check input data quality"
+            "Land Residual method not applicable; "
+            "check input data quality (requires land value, max GFA, available GFA)"
         )
+        result.notes.extend(result.land_residual.notes)
         return result
 
-    # Composite range: envelope of all applicable method estimates
-    lows = [m.low_estimate for m in applicable if m.low_estimate is not None]
-    highs = [m.high_estimate for m in applicable if m.high_estimate is not None]
-    if lows:
-        result.estimated_value_low = min(lows)
-    if highs:
-        result.estimated_value_high = max(highs)
+    result.is_valueable = True
 
-    # Determine confidence
+    # Value range comes directly from Land Residual
+    result.estimated_value_low = result.land_residual.low_estimate
+    result.estimated_value_high = result.land_residual.high_estimate
+
+    # Determine confidence based on data quality thresholds
     result.confidence, result.confidence_factors = _determine_confidence(
-        applicable, land_value, available_gfa_sf, params
+        land_value, available_gfa_sf, params
     )
 
     return result
@@ -799,9 +652,9 @@ def estimate_valuation_geodataframe(
 
 
 def _intermediate_fields(
-    potential: "DevelopmentPotentialResult",
-    current: "CurrentBuiltResult",
-    rights: "AvailableRightsResult",
+    potential: DevelopmentPotentialResult,
+    current: CurrentBuiltResult,
+    rights: AvailableRightsResult,
 ) -> dict:
     """
     Extract key fields from intermediate analysis results for inclusion
@@ -859,14 +712,9 @@ def _empty_valuation_record() -> dict:
         "valuation_land_residual_low": None,
         "valuation_land_residual_high": None,
         "valuation_land_residual_applicable": False,
-        "valuation_assessment_ratio_low": None,
-        "valuation_assessment_ratio_high": None,
-        "valuation_assessment_ratio_applicable": False,
-        "valuation_per_sf_low": None,
-        "valuation_per_sf_high": None,
-        "valuation_per_sf_applicable": False,
         # Intermediate fields
         "lot_area_sf": None,
+        "lot_area_source": None,
         "lot_width_ft": None,
         "lot_depth_ft": None,
         "is_conforming": None,

@@ -338,10 +338,6 @@ class ParcelInspectionResult:
 
         if self.stage4_params_used:
             d["stage4_params_used"] = {
-                "market_to_assessment_ratio_low": self.stage4_params_used.market_to_assessment_ratio_low,
-                "market_to_assessment_ratio_high": self.stage4_params_used.market_to_assessment_ratio_high,
-                "price_per_gfa_sf_low": self.stage4_params_used.price_per_gfa_sf_low,
-                "price_per_gfa_sf_high": self.stage4_params_used.price_per_gfa_sf_high,
                 "land_residual_discount_low": self.stage4_params_used.land_residual_discount_low,
                 "land_residual_discount_high": self.stage4_params_used.land_residual_discount_high,
                 "residential_improvement_value_per_sf": self.stage4_params_used.residential_improvement_value_per_sf,
@@ -764,27 +760,15 @@ def _format_report(r: ParcelInspectionResult) -> str:
                     f"    Land residual discount:     "
                     f"{params.land_residual_discount_low:.0%}–{params.land_residual_discount_high:.0%}"
                 )
-                lines.append(
-                    f"    Assessment market ratio:    "
-                    f"{params.market_to_assessment_ratio_low:.2f}x–{params.market_to_assessment_ratio_high:.2f}x"
-                )
-                lines.append(
-                    f"    Price per available GFA SF: "
-                    f"${params.price_per_gfa_sf_low:,.0f}–${params.price_per_gfa_sf_high:,.0f}/sf"
-                )
                 if params.params_last_updated:
                     lines.append(f"    Params last updated:        {params.params_last_updated}")
 
             lines.append("")
-            _format_method(lines, "Method 1 - Land Residual", val.land_residual)
-            lines.append("")
-            _format_method(lines, "Method 2 - Assessment Ratio", val.assessment_ratio)
-            lines.append("")
-            _format_method(lines, "Method 3 - Price Per SF", val.price_per_sf)
+            _format_method(lines, "Land Residual", val.land_residual)
 
             if val.estimated_value_low is not None and val.estimated_value_high is not None:
                 lines.append("")
-                lines.append("  Composite Range:")
+                lines.append("  Estimated Value Range:")
                 lines.append(f"    Low:  ${val.estimated_value_low:,.0f}")
                 lines.append(f"    High: ${val.estimated_value_high:,.0f}")
 

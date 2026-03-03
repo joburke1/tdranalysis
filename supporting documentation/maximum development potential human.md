@@ -223,60 +223,13 @@ Requires: assessed land value > 0, max GFA > 0, available GFA > 0.
 
 - **`discount_low` / `discount_high`** (`land_residual_discount_factor` in `config/valuation_params.json`): A fraction between 0 and 1 representing what a TDR buyer would actually pay relative to that implied land rate. The discount accounts for the fact that TDR rights convey only the right to build additional floor area — not fee-simple land ownership — and for negotiation, transaction costs, and market uncertainty. A discount of 0.65 means the buyer pays $0.65 for each dollar of implied land value. This is the most judgment-intensive parameter in the model. In the absence of observed TDR transactions, values typically range from 0.50 to 0.85; calibrate from comparable TDR markets or developer interviews.
 
-#### 2. Assessment Ratio Method
-Scales the assessed land value by the fraction of GFA capacity that is currently unused, then adjusts for any gap between assessed value and actual market value.
-
-```
-available_fraction = available_gfa_sf / max_gfa_sf  (capped at 1.0)
-value_low  = assessed_land_value × market_ratio_low × available_fraction
-value_high = assessed_land_value × market_ratio_high × available_fraction
-```
-
-Requires: assessed land value > 0, max GFA > 0, available GFA > 0.
-
-**How inputs are determined:**
-
-- **`assessed_land_value`**: Same source as Method 1 (`landValueAmt`).
-
-- **`available_fraction`**: Computed directly from Stage 3 results. A parcel using 70% of its maximum GFA has an available fraction of 0.30. This is capped at 1.0 to handle minor data inconsistencies.
-
-- **`market_ratio_low` / `market_ratio_high`** (`market_to_assessment_ratio` in `config/valuation_params.json`): A multiplier reflecting the relationship between market value and assessed value. Arlington assessments target 100% of market value (ratio = 1.0), but in a rising market assessments can lag. Calibrate from recent arm's-length sales: divide the sale price by the concurrent assessed land value for comparable properties. A ratio above 1.0 indicates market prices are running ahead of assessments. A ratio of 1.0 treats assessed value as equal to market value; 1.15 means market is estimated 15% above assessment.
-
-#### 3. Price Per Square Foot Method
-Applies a market-rate range directly to available GFA, bypassing assessment data. This is the broadest method — it applies to every parcel with available GFA — and represents a direct estimate of what a buyer would pay per square foot of transferable buildable area.
-
-```
-value_low  = available_gfa_sf × price_per_sf_low
-value_high = available_gfa_sf × price_per_sf_high
-```
-
-Requires: available GFA > 0.
-
-**How inputs are determined:**
-
-- **`available_gfa_sf`**: From Stage 3.
-
-- **`price_per_sf_low` / `price_per_sf_high`** (`price_per_available_gfa_sf` in `config/valuation_params.json`): The market rate in dollars per square foot of transferable development capacity. In an active TDR program, calibrate directly from observed TDR transaction prices. In a nascent or proposed program such as Arlington's, estimate from: (a) transaction prices in comparable TDR programs in similar markets, (b) developer pro forma analysis of the marginal value of additional floor area in this submarket, or (c) the cost to obtain equivalent density through alternative means such as rezoning or variances. Because this method requires only available GFA, it serves as the baseline estimate for all parcels with unused capacity.
-
-### Composite Range
-
-The composite LOW/HIGH range is the **envelope** of all applicable method estimates:
-
-```
-ESTIMATED_VALUE_LOW  = minimum of all applicable method lows
-ESTIMATED_VALUE_HIGH = maximum of all applicable method highs
-```
-
-This produces a wide range by design, capturing the spread across different approaches to valuing development capacity.
-
 ### Confidence Rating
 
 | Rating | Conditions |
 |--------|------------|
-| HIGH | All 3 methods applicable; assessed land value and available GFA both meet quality thresholds |
-| MEDIUM | 2 of 3 methods applicable, but quality thresholds not fully met |
-| LOW | Only 1 of 3 methods applicable |
-| NOT APPLICABLE | Overdeveloped, no available rights, or no applicable methods |
+| HIGH | Land Residual applicable; assessed land value and available GFA both meet quality thresholds |
+| MEDIUM | Land Residual applicable, but assessed land value or available GFA is below threshold |
+| NOT APPLICABLE | No land value data, no available GFA, overdeveloped, or non-residential |
 
 Quality thresholds are set in `config/valuation_params.json` under `confidence_thresholds`.
 
@@ -286,10 +239,8 @@ All market parameters are stored in `config/valuation_params.json` and must be c
 
 | Parameter | Used In | What It Represents | How to Calibrate |
 |-----------|---------|-------------------|-----------------|
-| `land_residual_discount_factor` (low/high) | Method 1 | Fraction of the implied land rate a TDR buyer would pay. Reflects that TDR rights are not fee-simple ownership and that transaction costs and negotiation reduce achievable prices. | Observed TDR transaction prices divided by the pipeline's implied land rate for the same parcels. In the absence of local transactions, use comparable TDR markets (0.50–0.85 is a common range). |
-| `market_to_assessment_ratio` (low/high) | Method 2 | Multiplier converting assessed land value to market value. A value of 1.0 treats assessment as equal to market; 1.15 means market is 15% above assessment. | Divide recent arm's-length sale prices for comparable lots by their concurrent assessed land value. Update annually or after significant market movements. |
-| `price_per_available_gfa_sf` (low/high) | Method 3 | Market price per square foot of transferable development capacity, independent of any individual parcel's assessed value. | Observed TDR transaction prices per sf; or comparable program benchmarks; or developer pro forma analysis of the marginal value of additional floor area in the submarket. |
-| `confidence_thresholds` | Confidence rating | Minimum assessed land value and minimum available GFA required for HIGH confidence. Parcels below either threshold are rated MEDIUM even if 3+ methods apply. | Set based on the minimum data quality considered reliable for policy use; review if the dataset's typical land value or GFA distribution changes significantly. |
+| `land_residual_discount_factor` (low/high) | Land Residual | Fraction of the implied land rate a TDR buyer would pay. Reflects that TDR rights are not fee-simple ownership and that transaction costs and negotiation reduce achievable prices. | Observed TDR transaction prices divided by the pipeline's implied land rate for the same parcels. In the absence of local transactions, use comparable TDR markets (0.50–0.85 is a common range). |
+| `confidence_thresholds` | Confidence rating | Minimum assessed land value and minimum available GFA required for HIGH confidence. Parcels below either threshold are rated MEDIUM. | Set based on the minimum data quality considered reliable for policy use; review if the dataset's typical land value or GFA distribution changes significantly. |
 | `residential_improvement_value_per_sf` (fallback) | Stage 2 GFA estimate | Static $/sf used to estimate GFA from improvement value when neighborhood calibration has fewer than 5 recent-build samples. | Current replacement cost per sf for residential construction in the area; consult local construction cost indices or assessor documentation. |
 
 ---

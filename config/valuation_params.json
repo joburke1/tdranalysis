@@ -15,16 +15,6 @@
       "This is NOT a substitute for a formal appraisal."
     ]
   },
-  "market_to_assessment_ratio": {
-    "low": 1.0,
-    "high": 1.15,
-    "notes": "Arlington assessments track close to market value. Range accounts for assessment lag and parcel-level variation."
-  },
-  "price_per_available_gfa_sf": {
-    "low": 100,
-    "high": 200,
-    "notes": "Dollars per square foot of unused GFA capacity. Varies by neighborhood, zoning district, and current market conditions. Calibrate from comparable land sales expressed per buildable SF."
-  },
   "land_residual_discount_factor": {
     "low": 0.55,
     "high": 0.75,
