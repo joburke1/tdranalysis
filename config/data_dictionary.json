@@ -167,13 +167,6 @@
       "example": "402500"
     },
     {
-      "field": "valuation_confidence",
-      "label": "Valuation Confidence",
-      "description": "How reliable the valuation estimate is. 'high' = land residual applicable and both assessed land value and available GFA meet quality thresholds; 'medium' = land residual applicable but data quality is below threshold; 'not_applicable' = parcel has no valueable development capacity (no land value data, overdeveloped, or no available GFA).",
-      "source": "Derived from data quality thresholds for assessed land value and available GFA",
-      "example": "high"
-    },
-    {
       "field": "spot_check_result",
       "label": "Spot Check Result",
       "description": "The outcome of a manual verification of this parcel's classification. Common values: 'confirmed' = analysis matches ground truth; 'incorrect' = analysis is wrong; 'vacant - confirmed buildable' = empty lot verified as developable. Blank if the parcel has not been spot-checked.",

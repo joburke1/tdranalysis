@@ -223,16 +223,6 @@ Requires: assessed land value > 0, max GFA > 0, available GFA > 0.
 
 - **`discount_low` / `discount_high`** (`land_residual_discount_factor` in `config/valuation_params.json`): A fraction between 0 and 1 representing what a TDR buyer would actually pay relative to that implied land rate. The discount accounts for the fact that TDR rights convey only the right to build additional floor area — not fee-simple land ownership — and for negotiation, transaction costs, and market uncertainty. A discount of 0.65 means the buyer pays $0.65 for each dollar of implied land value. This is the most judgment-intensive parameter in the model. In the absence of observed TDR transactions, values typically range from 0.50 to 0.85; calibrate from comparable TDR markets or developer interviews.
 
-### Confidence Rating
-
-| Rating | Conditions |
-|--------|------------|
-| HIGH | Land Residual applicable; assessed land value and available GFA both meet quality thresholds |
-| MEDIUM | Land Residual applicable, but assessed land value or available GFA is below threshold |
-| NOT APPLICABLE | No land value data, no available GFA, overdeveloped, or non-residential |
-
-Quality thresholds are set in `config/valuation_params.json` under `confidence_thresholds`.
-
 ### Configurable Market Parameters
 
 All market parameters are stored in `config/valuation_params.json` and must be calibrated to current conditions before use. The parameter file itself documents the current values and the date they were last updated.
@@ -240,7 +230,6 @@ All market parameters are stored in `config/valuation_params.json` and must be c
 | Parameter | Used In | What It Represents | How to Calibrate |
 |-----------|---------|-------------------|-----------------|
 | `land_residual_discount_factor` (low/high) | Land Residual | Fraction of the implied land rate a TDR buyer would pay. Reflects that TDR rights are not fee-simple ownership and that transaction costs and negotiation reduce achievable prices. | Observed TDR transaction prices divided by the pipeline's implied land rate for the same parcels. In the absence of local transactions, use comparable TDR markets (0.50–0.85 is a common range). |
-| `confidence_thresholds` | Confidence rating | Minimum assessed land value and minimum available GFA required for HIGH confidence. Parcels below either threshold are rated MEDIUM. | Set based on the minimum data quality considered reliable for policy use; review if the dataset's typical land value or GFA distribution changes significantly. |
 | `residential_improvement_value_per_sf` (fallback) | Stage 2 GFA estimate | Static $/sf used to estimate GFA from improvement value when neighborhood calibration has fewer than 5 recent-build samples. | Current replacement cost per sf for residential construction in the area; consult local construction cost indices or assessor documentation. |
 
 ---

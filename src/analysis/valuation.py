@@ -17,7 +17,6 @@ Valuation method:
 import json
 import logging
 from dataclasses import dataclass, field
-from enum import Enum
 from pathlib import Path
 from typing import Optional
 
@@ -58,12 +57,6 @@ class ValuationParams:
     land_residual_discount_high: float
     """Aggressive discount applied to raw land rate (0.0–1.0)"""
 
-    high_confidence_min_land_value: float
-    """Minimum assessed land value (dollars) for HIGH confidence rating"""
-
-    high_confidence_min_available_gfa_sf: float
-    """Minimum available GFA (sq ft) for HIGH confidence rating"""
-
     residential_improvement_value_per_sf: float = 185.0
     """$/SF used to estimate residential GFA from improvement value when the
     property API does not report floor area (typical for single-family homes)."""
@@ -101,8 +94,6 @@ def load_valuation_params(config_dir: str | Path = "config") -> ValuationParams:
     return ValuationParams(
         land_residual_discount_low=data["land_residual_discount_factor"]["low"],
         land_residual_discount_high=data["land_residual_discount_factor"]["high"],
-        high_confidence_min_land_value=data["confidence_thresholds"]["high_confidence_min_land_value"],
-        high_confidence_min_available_gfa_sf=data["confidence_thresholds"]["high_confidence_min_available_gfa_sf"],
         residential_improvement_value_per_sf=data.get("residential_improvement_value_per_sf", {}).get("fallback_value",
             data.get("residential_improvement_value_per_sf", {}).get("value", 185.0)),
         params_last_updated=meta.get("last_updated", ""),
@@ -112,19 +103,6 @@ def load_valuation_params(config_dir: str | Path = "config") -> ValuationParams:
 # ---------------------------------------------------------------------------
 # Supporting types
 # ---------------------------------------------------------------------------
-
-class ConfidenceLevel(str, Enum):
-    """Reliability of the valuation estimate."""
-
-    HIGH = "high"
-    """Land Residual applicable; assessed land value and available GFA meet quality thresholds."""
-
-    MEDIUM = "medium"
-    """Land Residual applicable, but assessed land value or available GFA is below threshold."""
-
-    NOT_APPLICABLE = "not_applicable"
-    """Land Residual not applicable, parcel is overdeveloped, or has no available rights."""
-
 
 @dataclass
 class ValuationMethodResult:
@@ -157,7 +135,6 @@ class ValuationResult:
 
     Uses the Land Residual method to derive a LOW/HIGH price range from the
     assessed land value, maximum GFA, available GFA, and a discount factor.
-    Includes a confidence indicator reflecting data quality.
 
     DISCLAIMER: This is an estimate for policy analysis only, not a property
     appraisal or formal valuation. Calibrate market parameters to current
@@ -181,13 +158,6 @@ class ValuationResult:
     # Per-method results
     land_residual: Optional[ValuationMethodResult] = None
     """Land residual method: derived land $/sf × available GFA × discount"""
-
-    # Confidence
-    confidence: ConfidenceLevel = ConfidenceLevel.NOT_APPLICABLE
-    """Reliability of the estimate based on data quality and method coverage"""
-
-    confidence_factors: list[str] = field(default_factory=list)
-    """Explanation of what drove the confidence rating"""
 
     # Input summary (for traceability)
     available_gfa_sf: Optional[float] = None
@@ -225,13 +195,11 @@ class ValuationResult:
             "zoning_district": self.zoning_district,
             "estimated_value_low": self.estimated_value_low,
             "estimated_value_high": self.estimated_value_high,
-            "valuation_confidence": self.confidence.value,
             "valuation_is_valueable": self.is_valueable,
             "valuation_available_gfa_sf": self.available_gfa_sf,
             "valuation_available_dwelling_units": self.available_dwelling_units,
             "valuation_assessed_land_value": self.assessed_land_value,
             "valuation_max_gfa_sf": self.max_gfa_sf,
-            "valuation_confidence_factors": "; ".join(self.confidence_factors),
             "valuation_notes": "; ".join(self.notes),
         }
 
@@ -270,11 +238,7 @@ class ValuationResult:
             lines.extend([
                 "",
                 f"Estimated Value Range: ${self.estimated_value_low:,.0f} – ${self.estimated_value_high:,.0f}",
-                f"Confidence: {self.confidence.value.upper()}",
             ])
-            if self.confidence_factors:
-                for factor in self.confidence_factors:
-                    lines.append(f"  ({factor})")
 
         lines.extend(["", "Valuation Method (Land Residual):"])
 
@@ -365,46 +329,6 @@ def _land_residual_method(
     )
 
 
-def _determine_confidence(
-    land_value: Optional[float],
-    available_gfa_sf: Optional[float],
-    params: ValuationParams,
-) -> tuple[ConfidenceLevel, list[str]]:
-    """Determine confidence level based on data quality thresholds.
-
-    Called only when Land Residual is applicable (land_value > 0, available_gfa > 0).
-    Returns HIGH when both inputs meet the minimum thresholds, MEDIUM otherwise.
-    """
-    has_good_land_value = (
-        land_value is not None
-        and land_value >= params.high_confidence_min_land_value
-    )
-    has_good_gfa = (
-        available_gfa_sf is not None
-        and available_gfa_sf >= params.high_confidence_min_available_gfa_sf
-    )
-
-    factors = []
-
-    if has_good_land_value and has_good_gfa:
-        factors.append(
-            "Assessed land value and available GFA meet quality thresholds"
-        )
-        return ConfidenceLevel.HIGH, factors
-
-    if not has_good_land_value:
-        factors.append(
-            f"Assessed land value below threshold "
-            f"(${params.high_confidence_min_land_value:,.0f})"
-        )
-    if not has_good_gfa:
-        factors.append(
-            f"Available GFA below threshold "
-            f"({params.high_confidence_min_available_gfa_sf:,.0f} sf)"
-        )
-    return ConfidenceLevel.MEDIUM, factors
-
-
 # ---------------------------------------------------------------------------
 # Main calculation function
 # ---------------------------------------------------------------------------
@@ -446,7 +370,6 @@ def calculate_valuation(
 
     # Early exit: not enough data to analyze
     if not rights.is_analyzable:
-        result.confidence = ConfidenceLevel.NOT_APPLICABLE
         result.notes.append(
             "Cannot estimate value: available rights analysis is incomplete"
         )
@@ -456,7 +379,6 @@ def calculate_valuation(
 
     # Early exit: overdeveloped — no unused development capacity
     if rights.is_overdeveloped:
-        result.confidence = ConfidenceLevel.NOT_APPLICABLE
         result.is_valueable = False
         result.notes.append(
             "Parcel is overdeveloped (current building exceeds by-right zoning limits); "
@@ -471,7 +393,6 @@ def calculate_valuation(
     )
 
     if not has_available_gfa and not has_available_units:
-        result.confidence = ConfidenceLevel.NOT_APPLICABLE
         result.is_valueable = False
         result.notes.append("No available development rights to value")
         return result
@@ -483,7 +404,6 @@ def calculate_valuation(
 
     if not result.land_residual.is_applicable:
         result.is_valueable = False
-        result.confidence = ConfidenceLevel.NOT_APPLICABLE
         result.notes.append(
             "Land Residual method not applicable; "
             "check input data quality (requires land value, max GFA, available GFA)"
@@ -496,11 +416,6 @@ def calculate_valuation(
     # Value range comes directly from Land Residual
     result.estimated_value_low = result.land_residual.low_estimate
     result.estimated_value_high = result.land_residual.high_estimate
-
-    # Determine confidence based on data quality thresholds
-    result.confidence, result.confidence_factors = _determine_confidence(
-        land_value, available_gfa_sf, params
-    )
 
     return result
 
@@ -701,13 +616,11 @@ def _empty_valuation_record() -> dict:
         # Valuation
         "estimated_value_low": None,
         "estimated_value_high": None,
-        "valuation_confidence": ConfidenceLevel.NOT_APPLICABLE.value,
         "valuation_is_valueable": False,
         "valuation_available_gfa_sf": None,
         "valuation_available_dwelling_units": None,
         "valuation_assessed_land_value": None,
         "valuation_max_gfa_sf": None,
-        "valuation_confidence_factors": "",
         "valuation_notes": "",
         "valuation_land_residual_low": None,
         "valuation_land_residual_high": None,

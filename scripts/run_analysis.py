@@ -133,7 +133,6 @@ _OUTPUT_SCHEMA = (
     # Valuation
     ("estimated_value_low",           "est_value_low"),
     ("estimated_value_high",          "est_value_high"),
-    ("valuation_confidence",          "valuation_confidence"),
     # Neighborhood calibration
     ("neighborhood_imp_rate_median",  "neighborhood_imp_rate_median"),
     ("neighborhood_imp_rate_low",     "neighborhood_imp_rate_low"),
@@ -912,12 +911,6 @@ def _build_summary(result_gdf: "gpd.GeoDataFrame", label: str) -> str:
                 f"  Aggregate low:      ${total_low:>14,.0f}",
                 f"  Aggregate high:     ${total_high:>14,.0f}",
             ])
-
-            if "valuation_confidence" in result_gdf.columns:
-                conf_counts = result_gdf["valuation_confidence"].value_counts()
-                lines.append("  Confidence levels:")
-                for level, count in conf_counts.items():
-                    lines.append(f"    {level:<16} {count:>6,}")
 
     lines.append("\n" + "=" * 60)
     lines.append(

@@ -11,7 +11,7 @@ This is a **four-stage pipeline**. Results are policy estimates, not appraisals.
 Stage 1: Max Development Potential  →  max_footprint_sf, max_gfa_sf, max_lot_coverage_sf
 Stage 2: Current Built              →  current_gfa_sf, gfa_source
 Stage 3: Available Rights           →  available_gfa_sf, utilization_pct, status flags
-Stage 4: Valuation                  →  estimated_value_low, estimated_value_high, confidence
+Stage 4: Valuation                  →  estimated_value_low, estimated_value_high
 ```
 
 ---
@@ -203,10 +203,10 @@ Lot coverage available rights are **not computed**. The pipeline reports the max
 ### Early Exit Conditions
 ```
 IF is_overdeveloped:
-    confidence = NOT_APPLICABLE  (no capacity to value)
+    is_valueable = False  (no capacity to value)
 
 IF available_gfa_sf <= 0 AND available_dwelling_units <= 0:
-    confidence = NOT_APPLICABLE  (no available rights)
+    is_valueable = False  (no available rights)
 ```
 
 ### Method 1: Land Residual
@@ -234,27 +234,10 @@ ESTIMATED_VALUE_LOW  = land_residual.low_estimate
 ESTIMATED_VALUE_HIGH = land_residual.high_estimate
 ```
 
-### Confidence Rating
-```
-has_good_land = assessed_land_value >= high_confidence_min_land_value
-has_good_gfa  = available_gfa_sf >= high_confidence_min_available_gfa_sf
-
-IF land_residual NOT APPLICABLE:
-    confidence = NOT_APPLICABLE
-
-ELIF has_good_land AND has_good_gfa:
-    confidence = HIGH
-
-ELSE:
-    confidence = MEDIUM
-```
-
 ### Configurable Parameters (config/valuation_params.json)
 | Key | Type | Used In | Description and Calibration |
 |-----|------|---------|----------------------------|
 | `land_residual_discount_factor.low/high` | float (0–1) | Land Residual | Fraction of implied land rate a TDR buyer pays. Accounts for non-fee-simple nature of TDR rights, transaction costs, and negotiation. Calibrate: observed TDR price ÷ pipeline's implied land_rate for same parcel. Typical range 0.50–0.85. |
-| `confidence_thresholds.high_confidence_min_land_value` | float | Confidence | Minimum assessed land value (dollars) for HIGH confidence. Parcels below this threshold are rated MEDIUM. |
-| `confidence_thresholds.high_confidence_min_available_gfa_sf` | float | Confidence | Minimum available GFA (sf) for HIGH confidence. Reflects that very small available rights produce unreliable estimates. |
 | `residential_improvement_value_per_sf.fallback_value` | float | Stage 2 | Static $/sf used when neighborhood calibration has < 5 recent-build samples. Calibrate from current residential construction cost indices or assessor documentation. |
 
 ---
@@ -301,4 +284,4 @@ R-6 district, 7,678 sf lot (assessor), porch=false, garage=false:
 | Current GFA | from property API | 3,996 sf |
 | Available GFA | 5,758 − 3,996 | 1,762 sf |
 | GFA utilization | 3,996 / 5,758 × 100 | 69.4% → UNDERDEVELOPED |
-| TDR value | composite of 4 methods | $119,630–$352,300 (HIGH confidence) |
+| TDR value | land residual method | $119,630–$352,300 |

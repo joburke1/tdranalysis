@@ -48,7 +48,6 @@ from .valuation import (
     ValuationResult,
     ValuationParams,
     ValuationMethodResult,
-    ConfidenceLevel,
     calculate_valuation,
     load_valuation_params,
 )
@@ -771,11 +770,6 @@ def _format_report(r: ParcelInspectionResult) -> str:
                 lines.append("  Estimated Value Range:")
                 lines.append(f"    Low:  ${val.estimated_value_low:,.0f}")
                 lines.append(f"    High: ${val.estimated_value_high:,.0f}")
-
-            lines.append("")
-            lines.append(f"  Confidence: {val.confidence.value.upper()}")
-            for factor in val.confidence_factors:
-                lines.append(f"    - {factor}")
 
             if val.notes:
                 lines.append("")

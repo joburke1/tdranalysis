@@ -53,7 +53,6 @@ def _compute_summary(geojson_data: dict) -> dict:
     zoning_counts: dict[str, int] = {}
     status_counts: dict[str, int] = {}
     available_gfa_values: list[float] = []
-    confidence_counts: dict[str, int] = {}
     vacant_count = 0
     underdeveloped_count = 0
     near_capacity_count = 0
@@ -91,10 +90,6 @@ def _compute_summary(geojson_data: dict) -> dict:
             near_capacity_count += 1
         elif status == "overdeveloped":
             overdeveloped_count += 1
-
-        # Confidence
-        conf = p.get("valuation_confidence", "not_applicable")
-        confidence_counts[conf] = confidence_counts.get(conf, 0) + 1
 
         # Values
         lv = p.get("land_value")
@@ -139,7 +134,6 @@ def _compute_summary(geojson_data: dict) -> dict:
         "total_est_low": total_est_low,
         "total_est_high": total_est_high,
         "parcels_with_value": parcels_with_value,
-        "confidence_counts": confidence_counts,
         "neighborhood_rate_median": neighborhood_rate_median,
         "neighborhood_rate_low": neighborhood_rate_low,
         "neighborhood_rate_high": neighborhood_rate_high,
@@ -323,9 +317,6 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         <h2>Development Status</h2>
         <div class="breakdown" id="status-breakdown"></div>
 
-        <h2>Valuation Confidence</h2>
-        <div class="breakdown" id="confidence-breakdown"></div>
-
         <h2>Legend</h2>
         <div class="legend">
             <div class="legend-item"><div class="legend-swatch" style="background:#084594"></div> High development potential</div>
@@ -398,13 +389,6 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
     fillBreakdown('zoning-breakdown', summary.zoning_counts);
     fillBreakdown('status-breakdown', summary.status_counts);
     // Map jargon labels to user-friendly text
-    const friendlyConfidence = {};
-    const confLabels = {'not_applicable': 'No unused capacity', 'low': 'Low', 'medium': 'Medium', 'high': 'High'};
-    for (const [k, v] of Object.entries(summary.confidence_counts)) {
-        friendlyConfidence[confLabels[k] || k] = v;
-    }
-    fillBreakdown('confidence-breakdown', friendlyConfidence);
-
     // --- Map ---
     const map = L.map('map', { zoomControl: true });
     L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -464,7 +448,6 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         const pid = props.parcel_id || '';
         const zoning = props.zoning_district || '';
         const status = props.development_status || 'unknown';
-        const conf = props.valuation_confidence || '';
 
         let html = '<div class="parcel-tooltip">';
         html += '<div class="tt-header">' + addr + '</div>';
@@ -492,7 +475,6 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         if (props.est_value_low != null) {
             html += '<div class="tt-section"><div class="tt-section-title">Estimated Value of Unused Rights</div>';
             html += '<div class="tt-row"><span class="tt-label">Range</span><span class="tt-value tt-highlight">' + fmtD(props.est_value_low) + ' &ndash; ' + fmtD(props.est_value_high) + '</span></div>';
-            html += '<div class="tt-row"><span class="tt-label">Confidence</span><span class="tt-value">' + conf + '</span></div>';
             html += '</div>';
         }
 

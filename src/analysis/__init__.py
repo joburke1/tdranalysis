@@ -26,7 +26,6 @@ from .valuation import (
     estimate_valuation_geodataframe,
     ValuationResult,
     ValuationMethodResult,
-    ConfidenceLevel,
     load_valuation_params,
 )
 
@@ -47,6 +46,5 @@ __all__ = [
     "estimate_valuation_geodataframe",
     "ValuationResult",
     "ValuationMethodResult",
-    "ConfidenceLevel",
     "load_valuation_params",
 ]

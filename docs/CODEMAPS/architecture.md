@@ -1,6 +1,6 @@
 <!-- Generated: 2026-02-20 | Files scanned: 15 | Token estimate: ~650 -->
 
-# Architecture — Arlington Zoning Analyzer
+# Architecture ï¿½ Arlington Zoning Analyzer
 
 ## System Type
 CLI data analysis pipeline. No web server, no database. Reads from external APIs and local file cache; writes to local files.
@@ -95,5 +95,5 @@ parcel row (GeoDataFrame)
   |
   +- AvailableRightsResult + land_value + neighborhood_rate
       -> valuation -> ValuationResult
-        (est_value_low, est_value_high, valuation_confidence)
+        (est_value_low, est_value_high)
 ```

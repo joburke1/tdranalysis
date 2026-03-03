@@ -13,12 +13,10 @@ from src.analysis.valuation import (
     ValuationParams,
     ValuationMethodResult,
     ValuationResult,
-    ConfidenceLevel,
     load_valuation_params,
     calculate_valuation,
     estimate_valuation_by_id,
     _land_residual_method,
-    _determine_confidence,
 )
 
 CONFIG_DIR = Path(__file__).parent.parent / "config"
@@ -33,8 +31,6 @@ def _make_params(**kwargs) -> ValuationParams:
     defaults = dict(
         land_residual_discount_low=0.60,
         land_residual_discount_high=0.85,
-        high_confidence_min_land_value=100_000.0,
-        high_confidence_min_available_gfa_sf=500.0,
         params_last_updated="2026-02-18",
     )
     defaults.update(kwargs)
@@ -108,8 +104,6 @@ class TestValuationParams:
         assert isinstance(params, ValuationParams)
         assert 0 < params.land_residual_discount_low <= 1.0
         assert params.land_residual_discount_low <= params.land_residual_discount_high <= 1.0
-        assert params.high_confidence_min_land_value > 0
-        assert params.high_confidence_min_available_gfa_sf > 0
         assert isinstance(params.params_last_updated, str)
 
     def test_load_missing_file_raises(self, tmp_path):
@@ -182,54 +176,6 @@ class TestLandResidualMethod:
 
 
 # ---------------------------------------------------------------------------
-# TestDetermineConfidence
-# ---------------------------------------------------------------------------
-
-class TestDetermineConfidence:
-    """Tests for _determine_confidence."""
-
-    def test_high_when_both_thresholds_met(self):
-        """Returns HIGH when land value and available GFA both meet thresholds."""
-        params = _make_params(
-            high_confidence_min_land_value=100_000.0,
-            high_confidence_min_available_gfa_sf=500.0,
-        )
-        level, factors = _determine_confidence(500_000.0, 2_550.0, params)
-        assert level == ConfidenceLevel.HIGH
-        assert len(factors) > 0
-
-    def test_medium_when_land_value_below_threshold(self):
-        """Returns MEDIUM when land value is below threshold."""
-        params = _make_params(
-            high_confidence_min_land_value=100_000.0,
-            high_confidence_min_available_gfa_sf=500.0,
-        )
-        level, factors = _determine_confidence(50_000.0, 2_550.0, params)
-        assert level == ConfidenceLevel.MEDIUM
-        assert any("land value" in f.lower() for f in factors)
-
-    def test_medium_when_gfa_below_threshold(self):
-        """Returns MEDIUM when available GFA is below threshold."""
-        params = _make_params(
-            high_confidence_min_land_value=100_000.0,
-            high_confidence_min_available_gfa_sf=500.0,
-        )
-        level, factors = _determine_confidence(500_000.0, 200.0, params)
-        assert level == ConfidenceLevel.MEDIUM
-        assert any("gfa" in f.lower() for f in factors)
-
-    def test_medium_when_both_below_threshold(self):
-        """Returns MEDIUM when both inputs are below threshold."""
-        params = _make_params(
-            high_confidence_min_land_value=100_000.0,
-            high_confidence_min_available_gfa_sf=500.0,
-        )
-        level, factors = _determine_confidence(50_000.0, 200.0, params)
-        assert level == ConfidenceLevel.MEDIUM
-        assert len(factors) == 2
-
-
-# ---------------------------------------------------------------------------
 # TestCalculateValuation
 # ---------------------------------------------------------------------------
 
@@ -239,7 +185,7 @@ class TestCalculateValuation:
     def test_typical_underdeveloped_parcel(self):
         """
         Typical underdeveloped R-6 parcel with good assessment data.
-        Land Residual method is applicable and confidence is HIGH.
+        Land Residual method is applicable.
         """
         rights = _make_rights()  # land_value=500k, available_gfa=2550
         params = _make_params()
@@ -253,10 +199,9 @@ class TestCalculateValuation:
         assert result.estimated_value_high is not None
         assert result.estimated_value_low < result.estimated_value_high
         assert result.land_residual.is_applicable is True
-        assert result.confidence == ConfidenceLevel.HIGH
 
     def test_vacant_parcel(self):
-        """Vacant lot: land residual is applicable and confidence is HIGH."""
+        """Vacant lot: land residual is applicable."""
         rights = _make_rights(
             current_gfa_sf=0.0,
             current_dwelling_units=0,
@@ -278,7 +223,6 @@ class TestCalculateValuation:
 
         assert result.is_valueable is True
         assert result.land_residual.is_applicable is True
-        assert result.confidence == ConfidenceLevel.HIGH
 
     def test_overdeveloped_parcel(self):
         """Overdeveloped parcel has no development potential to value."""
@@ -294,7 +238,6 @@ class TestCalculateValuation:
         result = calculate_valuation(rights, params)
 
         assert result.is_valueable is False
-        assert result.confidence == ConfidenceLevel.NOT_APPLICABLE
         assert result.estimated_value_low is None
         assert result.estimated_value_high is None
         assert any("overdeveloped" in n.lower() for n in result.notes)
@@ -311,7 +254,6 @@ class TestCalculateValuation:
         result = calculate_valuation(rights, params)
 
         assert result.is_valueable is False
-        assert result.confidence == ConfidenceLevel.NOT_APPLICABLE
         assert len(result.notes) > 0
 
     def test_no_land_value_not_valueable(self):
@@ -331,7 +273,6 @@ class TestCalculateValuation:
         assert result.is_valueable is False
         assert result.assessed_land_value is None
         assert result.land_residual.is_applicable is False
-        assert result.confidence == ConfidenceLevel.NOT_APPLICABLE
         assert result.estimated_value_low is None
         assert result.estimated_value_high is None
 
@@ -348,7 +289,6 @@ class TestCalculateValuation:
         result = calculate_valuation(rights, params)
 
         assert result.is_valueable is False
-        assert result.confidence == ConfidenceLevel.NOT_APPLICABLE
 
     def test_value_equals_land_residual(self):
         """estimated_value_low/high match the Land Residual method output directly."""
@@ -363,49 +303,6 @@ class TestCalculateValuation:
         assert result.estimated_value_high == pytest.approx(
             result.land_residual.high_estimate, rel=1e-9
         )
-
-    def test_confidence_high_with_good_data(self):
-        """Land value and available GFA above thresholds → HIGH confidence."""
-        rights = _make_rights(available_gfa_sf=2_000.0)  # > 500 sf threshold
-        params = _make_params(
-            high_confidence_min_land_value=100_000.0,  # land_value=500k passes
-            high_confidence_min_available_gfa_sf=500.0,   # 2000 sf passes
-        )
-
-        result = calculate_valuation(rights, params)
-
-        assert result.confidence == ConfidenceLevel.HIGH
-
-    def test_confidence_medium_low_land_value(self):
-        """Land value below threshold → MEDIUM confidence."""
-        rights = _make_rights(
-            current=_make_current(land_value=50_000.0),  # < 100k threshold
-            available_gfa_sf=2_000.0,
-        )
-        params = _make_params(
-            high_confidence_min_land_value=100_000.0,
-            high_confidence_min_available_gfa_sf=500.0,
-        )
-
-        result = calculate_valuation(rights, params)
-
-        assert result.is_valueable is True
-        assert result.land_residual.is_applicable is True
-        assert result.confidence == ConfidenceLevel.MEDIUM
-
-    def test_confidence_medium_low_gfa(self):
-        """Available GFA below threshold → MEDIUM confidence."""
-        rights = _make_rights(available_gfa_sf=200.0)  # < 500 sf threshold
-        params = _make_params(
-            high_confidence_min_land_value=100_000.0,
-            high_confidence_min_available_gfa_sf=500.0,
-        )
-
-        result = calculate_valuation(rights, params)
-
-        assert result.is_valueable is True
-        assert result.land_residual.is_applicable is True
-        assert result.confidence == ConfidenceLevel.MEDIUM
 
     def test_summary_output_contains_key_fields(self):
         """summary() returns a string with parcel ID, range, and disclaimer."""
@@ -451,7 +348,6 @@ class TestCalculateValuation:
             "zoning_district",
             "estimated_value_low",
             "estimated_value_high",
-            "valuation_confidence",
             "valuation_is_valueable",
             "valuation_land_residual_low",
             "valuation_land_residual_high",
@@ -476,15 +372,6 @@ class TestCalculateValuation:
         }
         for key in removed_keys:
             assert key not in d, f"Unexpected key still present: '{key}'"
-
-    def test_to_dict_confidence_is_string(self):
-        """to_dict() serializes confidence as a plain string, not an enum."""
-        rights = _make_rights()
-        result = calculate_valuation(rights, _make_params())
-        d = result.to_dict()
-
-        assert isinstance(d["valuation_confidence"], str)
-        assert d["valuation_confidence"] in ("high", "medium", "not_applicable")
 
     def test_input_fields_populated_in_result(self):
         """Key input data is stored on the result for traceability."""
@@ -616,7 +503,6 @@ class TestEstimateValuationGeoDataFrame:
         expected_columns = [
             "estimated_value_low",
             "estimated_value_high",
-            "valuation_confidence",
             "valuation_is_valueable",
             "valuation_land_residual_low",
             "valuation_land_residual_high",
@@ -661,18 +547,6 @@ class TestEstimateValuationGeoDataFrame:
         assert isinstance(result, gpd.GeoDataFrame)
         assert result.crs == gdf.crs
         assert "geometry" in result.columns
-
-    def test_batch_mixed_parcels_confidence_types(self):
-        """Different parcel types produce different confidence levels."""
-        from src.analysis.valuation import estimate_valuation_geodataframe
-
-        gdf = self._make_gdf()
-        result = estimate_valuation_geodataframe(gdf, config_dir=CONFIG_DIR)
-
-        confidence_values = set(result["valuation_confidence"].tolist())
-        # Should have a mix — not all the same
-        # At minimum, overdeveloped parcel should be 'not_applicable'
-        assert "not_applicable" in confidence_values or len(confidence_values) >= 1
 
     def test_value_matches_land_residual_for_valueable_parcels(self):
         """For valueable parcels, est_value_low == land_residual_low."""
