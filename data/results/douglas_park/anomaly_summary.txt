@@ -1,0 +1,45 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 197
+
+Quality Tier Summary:
+  auto-exclude              1  (0.5%)
+  flag-for-review          13  (6.6%)
+  clean                   183  (92.9%)
+
+Most common anomaly types:
+  statistical_outlier                                        9 parcel(s)
+  unusual_property_type                                      4 parcel(s)
+  nonresidential_property_type                               1 parcel(s)
+
+Auto-Exclude Parcels (1):
+  32007170      1022 S Highland St, Arlington VA 22204         nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (13):
+  26002010      1102 S Monroe St, Arlington VA 22204           statistical_outlier:available_gfa_sf_z=-3.4_low_value=-2492
+  26025022      3917 13Th St S, Arlington VA 22204             statistical_outlier:est_value_high_z=-2.8_low_value=53941
+  26004016      3815 14Th St S, Arlington VA 22204             statistical_outlier:est_value_high_z=-2.5_low_value=85625
+  26009006      3918 14Th St S, Arlington VA 22204             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-937
+  26003007      1301 S Quincy St, Arlington VA 22204           statistical_outlier:est_value_high_z=-3.0_low_value=33873
+  26012025      1703 S Oakland St, Arlington VA 22204          statistical_outlier:available_gfa_sf_z=-2.8_low_value=-1383
+  26012026      1707 S Oakland St, Arlington VA 22204          statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1615
+  26001109      S Kenmore Cir, Arlington VA 22206              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  26001108      S Kenmore Cir, Arlington VA 22206              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  26001107      S Kenmore Cir, Arlington VA 22206              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  27007285      1633 S Taylor St, Arlington VA 22204           statistical_outlier:est_value_high_z=-2.8_low_value=52128
+  26012031      3711 18Th St S, Arlington VA 22204             statistical_outlier:est_value_high_z=-2.8_low_value=60290
+  26001110      S Kenmore Cir, Arlington VA 22206              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    1  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=   13  total_avail_gfa=      11,867 sf  agg_value_high=$       286,082
+  clean                 parcels=  183  total_avail_gfa=     604,407 sf  agg_value_high=$    53,919,199
+
+  Clean-tier GFA capacity as % of full analysis: 98.1%
+  Clean-tier value as % of full analysis:        99.5%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

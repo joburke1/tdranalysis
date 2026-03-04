@@ -1,0 +1,40 @@
+Analysis Summary: Douglas Park
+Generated: 2026-03-02 22:35
+============================================================
+
+Total residential parcels analyzed: 197
+Conforming parcels: 70 (35.5%)
+
+Zoning district breakdown:
+  R-6             134 parcels
+  R-5              63 parcels
+
+Development status:
+  underdeveloped      152 parcels
+  overdeveloped        20 parcels
+  near-capacity        18 parcels
+  vacant                7 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 168
+  Total available SF:         616,274 sf
+  Median per parcel:            3,735 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       124
+  Range:           $        68 – $179
+  Sample size:              7 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            168
+  Aggregate low:      $    39,750,539
+  Aggregate high:     $    54,205,280
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

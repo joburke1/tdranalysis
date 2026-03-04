@@ -38,7 +38,15 @@ logging.basicConfig(
 logger = logging.getLogger("generate_map")
 
 
-def _compute_summary(geojson_data: dict) -> dict:
+# Exclusion reasons that mean the parcel is not in an in-scope residential zone.
+# These are NOT counted toward the "total zoned residential" denominator.
+_ZONING_EXCLUSION_REASONS = {
+    "Non-residential zoning",
+    "Zoning district out of scope (not R-5/R-6/R-8/R-10/R-20)",
+}
+
+
+def _compute_summary(geojson_data: dict, excluded_data: dict | None = None) -> dict:
     """Compute summary statistics from GeoJSON features."""
     features = geojson_data.get("features", [])
     total = len(features)
@@ -116,9 +124,44 @@ def _compute_summary(geojson_data: dict) -> dict:
         s = sorted(available_gfa_values)
         median_avail_gfa = s[len(s) // 2]
 
+    # Count in-scope excluded parcels (those in a qualifying residential zone but
+    # filtered out for data or eligibility reasons, not zoning-out-of-scope).
+    in_scope_excluded = 0
+    excluded_count = 0
+    if excluded_data:
+        for f in excluded_data.get("features", []):
+            excluded_count += 1
+            reason = f.get("properties", {}).get("exclusion_reason", "")
+            if reason not in _ZONING_EXCLUSION_REASONS:
+                in_scope_excluded += 1
+
+    total_residential_eligible = total + in_scope_excluded
+    pct_included = round(total / total_residential_eligible * 100, 1) if total_residential_eligible > 0 else 0
+
+    # Identify parcels used for neighborhood calibration.
+    # Mirrors the criteria in estimate_neighborhood_improvement_rate():
+    #   year_built >= (analysis_year - lookback_years)  →  >= 2016
+    #   improvement_value > _IMPROVEMENT_VALUE_THRESHOLD  →  > 5,000
+    _CALIBRATION_YEAR_CUTOFF = 2016
+    _CALIBRATION_IMP_THRESHOLD = 5_000.0
+    calibration_parcel_ids = [
+        f["properties"]["parcel_id"]
+        for f in features
+        if (
+            f["properties"].get("year_built") is not None
+            and f["properties"]["year_built"] >= _CALIBRATION_YEAR_CUTOFF
+            and f["properties"].get("improvement_value") is not None
+            and f["properties"]["improvement_value"] > _CALIBRATION_IMP_THRESHOLD
+        )
+    ]
+
     return {
         "neighborhood": neighborhood_name,
         "total_parcels": total,
+        "total_residential_eligible": total_residential_eligible,
+        "excluded_count": excluded_count,
+        "in_scope_excluded": in_scope_excluded,
+        "pct_included": pct_included,
         "zoning_counts": zoning_counts,
         "status_counts": status_counts,
         "vacant_count": vacant_count,
@@ -138,19 +181,13 @@ def _compute_summary(geojson_data: dict) -> dict:
         "neighborhood_rate_low": neighborhood_rate_low,
         "neighborhood_rate_high": neighborhood_rate_high,
         "neighborhood_rate_sample": neighborhood_rate_sample,
-        "pct_underdeveloped": round(
-            (underdeveloped_count + vacant_count) / total * 100, 1
-        ) if total > 0 else 0,
+        "calibration_parcel_ids": calibration_parcel_ids,
     }
 
 
 def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> str:
     """Generate a self-contained HTML string with embedded map."""
-    summary = _compute_summary(geojson_data)
-    if excluded_data:
-        summary["excluded_count"] = len(excluded_data.get("features", []))
-    else:
-        summary["excluded_count"] = 0
+    summary = _compute_summary(geojson_data, excluded_data)
     geojson_str = json.dumps(geojson_data)
     excluded_str = json.dumps(excluded_data) if excluded_data else "null"
     summary_str = json.dumps(summary)
@@ -213,6 +250,12 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
 
     .disclaimer { margin-top: 16px; padding: 10px; background: #2a1a1a; border-left: 3px solid #e63946; border-radius: 4px; font-size: 11px; color: #ccc; }
 
+    #sidebar h2.filterable { cursor: pointer; user-select: none; }
+    #sidebar h2.filterable:hover { color: #ffd700; }
+    #sidebar h2.filterable .filter-hint { font-size: 10px; color: #666; font-weight: 400; margin-left: 6px; text-transform: none; letter-spacing: 0; }
+    #sidebar h2.filterable.filter-active { color: #ffd700; border-bottom-color: #ffd700; }
+    #sidebar h2.filterable.filter-active .filter-hint { color: #ffd700; }
+
     #map { flex: 1; }
 
     .parcel-tooltip {
@@ -246,16 +289,16 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
                 <div class="value" id="s-with-capacity"></div>
             </div>
             <div class="stat-box">
-                <div class="label">Underdeveloped + Vacant</div>
-                <div class="value" id="s-pct-underdev"></div>
+                <div class="label">Zoned Residential</div>
+                <div class="value" id="s-residential-total"></div>
+            </div>
+            <div class="stat-box">
+                <div class="label">Included in Analysis</div>
+                <div class="value" id="s-pct-included"></div>
             </div>
             <div class="stat-box">
                 <div class="label">Vacant Buildable</div>
                 <div class="value" id="s-vacant"></div>
-            </div>
-            <div class="stat-box" id="s-excluded-box" style="display:none">
-                <div class="label">Excluded</div>
-                <div class="value" id="s-excluded"></div>
             </div>
         </div>
 
@@ -283,7 +326,17 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
             </div>
         </div>
 
-        <h2>Neighborhood Calibration</h2>
+        <h2>Legend</h2>
+        <div class="legend">
+            <div class="legend-item"><div class="legend-swatch" style="background:#009E73"></div> High development potential</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#56B4E9"></div> Moderate potential</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#F0E442"></div> Low potential</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#E69F00"></div> Near capacity</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#D55E00"></div> Exceeds max GFA</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#888"></div> Excluded / no data</div>
+        </div>
+
+        <h2 class="filterable" id="calibration-header" onclick="toggleCalibrationFilter()" title="Click to highlight calibration homes on the map">Neighborhood Calibration<span class="filter-hint" id="calibration-filter-hint">click to filter</span></h2>
         <div class="stat-grid">
             <div class="stat-box">
                 <div class="label">Improvement $/SF</div>
@@ -317,17 +370,6 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         <h2>Development Status</h2>
         <div class="breakdown" id="status-breakdown"></div>
 
-        <h2>Legend</h2>
-        <div class="legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#084594"></div> High development potential</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#4292c6"></div> Moderate potential</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#c6dbef"></div> Low potential</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#4292c6"></div> Near capacity</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#d94801"></div> Overdeveloped</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#2d6a4f; border: 2px solid #40916c"></div> Vacant buildable</div>
-            <div class="legend-item"><div class="legend-swatch" style="background:#888"></div> Excluded / no data</div>
-        </div>
-
         <div class="disclaimer">
             <strong>Disclaimer:</strong> Valuation estimates are for TDR policy analysis only,
             not property appraisals. Improvement $/SF derived from recent construction in this
@@ -360,12 +402,9 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
     document.title = 'Transfer of Development Rights (TDR) Analysis: ' + (summary.neighborhood || 'Unknown');
     document.getElementById('s-total').textContent = fmt(summary.total_parcels);
     document.getElementById('s-with-capacity').textContent = fmt(summary.parcels_with_capacity);
-    document.getElementById('s-pct-underdev').textContent = fmtPct(summary.pct_underdeveloped);
+    document.getElementById('s-residential-total').textContent = fmt(summary.total_residential_eligible);
+    document.getElementById('s-pct-included').textContent = fmtPct(summary.pct_included);
     document.getElementById('s-vacant').textContent = fmt(summary.vacant_count);
-    if (summary.excluded_count > 0) {
-        document.getElementById('s-excluded').textContent = fmt(summary.excluded_count);
-        document.getElementById('s-excluded-box').style.display = '';
-    }
     document.getElementById('s-land').textContent = fmtM(summary.total_land_value);
     document.getElementById('s-improvement').textContent = fmtM(summary.total_improvement_value);
     document.getElementById('s-assessed').textContent = fmtM(summary.total_assessed_value);
@@ -379,11 +418,19 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         : '$185/SF (estimated \u2014 limited local data)';
     document.getElementById('s-rate-sample').textContent = fmt(summary.neighborhood_rate_sample) + ' homes';
 
+    const STATUS_LABELS = {
+        'overdeveloped': 'Exceeds max GFA',
+        'near-capacity': 'Near capacity',
+        'underdeveloped': 'Underdeveloped',
+        'vacant': 'High development potential',
+    };
+    function statusLabel(s) { return STATUS_LABELS[s] || s; }
+
     function fillBreakdown(id, obj) {
         const el = document.getElementById(id);
         const sorted = Object.entries(obj).sort((a, b) => b[1] - a[1]);
         el.innerHTML = sorted.map(([k, v]) =>
-            '<div class="breakdown-row"><span class="bk-label">' + k + '</span><span class="bk-value">' + fmt(v) + '</span></div>'
+            '<div class="breakdown-row"><span class="bk-label">' + statusLabel(k) + '</span><span class="bk-value">' + fmt(v) + '</span></div>'
         ).join('');
     }
     fillBreakdown('zoning-breakdown', summary.zoning_counts);
@@ -412,33 +459,31 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         // Grey for excluded
         if (spotCheck === 'excluded') return '#888';
 
-        // Vacant = green
-        if (status === 'vacant') return '#2d6a4f';
+        // Vacant = high potential (teal)
+        if (status === 'vacant') return '#009E73';
 
-        // Overdeveloped = amber/orange (warning)
-        if (status === 'overdeveloped') return '#d94801';
+        // Exceeds max GFA = orange-red
+        if (status === 'overdeveloped') return '#D55E00';
 
-        // Near-capacity = medium blue
-        if (status === 'near-capacity') return '#4292c6';
+        // Near-capacity = amber
+        if (status === 'near-capacity') return '#E69F00';
 
         // No data
         if (avail == null) return '#888';
 
-        // Blue gradient for underdeveloped (more potential = darker blue)
-        if (avail <= 0) return '#4292c6';
+        // Gradient for underdeveloped (more potential = teal)
+        if (avail <= 0) return '#E69F00';
         const t = Math.min(avail / maxGfa, 1);
-        if (t < 0.33) return '#c6dbef';
-        if (t < 0.66) return '#4292c6';
-        return '#084594';
+        if (t < 0.33) return '#F0E442';
+        if (t < 0.66) return '#56B4E9';
+        return '#009E73';
     }
 
     function getWeight(props) {
-        if (props.development_status === 'vacant') return 2.5;
         return 1;
     }
 
     function getBorderColor(props) {
-        if (props.development_status === 'vacant') return '#40916c';
         return '#444';
     }
 
@@ -453,7 +498,7 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         html += '<div class="tt-header">' + addr + '</div>';
         html += '<div class="tt-row"><span class="tt-label">Parcel ID</span><span class="tt-value">' + pid + '</span></div>';
         html += '<div class="tt-row"><span class="tt-label">Zoning</span><span class="tt-value">' + zoning + '</span></div>';
-        html += '<div class="tt-row"><span class="tt-label">Status</span><span class="tt-value">' + status + '</span></div>';
+        html += '<div class="tt-row"><span class="tt-label">Status</span><span class="tt-value">' + statusLabel(status) + '</span></div>';
 
         html += '<div class="tt-section"><div class="tt-section-title">Current Building</div>';
         html += '<div class="tt-row"><span class="tt-label">Year Built</span><span class="tt-value">' + (props.year_built ? Math.round(props.year_built) : 'N/A') + '</span></div>';
@@ -506,7 +551,7 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         html += '<div class="sp-header">' + addr + '</div>';
         html += '<div class="sp-row"><span class="sp-label">Parcel ID</span><span class="sp-value">' + (props.parcel_id || '') + '</span></div>';
         html += '<div class="sp-row"><span class="sp-label">Zoning</span><span class="sp-value">' + (props.zoning_district || '') + '</span></div>';
-        html += '<div class="sp-row"><span class="sp-label">Status</span><span class="sp-value">' + (props.development_status || '') + '</span></div>';
+        html += '<div class="sp-row"><span class="sp-label">Status</span><span class="sp-value">' + statusLabel(props.development_status || '') + '</span></div>';
         if (props.available_gfa_sf != null) {
             html += '<div class="sp-row"><span class="sp-label">Available GFA</span><span class="sp-value sp-highlight">' + fmt(Math.round(props.available_gfa_sf)) + ' SF</span></div>';
         }
@@ -522,6 +567,40 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
         const el = document.getElementById('selected-parcel');
         el.style.display = 'none';
         el.innerHTML = '';
+    }
+
+    // --- Calibration filter ---
+    const calibrationIds = new Set(summary.calibration_parcel_ids || []);
+    let calibrationFilterActive = false;
+
+    function toggleCalibrationFilter() {
+        calibrationFilterActive = !calibrationFilterActive;
+        const header = document.getElementById('calibration-header');
+        const hint = document.getElementById('calibration-filter-hint');
+        if (calibrationFilterActive) {
+            header.classList.add('filter-active');
+            hint.textContent = 'click to clear';
+        } else {
+            header.classList.remove('filter-active');
+            hint.textContent = 'click to filter';
+        }
+        geojsonLayer.eachLayer(function(layer) {
+            const pid = layer.feature && layer.feature.properties && layer.feature.properties.parcel_id;
+            if (calibrationFilterActive) {
+                if (calibrationIds.has(pid)) {
+                    layer.setStyle({ fillColor: '#ffd700', fillOpacity: 0.9, color: '#b8860b', weight: 2.5, opacity: 1 });
+                    layer.bringToFront();
+                } else {
+                    layer.setStyle({ fillOpacity: 0.08, opacity: 0.2 });
+                }
+            } else {
+                geojsonLayer.resetStyle(layer);
+            }
+        });
+        // Keep selected parcel highlighted if it's a calibration parcel
+        if (selectedLayer) {
+            selectedLayer.setStyle({ weight: 3, color: '#ffd700', fillOpacity: calibrationFilterActive ? 0.95 : 0.9 });
+        }
     }
 
     // --- Add GeoJSON layer ---
@@ -544,13 +623,27 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
 
             layer.on('mouseover', function() {
                 if (this !== selectedLayer) {
-                    this.setStyle({ weight: 3, color: '#fff', fillOpacity: 0.85 });
+                    const pid = feature.properties.parcel_id;
+                    if (calibrationFilterActive && !calibrationIds.has(pid)) {
+                        this.setStyle({ weight: 1.5, color: '#fff', fillOpacity: 0.25 });
+                    } else {
+                        this.setStyle({ weight: 3, color: '#fff', fillOpacity: 0.85 });
+                    }
                 }
                 this.bringToFront();
             });
             layer.on('mouseout', function() {
                 if (this !== selectedLayer) {
-                    geojsonLayer.resetStyle(this);
+                    if (calibrationFilterActive) {
+                        const pid = feature.properties.parcel_id;
+                        if (calibrationIds.has(pid)) {
+                            this.setStyle({ fillColor: '#ffd700', fillOpacity: 0.9, color: '#b8860b', weight: 2.5, opacity: 1 });
+                        } else {
+                            this.setStyle({ fillOpacity: 0.08, opacity: 0.2 });
+                        }
+                    } else {
+                        geojsonLayer.resetStyle(this);
+                    }
                 }
             });
             layer.on('click', function() {
