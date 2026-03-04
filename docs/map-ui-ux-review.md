@@ -1,176 +1,115 @@
-# UI/UX Review: `map.html` / `generate_map.py`
-*Reviewed: 2026-02-20*
+# UI/UX Review: `index.html` / `map.html`
+*Original review: 2026-02-20 | Updated: 2026-03-04*
 
 ## Audience
 Policy analysts and housing advocates reviewing residential development capacity in Arlington neighborhoods. They are not GIS experts. They need to quickly answer: *"Which parcels have unused capacity, how much, and what is it worth?"* They may present these maps to colleagues or decision-makers.
 
 ---
 
-## Top 5 Issues (fix first)
+## What Is Working Well
 
-**1. Red means opportunity — semantic inversion (`generate_map.py` lines 403–405)**
-The darkest red (`#67000d`) marks parcels with the *highest development potential*. Red universally signals danger/stop/negative. For a policy analyst advocating for TDR, these parcels are the *most desirable targets* — they should be the most visually appealing, not alarming. This is the most critical issue because it actively misleads anyone who reads maps intuitively.
-
-**2. Dollar totals are unformatted millions (`generate_map.py` line 330, sidebar HTML ~lines 247–255)**
-`fmtD()` formats as `$145,678,234`. In the "Assessment Values" stat boxes, aggregate land and improvement values are neighborhood-scale numbers ($50M–$500M range). These overflow their small containers and are hard to parse. There is no abbreviation function — `$145.7M` reads instantly; `$145,678,234` requires counting digits.
-
-**3. No click-to-lock tooltip (`generate_map.py` lines 480–495)**
-Parcel detail is hover-only. The tooltip disappears the moment the cursor leaves the parcel. A user comparing two parcels, writing a report, or taking a screenshot has no way to hold a parcel's data visible. This is a fundamental usability gap for the core workflow.
-
-**4. Sections ordered by data availability, not user priority (sidebar HTML ~lines 222–298)**
-Section order: Overview → Assessment Values → Unused Development Potential → Neighborhood Calibration → Zoning → Status → Confidence → Legend. The most policy-relevant section — *aggregate value of unused rights* — is third. Assessment values (the total value of all property) comes before unused potential, which buries the headline finding.
-
-**5. "not_applicable" and "fallback" are pipeline jargon exposed to users (`generate_map.py` lines 350, confidence breakdown JS)**
-The confidence breakdown shows `not_applicable` as a raw enum value. The neighborhood rate shows `$185/SF (fallback)` when the sample is insufficient. These terms are meaningful to developers but confusing to the policy audience.
+- **Color palette** — Wong colorblind-safe set (#009E73 / #56B4E9 / #F0E442 / #E69F00 / #D55E00) is correctly implemented and distinguishable under protanopia and deuteranopia.
+- **Click-to-select parcel panel** — persistent sidebar panel with dismiss button and gold highlight is well-implemented for the core workflow.
+- **Index page hover panel** — showing neighborhood detail on hover and restoring aggregate summary on mouse-leave is the right interaction model for an overview map.
+- **URL parcel deep-linking** (`?parcel=23026006`) — allows sharing a direct link to a specific parcel.
+- **SRI hashes** on CDN assets — good security practice.
+- **Disclaimer** — present on both pages, styled distinctly with a left red border, correctly worded.
+- **Neighborhood navigation dropdown** — sensible jump-to pattern without cluttering the sidebar.
 
 ---
 
-## Full Audit
+## Issues (ordered by impact)
 
-### 2.1 Information Hierarchy — NEEDS WORK
+### High Priority
 
-| Check | Finding |
-|-------|---------|
-| Primary message | No single hero stat. The page communicates everything equally. |
-| Visual weight | Stat values (18px bold) compete with the h1 neighborhood name (also 18px). |
-| Grouping | Sections are well-separated with h2 borders. Good. |
-| Progressive disclosure | All data dumped in sidebar. Tooltip provides appropriate detail-on-hover. |
-| Labels | Most are clear. "Underdeveloped + Vacant" is awkward; "not_applicable" is technical. |
-| Title | "TDR Analysis: Alcova Heights" — "TDR" is unexplained acronym for non-specialists. |
+**1. Legend quintile labels are ambiguous (`generate_homepage.py`)**
+Labels read "Top quintile available GFA" without explaining whether "top" is desirable. A non-specialist cannot tell if the darkest color is good or bad.
+- Fix: "Most unused capacity (top 20%)" / "Least unused capacity (bottom 20%)" with a caption: "Color shows total unused floor area capacity (among analyzed neighborhoods)"
 
-### 2.2 Color — FAIL
+**2. Value range split across two stat boxes (`generate_map.py`)**
+"Aggregate Value (Low)" and "Aggregate Value (High)" appear as separate boxes. They represent a single estimate range and should read as a unit.
+- Fix: Combine into a single "Est. Value of Unused Rights" box displaying "$69.1M – $94.2M"
 
-| Check | Finding |
-|-------|---------|
-| Semantic consistency | **FAIL.** Dark red = high opportunity. Red = danger in universal convention. Inverted. |
-| Sequential scale | Single red gradient for underdeveloped parcels: technically sequential, but wrong hue. |
-| Diverging data | Not applicable — no single midpoint in this data. |
-| Categorical distinction | Near-capacity (`#4292c6`) and overdeveloped (`#08519c`) are both blue, distinguished only by lightness. Marginal. |
-| Contrast ratios | Sidebar: `#e0e0e0` on `#1a1a2e` ≈ 13.4:1 PASS. Labels `#999` on `#16213e` ≈ 5.9:1 PASS. Tooltip highlight `#c1121f` on white ≈ 5.1:1 PASS (barely). |
-| Colorblind safety | **FAIL.** Red (underdeveloped) and green (vacant) are adjacent categories. ~8% of men cannot distinguish these. No redundant encoding compensates. |
-| Harmony | Dark sidebar + light map works. Swatch colors in legend look coherent. |
+**3. Total GFA formatted as raw integer (`generate_map.py`)**
+"1,081,246 SF" in an 18px stat box requires counting digits. Use an abbreviated formatter.
+- Fix: `fmtGfa()` function abbreviating to "1.1M SF"; apply to total and median per-parcel stats
 
-### 2.3 Typography & Spacing — NEEDS WORK
+**4. Jargon in user-facing labels (both files)**
+Labels like "Improvement $/SF", "Available GFA", "Underdeveloped", and "not_applicable" are pipeline terminology not meaningful to the policy audience.
+- Proposed replacements:
+  - "Available GFA" → "Unused floor area"
+  - "Improvement $/SF" → "Avg. construction cost ($/SF)"
+  - "Underdeveloped" → "Parcels below zoning max"
+  - "Near capacity" → "Parcels near zoning max"
+  - "Vacant buildable" → "Vacant buildable lots"
+  - "not_applicable" in confidence breakdown → "No unused capacity"
+  - "Development Potential" (tooltip heading) → "Development Capacity"
 
-| Check | Finding |
-|-------|---------|
-| Font stack | System font stack. Excellent. |
-| Size hierarchy | h1=18px, h2=14px, body=13px, label=11px, stat-value=18px. h1 and stat values are the same size — no title dominance. |
-| Body text size | 13px sidebar body is slightly small for comfortable reading of dense stats. |
-| Line height | 1.5 on sidebar — good. 1.4 on tooltip — acceptable. |
-| Whitespace | Tight. stat-box padding is 10px; section margins are 16px. The sidebar is noticeably dense. |
-| Alignment | Consistent left-alignment. Grid layout is appropriate. |
+### Medium Priority
 
-### 2.4 Data Presentation — FAIL (dollar formatting)
+**5. Calibration filter hint text too small and unclear (`generate_map.py`)**
+"click to filter" is rendered at 10px gray — effectively invisible. The word "filter" doesn't describe what happens on the map.
+- Fix: 11px; text → "click to highlight on map" / "click to clear"
 
-| Check | Finding |
-|-------|---------|
-| Number formatting | **FAIL.** `fmtD()` shows full integers. `$145,678,234` in a 14px box is unreadable at a glance. No M/K abbreviation exists. |
-| N/A handling | `fmtD(null)` returns `'N/A'` — consistent. PASS. |
-| Sort order | Breakdowns sorted by count descending. Good. |
-| Units | Available GFA shown as "123,456 SF" — units present. PASS. |
-| Precision | `toFixed(1)` for percentages — appropriate. PASS. |
-| Raw enum values | `not_applicable` and `(fallback)` exposed to users. |
+**6. Nav dropdown placeholder ambiguous (`generate_map.py`)**
+Placeholder shows the current neighborhood name, making it look like a selectable item rather than a navigation control.
+- Fix: Placeholder text → "Jump to another neighborhood..."
 
-### 2.5 Interactivity — NEEDS WORK
+**7. Back link unclear (`generate_map.py`)**
+"← Arlington" at 12px is ambiguous (city? a section?).
+- Fix: "← All neighborhoods" at 13px bold
 
-| Check | Finding |
-|-------|---------|
-| Affordances | No visual cue that parcels are hoverable (no cursor change). |
-| Feedback | Hover highlight (weight:3, fillOpacity:0.85) is good. |
-| Persistent detail | **No click-to-lock.** Hover-only — detail disappears immediately. |
-| Navigation | Fits to bounds on load. No reset-view button. |
-| Defaults | 20px fitBounds padding is tight — minor. |
+**8. Sidebar section order (`generate_map.py`)**
+Status breakdown is separated from the legend. Zoning Districts is high in the sidebar despite being low-priority context.
+- Fix: Move Status breakdown adjacent to Legend; move Zoning Districts toward the bottom.
 
-### 2.6 Responsiveness — NEEDS WORK
+**9. Stat box label font size (both files)**
+`.stat-box .label` at 11px uppercase is at the lower edge of comfortable reading.
+- Fix: 11px → 12px
 
-| Check | Finding |
-|-------|---------|
-| Viewport flexibility | Sidebar hardcoded at 380px. At 1024px, map gets 644px — workable but tight. |
-| Small screens | No `@media` queries. Below ~800px the layout breaks. |
-| Long string overflow | No truncation on tooltip addresses — low risk. |
+**10. "N/A homes" display bug (`generate_map.py`)**
+When sample count is null, renders as "N/A homes" — the unit suffix should be suppressed.
+- Fix: Only append "homes" when value is non-null.
 
-### 2.7 Accessibility — FAIL
+### Accessibility (Lower Priority)
 
-| Check | Finding |
-|-------|---------|
-| Keyboard navigation | No keyboard access to parcel features. Leaflet limitation. |
-| Color-only encoding | Status categories have no redundant encoding for colorblind users. |
-| ARIA | `<div id="map">` has no `aria-label`. Legend swatches are purely visual. |
-| Text scaling | 11px labels will be marginal at 200% browser zoom. |
+**11. Neighborhood list rows not keyboard accessible (`generate_homepage.py`)**
+`div.nb-row` elements are click-only. Keyboard users cannot tab to or activate them.
+- Fix: Add `tabindex="0"`, `role="button"`, `aria-label`, `keydown` Enter/Space handler; set inner `<a>` to `tabindex="-1"` to avoid duplicate tab stop.
 
-### 2.8 Performance — NEEDS WORK
+**12. Calibration filter heading not keyboard accessible (`generate_map.py`)**
+The filterable heading has no keyboard affordance.
+- Fix: Add `tabindex="0"`, `role="button"`, `aria-pressed`, `keydown` handler.
 
-| Check | Finding |
-|-------|---------|
-| Asset size | GeoJSON embedded inline. Fine for small neighborhoods; could exceed 5MB for 500+ parcels. |
-| CDN dependency | Leaflet loaded from `unpkg.com`. Described as "self-contained" but requires internet access. |
-| Render blocking | Leaflet `<script>` in `<head>` without `defer`. Minor. |
+**13. Map div missing ARIA (`generate_map.py`)**
+`<div id="map">` has no ARIA role or label.
+- Fix: Add `role="application"` and `aria-label="Parcel map"`.
 
 ---
 
-## Recommended Changes (ordered by impact)
+## Out of Scope / Future
 
-### 1. Fix color semantics — replace red gradient with blue/teal for opportunity
-*`generate_map.py` lines 379–405 (`getColor` function)*
+- Responsive/mobile layout — 380px fixed sidebar breaks below ~800px; requires structural changes
+- Leaflet keyboard parcel navigation — requires a plugin
+- `prefers-reduced-motion` support
+- CDN offline dependency — `unpkg.com` means pages fail offline; architectural constraint
 
-Replace the red gradient with a blue/teal scale. Keep green for vacant, grey for excluded.
-- Low potential → light blue (`#c6dbef`)
-- Moderate potential → medium blue (`#4292c6`)
-- High potential → dark blue (`#084594`)
-- Overdeveloped → amber/orange (`#d94801`) to signal "over limit" as a warning
+---
 
-This also resolves the red-green colorblind failure since blue and green are distinguishable under deuteranopia.
+## Status
 
-### 2. Add dollar abbreviation formatter
-*`generate_map.py` line 330 (after existing `fmtD`)*
-
-```javascript
-function fmtM(n) {
-    if (n == null) return 'N/A';
-    if (Math.abs(n) >= 1e9) return '$' + (n/1e9).toFixed(1) + 'B';
-    if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
-    if (Math.abs(n) >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
-    return '$' + n.toFixed(0);
-}
-```
-Use `fmtM` for the four aggregate dollar stats in the sidebar; keep `fmtD` for per-parcel tooltip values.
-
-### 3. Add click-to-lock parcel detail panel
-*`generate_map.py` lines 480–495 (`onEachFeature`)*
-
-Add a click handler that populates a pinned `#selected-parcel` div at the top of the sidebar. When a parcel is clicked, inject its detail there and add a visible "selected" ring around it. Keep visible until another parcel is clicked or dismissed.
-
-### 4. Reorder sidebar sections by policy priority
-*`generate_map.py` lines 258–298 (sidebar HTML)*
-
-New order:
-1. Overview
-2. Unused Development Potential ← move up
-3. Aggregate Value (est_value_low / est_value_high) ← promote as headline
-4. Neighborhood Calibration
-5. Assessment Values ← demote (context, not finding)
-6. Zoning Districts
-7. Development Status
-8. Valuation Confidence
-9. Legend
-10. Disclaimer
-
-### 5. Fix jargon in user-facing text
-*`generate_map.py` lines 304 (subtitle), 350 (rate display), confidence JS*
-
-- Subtitle: spell out "Transfer of Development Rights (TDR) Analysis"
-- Fallback rate: `'$185/SF (fallback)'` → `'$185/SF (estimated — limited local data)'`
-- Confidence breakdown: map `not_applicable` → `"No unused capacity"` in JS before rendering
-
-### 6. Increase body text size and h1 prominence
-*`generate_map.py` lines 19, 21*
-
-- `#sidebar` font-size: `13px` → `14px`
-- `#sidebar h1` font-size: `18px` → `22px`
-- `.stat-box` padding: `10px` → `12px`
-
-### 7. Expand fitBounds padding
-*`generate_map.py` line 499*
-
-`{ padding: [20, 20] }` → `{ padding: [40, 40] }` — more spatial context around neighborhood on initial load.
+| # | Issue | Status |
+|---|-------|--------|
+| 1 | Legend quintile label clarity | Open |
+| 2 | Value range as single box | Open |
+| 3 | GFA abbreviated formatter | Open |
+| 4 | Jargon in user-facing labels | Open |
+| 5 | Calibration hint text | Open |
+| 6 | Nav dropdown placeholder | Open |
+| 7 | Back link text | Open |
+| 8 | Sidebar section order | Open |
+| 9 | Stat box label font size | Open |
+| 10 | "N/A homes" bug | Open |
+| 11 | Neighborhood rows keyboard accessible | Open |
+| 12 | Calibration filter keyboard accessible | Open |
+| 13 | Map div ARIA | Open |
