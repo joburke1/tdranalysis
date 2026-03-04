@@ -78,6 +78,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
 </head>
 <body>
 <div id="sidebar">
+    <div id="nav-bar" style="display:flex; align-items:center; gap:8px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #333;">
+      <a href="../index.html" style="color:#8ecae6; text-decoration:none; font-size:12px; white-space:nowrap;">&#8592; Arlington</a>
+      <select id="neighborhood-selector"
+              onchange="if(this.value) window.location.href='../'+this.value+'/map.html'"
+              style="flex:1; background:#16213e; color:#e0e0e0; border:1px solid #444; border-radius:4px; padding:4px; font-size:12px;">
+        <option value="" disabled selected>Douglas Park</option>
+        <option value="alcova_heights">Alcova Heights</option>
+
+      </select>
+    </div>
     <h1 id="neighborhood-name"></h1>
     <div class="subtitle">Transfer of Development Rights Analysis</div>
 
@@ -517,6 +527,20 @@ if (excludedData && excludedData.features && excludedData.features.length > 0) {
 if (geojsonLayer.getBounds().isValid()) {
     map.fitBounds(geojsonLayer.getBounds(), { padding: [40, 40] });
 }
+
+// --- URL parameter: auto-select parcel ---
+(function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var targetParcel = urlParams.get('parcel');
+    if (targetParcel) {
+        geojsonLayer.eachLayer(function(layer) {
+            if (layer.feature && layer.feature.properties.parcel_id === targetParcel) {
+                selectParcel(layer.feature.properties, layer);
+                map.fitBounds(layer.getBounds(), { padding: [60, 60], maxZoom: 18 });
+            }
+        });
+    }
+})();
 </script>
 </body>
 </html>

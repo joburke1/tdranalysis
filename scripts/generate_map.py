@@ -46,6 +46,36 @@ _ZONING_EXCLUSION_REASONS = {
 }
 
 
+def _find_analyzed_neighborhoods(results_dir: Path) -> list[dict]:
+    """
+    Scan results_dir for analyzed neighborhoods.
+
+    A directory is considered analyzed if it contains a ``*_analysis.geojson``
+    file.  Returns a list of ``{name, slug}`` dicts sorted by name.
+    """
+    neighborhoods = []
+    if not results_dir.exists():
+        return neighborhoods
+    for subdir in sorted(results_dir.iterdir()):
+        if not subdir.is_dir():
+            continue
+        geojson_files = list(subdir.glob("*_analysis.geojson"))
+        if not geojson_files:
+            continue
+        try:
+            with open(geojson_files[0], "r", encoding="utf-8") as f:
+                data = json.load(f)
+            features = data.get("features", [])
+            if features:
+                name = features[0]["properties"].get("neighborhood", subdir.name)
+            else:
+                name = subdir.name.replace("_", " ").title()
+        except Exception:
+            name = subdir.name.replace("_", " ").title()
+        neighborhoods.append({"name": name, "slug": subdir.name})
+    return sorted(neighborhoods, key=lambda x: x["name"])
+
+
 def _compute_summary(geojson_data: dict, excluded_data: dict | None = None) -> dict:
     """Compute summary statistics from GeoJSON features."""
     features = geojson_data.get("features", [])
@@ -185,12 +215,29 @@ def _compute_summary(geojson_data: dict, excluded_data: dict | None = None) -> d
     }
 
 
-def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> str:
+def generate_map_html(
+    geojson_data: dict,
+    excluded_data: dict | None = None,
+    results_dir: Path | None = None,
+    current_slug: str | None = None,
+) -> str:
     """Generate a self-contained HTML string with embedded map."""
     summary = _compute_summary(geojson_data, excluded_data)
     geojson_str = json.dumps(geojson_data)
     excluded_str = json.dumps(excluded_data) if excluded_data else "null"
     summary_str = json.dumps(summary)
+
+    # Build navigation dropdown options
+    if results_dir is not None:
+        analyzed = _find_analyzed_neighborhoods(results_dir)
+        current_name = summary.get("neighborhood", "")
+        # First option shows current neighborhood as a non-navigating placeholder
+        nav_options = f'<option value="" disabled selected>{current_name}</option>\n'
+        for nb in analyzed:
+            if nb["slug"] != current_slug:
+                nav_options += f'        <option value="{nb["slug"]}">{nb["name"]}</option>\n'
+    else:
+        nav_options = '<option value="">Jump to neighborhood\u2026</option>'
 
     html = textwrap.dedent("""\
     <!DOCTYPE html>
@@ -273,6 +320,14 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
     </head>
     <body>
     <div id="sidebar">
+        <div id="nav-bar" style="display:flex; align-items:center; gap:8px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #333;">
+          <a href="../index.html" style="color:#8ecae6; text-decoration:none; font-size:12px; white-space:nowrap;">&#8592; Arlington</a>
+          <select id="neighborhood-selector"
+                  onchange="if(this.value) window.location.href='../'+this.value+'/map.html'"
+                  style="flex:1; background:#16213e; color:#e0e0e0; border:1px solid #444; border-radius:4px; padding:4px; font-size:12px;">
+            NAV_OPTIONS_PLACEHOLDER
+          </select>
+        </div>
         <h1 id="neighborhood-name"></h1>
         <div class="subtitle">Transfer of Development Rights Analysis</div>
 
@@ -712,6 +767,20 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
     if (geojsonLayer.getBounds().isValid()) {
         map.fitBounds(geojsonLayer.getBounds(), { padding: [40, 40] });
     }
+
+    // --- URL parameter: auto-select parcel ---
+    (function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var targetParcel = urlParams.get('parcel');
+        if (targetParcel) {
+            geojsonLayer.eachLayer(function(layer) {
+                if (layer.feature && layer.feature.properties.parcel_id === targetParcel) {
+                    selectParcel(layer.feature.properties, layer);
+                    map.fitBounds(layer.getBounds(), { padding: [60, 60], maxZoom: 18 });
+                }
+            });
+        }
+    })();
     </script>
     </body>
     </html>
@@ -722,6 +791,7 @@ def generate_map_html(geojson_data: dict, excluded_data: dict | None = None) -> 
     html = html.replace("GEOJSON_DATA_PLACEHOLDER", geojson_str)
     html = html.replace("EXCLUDED_DATA_PLACEHOLDER", excluded_str)
     html = html.replace("SUMMARY_DATA_PLACEHOLDER", summary_str)
+    html = html.replace("NAV_OPTIONS_PLACEHOLDER", nav_options)
 
     return html
 
@@ -762,7 +832,10 @@ def generate_map(
         n_excluded = len(excluded_data.get("features", []))
         logger.info(f"Loaded {n_excluded:,} excluded parcels from: {excluded_geojson_path}")
 
-    html = generate_map_html(geojson_data, excluded_data)
+    # Pass results_dir and current_slug so the nav bar can list other neighborhoods
+    current_slug = geojson_path.parent.name
+    results_dir = geojson_path.parent.parent
+    html = generate_map_html(geojson_data, excluded_data, results_dir=results_dir, current_slug=current_slug)
 
     if output_path is None:
         output_path = geojson_path.parent / "map.html"
