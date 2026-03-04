@@ -34,28 +34,6 @@ logging.basicConfig(
 logger = logging.getLogger("generate_homepage")
 
 
-def _feature_centroid(feature: dict) -> tuple[float, float] | None:
-    """Compute (lat, lng) centroid from a GeoJSON feature's bounds midpoint."""
-    geom = feature.get("geometry", {})
-    if not geom:
-        return None
-    coords_flat: list[list[float]] = []
-    geom_type = geom.get("type")
-    coords = geom.get("coordinates", [])
-    if geom_type == "Polygon":
-        for ring in coords:
-            coords_flat.extend(ring)
-    elif geom_type == "MultiPolygon":
-        for poly in coords:
-            for ring in poly:
-                coords_flat.extend(ring)
-    if not coords_flat:
-        return None
-    lngs = [c[0] for c in coords_flat]
-    lats = [c[1] for c in coords_flat]
-    return ((min(lats) + max(lats)) / 2, (min(lngs) + max(lngs)) / 2)
-
-
 def _geojson_bounds(geojson_data: dict) -> list[float] | None:
     """Return [min_lng, min_lat, max_lng, max_lat] across all features."""
     coords_flat: list[list[float]] = []
@@ -105,36 +83,14 @@ def load_neighborhood_data(results_dir: Path) -> dict[str, dict]:
             name = summary.get("neighborhood") or subdir.name.replace("_", " ").title()
             slug = subdir.name
 
-            # Build per-parcel address lookup entries
-            addr_entries: dict[str, dict] = {}
-            for feat in geojson_data.get("features", []):
-                props = feat.get("properties", {})
-                addr = props.get("street_address", "")
-                parcel_id = props.get("parcel_id", "")
-                if not addr or not parcel_id:
-                    continue
-                centroid = _feature_centroid(feat)
-                if centroid is None:
-                    continue
-                lat, lng = centroid
-                addr_entries[addr.lower().strip()] = {
-                    "display": addr,
-                    "slug": slug,
-                    "parcel_id": parcel_id,
-                    "lat": round(lat, 6),
-                    "lng": round(lng, 6),
-                }
-
             neighborhoods[slug] = {
                 "name": name,
                 "slug": slug,
                 "summary": summary,
                 "bounds": bounds,
-                "addr_entries": addr_entries,
             }
             logger.info(
-                f"Loaded {name}: {summary['total_parcels']} parcels, "
-                f"{len(addr_entries)} addresses"
+                f"Loaded {name}: {summary['total_parcels']} parcels"
             )
         except Exception as e:
             logger.warning(f"Failed to load {subdir.name}: {e}")
@@ -147,11 +103,6 @@ def generate_homepage_html(
     neighborhoods: dict[str, dict],
 ) -> str:
     """Generate self-contained homepage HTML with embedded data."""
-    # Merge address lookups across all neighborhoods
-    address_lookup: dict[str, dict] = {}
-    for data in neighborhoods.values():
-        address_lookup.update(data.get("addr_entries", {}))
-
     # Build lightweight JS-side neighborhood summary (no full parcel GeoJSON)
     js_nb_data: dict[str, dict] = {}
     for slug, data in neighborhoods.items():
@@ -182,7 +133,6 @@ def generate_homepage_html(
 
     civic_str = json.dumps(civic_assoc_data)
     nb_data_str = json.dumps(js_nb_data)
-    addr_str = json.dumps(address_lookup)
     analyzed_slugs_str = json.dumps(sorted(neighborhoods.keys()))
     thresholds_str = json.dumps(thresholds)
 
@@ -243,25 +193,6 @@ def generate_homepage_html(
     .hp-link { display: block; margin-top: 8px; color: #8ecae6; font-size: 12px; text-decoration: none; }
     .hp-link:hover { color: #ffd700; }
 
-    #address-search { position: relative; margin-bottom: 4px; }
-    #address-input {
-        width: 100%; background: #16213e; color: #e0e0e0; border: 1px solid #444;
-        border-radius: 4px; padding: 8px 10px; font-size: 13px; outline: none;
-    }
-    #address-input:focus { border-color: #8ecae6; }
-    #address-input::placeholder { color: #666; }
-    #address-dropdown {
-        position: absolute; top: 100%; left: 0; right: 0; z-index: 9999;
-        background: #16213e; border: 1px solid #444; border-top: none;
-        border-radius: 0 0 4px 4px; display: none; max-height: 200px; overflow-y: auto;
-    }
-    .addr-option {
-        padding: 7px 10px; cursor: pointer; font-size: 12px; color: #e0e0e0;
-        border-bottom: 1px solid #222;
-    }
-    .addr-option:last-child { border-bottom: none; }
-    .addr-option:hover { background: #1e2d4a; color: #fff; }
-
     .disclaimer { margin-top: 16px; padding: 10px; background: #2a1a1a; border-left: 3px solid #e63946; border-radius: 4px; font-size: 11px; color: #ccc; }
 
     #map { flex: 1; }
@@ -289,12 +220,6 @@ def generate_homepage_html(
             <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-color:#555"></div> Not yet analyzed</div>
         </div>
 
-        <h2>Address Search</h2>
-        <div id="address-search">
-            <input type="text" id="address-input" placeholder="Search by address\u2026" autocomplete="off">
-            <div id="address-dropdown"></div>
-        </div>
-
         <h2>Analyzed Neighborhoods</h2>
         <div id="nb-list"></div>
 
@@ -316,7 +241,6 @@ def generate_homepage_html(
     // --- Embedded data ---
     const civicData = CIVIC_DATA_PLACEHOLDER;
     const neighborhoodData = NB_DATA_PLACEHOLDER;
-    const addressLookup = ADDR_LOOKUP_PLACEHOLDER;
     const analyzedSlugs = new Set(ANALYZED_SLUGS_PLACEHOLDER);
     const gfaThresholds = THRESHOLDS_PLACEHOLDER;  // [q20, q40, q60, q80]
 
@@ -404,7 +328,7 @@ def generate_homepage_html(
 
     function makeTooltip(slug, name, isAnalyzed) {
         var nb = neighborhoodData[slug];
-        var html = '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;font-size:12px;line-height:1.5;min-width:180px">';
+        var html = '<div style="font-family:-apple-system,BlinkMacSystemFont,sans-serif;font-size:12px;line-height:1.5;min-width:180px">';
         html += '<div style="font-weight:700;font-size:13px;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:6px">' + name + '</div>';
         if (!isAnalyzed || !nb) {
             html += '<div style="color:#888">Not yet analyzed</div>';
@@ -482,36 +406,6 @@ def generate_homepage_html(
         aggStats.style.display = 'none';
     }
 
-    // --- Address search ---
-    var addressInput = document.getElementById('address-input');
-    var dropdown = document.getElementById('address-dropdown');
-    var allAddressKeys = Object.keys(addressLookup);
-    addressInput.addEventListener('input', function() {
-        var q = this.value.toLowerCase().trim();
-        dropdown.innerHTML = '';
-        if (q.length < 3) { dropdown.style.display = 'none'; return; }
-        var matches = allAddressKeys.filter(function(a) { return a.includes(q); }).slice(0, 10);
-        if (matches.length === 0) { dropdown.style.display = 'none'; return; }
-        matches.forEach(function(key) {
-            var item = addressLookup[key];
-            var div = document.createElement('div');
-            div.className = 'addr-option';
-            div.textContent = item.display;
-            div.addEventListener('click', function() {
-                addressInput.value = item.display;
-                dropdown.style.display = 'none';
-                window.location.href = item.slug + '/map.html?parcel=' + item.parcel_id;
-            });
-            dropdown.appendChild(div);
-        });
-        dropdown.style.display = 'block';
-    });
-    document.addEventListener('click', function(e) {
-        if (!document.getElementById('address-search').contains(e.target)) {
-            dropdown.style.display = 'none';
-        }
-    });
-
     // --- Fit map to analyzed neighborhoods ---
     var analyzedBoundsArr = [];
     Object.values(neighborhoodData).forEach(function(nb) {
@@ -533,7 +427,6 @@ def generate_homepage_html(
 
     html = html.replace("CIVIC_DATA_PLACEHOLDER", civic_str)
     html = html.replace("NB_DATA_PLACEHOLDER", nb_data_str)
-    html = html.replace("ADDR_LOOKUP_PLACEHOLDER", addr_str)
     html = html.replace("ANALYZED_SLUGS_PLACEHOLDER", analyzed_slugs_str)
     html = html.replace("THRESHOLDS_PLACEHOLDER", thresholds_str)
 

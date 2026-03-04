@@ -1,18 +1,18 @@
 Analysis Summary: Arlington - East Falls Church
-Generated: 2026-03-04 10:36
+Generated: 2026-03-04 13:10
 ============================================================
 
-Total residential parcels analyzed: 1,355
-Conforming parcels: 673 (49.7%)
+Total residential parcels analyzed: 1,354
+Conforming parcels: 672 (49.6%)
 
 Zoning district breakdown:
   R-6             979 parcels
   R-10            259 parcels
-  R-8             117 parcels
+  R-8             116 parcels
 
 Development status:
   underdeveloped    1,144 parcels
-  overdeveloped       102 parcels
+  overdeveloped       101 parcels
   near-capacity        96 parcels
   vacant               13 parcels
 
