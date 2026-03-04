@@ -1,0 +1,39 @@
+name: Deploy Maps to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'data/results/**/map.html'
+      - 'data/results/index.html'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Stage HTML files for deployment
+        run: |
+          mkdir -p _site
+          cp data/results/index.html _site/index.html
+          for dir in data/results/*/; do
+            slug=$(basename "$dir")
+            if [ -f "$dir/map.html" ]; then
+              mkdir -p "_site/$slug"
+              cp "$dir/map.html" "_site/$slug/map.html"
+            fi
+          done
+          echo "Staged $(find _site -name '*.html' | wc -l) HTML files"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          force_orphan: true
