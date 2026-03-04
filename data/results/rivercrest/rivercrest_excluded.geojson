@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "rivercrest_excluded",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "parcel_id": "04037035", "street_address": "N Glebe Rd, Arlington VA 22207", "zoning_district": "S-3A", "neighborhood": "Rivercrest", "exclusion_reason": "Non-residential zoning" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ -77.121702409999955, 38.924763595000059 ], [ -77.122147672999972, 38.924642500000061 ], [ -77.122221165999974, 38.924758475000019 ], [ -77.121754349999946, 38.924877835000075 ], [ -77.121702409999955, 38.924763595000059 ] ] ] ] } }
+]
+}

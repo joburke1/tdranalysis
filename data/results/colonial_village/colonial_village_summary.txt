@@ -1,0 +1,26 @@
+Analysis Summary: Colonial Village
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 67
+
+Zoning district breakdown:
+  RA7-16           28 parcels
+  RA8-18           21 parcels
+  C-3               9 parcels
+  C-O-2.5           5 parcels
+  C-2               2 parcels
+  C-O-1.5           1 parcels
+  RA6-15            1 parcels
+
+Development status:
+  unknown              67 parcels
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

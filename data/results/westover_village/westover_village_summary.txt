@@ -1,0 +1,40 @@
+Analysis Summary: Westover Village
+Generated: 2026-03-04 10:39
+============================================================
+
+Total residential parcels analyzed: 358
+Conforming parcels: 65 (18.2%)
+
+Zoning district breakdown:
+  R-6             341 parcels
+  R-8              17 parcels
+
+Development status:
+  underdeveloped      338 parcels
+  near-capacity        10 parcels
+  overdeveloped         8 parcels
+  vacant                2 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 350
+  Total available SF:       1,148,117 sf
+  Median per parcel:            3,297 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       209
+  Range:           $       145 – $274
+  Sample size:             12 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            350
+  Aggregate low:      $   108,512,798
+  Aggregate high:     $   147,971,997
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

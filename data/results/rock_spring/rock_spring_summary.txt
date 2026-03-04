@@ -1,0 +1,40 @@
+Analysis Summary: Rock Spring
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 887
+Conforming parcels: 419 (47.2%)
+
+Zoning district breakdown:
+  R-10            868 parcels
+  R-20             19 parcels
+
+Development status:
+  underdeveloped      724 parcels
+  near-capacity        73 parcels
+  overdeveloped        67 parcels
+  vacant               23 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 818
+  Total available SF:       3,688,328 sf
+  Median per parcel:            4,785 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       239
+  Range:           $       165 – $314
+  Sample size:             89 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            818
+  Aggregate low:      $   264,176,669
+  Aggregate high:     $   360,240,913
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

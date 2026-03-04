@@ -1,0 +1,39 @@
+Analysis Summary: Stafford-Albemarle-Glebe
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 230
+Conforming parcels: 97 (42.2%)
+
+Zoning district breakdown:
+  R-10            230 parcels
+
+Development status:
+  underdeveloped      196 parcels
+  overdeveloped        20 parcels
+  near-capacity         8 parcels
+  vacant                6 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 210
+  Total available SF:         929,425 sf
+  Median per parcel:            4,774 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       255
+  Range:           $       200 – $310
+  Sample size:             10 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            210
+  Aggregate low:      $    66,348,752
+  Aggregate high:     $    90,475,571
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

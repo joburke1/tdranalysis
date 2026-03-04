@@ -1,0 +1,37 @@
+Analysis Summary: Buckingham
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 4
+Conforming parcels: 4 (100.0%)
+
+Zoning district breakdown:
+  R-6               4 parcels
+
+Development status:
+  overdeveloped         3 parcels
+  vacant                1 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 1
+  Total available SF:           6,300 sf
+  Median per parcel:            6,300 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       185
+  Range:           $       185 – $185
+  Sample size:              0 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:              1
+  Aggregate low:      $     1,876,545
+  Aggregate high:     $     2,558,925
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

@@ -1,0 +1,38 @@
+Analysis Summary: Arlington View
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 73
+Conforming parcels: 28 (38.4%)
+
+Zoning district breakdown:
+  R-5              73 parcels
+
+Development status:
+  underdeveloped       52 parcels
+  overdeveloped        12 parcels
+  near-capacity         9 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 59
+  Total available SF:         221,189 sf
+  Median per parcel:            3,970 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       658
+  Range:           $       446 – $869
+  Sample size:             24 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:             59
+  Aggregate low:      $    15,304,292
+  Aggregate high:     $    20,869,490
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

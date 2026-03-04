@@ -1,0 +1,39 @@
+Analysis Summary: Barcroft
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 544
+Conforming parcels: 272 (50.0%)
+
+Zoning district breakdown:
+  R-6             544 parcels
+
+Development status:
+  underdeveloped      487 parcels
+  overdeveloped        26 parcels
+  near-capacity        18 parcels
+  vacant               13 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 518
+  Total available SF:       1,941,611 sf
+  Median per parcel:            3,830 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       170
+  Range:           $       111 – $228
+  Sample size:             10 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            518
+  Aggregate low:      $   131,578,184
+  Aggregate high:     $   179,424,796
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

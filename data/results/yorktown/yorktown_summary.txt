@@ -1,0 +1,41 @@
+Analysis Summary: Yorktown
+Generated: 2026-03-04 10:39
+============================================================
+
+Total residential parcels analyzed: 974
+Conforming parcels: 478 (49.1%)
+
+Zoning district breakdown:
+  R-6             635 parcels
+  R-10            285 parcels
+  R-8              54 parcels
+
+Development status:
+  underdeveloped      813 parcels
+  overdeveloped        78 parcels
+  near-capacity        68 parcels
+  vacant               15 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 892
+  Total available SF:       3,499,654 sf
+  Median per parcel:            4,008 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       235
+  Range:           $       168 – $301
+  Sample size:             76 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            892
+  Aggregate low:      $   287,495,924
+  Aggregate high:     $   392,039,897
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

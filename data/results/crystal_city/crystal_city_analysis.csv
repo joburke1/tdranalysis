@@ -1,0 +1,124 @@
+parcel_id,street_address,neighborhood,zoning_district,is_split_zoned,property_type,land_value,improvement_value,development_status
+34024011,,Crystal City,M-2,True,,,,unknown
+34024008,,Crystal City,C-O-CC,True,,,,unknown
+34024007,,Crystal City,C-O-1.5,True,,,,unknown
+35001019,,Crystal City,RA-H-3.2,True,,,,unknown
+35001PCB,,Crystal City,RA-H-3.2,True,,,,unknown
+34024268,,Crystal City,C-O,False,,,,unknown
+34024PCB,,Crystal City,C-O,False,,,,unknown
+34024PCA,,Crystal City,C-O,False,,,,unknown
+35001029,,Crystal City,C-O-CC,True,,,,unknown
+34024266,,Crystal City,C-O,True,,,,unknown
+34024PAD,,Crystal City,C-O,True,,,,unknown
+34024033,,Crystal City,C-O,True,,,,unknown
+34024023,,Crystal City,C-O-1.5,True,,,,unknown
+34024009,,Crystal City,C-O-CC,True,,,,unknown
+34024017,,Crystal City,C-O-CC,True,,,,unknown
+34024270,"Richmond Hwy, Arlington VA 22202",Crystal City,C-O-1.5,True,101-Off Bldg-VacLand-site plan,,,unknown
+34024269,,Crystal City,C-O,True,,,,unknown
+35009008,"400 15Th St S, Arlington VA 22202",Crystal City,RA-H-3.2,False,313-Apartment - High-rise,12636000.0,40105900.0,unknown
+36017005,,Crystal City,RA-H-3.2,True,,,,unknown
+36017006,,Crystal City,RA-H-3.2,False,,,,unknown
+36042012,,Crystal City,C-2,False,,,,unknown
+36042010,"S Eads St, Arlington VA 22202",Crystal City,C-2,False,200-GenCom VacLand-no siteplan,,,unknown
+36042009,"2325 S Eads St, Arlington VA 22202",Crystal City,C-2,False,212-Restaurant/eating facility,906300.0,2540500.0,unknown
+36042008,,Crystal City,C-2,False,,,,unknown
+36042007,,Crystal City,C-2,False,,,,unknown
+36042013,"420 23Rd St S, Arlington VA 22202",Crystal City,C-2,False,212-Restaurant/eating facility,373700.0,1012500.0,unknown
+36042011,,Crystal City,C-2,False,,,,unknown
+36042006,,Crystal City,C-2,False,,,,unknown
+36042016,,Crystal City,C-2,False,,,,unknown
+36017004,"Richmond Hwy, Arlington VA 22202",Crystal City,C-2,False,200-GenCom VacLand-no siteplan,545100.0,130500.0,unknown
+36042015,,Crystal City,C-2,False,,,,unknown
+36042014,,Crystal City,C-2,False,,,,unknown
+36042005,"2525 S Eads St, Arlington VA 22202",Crystal City,CM,True,215-Gen Comm - other,,,unknown
+36017002,"2221 S Eads St, Arlington VA 22202",Crystal City,C-2,True,217-Bank,2305100.0,462800.0,unknown
+36042004,"2600 Richmond Hwy, Arlington VA 22202",Crystal City,CM,False,253-Service station,,,unknown
+36042003,"2620 Richmond Hwy, Arlington VA 22202",Crystal City,CM,True,216-Fast food,2319900.0,1651900.0,unknown
+36042002,,Crystal City,RA-H-3.2,True,,,,unknown
+36042001,,Crystal City,CM,True,,,,unknown
+35009009,,Crystal City,RA-H-3.2,False,,,,unknown
+35009007,,Crystal City,RA-H-3.2,False,,,,unknown
+35001376,"1221 S Eads St, Arlington VA 22202",Crystal City,RA-H-3.2,False,313-Apartment - High-rise,,,unknown
+35001375,,Crystal City,RA-H-3.2,True,,,,unknown
+35001374,,Crystal City,RA-H-3.2,False,,,,unknown
+34027016,,Crystal City,C-O,False,,,,unknown
+34027028,"2800 Crystal Dr, Arlington VA 22202",Crystal City,C-O,True,112-Off bldg 7+ stories,,,unknown
+34027026,,Crystal City,C-O,False,,,,unknown
+34027034,"2600 Crystal Dr, Arlington VA 22202",Crystal City,C-O,False,313-Apartment - High-rise,14317300.0,45462900.0,unknown
+34020239,"Crystal Dr, Arlington VA 22202",Crystal City,C-O-1.5,True,101-Off Bldg-VacLand-site plan,100.0,0.0,unknown
+34024460,,Crystal City,M-2,True,,,,unknown
+37026010,"Richmond Hwy, Arlington VA 22202",Crystal City,M-1,True,200-GenCom VacLand-no siteplan,,,unknown
+37026007,"3175 S Eads St, Arlington VA 22202",Crystal City,M-1,True,253-Service station,,,unknown
+37026001,"2804 Richmond Hwy, Arlington VA 22202",Crystal City,CM,True,215-Gen Comm - other,2893400.0,255500.0,unknown
+34020030,,Crystal City,C-O,True,,,,unknown
+34020022,,Crystal City,C-O,False,,,,unknown
+34020014,,Crystal City,RA4.8,True,,,,unknown
+34020PAE,,Crystal City,C-O-CC,True,,,,unknown
+34020003,"2221 S Clark St, Arlington VA 22202",Crystal City,C-O,True,313-Apartment - High-rise,23010000.0,23896100.0,unknown
+34020012,,Crystal City,C-O,True,,,,unknown
+34020PAC,,Crystal City,RA4.8,True,,,,unknown
+34020013,,Crystal City,RA4.8,True,,,,unknown
+36016005,"S Eads St, Arlington VA 22202",Crystal City,C-2,False,111-Off bldg < 7 stories,,,unknown
+35001PCA,,Crystal City,RA-H-3.2,True,,,,unknown
+35001008,"401 12Th St S, Arlington VA 22202",Crystal City,RA-H-3.2,True,313-Apartment - High-rise,30380700.0,82052200.0,unknown
+35001023,"S Eads St, Arlington VA 22202",Crystal City,RA-H-3.2,True,414-Hotel - land/other,878100.0,3007700.0,unknown
+35001164,"Army Navy Dr, Arlington VA 22202",Crystal City,RA-H-3.2,True,414-Hotel - land/other,20200.0,0.0,unknown
+35002002,,Crystal City,C-O,True,,,,unknown
+34027018,"Richmond Hwy, Arlington VA 22202",Crystal City,C-O,False,201-GenCom VacLand-siteplan,100.0,0.0,unknown
+34027017,"2799 Richmond Hwy, Arlington VA 22202",Crystal City,C-O,True,411-Hotel - Full service,,,unknown
+34027027,"2900 Crystal Dr, Arlington VA 22202",Crystal City,C-O-2.5,True,112-Off bldg 7+ stories,10187000.0,10663600.0,unknown
+34027002,,Crystal City,C-O,True,,,,unknown
+34027036,,Crystal City,C-O-1.5,False,,,,unknown
+34027035,,Crystal City,C-O-1.5,True,,,,unknown
+34027005,"2611 Richmond Hwy, Arlington VA 22202",Crystal City,C-O,False,112-Off bldg 7+ stories,12736400.0,3943000.0,unknown
+34020PEF,,Crystal City,C-O-1.5,False,,,,unknown
+34020243,"2451 Crystal Dr, Arlington VA 22202",Crystal City,C-O-1.5,True,112-Off bldg 7+ stories,,,unknown
+34020245,,Crystal City,C-O-1.5,True,,,,unknown
+34020236,,Crystal City,C-O-1.5,True,,,,unknown
+34026033,"Crystal Dr, Arlington VA 22202",Crystal City,C-O,True,310-Apartment Parking,,,unknown
+34020237,,Crystal City,C-O-1.5,True,,,,unknown
+34020PEE,,Crystal City,C-O-1.5,False,,,,unknown
+34020PED,,Crystal City,C-O-1.5,False,,,,unknown
+34020PEG,,Crystal City,C-O-1.5,True,,,,unknown
+34020240,"Crystal Dr, Arlington VA 22202",Crystal City,C-O-1.5,True,100-Off Bldg-VacLand-no s.plan,,,unknown
+34024457,,Crystal City,C-O-1.5,True,,,,unknown
+34020233,,Crystal City,C-O-1.5,True,,,,unknown
+34020235,,Crystal City,C-O-1.5,True,,,,unknown
+34020234,,Crystal City,C-O-1.5,True,,,,unknown
+34020029,"2521 S Clark St, Arlington VA 22202",Crystal City,C-O,False,112-Off bldg 7+ stories,,,unknown
+34020031,,Crystal City,C-O,True,,,,unknown
+34020002,,Crystal City,C-O,False,,,,unknown
+34020035,"2461 S Clark St, Arlington VA 22202",Crystal City,C-O,True,112-Off bldg 7+ stories,16444700.0,8299600.0,unknown
+34020287,,Crystal City,C-O,True,,,,unknown
+34020286,,Crystal City,C-O-CC,True,,,,unknown
+34020270,"2399 Richmond Hwy, Arlington VA 22202",Crystal City,C-O,False,411-Hotel - Full service,19650000.0,38630200.0,unknown
+34020PAD,,Crystal City,RA4.8,True,,,,unknown
+36016003,"1919 S Eads St, Arlington VA 22202",Crystal City,C-2,True,111-Off bldg < 7 stories,4163300.0,1331500.0,unknown
+36016004,,Crystal City,RA-H-3.2,True,,,,unknown
+34024462,"S Clark St, Arlington VA 22202",Crystal City,C-O-1.5,True,101-Off Bldg-VacLand-site plan,900.0,0.0,unknown
+34024463,"S Clark St, Arlington VA 22202",Crystal City,C-O-1.5,True,101-Off Bldg-VacLand-site plan,2800.0,0.0,unknown
+34025007,,Crystal City,C-O-1.5,True,,,,unknown
+35003845,,Crystal City,P-S,True,,,,unknown
+35001010,"11Th St S, Arlington VA 22202",Crystal City,RA-H-3.2,True,414-Hotel - land/other,7531500.0,24061800.0,unknown
+35001009,,Crystal City,RA-H-3.2,True,,,,unknown
+35001027,,Crystal City,C-O-CC,True,,,,unknown
+35001012,,Crystal City,C-O,True,,,,unknown
+35002PCA,,Crystal City,C-O-CC,True,,,,unknown
+34027033,"2600 Crystal Dr, Arlington VA 22202",Crystal City,C-O,True,313-Apartment - High-rise,25919200.0,82246100.0,unknown
+34020271,"Richmond Hwy, Arlington VA 22202",Crystal City,C-O,False,414-Hotel - land/other,100.0,0.0,unknown
+34020018,,Crystal City,C-O,True,,,,unknown
+34020017,,Crystal City,C-O-CC,True,,,,unknown
+34020265,,Crystal City,C-O,True,,,,unknown
+34020232,,Crystal City,C-O-1.5,True,,,,unknown
+34020PCA,,Crystal City,C-O-1.5,True,,,,unknown
+34026035,"1999 Richmond Hwy, Arlington VA 22202",Crystal City,C-O,False,411-Hotel - Full service,17750000.0,39478200.0,unknown
+34026PAA,,Crystal City,C-O-CC,True,,,,unknown
+34020251,,Crystal City,C-O,True,,,,unknown
+34020037,,Crystal City,M-2,True,,,,unknown
+34020PAB,,Crystal City,C-O,False,,,,unknown
+34020PAF,,Crystal City,C-O,True,,,,unknown
+34020238,"1501 Crystal Dr, Arlington VA 22202",Crystal City,C-O-1.5,True,313-Apartment - High-rise,,,unknown
+35003844,"S Eads St, Arlington VA 22202",Crystal City,P-S,True,100-Off Bldg-VacLand-no s.plan,100.0,0.0,unknown
+35001028,"400 11Th St S, Arlington VA 22202",Crystal City,C-O-CC,True,313-Apartment - High-rise,24553700.0,135275500.0,unknown
+36042018,,Crystal City,CM,False,,,,unknown

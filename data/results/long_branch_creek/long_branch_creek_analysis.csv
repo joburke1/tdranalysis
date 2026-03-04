@@ -1,0 +1,258 @@
+parcel_id,street_address,neighborhood,zoning_district,is_split_zoned,property_type,land_value,improvement_value,development_status
+38002010,,Long Branch Creek,R-10T,True,,,,unknown
+38002004,"1601 26Th St S, Arlington VA 22206",Long Branch Creek,RA14-26,True,311-Apartment - Garden,17552200.0,40642300.0,unknown
+38001014,"1543 28Th St S, Arlington VA 22202",Long Branch Creek,RA14-26,True,311-Apartment - Garden,,,unknown
+38001001,"2700 S Lang St, Arlington VA 22202",Long Branch Creek,S-3A,True,215-Gen Comm - other,,,unknown
+38006013,,Long Branch Creek,R2-7,True,,,,unknown
+38006011,"2615 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,494000.0,126800.0,unknown
+38006010,"2617 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008025,"2602 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008026,"2604 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008042,"2606 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008027,"2608 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008043,,Long Branch Creek,R2-7,True,,,,unknown
+38008028,,Long Branch Creek,R2-7,True,,,,unknown
+38008023,"2108 26Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38008029,"2614 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008022,"2110 26Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,,,unknown
+38008021,"2112 26Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,,,unknown
+38008018,"2611 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,477400.0,175400.0,unknown
+38008031,"2618 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008017,"2613 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,477100.0,81600.0,unknown
+38008032,,Long Branch Creek,R2-7,True,,,,unknown
+38006074,,Long Branch Creek,RA14-26,True,,1631400.0,0.0,unknown
+38006014,,Long Branch Creek,R2-7,True,,,,unknown
+38006012,"2613 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38006009,"2619 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,494000.0,132500.0,unknown
+38008024,"2600 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008019,"2609 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,479200.0,110400.0,unknown
+38008030,"2616 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38007009,,Long Branch Creek,R2-7,False,,,,unknown
+38008020,"2114 26Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,503700.0,84300.0,unknown
+38008044,"2615 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,472400.0,64500.0,unknown
+38006007,,Long Branch Creek,R2-7,True,,,,unknown
+38006006,"2625 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38007011,"2630 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,493200.0,86300.0,unknown
+38007012,,Long Branch Creek,R2-7,False,,,,unknown
+38001050,"1417 28Th St S, Arlington VA 22206",Long Branch Creek,RA14-26,True,311-Apartment - Garden,16282900.0,41391900.0,unknown
+38001038,,Long Branch Creek,RA14-26,False,,,,unknown
+38001002,,Long Branch Creek,S-3A,True,,,,unknown
+38006008,"2621 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38006020,,Long Branch Creek,RA8-18,True,,,,unknown
+38007010,"2626 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38008033,"2622 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008034,"2624 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,492000.0,98100.0,unknown
+38008035,,Long Branch Creek,R2-7,True,,,,unknown
+38008036,"2628 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38008014,,Long Branch Creek,RA8-18,True,,,,unknown
+38008037,,Long Branch Creek,R2-7,True,,,,unknown
+38008013,,Long Branch Creek,RA8-18,True,,,,unknown
+38008038,"2632 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008012,"2625 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38008011,,Long Branch Creek,RA8-18,True,,,,unknown
+38008010,"2629 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,467500.0,121400.0,unknown
+38008009,"2631 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,467500.0,85300.0,unknown
+38008008,"2633 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38008007,"2635 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38008003,"2105 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38008004,"2107 27Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38008005,"2109 27Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,,,unknown
+38008016,,Long Branch Creek,RA8-18,True,,,,unknown
+38008015,"2619 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,469400.0,108400.0,unknown
+38008006,,Long Branch Creek,RA8-18,False,,,,unknown
+38016021,"2112 27Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,477400.0,102400.0,unknown
+38007015,"2638 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38007008,"2631 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38007016,,Long Branch Creek,R2-7,False,,,,unknown
+38007018,"2635 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38007001,"2003 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,494000.0,63300.0,unknown
+38007006,,Long Branch Creek,R2-7,False,,,,unknown
+38007002,"2005 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38008039,,Long Branch Creek,R2-7,True,,,,unknown
+38007003,"2007 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,495200.0,88000.0,unknown
+38007004,,Long Branch Creek,R2-7,False,,,,unknown
+38008040,,Long Branch Creek,R2-7,True,,,,unknown
+38008041,,Long Branch Creek,R2-7,True,,,,unknown
+38008002,"2103 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018028,"2002 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018027,"2004 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018026,"2006 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018025,"2008 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,494000.0,69400.0,unknown
+38018030,"2712 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,496400.0,87600.0,unknown
+38018031,"2714 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,492200.0,154300.0,unknown
+38018023,"2713 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,497000.0,129300.0,unknown
+38018032,,Long Branch Creek,R2-7,False,,,,unknown
+38016025,"2102 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016024,"2104 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,495200.0,119000.0,unknown
+38018033,"2718 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,492200.0,83500.0,unknown
+38018022,"2715 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,492800.0,66100.0,unknown
+38016023,"2106 27Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38018048,"2720 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016022,"2110 27Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,,,unknown
+38018021,"2717 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016027,"2714 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,497600.0,83200.0,unknown
+38018034,"2722 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018020,"2719 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018035,"2724 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016028,,Long Branch Creek,R2-7,True,,,,unknown
+38018019,"2721 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016020,"2711 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38018049,"2726 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016029,,Long Branch Creek,R2-7,True,,,,unknown
+38018018,"2723 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018036,"2728 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016019,"2713 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38016030,"2720 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38018017,"2725 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,492800.0,229800.0,unknown
+38018037,"2730 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,492200.0,102100.0,unknown
+38016018,"2715 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38018016,"2727 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,492800.0,284500.0,unknown
+38016031,,Long Branch Creek,R2-7,True,,,,unknown
+38018038,"2732 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018015,"2729 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016017,"2717 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,469700.0,69300.0,unknown
+38016032,"2724 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,494400.0,129900.0,unknown
+38018039,"2734 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018014,"2731 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,492800.0,65500.0,unknown
+38016016,"2719 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38016033,"2726 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38018040,"2736 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018013,,Long Branch Creek,R2-7,False,,,,unknown
+38016015,"2721 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38016034,"2728 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38018041,"2738 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018047,"2735 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016014,"2723 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,469700.0,72200.0,unknown
+38016035,"2730 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,494400.0,144800.0,unknown
+38018012,"2737 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016013,"2725 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,469700.0,132400.0,unknown
+38016036,"2732 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38018043,"2742 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,489000.0,194700.0,unknown
+38018011,"2739 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016012,"2727 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38016037,"2734 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38018044,"2744 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016011,,Long Branch Creek,RA8-18,True,,,,unknown
+38016038,,Long Branch Creek,R2-7,True,,,,unknown
+38018050,"2746 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018009,,Long Branch Creek,R2-7,False,,,,unknown
+38016010,"2731 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38016039,"2738 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38018045,"2748 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,489000.0,91700.0,unknown
+38018008,"2745 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016009,"2733 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,469700.0,114700.0,unknown
+38018046,"2750 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018007,,Long Branch Creek,R2-7,False,,,,unknown
+38016008,"2735 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,469700.0,136600.0,unknown
+38016041,,Long Branch Creek,R2-7,True,,,,unknown
+38018002,,Long Branch Creek,R2-7,False,,,,unknown
+38016042,"2744 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,493600.0,147100.0,unknown
+38018005,,Long Branch Creek,R2-7,False,,,,unknown
+38016002,"2829 S Glebe Rd, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38016005,,Long Branch Creek,RA8-18,False,,,,unknown
+38007013,"2634 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38007014,"2636 S Troy St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38007007,"2633 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38007017,"2001 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,502500.0,63300.0,unknown
+38007005,,Long Branch Creek,R2-7,False,,,,unknown
+38006002,"1300 28Th St S, Arlington VA 22206",Long Branch Creek,RA8-18,True,311-Apartment - Garden,,,unknown
+38008001,"2101 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018029,"2000 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,502500.0,90900.0,unknown
+38018024,"2010 27Th St S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,502500.0,81700.0,unknown
+38019001,"2901 S Glebe Rd, Arlington VA 22206",Long Branch Creek,C-1,True,214-Neighborhood Center,,,unknown
+38016026,,Long Branch Creek,R2-7,False,,,,unknown
+38006PCA,,Long Branch Creek,RA7-16,True,,,,unknown
+38018042,,Long Branch Creek,R2-7,False,,,,unknown
+38006PCB,,Long Branch Creek,RA7-16,False,,,,unknown
+38006PCD,,Long Branch Creek,RA7-16,False,,,,unknown
+38018010,,Long Branch Creek,R2-7,False,,,,unknown
+38006PCC,,Long Branch Creek,RA7-16,False,,,,unknown
+38016040,"2740 S Uhle St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,490900.0,388400.0,unknown
+38018001,"2849 S Glebe Rd, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016007,"2737 S Veitch St, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38018003,"2845 S Glebe Rd, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018004,"2843 S Glebe Rd, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38018006,"2839 S Glebe Rd, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016001,"2831 S Glebe Rd, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38016004,"2825 S Glebe Rd, Arlington VA 22206",Long Branch Creek,RA8-18,True,514-Side by side,,,unknown
+38016003,,Long Branch Creek,RA8-18,True,,,,unknown
+38016006,"2821 S Glebe Rd, Arlington VA 22206",Long Branch Creek,RA8-18,False,514-Side by side,,,unknown
+38006021,,Long Branch Creek,RA7-16,True,,,,unknown
+38019002,"2921 S Glebe Rd, Arlington VA 22206",Long Branch Creek,C-2,True,214-Neighborhood Center,,,unknown
+37032PCE,,Long Branch Creek,RA8-18,False,,,,unknown
+37032PCA,,Long Branch Creek,RA8-18,False,,,,unknown
+37032PCD,,Long Branch Creek,RA8-18,True,,,,unknown
+37032PCC,,Long Branch Creek,RA8-18,True,,,,unknown
+37032PCB,,Long Branch Creek,RA8-18,True,,,,unknown
+38021001,"2698 S Four Mile Run Dr, Arlington VA 22204",Long Branch Creek,S-3A,True,200-GenCom VacLand-no siteplan,,,unknown
+38011005,"2101 26Th St S, Arlington VA 22206",Long Branch Creek,RA6-15,False,311-Apartment - Garden,,,unknown
+38011006,"2300 25Th St S, Arlington VA 22206",Long Branch Creek,RA6-15,False,312-Apartment - Mid-rise,,,unknown
+38011008,,Long Branch Creek,RA6-15,False,,,,unknown
+38011009,"2601 S Wayne Ct, Arlington VA 22206",Long Branch Creek,RA6-15,False,311-Apartment - Garden,,,unknown
+38011010,,Long Branch Creek,RA6-15,False,,,,unknown
+38011011,"2350 26Th Ct S, Arlington VA 22206",Long Branch Creek,RA6-15,False,311-Apartment - Garden,,,unknown
+38011012,"2701 S Adams St, Arlington VA 22206",Long Branch Creek,RA6-15,False,311-Apartment - Garden,,,unknown
+38011004,,Long Branch Creek,RA6-15,True,,,,unknown
+38011007,"2700 S Adams St, Arlington VA 22206",Long Branch Creek,RA6-15,False,311-Apartment - Garden,14364300.0,0.0,unknown
+38002007,"2445 Army Navy Dr, Arlington VA 22206",Long Branch Creek,RA7-16,True,213-Small office,1806500.0,6010200.0,unknown
+38002PCA,,Long Branch Creek,RA7-16,True,,,,unknown
+38006073,"1800 26Th St S, Arlington VA 22206",Long Branch Creek,RA14-26,True,310-Apartment Parking,,,unknown
+38012023,"2729 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012022,"2727 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012021,"2725 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012174,,Long Branch Creek,C-2,True,,,,unknown
+38012020,"2723 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012019,,Long Branch Creek,R2-7,False,,,,unknown
+38012018,"2719 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,452900.0,72100.0,unknown
+38012017,"2717 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012016,,Long Branch Creek,R2-7,False,,,,unknown
+38012015,,Long Branch Creek,R2-7,False,,,,unknown
+38012014,"2711 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,452900.0,65600.0,unknown
+38012013,"2709 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012009,,Long Branch Creek,S-3A,True,,,,unknown
+38012169,"S Four Mile Run Dr, Arlington VA 22206",Long Branch Creek,R2-7,False,510-Res - Vacant(SF & Twnhse),,,unknown
+38012042,"2623 S Four Mile Run Dr, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,476000.0,56000.0,unknown
+38012027,"2730 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012048,"2611 S Four Mile Run Dr, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,481500.0,58900.0,unknown
+38012049,,Long Branch Creek,R2-7,False,,,,unknown
+38012041,"2618 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012028,"2728 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012040,"2616 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,480200.0,64700.0,unknown
+38012029,"2726 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012030,"2724 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012031,"2722 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,478600.0,56700.0,unknown
+38012036,,Long Branch Creek,R2-7,False,,,,unknown
+38012035,"2606 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,486500.0,230600.0,unknown
+38012034,"2604 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012050,,Long Branch Creek,R2-7,True,,,,unknown
+38012051,"2637 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012052,"2633 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012053,"2631 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012054,"2627 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012055,"2625 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012060,,Long Branch Creek,R2-7,True,,,,unknown
+38012061,"2609 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012062,,Long Branch Creek,R2-7,True,,,,unknown
+38012024,"2731 S Cleveland St, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,469500.0,90100.0,unknown
+38012173,"2720 S Glebe Rd, Arlington VA 22206",Long Branch Creek,C-2,False,253-Service station,,,unknown
+38012002,"2710 S Glebe Rd, Arlington VA 22206",Long Branch Creek,C-2,True,254-Auto dealership,,,unknown
+38012044,,Long Branch Creek,R2-7,False,,,,unknown
+38012043,"2621 S Four Mile Run Dr, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012026,,Long Branch Creek,R2-7,False,,,,unknown
+38012045,"2617 S Four Mile Run Dr, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012046,"2615 S Four Mile Run Dr, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,,,unknown
+38012039,,Long Branch Creek,R2-7,False,,,,unknown
+38012038,,Long Branch Creek,R2-7,False,,,,unknown
+38012037,"2610 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,491500.0,91400.0,unknown
+38012033,"2602 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012032,,Long Branch Creek,R2-7,True,,,,unknown
+38012056,,Long Branch Creek,R2-7,True,,,,unknown
+38012057,"2617 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012058,"2615 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,462400.0,44500.0,unknown
+38012059,"2613 27Th Rd S, Arlington VA 22206",Long Branch Creek,R2-7,True,514-Side by side,,,unknown
+38012063,,Long Branch Creek,R2-7,True,,,,unknown
+38020006,"S Glebe Rd, Arlington VA 22206",Long Branch Creek,RA8-18,False,300-MultiFam-VacLand-no s.plan,,,unknown
+38020012,"2900 S Glebe Rd, Arlington VA 22206",Long Branch Creek,RA8-18,False,312-Apartment - Mid-rise,,,unknown
+38020011,"2910 S Glebe Rd, Arlington VA 22206",Long Branch Creek,RA8-18,True,312-Apartment - Mid-rise,7205000.0,16961000.0,unknown
+38020009,"2920 S Glebe Rd, Arlington VA 22206",Long Branch Creek,C-1-O,True,213-Small office,977700.0,2854800.0,unknown
+38012047,"2613 S Four Mile Run Dr, Arlington VA 22206",Long Branch Creek,R2-7,False,514-Side by side,481500.0,76400.0,unknown

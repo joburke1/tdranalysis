@@ -1,0 +1,38 @@
+Analysis Summary: Claremont
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 46
+Conforming parcels: 23 (50.0%)
+
+Zoning district breakdown:
+  R-6              46 parcels
+
+Development status:
+  underdeveloped       35 parcels
+  near-capacity         8 parcels
+  overdeveloped         3 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 38
+  Total available SF:         134,964 sf
+  Median per parcel:            3,689 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       176
+  Range:           $       138 – $213
+  Sample size:              5 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:             38
+  Aggregate low:      $     8,667,712
+  Aggregate high:     $    11,819,607
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

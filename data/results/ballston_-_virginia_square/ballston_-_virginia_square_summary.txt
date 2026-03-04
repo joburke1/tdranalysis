@@ -1,0 +1,40 @@
+Analysis Summary: Ballston - Virginia Square
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 271
+Conforming parcels: 140 (51.7%)
+
+Zoning district breakdown:
+  R-5             234 parcels
+  R-6              37 parcels
+
+Development status:
+  underdeveloped      218 parcels
+  near-capacity        29 parcels
+  overdeveloped        22 parcels
+  vacant                2 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 243
+  Total available SF:         790,824 sf
+  Median per parcel:            3,340 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       218
+  Range:           $       170 – $267
+  Sample size:             23 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            243
+  Aggregate low:      $    74,222,856
+  Aggregate high:     $   101,212,985
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

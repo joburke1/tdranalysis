@@ -1,0 +1,39 @@
+Analysis Summary: Highland Park - Overlee Knolls
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 616
+Conforming parcels: 201 (32.6%)
+
+Zoning district breakdown:
+  R-6             616 parcels
+
+Development status:
+  underdeveloped      553 parcels
+  near-capacity        29 parcels
+  overdeveloped        26 parcels
+  vacant                8 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 590
+  Total available SF:       2,142,078 sf
+  Median per parcel:            3,753 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       230
+  Range:           $       160 – $299
+  Sample size:             31 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            590
+  Aggregate low:      $   186,426,361
+  Aggregate high:     $   254,217,765
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

@@ -1,0 +1,40 @@
+Analysis Summary: Dover Crystal
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 313
+Conforming parcels: 160 (51.1%)
+
+Zoning district breakdown:
+  R-10            256 parcels
+  R-20             57 parcels
+
+Development status:
+  underdeveloped      289 parcels
+  overdeveloped         9 parcels
+  vacant                8 parcels
+  near-capacity         7 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 303
+  Total available SF:       1,515,866 sf
+  Median per parcel:            5,042 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       262
+  Range:           $       184 – $341
+  Sample size:             13 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            303
+  Aggregate low:      $   103,714,835
+  Aggregate high:     $   141,429,320
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

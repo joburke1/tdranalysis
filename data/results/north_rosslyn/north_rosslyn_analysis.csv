@@ -1,0 +1,269 @@
+parcel_id,street_address,neighborhood,zoning_district,is_split_zoned,property_type,land_value,improvement_value,development_status
+16004003,"Langston Blvd, Arlington VA 22209",North Rosslyn,C-O-2.5,True,300-MultiFam-VacLand-no s.plan,1984300.0,0.0,unknown
+16004004,"Langston Blvd, Arlington VA 22209",North Rosslyn,C-O-2.5,True,300-MultiFam-VacLand-no s.plan,1481500.0,0.0,unknown
+16004005,"Langston Blvd, Arlington VA 22209",North Rosslyn,C-O-2.5,True,300-MultiFam-VacLand-no s.plan,2236400.0,0.0,unknown
+16004002,"Langston Blvd, Arlington VA 22209",North Rosslyn,C-O-2.5,True,300-MultiFam-VacLand-no s.plan,1282100.0,0.0,unknown
+16004006,"Langston Blvd, Arlington VA 22209",North Rosslyn,C-O-2.5,True,300-MultiFam-VacLand-no s.plan,1540600.0,0.0,unknown
+16004001,"1401 Langston Blvd, Arlington VA 22209",North Rosslyn,C-O-2.5,True,300-MultiFam-VacLand-no s.plan,41005100.0,1000.0,unknown
+16024023,"1610 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,606300.0,60200.0,unknown
+16024022,"1612 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,606300.0,245100.0,unknown
+16024021,"1614 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,605800.0,78700.0,unknown
+16024020,"1616 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,605100.0,235700.0,unknown
+16024019,"1618 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,604300.0,162400.0,unknown
+16024018,"1620 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,602900.0,84500.0,unknown
+16024017,"1622 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,601300.0,70400.0,unknown
+16024016,"1624 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,599500.0,144600.0,unknown
+16024015,"1626 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,597300.0,230100.0,unknown
+16024014,"1628 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,594700.0,236200.0,unknown
+16024013,"1630 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,591900.0,129800.0,unknown
+16024003,"1543 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,605000.0,178600.0,unknown
+16024006,"1549 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,599800.0,183700.0,unknown
+16024007,"1551 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,598200.0,204100.0,unknown
+16024008,"1553 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,596400.0,133000.0,unknown
+16024009,"1555 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,594600.0,151600.0,unknown
+16024010,"1557 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,593300.0,142700.0,unknown
+16024011,"1559 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,591500.0,144600.0,unknown
+16014224,"1507 B N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,422600.0,unknown
+16014218,"1505 B N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,454700.0,unknown
+16014212,"1503 B N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,464000.0,unknown
+16014225,"1507 C N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,422600.0,unknown
+16014206,"1501 B N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,486400.0,unknown
+16014219,"1505 C N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,507800.0,unknown
+16024004,"1545 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,603100.0,173500.0,unknown
+16024PCA,,North Rosslyn,RA6-15,False,,,,unknown
+16014223,"1507 A N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,440500.0,unknown
+16014217,"1505 A N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,449500.0,unknown
+16014211,"1503 A N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,440500.0,unknown
+16014205,"1501 A N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,440500.0,unknown
+16014005,"1600 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,510-Res - Vacant(SF & Twnhse),943400.0,0.0,unknown
+16014004,"1590 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,511-Single Family Detached,943400.0,645900.0,unknown
+16014041,"1617 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,606600.0,73600.0,unknown
+16014040,"1619 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,604600.0,218300.0,unknown
+16014038,"1625 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,599800.0,126600.0,unknown
+16014037,"1627 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,589700.0,66800.0,unknown
+16014042,"1615 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,606500.0,77200.0,unknown
+16014043,"1613 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,604800.0,76500.0,unknown
+16014044,"1611 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,603400.0,105900.0,unknown
+16014045,"1609 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,602500.0,132500.0,unknown
+16014046,"1607 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,603800.0,100500.0,unknown
+16014047,"1605 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,600100.0,76100.0,unknown
+16014048,"1603 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,600100.0,85800.0,unknown
+16014049,"1601 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,514-Side by side,603800.0,76800.0,unknown
+16014PCB,,North Rosslyn,RA6-15,True,,,,unknown
+16014058,"1537 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,528-SFD/Apt Zone no site plan,935300.0,412600.0,unknown
+16014059,"1501 Key Blvd, Arlington VA 22209",North Rosslyn,RA6-15,False,311-Apartment - Garden,228400.0,1156700.0,unknown
+16014075,"1533 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,311-Apartment - Garden,605200.0,2465500.0,unknown
+16014PCC,,North Rosslyn,RA6-15,False,,,,unknown
+16024030,"19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,300-MultiFam-VacLand-no s.plan,100.0,0.0,unknown
+16024005,"1547 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,601400.0,183200.0,unknown
+16014PCD,,North Rosslyn,RA6-15,False,,,,unknown
+16014229,"1517 Key Blvd, Arlington VA 22209",North Rosslyn,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+16014202,"N Colonial Ter, Arlington VA 22209",North Rosslyn,S-3A,True,200-GenCom VacLand-no siteplan,146000.0,0.0,unknown
+16014230,"1599 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,512-Townhouse (fee simple own),640000.0,846200.0,unknown
+16014231,"1597 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,512-Townhouse (fee simple own),640000.0,883600.0,unknown
+16014232,"1595 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,846200.0,unknown
+16014002,"1537 Key Blvd, Arlington VA 22209",North Rosslyn,RA6-15,False,311-Apartment - Garden,3006300.0,3548100.0,unknown
+16014233,"1621 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,511-Single Family Detached,929800.0,1099700.0,unknown
+16024025,"1608 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,606300.0,69600.0,unknown
+16024002,"1541 19Th St N, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,611100.0,145200.0,unknown
+16024039,"N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+16024038,"1924 N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,675400.0,unknown
+16024037,"1922 N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,715900.0,unknown
+16024036,"1920 N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,707800.0,unknown
+16024035,"1918 N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,757300.0,unknown
+16024034,"1916 N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,587000.0,unknown
+16024033,"1914 N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,664200.0,unknown
+16024032,"1912 N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,651300.0,unknown
+16024031,"1910 N Ode St, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),640000.0,838000.0,unknown
+16039008,"N Kent St, Arlington VA 22209",North Rosslyn,C-O,True,101-Off Bldg-VacLand-site plan,2556200.0,0.0,unknown
+16019005,"1950 N Lynn St, Arlington VA 22209",North Rosslyn,C-O-ROSS,False,313-Apartment - High-rise,33721800.0,92837000.0,unknown
+16020002,"1911 Fort Myer Dr, Arlington VA 22209",North Rosslyn,C-O-ROSS,False,313-Apartment - High-rise,35073500.0,500.0,unknown
+16018007,"1001 19Th St N, Arlington VA 22209",North Rosslyn,C-O-ROSS,True,112-Off bldg 7+ stories,15131600.0,93485900.0,unknown
+16020006,"N Moore St, Arlington VA 22209",North Rosslyn,C-O-ROSS,False,211-Retail strip,4893600.0,0.0,unknown
+16020001,"1901 Fort Myer Dr, Arlington VA 22209",North Rosslyn,C-O-ROSS,False,313-Apartment - High-rise,26817900.0,500.0,unknown
+16039011,,North Rosslyn,C-O-ROSS,True,,6292100.0,13695600.0,unknown
+16039012,"19Th St N, Arlington VA 22209",North Rosslyn,C-O-ROSS,False,101-Off Bldg-VacLand-site plan,6292100.0,0.0,unknown
+16039006,"1800 N Kent St, Arlington VA 22209",North Rosslyn,C-O,True,112-Off bldg 7+ stories,8836100.0,39952100.0,unknown
+16039010,,North Rosslyn,C-O-ROSS,True,,3917400.0,0.0,unknown
+16039037,,North Rosslyn,C-O-ROSS,True,,6807400.0,24916800.0,unknown
+16039025,,North Rosslyn,C-O-ROSS,False,,1255400.0,0.0,unknown
+16014213,"1503 C N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,495300.0,unknown
+16014207,"1501 C N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,422600.0,unknown
+16014220,"1505 D N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,529300.0,unknown
+16014214,"1503 D N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,431200.0,unknown
+16014208,"1501 D N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,470700.0,unknown
+16014221,"1505 E N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,469200.0,unknown
+16014215,"1503 E N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,476800.0,unknown
+16014209,"1501 E N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,422600.0,unknown
+16014222,"1505 F N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,440500.0,unknown
+16014216,"1503 F N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,440500.0,unknown
+16014210,"1501 F N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,529200.0,unknown
+16035001,,North Rosslyn,C-O-ROSS,False,,31448100.0,1000.0,unknown
+16014003,"1603 Key Blvd, Arlington VA 22209",North Rosslyn,RA6-15,False,528-SFD/Apt Zone no site plan,943400.0,0.0,unknown
+16014226,"1507 D N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,452400.0,unknown
+16014228,"1507 F N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,572000.0,unknown
+16014227,"1507 E N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,464000.0,unknown
+16035002,"1400 Key Blvd, Arlington VA 22209",North Rosslyn,C-O-ROSS,False,313-Apartment - High-rise,24036500.0,1000.0,unknown
+16039030,,North Rosslyn,C-O,False,,1891300.0,0.0,unknown
+16039019,,North Rosslyn,C-O,True,,393500.0,0.0,unknown
+16039031,,North Rosslyn,C-O,False,,2026000.0,0.0,unknown
+16039014,"1776 N Kent St, Arlington VA 22209",North Rosslyn,C-O,False,101-Off Bldg-VacLand-site plan,100.0,0.0,unknown
+16039003,,North Rosslyn,C-O,True,,2610300.0,0.0,unknown
+16039034,"N Kent St, Arlington VA 22209",North Rosslyn,C-O-ROSS,False,215-Gen Comm - other,632000.0,760500.0,unknown
+16039023,,North Rosslyn,C-O,False,,801500.0,0.0,unknown
+16039036,"1621 N Kent St, Arlington VA 22209",North Rosslyn,C-O-ROSS,True,112-Off bldg 7+ stories,8745400.0,10006300.0,unknown
+16039021,,North Rosslyn,C-O,True,,4518400.0,0.0,unknown
+16039002,,North Rosslyn,C-O,True,,11620600.0,38621000.0,unknown
+16039035,,North Rosslyn,C-O-ROSS,True,,8804900.0,10026400.0,unknown
+16039033,"1601 N Kent St, Arlington VA 22209",North Rosslyn,C-O-ROSS,True,112-Off bldg 7+ stories,8747200.0,9476500.0,unknown
+16039032,,North Rosslyn,C-O-ROSS,True,,8480600.0,26489800.0,unknown
+16039018,"1735 N Lynn St, Arlington VA 22209",North Rosslyn,C-O-ROSS,True,112-Off bldg 7+ stories,18550800.0,55398300.0,unknown
+16036PEA,,North Rosslyn,C-O-ROSS,False,,,,unknown
+16036002,,North Rosslyn,C-O-ROSS,True,,58018000.0,1000.0,unknown
+16036005,,North Rosslyn,C-O,True,,15900000.0,78144800.0,unknown
+16039005,,North Rosslyn,C-O-ROSS,True,,21240000.0,164128100.0,unknown
+16033004,"1515 Wilson Blvd, Arlington VA 22209",North Rosslyn,C-O,False,112-Off bldg 7+ stories,7607800.0,10447300.0,unknown
+16033001,"1501 Wilson Blvd, Arlington VA 22209",North Rosslyn,C-O,False,112-Off bldg 7+ stories,7798100.0,8233900.0,unknown
+16014PCE,,North Rosslyn,RA6-15,False,,,,unknown
+16014PCF,,North Rosslyn,RA6-15,True,,,,unknown
+16014007,"1817 N Quinn St, Arlington VA 22209",North Rosslyn,RA6-15,False,312-Apartment - Mid-rise,4914000.0,11319400.0,unknown
+16014236,"N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,True,300-MultiFam-VacLand-no s.plan,,,unknown
+16014008,"1663 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,591100.0,74000.0,unknown
+16014009,"1661 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,588300.0,72800.0,unknown
+16014010,"1659 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,588300.0,72900.0,unknown
+16014070,"1657 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,588300.0,71200.0,unknown
+16014011,"1655 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,588300.0,71500.0,unknown
+16014012,"1653 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,588300.0,76000.0,unknown
+16014013,"1651 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,514-Side by side,588300.0,87300.0,unknown
+16014014,"1649 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,515-Duplex,637400.0,140000.0,unknown
+16016101,"20Th St N, Arlington VA 22209",North Rosslyn,C-O-ROSS,True,200-GenCom VacLand-no siteplan,6000.0,0.0,unknown
+16016102,"1300 Cherry Hill Rd, Arlington VA 22209",North Rosslyn,C-O-ROSS,True,200-GenCom VacLand-no siteplan,36700.0,0.0,unknown
+16017100,"20Th St N, Arlington VA 22209",North Rosslyn,S-3A,True,200-GenCom VacLand-no siteplan,11200.0,0.0,unknown
+16018PCA,,North Rosslyn,C-O-ROSS,True,,,,unknown
+16023042,"1502 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,544100.0,unknown
+16023043,"1504 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,530700.0,unknown
+16023044,"1506 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,666500.0,unknown
+16023045,"1508 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,804800.0,unknown
+16023046,"1510 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,653500.0,unknown
+16023047,"1512 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,765300.0,unknown
+16023048,"1514 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,528200.0,unknown
+16023049,"1516 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,658300.0,unknown
+16023054,"1524 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,630300.0,unknown
+16023055,"1526 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,571000.0,unknown
+16023053,"1522 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,747500.0,unknown
+16023056,"1528 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,657900.0,unknown
+16023057,"1530 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,666000.0,unknown
+16023096,"1532 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,663100.0,unknown
+16023099,"1526 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,749500.0,unknown
+16023065,"1546 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,663000.0,unknown
+16023112,"1500 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,681200.0,unknown
+16023134,"N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+16023069,"1548 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,889100.0,unknown
+16023070,"1550 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,792000.0,unknown
+16023129,"1533 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,663100.0,unknown
+16023071,"1552 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,571000.0,unknown
+16023113,"1501 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,681200.0,unknown
+16023092,"1594 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,800400.0,unknown
+16023091,"1592 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,654400.0,unknown
+16023090,"1590 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,662600.0,unknown
+16023089,"1588 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,843600.0,unknown
+16023088,"1586 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,757400.0,unknown
+16023087,"1584 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,671100.0,unknown
+16023086,"1582 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,749500.0,unknown
+16023083,"1576 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,671100.0,unknown
+16023082,"1574 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,625800.0,unknown
+16023081,"1572 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,542100.0,unknown
+16023080,"1570 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,719500.0,unknown
+16023079,"1568 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,801700.0,unknown
+16023041,"1500 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,734600.0,unknown
+16023050,"1518 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,743700.0,unknown
+16023052,"1520 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,681200.0,unknown
+16023058,"1532 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,547000.0,unknown
+16023059,"1534 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,623100.0,unknown
+16023060,"1536 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,588500.0,unknown
+16023051,"N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+16023061,"1538 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,645600.0,unknown
+16023062,"1540 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,588500.0,unknown
+16023063,"1542 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,609700.0,unknown
+16023095,"1534 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,779400.0,unknown
+16023098,"1528 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,604600.0,unknown
+16023097,"1530 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,568700.0,unknown
+16023064,"1544 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,643000.0,unknown
+16023100,"1524 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,725300.0,unknown
+16023101,"1522 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,790000.0,unknown
+16023102,"1520 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,567500.0,unknown
+16023103,"1518 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,557600.0,unknown
+16023104,"1516 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,785500.0,unknown
+16023131,"N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+16023108,"1508 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,677200.0,unknown
+16023105,"1514 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,690300.0,unknown
+16023109,"1506 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,575700.0,unknown
+16023107,"1510 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,738900.0,unknown
+16023106,"1512 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,663100.0,unknown
+16023110,"1504 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,595100.0,unknown
+16023111,"1502 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,664400.0,unknown
+16023068,"N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+16023133,"N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+16023127,"1529 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,553200.0,unknown
+16023128,"1531 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,530700.0,unknown
+16023126,"1527 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,667400.0,unknown
+16023130,"1535 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,763600.0,unknown
+16023124,"1523 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,695800.0,unknown
+16023125,"1525 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,663100.0,unknown
+16023123,"1521 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,608700.0,unknown
+16023122,"1519 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,624800.0,unknown
+16023121,"1517 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,681200.0,unknown
+16023119,"1513 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,663100.0,unknown
+16023120,"1515 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,733000.0,unknown
+16023118,"1511 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,722100.0,unknown
+16023117,"1509 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,533800.0,unknown
+16023116,"1507 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,658300.0,unknown
+16023115,"1505 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,669900.0,unknown
+16023114,"1503 N Colonial Ct, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,900800.0,unknown
+16023072,"1554 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,626800.0,unknown
+16023073,"1556 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,597800.0,unknown
+16023074,"1558 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,558900.0,unknown
+16023094,"1596 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,790500.0,unknown
+16023075,"1560 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,547000.0,unknown
+16023085,"1580 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,781500.0,unknown
+16023132,"N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+16023084,"1578 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,653500.0,unknown
+16023076,"1562 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,588500.0,unknown
+16023077,"1564 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,678600.0,unknown
+16023078,"1566 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,512-Townhouse (fee simple own),775000.0,547000.0,unknown
+16014PCG,,North Rosslyn,RA6-15,False,,,,unknown
+16014055,"1549 N Colonial Ter, Arlington VA 22209",North Rosslyn,RA6-15,False,312-Apartment - Mid-rise,1306300.0,2422700.0,unknown
+16038001,,North Rosslyn,C-O-ROSS,False,,22409400.0,120218700.0,unknown
+16038002,,North Rosslyn,C-O-ROSS,False,,3587400.0,24043700.0,unknown
+16038003,,North Rosslyn,C-O-ROSS,False,,10909000.0,96174900.0,unknown
+16038004,,North Rosslyn,C-O-ROSS,False,,4354000.0,0.0,unknown
+16038PCA,,North Rosslyn,C-O-ROSS,False,,,,unknown
+16037010,,North Rosslyn,C-O-ROSS,False,,,,unknown
+16037004,,North Rosslyn,C-O-ROSS,False,,34845500.0,235351400.0,unknown
+16037009,"1850 N Moore St, Arlington VA 22209",North Rosslyn,C-O-ROSS,False,Public Service/Stormwater,,,unknown
+16034PCB,,North Rosslyn,RA4.8,True,,,,unknown
+16034PCA,,North Rosslyn,RA4.8,True,,,,unknown
+16034001,,North Rosslyn,RA-H-3.2,False,,20510900.0,124487100.0,unknown
+16034021,,North Rosslyn,RA6-15,True,,944400.0,310200.0,unknown
+16034002,"1500 Key Blvd, Arlington VA 22209",North Rosslyn,RA-H-3.2,True,313-Apartment - High-rise,1922500.0,0.0,unknown
+16034031,,North Rosslyn,RA-H-3.2,True,,2288700.0,0.0,unknown
+16034040,"1614 Key Blvd, Arlington VA 22209",North Rosslyn,RA6-15,True,512-Townhouse (fee simple own),600000.0,319300.0,unknown
+16034038,,North Rosslyn,RA6-15,True,,600000.0,341900.0,unknown
+16034036,,North Rosslyn,RA6-15,True,,600000.0,317000.0,unknown
+16034039,,North Rosslyn,RA6-15,True,,600000.0,330200.0,unknown
+16034037,"1608 Key Blvd, Arlington VA 22209",North Rosslyn,RA6-15,True,512-Townhouse (fee simple own),600000.0,297500.0,unknown
+16034035,,North Rosslyn,RA6-15,True,,600000.0,209900.0,unknown
+16032002,"1625 Wilson Blvd, Arlington VA 22209",North Rosslyn,C-2,True,211-Retail strip,502500.0,622300.0,unknown
+16033013,"Wilson Blvd, Arlington VA 22209",North Rosslyn,C-O,False,313-Apartment - High-rise,3624200.0,25634200.0,unknown
+16033014,"18Th St N, Arlington VA 22209",North Rosslyn,C-O,False,313-Apartment - High-rise,2318400.0,16409700.0,unknown
+16033022,"N Pierce St, Arlington VA 22209",North Rosslyn,C-O,True,313-Apartment - High-rise,2119600.0,14999400.0,unknown
+16033016,,North Rosslyn,C-O,False,,4375400.0,30951700.0,unknown
+16032024,"1601 Wilson Blvd, Arlington VA 22204",North Rosslyn,S-3A,True,215-Gen Comm - other,,,unknown
+16033021,"18Th St N, Arlington VA 22209",North Rosslyn,C-O,True,313-Apartment - High-rise,286100.0,2020200.0,unknown
+16033017,"18Th St N, Arlington VA 22209",North Rosslyn,C-O,True,313-Apartment - High-rise,2550300.0,18048800.0,unknown
+16033012,"1788 N Pierce St, Arlington VA 22209",North Rosslyn,C-O,False,313-Apartment - High-rise,11662200.0,87955400.0,unknown
+16033PAA,,North Rosslyn,C-O,True,,,,unknown
+16033007,"1525 Wilson Blvd, Arlington VA 22209",North Rosslyn,C-O,True,112-Off bldg 7+ stories,19165400.0,47102900.0,unknown
+16022PCA,,North Rosslyn,C-O-ROSS,False,,,,unknown
+16022257,"20Th St N, Arlington VA 22209",North Rosslyn,C-O-ROSS,True,313-Apartment - High-rise,,,unknown
+16016100,"20Th St N, Arlington VA 22209",North Rosslyn,S-3A,True,200-GenCom VacLand-no siteplan,2500.0,0.0,unknown

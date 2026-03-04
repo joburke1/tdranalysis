@@ -1,5 +1,5 @@
 Analysis Summary: Alcova Heights
-Generated: 2026-02-25 16:25
+Generated: 2026-03-04 10:36
 ============================================================
 
 Total residential parcels analyzed: 295
@@ -27,12 +27,8 @@ Neighborhood Improvement Rate Calibration:
 
 Valuation (parcels with positive available rights):
   Parcels valued:            283
-  Aggregate low:      $    69,106,574
-  Aggregate high:     $   216,278,015
-  Confidence levels:
-    high                275
-    not_applicable       12
-    medium                8
+  Aggregate low:      $    69,112,384
+  Aggregate high:     $    94,244,159
 
 ============================================================
 DISCLAIMER: Valuation estimates are for policy analysis only,

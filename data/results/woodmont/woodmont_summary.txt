@@ -1,0 +1,41 @@
+Analysis Summary: Woodmont
+Generated: 2026-03-04 10:39
+============================================================
+
+Total residential parcels analyzed: 292
+Conforming parcels: 127 (43.5%)
+
+Zoning district breakdown:
+  R-10            156 parcels
+  R-8             107 parcels
+  R-20             29 parcels
+
+Development status:
+  underdeveloped      232 parcels
+  overdeveloped        27 parcels
+  near-capacity        24 parcels
+  vacant                9 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 260
+  Total available SF:       1,073,912 sf
+  Median per parcel:            3,992 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       208
+  Range:           $       124 – $293
+  Sample size:              9 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            260
+  Aggregate low:      $    80,653,906
+  Aggregate high:     $   109,982,599
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

@@ -1,0 +1,25 @@
+Analysis Summary: Fairlington
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 52
+
+Zoning district breakdown:
+  RA14-26          43 parcels
+  S-3A              4 parcels
+  C-1               2 parcels
+  RA6-15            1 parcels
+  C-O-1.0           1 parcels
+  P-S               1 parcels
+
+Development status:
+  unknown              52 parcels
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

@@ -1,0 +1,68 @@
+parcel_id,street_address,neighborhood,zoning_district,is_split_zoned,property_type,land_value,improvement_value,development_status
+16025008,"1900 N Quinn St, Arlington VA 22209",Colonial Village,C-O-1.5,True,410-Hotel Residence Suites,8400000.0,33486300.0,unknown
+16025009,"1820 N Quinn St, Arlington VA 22209",Colonial Village,RA6-15,True,312-Apartment - Mid-rise,3510000.0,15439800.0,unknown
+16027009,"2132 Langston Blvd, Arlington VA 22201",Colonial Village,RA8-18,False,512-Townhouse (fee simple own),625000.0,310900.0,unknown
+16027008,"2134 Langston Blvd, Arlington VA 22201",Colonial Village,RA8-18,False,512-Townhouse (fee simple own),625000.0,316300.0,unknown
+16027007,"2136 Langston Blvd, Arlington VA 22201",Colonial Village,RA8-18,False,512-Townhouse (fee simple own),625000.0,323600.0,unknown
+16027006,"1904 N Uhle St, Arlington VA 22201",Colonial Village,RA8-18,False,511-Single Family Detached,1126300.0,482100.0,unknown
+16027002,"2121 19Th St N, Arlington VA 22201",Colonial Village,RA8-18,False,511-Single Family Detached,1158600.0,78100.0,unknown
+16026PLF,,Colonial Village,RA7-16,False,,,,unknown
+16027010,"2130 Langston Blvd, Arlington VA 22201",Colonial Village,RA8-18,False,512-Townhouse (fee simple own),625000.0,348100.0,unknown
+16027003,"2133 19Th St N, Arlington VA 22201",Colonial Village,RA8-18,False,614-Condo Co-op,2836100.0,4175600.0,unknown
+16026PCC,,Colonial Village,RA7-16,True,,,,unknown
+16027001,"1900 N Uhle St, Arlington VA 22201",Colonial Village,RA8-18,False,511-Single Family Detached,1140300.0,571800.0,unknown
+16026002,"1811 N Veitch St, Arlington VA 22201",Colonial Village,RA8-18,True,311-Apartment - Garden,671900.0,1150800.0,unknown
+16026PCE,,Colonial Village,RA7-16,False,,,,unknown
+16026505,"2101 18Th St N, Arlington VA 22201",Colonial Village,RA7-16,True,311-Apartment - Garden,3619100.0,2941800.0,unknown
+16026003,"2132 19Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,311-Apartment - Garden,638400.0,821600.0,unknown
+16026006,"19Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,300-MultiFam-VacLand-no s.plan,392700.0,0.0,unknown
+16026007,"2114 19Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,215-Gen Comm - other,502100.0,60600.0,unknown
+16025075,"N Rhodes St, Arlington VA 22201",Colonial Village,RA7-16,True,640-Not Valued Condo (H.O.A.),100.0,0.0,unknown
+16025074,"1851 N Scott St, Arlington VA 22209",Colonial Village,RA7-16,True,312-Apartment - Mid-rise,2252000.0,12343600.0,unknown
+16026PCG,,Colonial Village,RA7-16,True,,,,unknown
+16026PCA,,Colonial Village,RA7-16,True,,,,unknown
+16025PCA,,Colonial Village,RA7-16,True,,,,unknown
+16025072,"1804 N Quinn St, Arlington VA 22209",Colonial Village,RA7-16,True,312-Apartment - Mid-rise,13361700.0,72518600.0,unknown
+16025PCC,,Colonial Village,RA7-16,True,,,,unknown
+16025PCB,,Colonial Village,RA7-16,False,,,,unknown
+16026PCB,,Colonial Village,RA7-16,False,,,,unknown
+16026PCD,,Colonial Village,RA7-16,False,,,,unknown
+16031PCA,,Colonial Village,RA7-16,False,,,,unknown
+16031PCD,,Colonial Village,RA7-16,False,,,,unknown
+16025PCD,,Colonial Village,RA7-16,True,,,,unknown
+16025002,"1711 Wilson Blvd, Arlington VA 22209",Colonial Village,C-2,True,214-Neighborhood Center,3843500.0,10488200.0,unknown
+16025PCE,,Colonial Village,RA7-16,False,,,,unknown
+16030PCA,,Colonial Village,RA7-16,False,,,,unknown
+16031PCB,,Colonial Village,RA7-16,False,,,,unknown
+16031PCE,,Colonial Village,RA7-16,False,,,,unknown
+16025073,"1870 N Scott St, Arlington VA 22209",Colonial Village,RA7-16,True,312-Apartment - Mid-rise,12934300.0,69432700.0,unknown
+16025014,"1720 N Quinn St, Arlington VA 22209",Colonial Village,C-2,True,311-Apartment - Garden,2873500.0,2804600.0,unknown
+16030004,"2043 Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,211-Retail strip,1047300.0,2095500.0,unknown
+16030005,"2045 Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,212-Restaurant/eating facility,1276500.0,1767400.0,unknown
+16030006,"2051 Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,212-Restaurant/eating facility,649000.0,1105300.0,unknown
+16030007,"2053 Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,212-Restaurant/eating facility,408900.0,798900.0,unknown
+16030008,"2055 Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,212-Restaurant/eating facility,351100.0,1204000.0,unknown
+16030PCB,,Colonial Village,RA7-16,True,,,,unknown
+16030025,"Wilson Blvd, Arlington VA 22201",Colonial Village,C-O-2.5,True,101-Off Bldg-VacLand-site plan,7699500.0,0.0,unknown
+16030024,"2107 Wilson Blvd, Arlington VA 22201",Colonial Village,C-O-2.5,False,112-Off bldg 7+ stories,15357900.0,33884800.0,unknown
+16030023,"2101 Wilson Blvd, Arlington VA 22201",Colonial Village,C-O-2.5,True,112-Off bldg 7+ stories,7689900.0,36002600.0,unknown
+16030022,"2111 Wilson Blvd, Arlington VA 22201",Colonial Village,C-O-2.5,True,112-Off bldg 7+ stories,15407900.0,36002600.0,unknown
+16030002,"Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,200-GenCom VacLand-no siteplan,319400.0,0.0,unknown
+16030003,"2039 Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,212-Restaurant/eating facility,555200.0,1641800.0,unknown
+16030030,"2057 Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,212-Restaurant/eating facility,936200.0,892000.0,unknown
+16030010,"Wilson Blvd, Arlington VA 22201",Colonial Village,C-3,True,200-GenCom VacLand-no siteplan,196900.0,0.0,unknown
+16030026,"Wilson Blvd, Arlington VA 22201",Colonial Village,C-O-2.5,False,215-Gen Comm - other,277000.0,18500.0,unknown
+16030027,"1702 N Troy St, Arlington VA 22201",Colonial Village,RA7-16,True,311-Apartment - Garden,15875300.0,6880600.0,unknown
+16031PCC,,Colonial Village,RA7-16,False,,,,unknown
+16026078,"2122 19Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,311-Apartment - Garden,,,unknown
+16026506,"18Th St N, Arlington VA 22201",Colonial Village,RA7-16,True,300-MultiFam-VacLand-no s.plan,100.0,0.0,unknown
+16028010,"2122 18Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,512-Townhouse (fee simple own),660000.0,886600.0,unknown
+16026507,"N Uhle St, Arlington VA 22201",Colonial Village,RA7-16,False,310-Apartment Parking,21500.0,0.0,unknown
+16028008,"2111 Key Blvd, Arlington VA 22201",Colonial Village,RA7-16,True,311-Apartment - Garden,6626300.0,10818200.0,unknown
+16028011,"2120 18Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,512-Townhouse (fee simple own),660000.0,878900.0,unknown
+16028012,"2118 18Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,512-Townhouse (fee simple own),,,unknown
+16028013,"2116 18Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,512-Townhouse (fee simple own),660000.0,878900.0,unknown
+16028014,"2114 18Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,512-Townhouse (fee simple own),660000.0,878900.0,unknown
+16028015,"2112 18Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,512-Townhouse (fee simple own),,,unknown
+16028016,"2110 18Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,512-Townhouse (fee simple own),660000.0,886600.0,unknown
+16028017,"18Th St N, Arlington VA 22201",Colonial Village,RA8-18,True,540 - Not Valued Resd. (H.O.A),,,unknown

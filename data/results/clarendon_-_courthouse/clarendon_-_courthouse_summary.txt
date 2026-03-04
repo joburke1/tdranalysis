@@ -1,0 +1,39 @@
+Analysis Summary: Clarendon - Courthouse
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 50
+Conforming parcels: 32 (64.0%)
+
+Zoning district breakdown:
+  R-5              50 parcels
+
+Development status:
+  underdeveloped       34 parcels
+  near-capacity         7 parcels
+  overdeveloped         5 parcels
+  vacant                4 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 45
+  Total available SF:         144,835 sf
+  Median per parcel:            3,748 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       256
+  Range:           $       199 – $313
+  Sample size:              9 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:             45
+  Aggregate low:      $    14,115,572
+  Aggregate high:     $    19,248,508
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

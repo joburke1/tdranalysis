@@ -1,0 +1,39 @@
+Analysis Summary: Gulf Branch
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 176
+Conforming parcels: 86 (48.9%)
+
+Zoning district breakdown:
+  R-10            176 parcels
+
+Development status:
+  underdeveloped      137 parcels
+  overdeveloped        19 parcels
+  near-capacity        16 parcels
+  vacant                4 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 157
+  Total available SF:         709,500 sf
+  Median per parcel:            5,026 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       292
+  Range:           $       229 – $355
+  Sample size:             32 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            157
+  Aggregate low:      $    52,047,858
+  Aggregate high:     $    70,974,352
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

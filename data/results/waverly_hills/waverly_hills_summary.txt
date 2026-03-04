@@ -1,0 +1,40 @@
+Analysis Summary: Waverly Hills
+Generated: 2026-03-04 10:39
+============================================================
+
+Total residential parcels analyzed: 483
+Conforming parcels: 202 (41.8%)
+
+Zoning district breakdown:
+  R-6             481 parcels
+  R-5               2 parcels
+
+Development status:
+  underdeveloped      450 parcels
+  near-capacity        16 parcels
+  overdeveloped        10 parcels
+  vacant                7 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 472
+  Total available SF:       1,790,761 sf
+  Median per parcel:            3,973 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       252
+  Range:           $       201 – $303
+  Sample size:             20 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            472
+  Aggregate low:      $   161,053,098
+  Aggregate high:     $   219,617,861
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

@@ -172,10 +172,19 @@ def generate_homepage_html(
             "overdeveloped_count": s["overdeveloped_count"],
         }
 
+    # Compute quintile thresholds on total_available_gfa across all analyzed neighborhoods
+    gfa_sorted = sorted(d["summary"]["total_available_gfa"] for d in neighborhoods.values())
+    n = len(gfa_sorted)
+    if n >= 5:
+        thresholds = [gfa_sorted[int(n * p)] for p in (0.20, 0.40, 0.60, 0.80)]
+    else:
+        thresholds = [0, 0, 0, 0]
+
     civic_str = json.dumps(civic_assoc_data)
     nb_data_str = json.dumps(js_nb_data)
     addr_str = json.dumps(address_lookup)
     analyzed_slugs_str = json.dumps(sorted(neighborhoods.keys()))
+    thresholds_str = json.dumps(thresholds)
 
     html = textwrap.dedent("""\
     <!DOCTYPE html>
@@ -272,7 +281,11 @@ def generate_homepage_html(
 
         <h2>Map Legend</h2>
         <div class="legend">
-            <div class="legend-item"><div class="legend-swatch" style="background:#009E73;opacity:0.7;border-color:#009E73"></div> Analyzed neighborhood</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#009E73;border-color:#009E73"></div> Top quintile available GFA</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#56B4E9;border-color:#56B4E9"></div> Upper-middle quintile</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#F0E442;border-color:#888"></div> Middle quintile</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#E69F00;border-color:#E69F00"></div> Lower-middle quintile</div>
+            <div class="legend-item"><div class="legend-swatch" style="background:#D55E00;border-color:#D55E00"></div> Bottom quintile available GFA</div>
             <div class="legend-item"><div class="legend-swatch" style="background:transparent;border-color:#555"></div> Not yet analyzed</div>
         </div>
 
@@ -300,6 +313,7 @@ def generate_homepage_html(
     const neighborhoodData = NB_DATA_PLACEHOLDER;
     const addressLookup = ADDR_LOOKUP_PLACEHOLDER;
     const analyzedSlugs = new Set(ANALYZED_SLUGS_PLACEHOLDER);
+    const gfaThresholds = THRESHOLDS_PLACEHOLDER;  // [q20, q40, q60, q80]
 
     // --- Helpers ---
     function fmt(n) { return n == null ? 'N/A' : n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
@@ -356,13 +370,25 @@ def generate_homepage_html(
 
     function getSlug(name) { return name.toLowerCase().replace(/ /g, '_'); }
 
+    function getGfaColor(slug) {
+        var nb = neighborhoodData[slug];
+        if (!nb) return '#888';
+        var gfa = nb.total_available_gfa;
+        if (gfa > gfaThresholds[3]) return '#009E73';
+        if (gfa > gfaThresholds[2]) return '#56B4E9';
+        if (gfa > gfaThresholds[1]) return '#F0E442';
+        if (gfa > gfaThresholds[0]) return '#E69F00';
+        return '#D55E00';
+    }
+
     function featureStyle(feature, isHover) {
         var slug = getSlug(feature.properties.CIVIC || '');
         var isAnalyzed = analyzedSlugs.has(slug);
         if (isAnalyzed) {
+            var color = getGfaColor(slug);
             return {
-                fillColor: '#009E73', fillOpacity: isHover ? 0.5 : 0.35,
-                color: '#009E73', weight: isHover ? 2.5 : 1.5, opacity: 0.8
+                fillColor: color, fillOpacity: isHover ? 0.6 : 0.45,
+                color: color, weight: isHover ? 2.5 : 1.5, opacity: 0.8
             };
         }
         return {
@@ -371,12 +397,35 @@ def generate_homepage_html(
         };
     }
 
+    function makeTooltip(slug, name, isAnalyzed) {
+        var nb = neighborhoodData[slug];
+        var html = '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;font-size:12px;line-height:1.5;min-width:180px">';
+        html += '<div style="font-weight:700;font-size:13px;border-bottom:1px solid #ddd;padding-bottom:4px;margin-bottom:6px">' + name + '</div>';
+        if (!isAnalyzed || !nb) {
+            html += '<div style="color:#888">Not yet analyzed</div>';
+        } else {
+            var gfa = nb.total_available_gfa;
+            var quintile = gfa > gfaThresholds[3] ? 'Top' : gfa > gfaThresholds[2] ? 'Upper-middle' : gfa > gfaThresholds[1] ? 'Middle' : gfa > gfaThresholds[0] ? 'Lower-middle' : 'Bottom';
+            function row(label, value) { return '<div style="display:flex;justify-content:space-between;gap:12px;padding:1px 0"><span style="color:#666">' + label + '</span><span style="font-weight:600">' + value + '</span></div>'; }
+            html += row('Parcels analyzed', fmt(nb.total_parcels));
+            html += row('Available GFA', fmtGfa(nb.total_available_gfa));
+            html += row('Value range', fmtM(nb.total_est_low) + ' \u2013 ' + fmtM(nb.total_est_high));
+            if (nb.neighborhood_rate_median) html += row('Improvement $/SF', fmtD(nb.neighborhood_rate_median) + '/SF');
+            html += row('Vacant buildable', fmt(nb.vacant_count));
+            html += row('Underdeveloped', fmt(nb.underdeveloped_count));
+            html += row('GFA quintile', quintile);
+        }
+        html += '</div>';
+        return html;
+    }
+
     var civicLayer = L.geoJSON(civicData, {
         style: function(feature) { return featureStyle(feature, false); },
         onEachFeature: function(feature, layer) {
             var name = feature.properties.CIVIC || 'Unknown';
             var slug = getSlug(name);
             var isAnalyzed = analyzedSlugs.has(slug);
+            layer.bindTooltip(makeTooltip(slug, name, isAnalyzed), {sticky: true, direction: 'top', opacity: 0.97});
             layer.on('mouseover', function() {
                 layer.setStyle(featureStyle(feature, true));
                 layer.bringToFront();
@@ -481,6 +530,7 @@ def generate_homepage_html(
     html = html.replace("NB_DATA_PLACEHOLDER", nb_data_str)
     html = html.replace("ADDR_LOOKUP_PLACEHOLDER", addr_str)
     html = html.replace("ANALYZED_SLUGS_PLACEHOLDER", analyzed_slugs_str)
+    html = html.replace("THRESHOLDS_PLACEHOLDER", thresholds_str)
 
     return html
 

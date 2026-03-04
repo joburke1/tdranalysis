@@ -1,0 +1,39 @@
+Analysis Summary: Penrose
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 373
+Conforming parcels: 86 (23.1%)
+
+Zoning district breakdown:
+  R-6             373 parcels
+
+Development status:
+  underdeveloped      347 parcels
+  overdeveloped        11 parcels
+  near-capacity         8 parcels
+  vacant                7 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 362
+  Total available SF:       1,193,044 sf
+  Median per parcel:            3,264 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       207
+  Range:           $       170 – $243
+  Sample size:             10 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            362
+  Aggregate low:      $    95,361,493
+  Aggregate high:     $   130,038,400
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

@@ -1,0 +1,38 @@
+Analysis Summary: Arlington Forest
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 630
+Conforming parcels: 222 (35.2%)
+
+Zoning district breakdown:
+  R-6             630 parcels
+
+Development status:
+  underdeveloped      616 parcels
+  near-capacity         9 parcels
+  overdeveloped         5 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 625
+  Total available SF:       2,299,458 sf
+  Median per parcel:            3,747 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       185
+  Range:           $       185 – $185
+  Sample size:              2 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            625
+  Aggregate low:      $   177,196,170
+  Aggregate high:     $   241,631,142
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

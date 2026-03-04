@@ -1,0 +1,368 @@
+parcel_id,street_address,neighborhood,zoning_district,is_split_zoned,property_type,land_value,improvement_value,development_status
+17004016,"1550 Wilson Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,False,111-Off bldg < 7 stories,6659500.0,16429500.0,unknown
+17004015,,Radnor/Ft.Myer Heights,C-O,False,,1740500.0,0.0,unknown
+17003029,,Radnor/Ft.Myer Heights,C-O,False,,7065200.0,26702200.0,unknown
+17004014,,Radnor/Ft.Myer Heights,C-O,False,,3012400.0,8692800.0,unknown
+17004007,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,2025000.0,4002600.0,unknown
+17004008,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,2025000.0,4002600.0,unknown
+17004009,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,2025000.0,4002600.0,unknown
+17004010,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,2025000.0,4203600.0,unknown
+17004023,"1527 Clarendon Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,False,215-Gen Comm - other,548200.0,504800.0,unknown
+17004011,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,1546300.0,0.0,unknown
+17004012,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,1546300.0,0.0,unknown
+17004013,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,1730500.0,0.0,unknown
+17003025,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,5500000.0,31416000.0,unknown
+17002004,,Radnor/Ft.Myer Heights,C-O,False,,11326000.0,16736100.0,unknown
+17002005,,Radnor/Ft.Myer Heights,C-O,False,,16815500.0,41701800.0,unknown
+17002007,"1200 Wilson Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,False,112-Off bldg 7+ stories,8741500.0,4383200.0,unknown
+17003030,"1300 Wilson Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,True,112-Off bldg 7+ stories,21796800.0,93591900.0,unknown
+17003031,"17Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,True,101-Off Bldg-VacLand-site plan,8915500.0,45141700.0,unknown
+17001009,,Radnor/Ft.Myer Heights,C-O-2.5,True,,100.0,0.0,unknown
+17001010,,Radnor/Ft.Myer Heights,C-O,True,,32959000.0,116276600.0,unknown
+17001011,,Radnor/Ft.Myer Heights,C-O,True,,35841800.0,161243100.0,unknown
+17039PCA,,Radnor/Ft.Myer Heights,RA4.8,True,,,,unknown
+17026013,,Radnor/Ft.Myer Heights,RA6-15,False,,475800.0,248000.0,unknown
+17026011,,Radnor/Ft.Myer Heights,RA6-15,False,,451100.0,762800.0,unknown
+17026010,,Radnor/Ft.Myer Heights,RA6-15,False,,503300.0,508300.0,unknown
+17022008,"1510 N Rolfe St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,311-Apartment - Garden,847000.0,889800.0,unknown
+17022011,"1509 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,528-SFD/Apt Zone no site plan,,,unknown
+17026009,"1505 N Rhodes St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,503300.0,319000.0,unknown
+17022012,"1505 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,528-SFD/Apt Zone no site plan,,,unknown
+17026008,"1501 N Rhodes St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,468600.0,636500.0,unknown
+17026012,"1517 N Rhodes St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,540600.0,573500.0,unknown
+17022010,"1828 16Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,311-Apartment - Garden,607400.0,1202000.0,unknown
+17022009,,Radnor/Ft.Myer Heights,RA8-18,False,,556600.0,473700.0,unknown
+17022PCA,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17010PCB,,Radnor/Ft.Myer Heights,C-O-2.5,True,,,,unknown
+17006004,,Radnor/Ft.Myer Heights,RA4.8,False,,2413600.0,0.0,unknown
+17006006,"Clarendon Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,301-MultiFam-VacLand-site plan,1474000.0,0.0,unknown
+17007PCA,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17006007,"1555 16Th Rd N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,300-MultiFam-VacLand-no s.plan,1624800.0,0.0,unknown
+17003012,,Radnor/Ft.Myer Heights,RA4.8,False,,6677000.0,0.0,unknown
+17007009,,Radnor/Ft.Myer Heights,RA6-15,False,,920900.0,134600.0,unknown
+17003011,,Radnor/Ft.Myer Heights,RA4.8,False,,2529200.0,0.0,unknown
+17003299,,Radnor/Ft.Myer Heights,RA4.8,False,,316000.0,0.0,unknown
+17003300,,Radnor/Ft.Myer Heights,RA4.8,False,,316000.0,0.0,unknown
+17026066,"N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+17026055,"1470 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),650000.0,315800.0,unknown
+17026056,"1468 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),650000.0,270600.0,unknown
+17026057,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,253500.0,unknown
+17026058,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,251500.0,unknown
+17026059,"1462 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17026060,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,259600.0,unknown
+17026061,"1458 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),650000.0,305700.0,unknown
+17026062,"1456 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),650000.0,263900.0,unknown
+17026063,"1454 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17026064,"1452 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),650000.0,253800.0,unknown
+17006005,"1542 Clarendon Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,301-MultiFam-VacLand-site plan,2617700.0,0.0,unknown
+17006003,"1558 Clarendon Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,301-MultiFam-VacLand-site plan,1347400.0,0.0,unknown
+17006001,,Radnor/Ft.Myer Heights,RA4.8,False,,3249600.0,65415900.0,unknown
+17006002,,Radnor/Ft.Myer Heights,RA4.8,False,,1624800.0,0.0,unknown
+17003041,,Radnor/Ft.Myer Heights,RA4.8,False,,1170000.0,1900400.0,unknown
+17003010,,Radnor/Ft.Myer Heights,RA4.8,False,,2529200.0,0.0,unknown
+17026014,"1726 16Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,566400.0,157400.0,unknown
+17003298,,Radnor/Ft.Myer Heights,RA4.8,False,,126500.0,0.0,unknown
+17003032,"1300 17Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,True,112-Off bldg 7+ stories,14546300.0,45141700.0,unknown
+17003024,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,1099900.0,6283200.0,unknown
+17003023,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,2200100.0,12566400.0,unknown
+17003033,"1616 Fort Myer Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,True,112-Off bldg 7+ stories,17589900.0,18241500.0,unknown
+17002002,,Radnor/Ft.Myer Heights,C-O,False,,100.0,0.0,unknown
+17003PCA,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,,,unknown
+17032008,"1500 Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,313-Apartment - High-rise,16965000.0,55405200.0,unknown
+17001012,"N Arlington Ridge Rd, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O-2.5,True,310-Apartment Parking,100.0,0.0,unknown
+17041PCA,,Radnor/Ft.Myer Heights,RA4.8,True,,,,unknown
+17001013,,Radnor/Ft.Myer Heights,S-3A,True,,100.0,0.0,unknown
+17040PCA,,Radnor/Ft.Myer Heights,RA4.8,True,,,,unknown
+17042PCA,,Radnor/Ft.Myer Heights,RA4.8,True,,,,unknown
+17002015,"Fairfax Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,True,101-Off Bldg-VacLand-site plan,100.0,0.0,unknown
+17026PCB,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17022002,,Radnor/Ft.Myer Heights,RA8-18,False,,916100.0,220200.0,unknown
+17015010,,Radnor/Ft.Myer Heights,P-S,False,,5856400.0,29138500.0,unknown
+17015005,"N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,200-GenCom VacLand-no siteplan,100.0,0.0,unknown
+17015004,"N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,200-GenCom VacLand-no siteplan,874200.0,4202300.0,unknown
+17015002,"N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,200-GenCom VacLand-no siteplan,3309400.0,15908800.0,unknown
+17014005,"2000 15Th St N, Arlington VA 22201",Radnor/Ft.Myer Heights,C-O,False,112-Off bldg 7+ stories,11622700.0,3413600.0,unknown
+17015009,"N Troy St, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,210-General Comm Parking,12448800.0,64912600.0,unknown
+17015008,"N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,210-General Comm Parking,7995400.0,41690800.0,unknown
+17015007,"N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,200-GenCom VacLand-no siteplan,1250100.0,6518400.0,unknown
+17022001,,Radnor/Ft.Myer Heights,RA8-18,False,,938600.0,247300.0,unknown
+17015PLA,,Radnor/Ft.Myer Heights,P-S,False,,,,unknown
+17014001,"1412 N Taft St, Arlington VA 22201",Radnor/Ft.Myer Heights,C-O,False,313-Apartment - High-rise,20713700.0,105230400.0,unknown
+17015003,"N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,200-GenCom VacLand-no siteplan,1436200.0,6903800.0,unknown
+17015001,"N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,200-GenCom VacLand-no siteplan,6556500.0,31517300.0,unknown
+17013015,,Radnor/Ft.Myer Heights,C-O,True,,7249200.0,8385500.0,unknown
+17013006,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,20435900.0,120904600.0,unknown
+17020005,"1910 13Th St N, Arlington VA 22201",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,1752700.0,2027300.0,unknown
+17020010,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17021004,"1250 N Rolfe St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,312-Apartment - Mid-rise,,,unknown
+17015011,"1425 N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,P-S,False,215-Gen Comm - other,100.0,0.0,unknown
+17020006,,Radnor/Ft.Myer Heights,RA6-15,True,,702500.0,2768800.0,unknown
+17022004,"1412 N Rolfe St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,311-Apartment - Garden,798000.0,908600.0,unknown
+17022032,"1463 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,575000.0,unknown
+17022033,,Radnor/Ft.Myer Heights,RA8-18,False,,680000.0,473000.0,unknown
+17022036,"1447 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,442100.0,unknown
+17022040,"1431 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,469100.0,unknown
+17022041,"1427 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,594100.0,unknown
+17022042,"1423 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,603800.0,unknown
+17022043,"1419 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,503200.0,unknown
+17022037,"1443 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,499700.0,unknown
+17022038,,Radnor/Ft.Myer Heights,RA8-18,False,,680000.0,567700.0,unknown
+17022039,"1435 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),,,unknown
+17022034,"1455 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,483900.0,unknown
+17022035,"1451 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,506200.0,unknown
+17020003,,Radnor/Ft.Myer Heights,RA6-15,True,,1532800.0,2648800.0,unknown
+17019PCA,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17022044,"1415 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),680000.0,560400.0,unknown
+17022045,,Radnor/Ft.Myer Heights,RA8-18,False,,100.0,0.0,unknown
+17026PCA,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17026065,"1450 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),650000.0,288900.0,unknown
+17026019,"1410 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,1827000.0,399600.0,unknown
+17032022,,Radnor/Ft.Myer Heights,RA6-15,False,,664300.0,0.0,unknown
+17032023,"1515 12Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,811400.0,676900.0,unknown
+17032027,"Fort Myer Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,301-MultiFam-VacLand-site plan,39900.0,0.0,unknown
+17032026,"1209 Fort Myer Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,312-Apartment - Mid-rise,1040000.0,3251100.0,unknown
+17032PCB,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17032001,"1521 12Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,1030900.0,1237200.0,unknown
+17032147,"1326 N Oak St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),575000.0,921000.0,unknown
+17032148,"1332 N Oak St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17032020,"1204 N Oak St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,528-SFD/Apt Zone no site plan,,,unknown
+17032146,,Radnor/Ft.Myer Heights,RA6-15,False,,575000.0,932000.0,unknown
+17032019,"1215 Fort Myer Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,312-Apartment - Mid-rise,,,unknown
+17032007,"1315 Fort Myer Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,,,unknown
+17032006,"1301 Fort Myer Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,1435100.0,1084900.0,unknown
+17032017,"1310 N Oak St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,312-Apartment - Mid-rise,,,unknown
+17032010,"1415 N Oak St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,312-Apartment - Mid-rise,1430000.0,4303200.0,unknown
+17032PCA,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17031046,"1301 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),1000000.0,1332100.0,unknown
+17031047,,Radnor/Ft.Myer Heights,RA6-15,False,,1000000.0,1175600.0,unknown
+17031048,,Radnor/Ft.Myer Heights,RA6-15,False,,1000000.0,1180000.0,unknown
+17031049,,Radnor/Ft.Myer Heights,RA6-15,False,,1000000.0,1185200.0,unknown
+17031050,"1309 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031051,,Radnor/Ft.Myer Heights,RA6-15,False,,1000000.0,1295900.0,unknown
+17031052,"1313 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),1000000.0,1175600.0,unknown
+17031053,"1315 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031054,,Radnor/Ft.Myer Heights,RA6-15,False,,1000000.0,1323900.0,unknown
+17031057,"1404 N Meade St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031058,"1406 N Meade St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),1000000.0,1177500.0,unknown
+17031059,"1408 N Meade St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),1000000.0,1166500.0,unknown
+17031060,"1410 N Meade St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),1000000.0,1137800.0,unknown
+17031062,"1414 N Meade St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031061,"1412 N Meade St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17020PCA,,Radnor/Ft.Myer Heights,RA8-18,True,,,,unknown
+17020008,"Fairfax Dr, Arlington VA 22201",Radnor/Ft.Myer Heights,S-3A,False,200-GenCom VacLand-no siteplan,359100.0,0.0,unknown
+17012005,"2007 15Th St N, Arlington VA 22201",Radnor/Ft.Myer Heights,C-2,True,213-Small office,811100.0,1432300.0,unknown
+17012021,"1515 N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,C-O,True,112-Off bldg 7+ stories,15546600.0,38206000.0,unknown
+17021001,,Radnor/Ft.Myer Heights,RA8-18,True,,1132000.0,990700.0,unknown
+17021006,"1800 13Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,312-Apartment - Mid-rise,2032200.0,5300300.0,unknown
+17021002,"1227 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,True,528-SFD/Apt Zone no site plan,920900.0,170000.0,unknown
+17021007,"1405 N Scott St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,300-MultiFam-VacLand-no s.plan,,,unknown
+17013PCA,,Radnor/Ft.Myer Heights,RA4.8,True,,,,unknown
+17013019,,Radnor/Ft.Myer Heights,RC,True,,32367600.0,160478100.0,unknown
+17013017,"1401 N Taft St, Arlington VA 22201",Radnor/Ft.Myer Heights,RA4.8,True,313-Apartment - High-rise,23810400.0,115464500.0,unknown
+17021009,"13Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RC,True,300-MultiFam-VacLand-no s.plan,450600.0,0.0,unknown
+17031PCA,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17031064,"1403 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),1000000.0,1485700.0,unknown
+17031065,"1405 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031066,"1407 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031067,"1409 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031068,"1411 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031069,"1413 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031070,"1415 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),1000000.0,1188100.0,unknown
+17031071,"1417 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031072,"1419 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031073,"1421 N Nash St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031074,"1331 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031075,"1333 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17031076,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17031079,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17031078,"1345 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,540 - Not Valued Resd. (H.O.A),,,unknown
+17031077,"1337 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),900000.0,1013700.0,unknown
+17004022,,Radnor/Ft.Myer Heights,C-O,True,,10777300.0,23592700.0,unknown
+17004021,,Radnor/Ft.Myer Heights,C-O,False,,228300.0,171900.0,unknown
+17004020,"1500 Wilson Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O,False,112-Off bldg 7+ stories,15896800.0,34207100.0,unknown
+17027004,"1510 N Queen St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,5156200.0,2065600.0,unknown
+17027002,"1415 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,1457900.0,768900.0,unknown
+17027001,"1723 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,528-SFD/Apt Zone no site plan,973400.0,133200.0,unknown
+17027005,"1701 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,311-Apartment - Garden,,,unknown
+17027003,"1505 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,1468500.0,864500.0,unknown
+17009001,"1600 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,1436400.0,2834600.0,unknown
+17009002,,Radnor/Ft.Myer Heights,RA6-15,False,,1488000.0,2834600.0,unknown
+17031063,"N Meade St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,540 - Not Valued Resd. (H.O.A),,,unknown
+17031080,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17010016,,Radnor/Ft.Myer Heights,RA8-18,False,,497200.0,0.0,unknown
+17009007,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17009008,,Radnor/Ft.Myer Heights,RA8-18,True,,,,unknown
+17009011,"1660 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17009012,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,717400.0,unknown
+17009013,"1668 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17009014,"1672 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17009015,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17009016,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17009017,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,632400.0,unknown
+17009018,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,822600.0,unknown
+17009019,"1690 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17009020,"1686 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17009021,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,634800.0,unknown
+17009022,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,589800.0,unknown
+17009023,"1674 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),,,unknown
+17009024,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17009025,,Radnor/Ft.Myer Heights,RA6-15,False,,650000.0,602300.0,unknown
+17009026,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17009027,"1656 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,540 - Not Valued Resd. (H.O.A),,,unknown
+17009028,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17025001,,Radnor/Ft.Myer Heights,RA6-15,True,,2060900.0,3425100.0,unknown
+17011026,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,335900.0,unknown
+17011032,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,329200.0,unknown
+17011025,"1889 16Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),650000.0,345200.0,unknown
+17011054,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,598800.0,unknown
+17011031,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,315600.0,unknown
+17011024,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,355200.0,unknown
+17011053,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011030,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,324700.0,unknown
+17011034,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,674100.0,unknown
+17011052,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011048,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011029,"1881 16Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),650000.0,324700.0,unknown
+17011035,"1614 N Rhodes St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),,,unknown
+17011049,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,605700.0,unknown
+17011028,"1883 16Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),650000.0,317600.0,unknown
+17011036,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011050,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011037,"1618 N Rhodes St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),,,unknown
+17011027,"1885 16Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),650000.0,376300.0,unknown
+17011038,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011033,"16Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,True,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+17011039,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011044,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011045,"1854 Clarendon Blvd, Arlington VA 22201",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),,,unknown
+17011040,"1624 N Rhodes St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),,,unknown
+17011046,"1852 Clarendon Blvd, Arlington VA 22201",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),,,unknown
+17011047,,Radnor/Ft.Myer Heights,RA8-18,False,,650000.0,665800.0,unknown
+17011041,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17011042,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17020011,"1928 13Th St N, Arlington VA 22201",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),645000.0,544300.0,unknown
+17020012,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17010034,,Radnor/Ft.Myer Heights,RA8-18,True,,100.0,0.0,unknown
+17010018,,Radnor/Ft.Myer Heights,C-2,True,,2574700.0,339200.0,unknown
+17036PCA,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17013296,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,,,unknown
+17019002,"2005 Fairfax Dr, Arlington VA 22201",Radnor/Ft.Myer Heights,RA8-18,True,311-Apartment - Garden,,,unknown
+17008PCA,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17010195,"1776 Wilson Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,C-O-2.5,True,111-Off bldg < 7 stories,,,unknown
+17010197,,Radnor/Ft.Myer Heights,C-1,True,,90400.0,0.0,unknown
+17010196,,Radnor/Ft.Myer Heights,C-1,True,,90400.0,0.0,unknown
+17017005,"2025 Fairfax Dr, Arlington VA 22201",Radnor/Ft.Myer Heights,RA8-18,True,312-Apartment - Mid-rise,8112000.0,0.0,unknown
+17017006,"1215 N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,RA8-18,True,311-Apartment - Garden,2868500.0,8927400.0,unknown
+17017002,"1233 N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,RA8-18,False,311-Apartment - Garden,1554800.0,2162000.0,unknown
+17003PCB,,Radnor/Ft.Myer Heights,RA4.8,True,,,,unknown
+17005026,"1527 16Th Rd N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,512-Townhouse (fee simple own),,,unknown
+17005027,"1525 16Th Rd N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,512-Townhouse (fee simple own),,,unknown
+17005028,"1523 16Th Rd N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,512-Townhouse (fee simple own),,,unknown
+17005029,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005030,"1519 16Th Rd N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,512-Townhouse (fee simple own),,,unknown
+17005031,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005032,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,941800.0,unknown
+17005033,,Radnor/Ft.Myer Heights,RA4.8,False,,,,unknown
+17005034,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005035,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,859100.0,unknown
+17005036,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005037,"1505 16Th Rd N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,512-Townhouse (fee simple own),,,unknown
+17005038,"1503 16Th Rd N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,512-Townhouse (fee simple own),,,unknown
+17005014,,Radnor/Ft.Myer Heights,RA4.8,False,,,,unknown
+17005015,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005016,,Radnor/Ft.Myer Heights,RA4.8,False,,,,unknown
+17005017,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005018,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,859100.0,unknown
+17005019,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005020,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,939100.0,unknown
+17005021,,Radnor/Ft.Myer Heights,RA4.8,False,,,,unknown
+17005022,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005023,,Radnor/Ft.Myer Heights,RA4.8,False,,,,unknown
+17005005,,Radnor/Ft.Myer Heights,RA4.8,False,,1689900.0,2834600.0,unknown
+17005024,,Radnor/Ft.Myer Heights,RA4.8,False,,720000.0,854200.0,unknown
+17005025,"1506 16Th Ct N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,512-Townhouse (fee simple own),,,unknown
+17005039,"16Th Rd N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,540 - Not Valued Resd. (H.O.A),,,unknown
+17005012,"1530 Clarendon Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,313-Apartment - High-rise,,,unknown
+17011057,"1840 Wilson Blvd, Arlington VA 22201",Radnor/Ft.Myer Heights,C-O-2.5,False,312-Apartment - Mid-rise,,,unknown
+17011056,,Radnor/Ft.Myer Heights,C-O-2.5,False,,7002200.0,500.0,unknown
+17016PCA,,Radnor/Ft.Myer Heights,RA-H-3.2,True,,,,unknown
+17016003,"N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,C-O,True,415-Hotel - Select Service,1914700.0,5700600.0,unknown
+17016006,"1309 N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,C-O,True,415-Hotel - Select Service,3829400.0,11015400.0,unknown
+17016008,,Radnor/Ft.Myer Heights,C-O,True,,1914700.0,5700600.0,unknown
+17016009,"1325 N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,C-O,True,415-Hotel - Select Service,1914700.0,5700600.0,unknown
+17016010,"1345 N Courthouse Rd, Arlington VA 22201",Radnor/Ft.Myer Heights,C-O,True,415-Hotel - Select Service,76600.0,457200.0,unknown
+17016PCB,,Radnor/Ft.Myer Heights,C-3,True,,,,unknown
+17010PCC,,Radnor/Ft.Myer Heights,C-O,True,,,,unknown
+17012PCB,,Radnor/Ft.Myer Heights,C-O,True,,,,unknown
+17011051,"1827 16Th St N, Arlington VA 22201",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),,,unknown
+17011043,"1630 N Rhodes St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,512-Townhouse (fee simple own),,,unknown
+17011055,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17012PCA,,Radnor/Ft.Myer Heights,RA4.8,True,,,,unknown
+17010PCA,,Radnor/Ft.Myer Heights,C-O-2.5,True,,,,unknown
+17023012,,Radnor/Ft.Myer Heights,RA8-18,False,,1711900.0,2834600.0,unknown
+17023PCA,,Radnor/Ft.Myer Heights,RA8-18,False,,,,unknown
+17034003,"1200 N Rolfe St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,312-Apartment - Mid-rise,4020000.0,29839400.0,unknown
+17011065,,Radnor/Ft.Myer Heights,RA8-18,False,,219000.0,0.0,unknown
+17011PCA,,Radnor/Ft.Myer Heights,C-O-2.5,False,,,,unknown
+17011068,,Radnor/Ft.Myer Heights,C-O-2.5,False,,15951800.0,86967000.0,unknown
+17024031,"1723 Fairfax Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,312-Apartment - Mid-rise,,,unknown
+17024033,"1351 N Rolfe St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,True,313-Apartment - High-rise,,,unknown
+17024034,"1800 14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA8-18,False,200-GenCom VacLand-no siteplan,2207200.0,0.0,unknown
+17033PCC,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17033033,,Radnor/Ft.Myer Heights,RA6-15,False,,944700.0,221100.0,unknown
+17033032,"1729 12Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,528-SFD/Apt Zone no site plan,,,unknown
+17033031,,Radnor/Ft.Myer Heights,RA6-15,False,,944700.0,141200.0,unknown
+17038029,"1201 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,312-Apartment - Mid-rise,,,unknown
+17038007,"1200 N Queen St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,312-Apartment - Mid-rise,2732900.0,12519200.0,unknown
+17038002,,Radnor/Ft.Myer Heights,RA6-15,False,,1792300.0,3009600.0,unknown
+17033030,"1210 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,3194900.0,1185400.0,unknown
+17038PCA,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17038006,"1220 N Queen St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,2483600.0,425500.0,unknown
+17033003,"1240 N Quinn St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,311-Apartment - Garden,2065700.0,381300.0,unknown
+17038PCB,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17033PCB,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17033012,"1201 N Pierce St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,312-Apartment - Mid-rise,1290500.0,0.0,unknown
+17033028,"1200 Fort Myer Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,C-1-R,True,212-Restaurant/eating facility,747300.0,785500.0,unknown
+17033013,"1225 N Pierce St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,312-Apartment - Mid-rise,4556500.0,26603400.0,unknown
+17033029,"1210 Fort Myer Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,C-1-R,True,211-Retail strip,,,unknown
+17033023,"14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,S-3A,False,200-GenCom VacLand-no siteplan,22100.0,0.0,unknown
+17033034,"14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,S-3A,False,200-GenCom VacLand-no siteplan,,,unknown
+17033020,,Radnor/Ft.Myer Heights,S-3A,False,,77700.0,0.0,unknown
+17033021,,Radnor/Ft.Myer Heights,S-3A,False,,106000.0,0.0,unknown
+17033022,"14Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,S-3A,False,200-GenCom VacLand-no siteplan,459900.0,0.0,unknown
+17033014,"1239 N Pierce St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,528-SFD/Apt Zone no site plan,934400.0,349700.0,unknown
+17033PCD,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17033016,"1251 N Pierce St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,528-SFD/Apt Zone no site plan,953000.0,181500.0,unknown
+17033253,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17033017,,Radnor/Ft.Myer Heights,RA6-15,False,,17655000.0,1000.0,unknown
+17011076,,Radnor/Ft.Myer Heights,C-O-2.5,False,,18258000.0,135513300.0,unknown
+17033007,,Radnor/Ft.Myer Heights,RA6-15,False,,3315000.0,4124700.0,unknown
+17033332,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17033245,"1620 Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),615000.0,177400.0,unknown
+17033244,"1618 Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),615000.0,218800.0,unknown
+17033243,"1616 Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),615000.0,170100.0,unknown
+17033242,"1614 Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),615000.0,179300.0,unknown
+17033241,"1612 Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),615000.0,218100.0,unknown
+17033246,"Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,510-Res - Vacant(SF & Twnhse),500.0,0.0,unknown
+17033240,"1610 Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,512-Townhouse (fee simple own),615000.0,193500.0,unknown
+17033247,"Arlington Blvd, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,540 - Not Valued Resd. (H.O.A),100.0,0.0,unknown
+17033005,"1318 N Pierce St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,311-Apartment - Garden,1536200.0,325400.0,unknown
+17033333,"1300 N Pierce St, Arlington VA 22201",Radnor/Ft.Myer Heights,RA6-15,False,313-Apartment - High-rise,6435000.0,19711200.0,unknown
+17003583,"1531 N Pierce St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA4.8,False,313-Apartment - High-rise,,,unknown
+17003585,,Radnor/Ft.Myer Heights,RA4.8,True,,,,unknown
+17027008,"1601 Fairfax Dr, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,413-Hotel - Lodging,1900000.0,1000.0,unknown
+17027011,"1515 N Queen St, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,False,311-Apartment - Garden,,,unknown
+17027010,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17033PCA,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17037001,"1530 12Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,312-Apartment - Mid-rise,2520000.0,3385700.0,unknown
+17037004,"1518 12Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,311-Apartment - Garden,956800.0,1358500.0,unknown
+17037PCA,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17037008,,Radnor/Ft.Myer Heights,RA6-15,True,,1275800.0,1519200.0,unknown
+17037010,"1428 12Th St N, Arlington VA 22209",Radnor/Ft.Myer Heights,RA6-15,True,528-SFD/Apt Zone no site plan,965900.0,294400.0,unknown
+17037PCC,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17037PCF,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17037PCD,,Radnor/Ft.Myer Heights,RA6-15,True,,,,unknown
+17037PCG,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17037PCB,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17037PCE,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown
+17037064,,Radnor/Ft.Myer Heights,RA6-15,False,,,,unknown

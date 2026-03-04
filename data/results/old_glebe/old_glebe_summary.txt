@@ -1,0 +1,39 @@
+Analysis Summary: Old Glebe
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 562
+Conforming parcels: 220 (39.1%)
+
+Zoning district breakdown:
+  R-10            562 parcels
+
+Development status:
+  underdeveloped      407 parcels
+  overdeveloped        97 parcels
+  near-capacity        41 parcels
+  vacant               17 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 461
+  Total available SF:       1,965,552 sf
+  Median per parcel:            4,312 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       231
+  Range:           $       163 – $300
+  Sample size:             53 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            461
+  Aggregate low:      $   148,935,607
+  Aggregate high:     $   203,094,010
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

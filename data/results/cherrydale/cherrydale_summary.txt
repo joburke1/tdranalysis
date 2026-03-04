@@ -1,0 +1,41 @@
+Analysis Summary: Cherrydale
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 469
+Conforming parcels: 178 (38.0%)
+
+Zoning district breakdown:
+  R-6             432 parcels
+  R-5              23 parcels
+  R-8              14 parcels
+
+Development status:
+  underdeveloped      401 parcels
+  near-capacity        32 parcels
+  overdeveloped        24 parcels
+  vacant               12 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 443
+  Total available SF:       1,540,812 sf
+  Median per parcel:            3,620 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       240
+  Range:           $       168 – $311
+  Sample size:             42 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            443
+  Aggregate low:      $   134,043,484
+  Aggregate high:     $   182,786,569
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

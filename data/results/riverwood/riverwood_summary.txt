@@ -1,0 +1,39 @@
+Analysis Summary: Riverwood
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 60
+Conforming parcels: 40 (66.7%)
+
+Zoning district breakdown:
+  R-20             60 parcels
+
+Development status:
+  underdeveloped       45 parcels
+  overdeveloped         9 parcels
+  vacant                3 parcels
+  near-capacity         3 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 51
+  Total available SF:         307,988 sf
+  Median per parcel:            6,249 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       185
+  Range:           $       185 – $185
+  Sample size:              4 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:             51
+  Aggregate low:      $    18,849,410
+  Aggregate high:     $    25,703,741
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

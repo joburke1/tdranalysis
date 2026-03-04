@@ -1,0 +1,39 @@
+Analysis Summary: Leeway Overlee
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 682
+Conforming parcels: 273 (40.0%)
+
+Zoning district breakdown:
+  R-6             682 parcels
+
+Development status:
+  underdeveloped      576 parcels
+  near-capacity        57 parcels
+  overdeveloped        40 parcels
+  vacant                9 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 632
+  Total available SF:       2,342,655 sf
+  Median per parcel:            3,852 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       233
+  Range:           $       190 – $277
+  Sample size:             53 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            632
+  Aggregate low:      $   195,799,203
+  Aggregate high:     $   266,998,914
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

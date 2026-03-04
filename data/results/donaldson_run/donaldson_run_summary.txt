@@ -1,0 +1,41 @@
+Analysis Summary: Donaldson Run
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 883
+Conforming parcels: 425 (48.1%)
+
+Zoning district breakdown:
+  R-8             478 parcels
+  R-10            373 parcels
+  R-6              32 parcels
+
+Development status:
+  underdeveloped      754 parcels
+  overdeveloped        65 parcels
+  near-capacity        48 parcels
+  vacant               16 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 814
+  Total available SF:       3,585,581 sf
+  Median per parcel:            4,614 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       249
+  Range:           $       174 – $325
+  Sample size:             62 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            814
+  Aggregate low:      $   276,759,764
+  Aggregate high:     $   377,399,679
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

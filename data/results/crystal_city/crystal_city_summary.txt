@@ -1,0 +1,29 @@
+Analysis Summary: Crystal City
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 123
+
+Zoning district breakdown:
+  C-O              36 parcels
+  C-O-1.5          25 parcels
+  RA-H-3.2         18 parcels
+  C-2              15 parcels
+  C-O-CC           11 parcels
+  CM                6 parcels
+  RA4.8             4 parcels
+  M-2               3 parcels
+  M-1               2 parcels
+  P-S               2 parcels
+
+Development status:
+  unknown             123 parcels
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

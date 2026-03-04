@@ -1,0 +1,38 @@
+Analysis Summary: Glebewood
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 15
+Conforming parcels: 2 (13.3%)
+
+Zoning district breakdown:
+  R-6              15 parcels
+
+Development status:
+  underdeveloped       13 parcels
+  overdeveloped         1 parcels
+  vacant                1 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 14
+  Total available SF:          56,552 sf
+  Median per parcel:            4,257 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       185
+  Range:           $       185 – $185
+  Sample size:              0 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:             14
+  Aggregate low:      $     4,180,861
+  Aggregate high:     $     5,701,175
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

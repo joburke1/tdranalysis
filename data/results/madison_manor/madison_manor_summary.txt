@@ -1,0 +1,39 @@
+Analysis Summary: Madison Manor
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 498
+Conforming parcels: 323 (64.9%)
+
+Zoning district breakdown:
+  R-6             498 parcels
+
+Development status:
+  underdeveloped      485 parcels
+  near-capacity         7 parcels
+  overdeveloped         4 parcels
+  vacant                2 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 494
+  Total available SF:       1,866,876 sf
+  Median per parcel:            3,789 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       240
+  Range:           $       185 – $295
+  Sample size:              8 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            494
+  Aggregate low:      $   144,314,829
+  Aggregate high:     $   196,792,948
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

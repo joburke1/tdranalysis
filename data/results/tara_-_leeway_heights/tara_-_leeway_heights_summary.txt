@@ -1,0 +1,40 @@
+Analysis Summary: Tara - Leeway Heights
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 821
+Conforming parcels: 473 (57.6%)
+
+Zoning district breakdown:
+  R-8             485 parcels
+  R-6             336 parcels
+
+Development status:
+  underdeveloped      752 parcels
+  near-capacity        34 parcels
+  overdeveloped        28 parcels
+  vacant                7 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 793
+  Total available SF:       2,887,231 sf
+  Median per parcel:            3,741 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       246
+  Range:           $       201 – $291
+  Sample size:             47 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            793
+  Aggregate low:      $   243,869,885
+  Aggregate high:     $   332,549,843
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

@@ -1,0 +1,62 @@
+parcel_id,street_address,neighborhood,zoning_district,is_split_zoned,property_type,land_value,improvement_value,development_status
+28002PCA,,Shirlington,RA14-26,True,,,,unknown
+29004PCB,,Shirlington,RA14-26,True,,,,unknown
+29005PCC,,Shirlington,RA14-26,False,,,,unknown
+29003PCB,,Shirlington,RA14-26,False,,,,unknown
+29003006,"2815 S Wakefield St, Arlington VA 22206",Shirlington,C-1-R,True,211-Retail strip,714200.0,907600.0,unknown
+29003PCD,,Shirlington,RA14-26,False,,,,unknown
+29003PCC,,Shirlington,RA14-26,False,,,,unknown
+29020019,"2766 S Quincy St, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,,,unknown
+29020018,,Shirlington,C-O-1.5,False,,86700.0,958400.0,unknown
+29020017,,Shirlington,C-O-1.5,False,,70200.0,774500.0,unknown
+29020005,,Shirlington,C-O-1.5,False,,249800.0,2759200.0,unknown
+29020006,,Shirlington,C-O-1.5,False,,333100.0,3659500.0,unknown
+29020010,,Shirlington,C-O-1.5,False,,166500.0,1858800.0,unknown
+29020011,"2700 S Quincy St, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,,,unknown
+29020012,,Shirlington,C-O-1.5,False,,166500.0,1858800.0,unknown
+29020022,"4015 Campbell Ave, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,207200.0,2275100.0,unknown
+29020016,,Shirlington,C-O-1.5,False,,70200.0,774500.0,unknown
+29020015,"2774 S Quincy St, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,,,unknown
+29020013,"4013 Campbell Ave, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,93800.0,1016500.0,unknown
+29020001,,Shirlington,C-O-1.5,False,,760800.0,8219400.0,unknown
+29020002,"S Arlington Mill Dr, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,,,unknown
+29020003,,Shirlington,C-O-1.5,False,,893200.0,0.0,unknown
+29020021,,Shirlington,C-O-1.5,False,,183800.0,2033100.0,unknown
+29020020,,Shirlington,C-O-1.5,False,,201800.0,2217000.0,unknown
+29020023,"S Arlington Mill Dr, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,,,unknown
+29020004,,Shirlington,C-O-1.5,False,,589600.0,6534900.0,unknown
+29020007,"4039 Campbell Ave, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,,,unknown
+29020009,,Shirlington,C-O-1.5,False,,981400.0,10678500.0,unknown
+29020014,,Shirlington,C-O-1.5,False,,341900.0,3775700.0,unknown
+29020008,,Shirlington,C-O-1.5,False,,297400.0,3291600.0,unknown
+29019024,,Shirlington,C-O-1.5,False,,3426900.0,18897900.0,unknown
+29019022,"2900 S Quincy St, Arlington VA 22206",Shirlington,C-O-1.5,False,112-Off bldg 7+ stories,,,unknown
+29019026,,Shirlington,C-O-1.5,True,,4131100.0,20034900.0,unknown
+29019023,,Shirlington,C-O-1.5,False,,498900.0,0.0,unknown
+29019021,,Shirlington,C-O-1.5,False,,1995300.0,0.0,unknown
+29019020,,Shirlington,C-O-1.5,False,,72600.0,0.0,unknown
+29019019,"31St St S, Arlington VA 22206",Shirlington,C-O-1.5,False,200-GenCom VacLand-no siteplan,1319300.0,0.0,unknown
+29019018,"31St St S, Arlington VA 22206",Shirlington,C-O-1.5,False,312-Apartment - Mid-rise,6660300.0,31304600.0,unknown
+29020024,,Shirlington,C-O-1.5,False,,16100.0,0.0,unknown
+29019030,"2817 S Quincy St, Arlington VA 22206",Shirlington,C-O-1.5,True,253-Service station,,,unknown
+29019033,,Shirlington,C-O-1.5,True,,,,unknown
+29023004,,Shirlington,C-O-1.5,False,,13100.0,0.0,unknown
+29023008,"S Quincy St, Arlington VA 22206",Shirlington,C-O-1.5,True,200-GenCom VacLand-no siteplan,5400.0,0.0,unknown
+29019032,"S Quincy St, Arlington VA 22206",Shirlington,C-O-1.5,True,101-Off Bldg-VacLand-site plan,100.0,0.0,unknown
+29023007,,Shirlington,C-O-1.5,True,,,,unknown
+29003PCF,,Shirlington,RA14-26,True,,,,unknown
+29014PLB,,Shirlington,P-S,True,,,,unknown
+29014007,"3000 S Randolph St, Arlington VA 22206",Shirlington,C-O-1.5,True,312-Apartment - Mid-rise,,,unknown
+29014PLA,,Shirlington,C-O-1.5,True,,,,unknown
+29003028,"S Taylor St, Arlington VA 22206",Shirlington,P-S,False,251-Warehouse,18593400.0,4957100.0,unknown
+29003027,,Shirlington,P-S,False,,6307100.0,8897500.0,unknown
+29014PCB,,Shirlington,C-O-1.5,True,,,,unknown
+29014018,"4150 Campbell Ave, Arlington VA 22206",Shirlington,C-O-1.5,False,313-Apartment - High-rise,2657100.0,13425800.0,unknown
+29014017,,Shirlington,C-O-1.5,False,,,,unknown
+29014016,"4220 Campbell Ave, Arlington VA 22206",Shirlington,C-O-1.5,False,313-Apartment - High-rise,10419400.0,51913100.0,unknown
+29014PCA,,Shirlington,C-O-1.5,False,,,,unknown
+29014183,"4115 Campbell Ave, Arlington VA 22206",Shirlington,C-O-1.5,False,215-Gen Comm - other,1769700.0,9100400.0,unknown
+29014184,,Shirlington,C-O-1.5,False,,,,unknown
+29003PCA,,Shirlington,RA14-26,True,,,,unknown
+29003029,,Shirlington,P-S,False,,511100.0,139200.0,unknown
+29023005,"3939 Campbell Ave, Arlington VA 22206",Shirlington,C-O-1.5,True,111-Off bldg < 7 stories,,,unknown

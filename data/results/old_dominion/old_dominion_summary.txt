@@ -1,0 +1,40 @@
+Analysis Summary: Old Dominion
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 427
+Conforming parcels: 120 (28.1%)
+
+Zoning district breakdown:
+  R-6             378 parcels
+  R-8              49 parcels
+
+Development status:
+  underdeveloped      347 parcels
+  near-capacity        35 parcels
+  overdeveloped        32 parcels
+  vacant               13 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 395
+  Total available SF:       1,226,905 sf
+  Median per parcel:            3,228 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       238
+  Range:           $       216 – $260
+  Sample size:             19 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:            395
+  Aggregate low:      $   112,728,958
+  Aggregate high:     $   153,721,306
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

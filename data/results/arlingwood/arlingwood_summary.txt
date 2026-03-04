@@ -1,0 +1,40 @@
+Analysis Summary: Arlingwood
+Generated: 2026-03-04 10:37
+============================================================
+
+Total residential parcels analyzed: 59
+Conforming parcels: 23 (39.0%)
+
+Zoning district breakdown:
+  R-20             34 parcels
+  R-10             25 parcels
+
+Development status:
+  underdeveloped       40 parcels
+  overdeveloped         9 parcels
+  near-capacity         7 parcels
+  vacant                3 parcels
+
+Unused GFA Capacity (parcels with positive available rights):
+  Parcels with capacity: 44
+  Total available SF:         223,285 sf
+  Median per parcel:            5,086 sf
+
+Neighborhood Improvement Rate Calibration:
+  Median $/SF:     $       285
+  Range:           $       179 – $391
+  Sample size:              5 recent builds
+
+Valuation (parcels with positive available rights):
+  Parcels valued:             44
+  Aggregate low:      $    20,405,011
+  Aggregate high:     $    27,825,015
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.

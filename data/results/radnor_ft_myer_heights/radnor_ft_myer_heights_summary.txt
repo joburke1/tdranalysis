@@ -1,0 +1,29 @@
+Analysis Summary: Radnor/Ft.Myer Heights
+Generated: 2026-03-04 10:38
+============================================================
+
+Total residential parcels analyzed: 367
+
+Zoning district breakdown:
+  RA6-15          163 parcels
+  RA8-18           71 parcels
+  RA4.8            52 parcels
+  C-O              30 parcels
+  RA-H-3.2         14 parcels
+  P-S              11 parcels
+  C-O-2.5          10 parcels
+  S-3A              7 parcels
+  C-2               2 parcels
+  RC                2 parcels
+
+Development status:
+  unknown             367 parcels
+
+============================================================
+DISCLAIMER: Valuation estimates are for policy analysis only,
+not property appraisals. Calibrate market parameters before use.
+
+LIMITATION: Parcels with no record in the Arlington property API
+(typically alley remnants, strips, or administrative parcels) are
+excluded from this analysis. A small number of legitimately
+developable parcels with incomplete API coverage may also be excluded.
