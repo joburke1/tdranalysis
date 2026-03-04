@@ -1,0 +1,47 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 230
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review          17  (7.4%)
+  clean                   213  (92.6%)
+
+Most common anomaly types:
+  lot_area_marginal                                          8 parcel(s)
+  unusual_property_type                                      5 parcel(s)
+  statistical_outlier                                        3 parcel(s)
+  low_improvement_value                                      1 parcel(s)
+
+Flag-for-Review Parcels (17):
+  03070002      3907 N Wakefield St, Arlington VA 22207        statistical_outlier:est_value_high_z=3.6_high_value=1057202
+  03070018      N Glebe Rd, Arlington VA 22207                 unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03070017      Chesterbrook Rd, Arlington VA 22207            low_improvement_value:$25000<$30000_makes_gfa_estimate_unreliable
+  03070013      3860 Chesterbrook Rd, Arlington VA 22207       statistical_outlier:est_value_high_z=3.2_high_value=990556
+  03070025      3916 N Glebe Rd, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-2.5_low_value=-2086
+  03071098      40Th St N, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03070024      3914 N Glebe Rd, Arlington VA 22207            lot_area_marginal:1560sf<2000sf_threshold
+  03070023      3912 N Glebe Rd, Arlington VA 22207            lot_area_marginal:1560sf<2000sf_threshold
+  03070034      3908 N Glebe Rd, Arlington VA 22207            lot_area_marginal:1582sf<2000sf_threshold
+  03070033      3906 N Glebe Rd, Arlington VA 22207            lot_area_marginal:1560sf<2000sf_threshold
+  03070027      3922 N Glebe Rd, Arlington VA 22207            lot_area_marginal:1560sf<2000sf_threshold
+  03071096      40Th St N, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03070032      3904 N Glebe Rd, Arlington VA 22207            lot_area_marginal:1560sf<2000sf_threshold
+  03070028      3920 N Glebe Rd, Arlington VA 22207            lot_area_marginal:1560sf<2000sf_threshold
+  03070031      3902 N Glebe Rd, Arlington VA 22207            lot_area_marginal:1560sf<2000sf_threshold
+  03071085      40Th St N, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03071084      40Th St N, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=   17  total_avail_gfa=      56,832 sf  agg_value_high=$     2,797,148
+  clean                 parcels=  213  total_avail_gfa=     872,593 sf  agg_value_high=$    87,678,423
+
+  Clean-tier GFA capacity as % of full analysis: 93.9%
+  Clean-tier value as % of full analysis:        96.9%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

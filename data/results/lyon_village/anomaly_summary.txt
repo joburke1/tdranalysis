@@ -1,0 +1,55 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 776
+
+Quality Tier Summary:
+  auto-exclude              4  (0.5%)
+  flag-for-review          18  (2.3%)
+  clean                   754  (97.2%)
+
+Most common anomaly types:
+  statistical_outlier                                       15 parcel(s)
+  nonresidential_property_type                               4 parcel(s)
+  unknown_property_type                                      3 parcel(s)
+  unusual_property_type                                      1 parcel(s)
+  lot_area_marginal                                          1 parcel(s)
+
+Auto-Exclude Parcels (4):
+  15013010      1920 N Highland St, Arlington VA 22201         nonresidential_property_type:215-Gen Comm - other
+  15012022      Kirkwood Rd, Arlington VA 22201                nonresidential_property_type:200-GenCom VacLand-no siteplan
+  15027003      1701 N Bryan St, Arlington VA 22201            nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-7.1_low_value=-10472
+  15077007      1305 N Jackson St, Arlington VA 22201          nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (18):
+  15011003      3155 20Th St N, Arlington VA 22201             statistical_outlier:available_gfa_sf_z=-2.9_low_value=-2705
+  15019006      1818 N Bryan St, Arlington VA 22201            unknown_property_type:211-Retail strip
+  15011007      3173 20Th St N, Arlington VA 22201             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-2050
+  15037005      1813 N Herndon St, Arlington VA 22201          statistical_outlier:available_gfa_sf_z=-2.5_low_value=-2016
+  15045011      1718 N Harvard St, Arlington VA 22201          statistical_outlier:available_gfa_sf_z=-3.2_low_value=-3344
+  15051021      1606 N Danville St, Arlington VA 22201         statistical_outlier:available_gfa_sf_z=-3.0_low_value=-2896
+  15046005      3123 Key Blvd, Arlington VA 22201              statistical_outlier:available_gfa_sf_z=-2.6_low_value=-2172
+  15067022      1620 N Garfield St, Arlington VA 22201         statistical_outlier:available_gfa_sf_z=-3.0_low_value=-2932
+  15072010      3162 Key Blvd, Arlington VA 22201              statistical_outlier:available_gfa_sf_z=-2.6_low_value=-2145
+  15069018      1416 N Hancock St, Arlington VA 22201          statistical_outlier:available_gfa_sf_z=-2.9_low_value=-2662
+  15041056      1436 N Jackson St, Arlington VA 22201          statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2340
+  15067010      1311 N Highland St, Arlington VA 22201         statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2340
+  15067008      1301 N Highland St, Arlington VA 22201         unknown_property_type:219-Mixed office/comm
+  15067009      1307 N Highland St, Arlington VA 22201         unknown_property_type:219-Mixed office/comm
+  15076012      1404 N Hudson St, Arlington VA 22201           statistical_outlier:available_gfa_sf_z=-3.4_low_value=-3730
+  15073003      1313 N Hudson St, Arlington VA 22201           statistical_outlier:available_gfa_sf_z=-3.1_low_value=-3164
+  15079023      N Jackson St, Arlington VA 22201               unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_marginal:1330sf<2000sf_threshold
+  15054015      2504 N Custis Rd, Arlington VA 22201           statistical_outlier:available_gfa_sf_z=-2.5_low_value=-1985
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    4  total_avail_gfa=      12,871 sf  agg_value_high=$     1,326,426
+  flag-for-review       parcels=   18  total_avail_gfa=      14,748 sf  agg_value_high=$     1,070,637
+  clean                 parcels=  754  total_avail_gfa=   2,159,382 sf  agg_value_high=$   372,465,319
+
+  Clean-tier GFA capacity as % of full analysis: 98.7%
+  Clean-tier value as % of full analysis:        99.4%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

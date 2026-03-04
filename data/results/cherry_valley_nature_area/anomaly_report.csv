@@ -1,0 +1,16 @@
+parcel_id,quality_tier,anomaly_flags,anomaly_count
+06024040,clean,,0
+06024041,clean,,0
+06024031,clean,,0
+06024025,clean,,0
+06024095,clean,,0
+06024034,clean,,0
+06024042,clean,,0
+06024028,clean,,0
+06024051,clean,,0
+06024050,clean,,0
+06024012,flag-for-review,statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1938,1
+06024014,clean,,0
+06024015,clean,,0
+06024010,clean,,0
+06024083,clean,,0

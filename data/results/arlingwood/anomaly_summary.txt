@@ -1,0 +1,35 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 59
+
+Quality Tier Summary:
+  auto-exclude              2  (3.4%)
+  flag-for-review           3  (5.1%)
+  clean                    54  (91.5%)
+
+Most common anomaly types:
+  statistical_outlier                                        4 parcel(s)
+  nonresidential_property_type                               2 parcel(s)
+
+Auto-Exclude Parcels (2):
+  03003032      4144 N Richmond St, Arlington VA 22207         nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=-2.5_low_value=35475
+  03033193      4175 41St St N, Arlington VA 22207             nonresidential_property_type:200-GenCom VacLand-no siteplan
+
+Flag-for-Review Parcels (3):
+  03001024      175 Chain Bridge Rd, Arlington VA 22101        statistical_outlier:est_value_high_z=4.0_high_value=5078238
+  03003024      4112 N Richmond St, Arlington VA 22207         statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2016
+  03001038      409 Chain Bridge Rd, Arlington VA 22101        statistical_outlier:available_gfa_sf_z=-4.8_low_value=-103404
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=       1,563 sf  agg_value_high=$        35,475
+  flag-for-review       parcels=    3  total_avail_gfa=       9,186 sf  agg_value_high=$     5,078,238
+  clean                 parcels=   54  total_avail_gfa=     212,536 sf  agg_value_high=$    22,711,302
+
+  Clean-tier GFA capacity as % of full analysis: 95.2%
+  Clean-tier value as % of full analysis:        81.6%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

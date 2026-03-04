@@ -1,0 +1,368 @@
+parcel_id,quality_tier,anomaly_flags,anomaly_count
+17004016,flag-for-review,unknown_property_type:111-Off bldg < 7 stories,1
+17004015,clean,,0
+17003029,clean,,0
+17004014,clean,,0
+17004007,clean,,0
+17004008,clean,,0
+17004009,clean,,0
+17004010,clean,,0
+17004023,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+17004011,clean,,0
+17004012,clean,,0
+17004013,clean,,0
+17003025,clean,,0
+17002004,clean,,0
+17002005,clean,,0
+17002007,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+17003030,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+17003031,flag-for-review,unknown_property_type:101-Off Bldg-VacLand-site plan,1
+17001009,clean,,0
+17001010,clean,,0
+17001011,clean,,0
+17039PCA,clean,,0
+17026013,clean,,0
+17026011,clean,,0
+17026010,clean,,0
+17022008,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17022011,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17026009,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17022012,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17026008,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17026012,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17022010,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17022009,clean,,0
+17022PCA,clean,,0
+17010PCB,clean,,0
+17006004,clean,,0
+17006006,flag-for-review,unknown_property_type:301-MultiFam-VacLand-site plan,1
+17007PCA,clean,,0
+17006007,auto-exclude,nonresidential_property_type:300-MultiFam-VacLand-no s.plan,1
+17003012,clean,,0
+17007009,clean,,0
+17003011,clean,,0
+17003299,clean,,0
+17003300,clean,,0
+17026066,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1
+17026055,clean,,0
+17026056,clean,,0
+17026057,clean,,0
+17026058,clean,,0
+17026059,clean,,0
+17026060,clean,,0
+17026061,clean,,0
+17026062,clean,,0
+17026063,clean,,0
+17026064,clean,,0
+17006005,flag-for-review,unknown_property_type:301-MultiFam-VacLand-site plan,1
+17006003,flag-for-review,unknown_property_type:301-MultiFam-VacLand-site plan,1
+17006001,clean,,0
+17006002,clean,,0
+17003041,clean,,0
+17003010,clean,,0
+17026014,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17003298,clean,,0
+17003032,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+17003024,clean,,0
+17003023,clean,,0
+17003033,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+17002002,clean,,0
+17003PCA,clean,,0
+17032008,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+17001012,auto-exclude,nonresidential_property_type:310-Apartment Parking,1
+17041PCA,clean,,0
+17001013,clean,,0
+17040PCA,clean,,0
+17042PCA,clean,,0
+17002015,flag-for-review,unknown_property_type:101-Off Bldg-VacLand-site plan,1
+17026PCB,clean,,0
+17022002,clean,,0
+17015010,clean,,0
+17015005,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17015004,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17015002,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17014005,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+17015009,auto-exclude,nonresidential_property_type:210-General Comm Parking,1
+17015008,auto-exclude,nonresidential_property_type:210-General Comm Parking,1
+17015007,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17022001,clean,,0
+17015PLA,clean,,0
+17014001,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+17015003,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17015001,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17013015,clean,,0
+17013006,clean,,0
+17020005,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17020010,clean,,0
+17021004,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17015011,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+17020006,clean,,0
+17022004,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17022032,clean,,0
+17022033,clean,,0
+17022036,clean,,0
+17022040,clean,,0
+17022041,clean,,0
+17022042,clean,,0
+17022043,clean,,0
+17022037,clean,,0
+17022038,clean,,0
+17022039,clean,,0
+17022034,clean,,0
+17022035,clean,,0
+17020003,clean,,0
+17019PCA,clean,,0
+17022044,clean,,0
+17022045,clean,,0
+17026PCA,clean,,0
+17026065,clean,,0
+17026019,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17032022,clean,,0
+17032023,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17032027,flag-for-review,unknown_property_type:301-MultiFam-VacLand-site plan,1
+17032026,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17032PCB,clean,,0
+17032001,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17032147,clean,,0
+17032148,clean,,0
+17032020,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17032146,clean,,0
+17032019,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17032007,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17032006,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17032017,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17032010,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17032PCA,clean,,0
+17031046,clean,,0
+17031047,clean,,0
+17031048,clean,,0
+17031049,clean,,0
+17031050,clean,,0
+17031051,clean,,0
+17031052,clean,,0
+17031053,clean,,0
+17031054,clean,,0
+17031057,clean,,0
+17031058,clean,,0
+17031059,clean,,0
+17031060,clean,,0
+17031062,clean,,0
+17031061,clean,,0
+17020PCA,clean,,0
+17020008,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17012005,flag-for-review,unknown_property_type:213-Small office,1
+17012021,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+17021001,clean,,0
+17021006,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17021002,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17021007,auto-exclude,nonresidential_property_type:300-MultiFam-VacLand-no s.plan,1
+17013PCA,clean,,0
+17013019,clean,,0
+17013017,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+17021009,auto-exclude,nonresidential_property_type:300-MultiFam-VacLand-no s.plan,1
+17031PCA,clean,,0
+17031064,clean,,0
+17031065,clean,,0
+17031066,clean,,0
+17031067,clean,,0
+17031068,clean,,0
+17031069,clean,,0
+17031070,clean,,0
+17031071,clean,,0
+17031072,clean,,0
+17031073,clean,,0
+17031074,clean,,0
+17031075,clean,,0
+17031076,clean,,0
+17031079,clean,,0
+17031078,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1
+17031077,clean,,0
+17004022,clean,,0
+17004021,clean,,0
+17004020,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+17027004,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17027002,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17027001,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17027005,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17027003,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17009001,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17009002,clean,,0
+17031063,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1
+17031080,clean,,0
+17010016,clean,,0
+17009007,clean,,0
+17009008,clean,,0
+17009011,clean,,0
+17009012,clean,,0
+17009013,clean,,0
+17009014,clean,,0
+17009015,clean,,0
+17009016,clean,,0
+17009017,clean,,0
+17009018,clean,,0
+17009019,clean,,0
+17009020,clean,,0
+17009021,clean,,0
+17009022,clean,,0
+17009023,clean,,0
+17009024,clean,,0
+17009025,clean,,0
+17009026,clean,,0
+17009027,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1
+17009028,clean,,0
+17025001,clean,,0
+17011026,clean,,0
+17011032,clean,,0
+17011025,clean,,0
+17011054,clean,,0
+17011031,clean,,0
+17011024,clean,,0
+17011053,clean,,0
+17011030,clean,,0
+17011034,clean,,0
+17011052,clean,,0
+17011048,clean,,0
+17011029,clean,,0
+17011035,clean,,0
+17011049,clean,,0
+17011028,clean,,0
+17011036,clean,,0
+17011050,clean,,0
+17011037,clean,,0
+17011027,clean,,0
+17011038,clean,,0
+17011033,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1
+17011039,clean,,0
+17011044,clean,,0
+17011045,clean,,0
+17011040,clean,,0
+17011046,clean,,0
+17011047,clean,,0
+17011041,clean,,0
+17011042,clean,,0
+17020011,clean,,0
+17020012,clean,,0
+17010034,clean,,0
+17010018,clean,,0
+17036PCA,clean,,0
+17013296,clean,,0
+17019002,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17008PCA,clean,,0
+17010195,flag-for-review,unknown_property_type:111-Off bldg < 7 stories,1
+17010197,clean,,0
+17010196,clean,,0
+17017005,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17017006,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17017002,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17003PCB,clean,,0
+17005026,clean,,0
+17005027,clean,,0
+17005028,clean,,0
+17005029,clean,,0
+17005030,clean,,0
+17005031,clean,,0
+17005032,clean,,0
+17005033,clean,,0
+17005034,clean,,0
+17005035,clean,,0
+17005036,clean,,0
+17005037,clean,,0
+17005038,clean,,0
+17005014,clean,,0
+17005015,clean,,0
+17005016,clean,,0
+17005017,clean,,0
+17005018,clean,,0
+17005019,clean,,0
+17005020,clean,,0
+17005021,clean,,0
+17005022,clean,,0
+17005023,clean,,0
+17005005,clean,,0
+17005024,clean,,0
+17005025,clean,,0
+17005039,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1
+17005012,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+17011057,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17011056,clean,,0
+17016PCA,clean,,0
+17016003,flag-for-review,unknown_property_type:415-Hotel - Select Service,1
+17016006,flag-for-review,unknown_property_type:415-Hotel - Select Service,1
+17016008,clean,,0
+17016009,flag-for-review,unknown_property_type:415-Hotel - Select Service,1
+17016010,flag-for-review,unknown_property_type:415-Hotel - Select Service,1
+17016PCB,clean,,0
+17010PCC,clean,,0
+17012PCB,clean,,0
+17011051,clean,,0
+17011043,clean,,0
+17011055,clean,,0
+17012PCA,clean,,0
+17010PCA,clean,,0
+17023012,clean,,0
+17023PCA,clean,,0
+17034003,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17011065,clean,,0
+17011PCA,clean,,0
+17011068,clean,,0
+17024031,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17024033,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+17024034,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17033PCC,clean,,0
+17033033,clean,,0
+17033032,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17033031,clean,,0
+17038029,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17038007,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17038002,clean,,0
+17033030,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17038PCA,clean,,0
+17038006,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17033003,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17038PCB,clean,,0
+17033PCB,clean,,0
+17033012,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17033028,flag-for-review,unknown_property_type:212-Restaurant/eating facility,1
+17033013,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17033029,flag-for-review,unknown_property_type:211-Retail strip,1
+17033023,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17033034,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17033020,clean,,0
+17033021,clean,,0
+17033022,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+17033014,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17033PCD,clean,,0
+17033016,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17033253,clean,,0
+17033017,clean,,0
+17011076,clean,,0
+17033007,clean,,0
+17033332,clean,,0
+17033245,clean,,0
+17033244,clean,,0
+17033243,clean,,0
+17033242,clean,,0
+17033241,clean,,0
+17033246,clean,,0
+17033240,clean,,0
+17033247,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1
+17033005,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17033333,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+17003583,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+17003585,clean,,0
+17027008,flag-for-review,unknown_property_type:413-Hotel - Lodging,1
+17027011,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17027010,clean,,0
+17033PCA,clean,,0
+17037001,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+17037004,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+17037PCA,clean,,0
+17037008,clean,,0
+17037010,flag-for-review,unknown_property_type:528-SFD/Apt Zone no site plan,1
+17037PCC,clean,,0
+17037PCF,clean,,0
+17037PCD,clean,,0
+17037PCG,clean,,0
+17037PCB,clean,,0
+17037PCE,clean,,0
+17037064,clean,,0

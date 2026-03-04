@@ -1,0 +1,36 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 126
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review           9  (7.1%)
+  clean                   117  (92.9%)
+
+Most common anomaly types:
+  statistical_outlier                                       10 parcel(s)
+
+Flag-for-Review Parcels (9):
+  04034007      3839 Military Rd, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.2_low_value=-1031
+  04037013      3815 N Nelson St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.7_low_value=1384|statistical_outlier:est_value_high_z=-2.8_low_value=124478
+  04035013      3716 N Nelson St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.8_low_value=-2305
+  04037008      3812 N Nelson St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.9_low_value=-479
+  04037010      3701 38Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-4.7_low_value=65793
+  04035007      3747 N Oakland St, Arlington VA 22207          statistical_outlier:est_value_high_z=-4.9_low_value=49427
+  04037031      3632 36Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.9_low_value=-2506
+  04003011      3660 N Oakland St, Arlington VA 22207          statistical_outlier:est_value_high_z=-3.3_low_value=195019
+  04034008      3841 Military Rd, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.2_low_value=-1054
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=    9  total_avail_gfa=       4,907 sf  agg_value_high=$       434,716
+  clean                 parcels=  117  total_avail_gfa=     700,681 sf  agg_value_high=$    62,930,566
+
+  Clean-tier GFA capacity as % of full analysis: 99.3%
+  Clean-tier value as % of full analysis:        99.3%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

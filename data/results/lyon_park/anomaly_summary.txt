@@ -1,0 +1,51 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 504
+
+Quality Tier Summary:
+  auto-exclude              7  (1.4%)
+  flag-for-review          11  (2.2%)
+  clean                   486  (96.4%)
+
+Most common anomaly types:
+  statistical_outlier                                       10 parcel(s)
+  nonresidential_property_type                               7 parcel(s)
+  unknown_property_type                                      3 parcel(s)
+  lot_area_remnant                                           1 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+
+Auto-Exclude Parcels (7):
+  18036002      903 N Barton St, Arlington VA 22201            nonresidential_property_type:215-Gen Comm - other
+  18039030      N Barton St, Arlington VA 22201                nonresidential_property_type:215-Gen Comm - other
+  18050001      420 N Fillmore St, Arlington VA 22201          nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=10.5_high_value=2880568
+  18049008      3020 N Pershing Dr, Arlington VA 22201         nonresidential_property_type:215-Gen Comm - other
+  18073030      N Danville St, Arlington VA 22201              nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_remnant:285sf<1000sf_threshold|lot_width_remnant:6.8ft<15ft_threshold
+  18073023      N Danville St, Arlington VA 22201              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  19055026      3101 Arlington Blvd, Arlington VA 22201        nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (11):
+  18032013      919 N Edgewood St, Arlington VA 22201          statistical_outlier:available_gfa_sf_z=-3.4_low_value=-3098
+  18031004      2800 10Th St N, Arlington VA 22201             unknown_property_type:213-Small office
+  19010012      715 N Irving St, Arlington VA 22201            statistical_outlier:available_gfa_sf_z=-2.7_low_value=-3160
+  19028001      605 N Irving St, Arlington VA 22201            unknown_property_type:311-Apartment - Garden|statistical_outlier:available_gfa_sf_z=-4.9_low_value=-7780
+  18039011      727 N Cleveland St, Arlington VA 22201         statistical_outlier:available_gfa_sf_z=-3.1_low_value=-2617
+  19029003      509 N Hudson St, Arlington VA 22201            statistical_outlier:available_gfa_sf_z=-3.2_low_value=-4140
+  19027004      3108 6Th St N, Arlington VA 22201              statistical_outlier:available_gfa_sf_z=-3.7_low_value=-5289
+  19029014      508 N Highland St, Arlington VA 22201          statistical_outlier:available_gfa_sf_z=-2.9_low_value=-3484
+  18065011      2615 3Rd St N, Arlington VA 22201              statistical_outlier:available_gfa_sf_z=-2.8_low_value=-3370
+  18052007      2807 N Pershing Dr, Arlington VA 22201         unknown_property_type:311-Apartment - Garden
+  19051009      112 N Highland St, Arlington VA 22201          statistical_outlier:available_gfa_sf_z=-2.6_low_value=-2857
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    7  total_avail_gfa=      17,509 sf  agg_value_high=$     3,478,622
+  flag-for-review       parcels=   11  total_avail_gfa=       5,621 sf  agg_value_high=$       175,718
+  clean                 parcels=  486  total_avail_gfa=   1,491,206 sf  agg_value_high=$   209,930,239
+
+  Clean-tier GFA capacity as % of full analysis: 98.5%
+  Clean-tier value as % of full analysis:        98.3%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

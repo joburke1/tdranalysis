@@ -1,0 +1,52 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 339
+
+Quality Tier Summary:
+  auto-exclude              2  (0.6%)
+  flag-for-review          20  (5.9%)
+  clean                   317  (93.5%)
+
+Most common anomaly types:
+  statistical_outlier                                       25 parcel(s)
+  nonresidential_property_type                               2 parcel(s)
+
+Auto-Exclude Parcels (2):
+  21032001      415 S Lexington St, Arlington VA 22204         nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=3.1_high_value=635139
+  21034015      5Th Rd S, Arlington VA 22204                   nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (20):
+  21020006      5720 2Nd St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-4.2_low_value=-1230
+  21020003      5732 2Nd St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.9_low_value=108663
+  21018023      5614 1St St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.5_low_value=143045
+  21022008      5809 4Th St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-3.0_low_value=221|statistical_outlier:est_value_high_z=-3.9_low_value=23452
+  21014043      5918 4Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.6_low_value=136404
+  21028068      5820 5Th St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-2.5_low_value=765|statistical_outlier:est_value_high_z=-3.2_low_value=81179
+  21028061      5727 5Th Rd S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.7_low_value=131097
+  21030004      5616 4Th St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-3.4_low_value=-265
+  21028054      5716 5Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.9_low_value=111316
+  21031009      510 S Jefferson St, Arlington VA 22204         statistical_outlier:available_gfa_sf_z=-3.2_low_value=-55
+  21014058      5941 4Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=3.8_high_value=697499
+  21012006      12 S Lexington St, Arlington VA 22204          statistical_outlier:est_value_high_z=-2.7_low_value=128193
+  21012007      5806 Arlington Blvd, Arlington VA 22204        statistical_outlier:est_value_high_z=-3.3_low_value=77642
+  21016008      5817 2Nd St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-2.7_low_value=495|statistical_outlier:est_value_high_z=-3.7_low_value=35988
+  21011013      5729 1St St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.6_low_value=136254
+  21026015      5425 4Th St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-2.8_low_value=455|statistical_outlier:est_value_high_z=-3.6_low_value=48283
+  21026014      5421 4Th St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-3.4_low_value=-286
+  21010017      5427 3Rd St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-3.7_low_value=-645
+  21025005      5500 3Rd St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-3.1_low_value=96146
+  21029001      401 S Jefferson St, Arlington VA 22204         statistical_outlier:available_gfa_sf_z=-3.5_low_value=-339
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=      10,825 sf  agg_value_high=$       943,089
+  flag-for-review       parcels=   20  total_avail_gfa=      19,035 sf  agg_value_high=$     1,955,160
+  clean                 parcels=  317  total_avail_gfa=   1,219,020 sf  agg_value_high=$   118,319,264
+
+  Clean-tier GFA capacity as % of full analysis: 97.6%
+  Clean-tier value as % of full analysis:        97.6%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

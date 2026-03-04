@@ -1,0 +1,55 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 544
+
+Quality Tier Summary:
+  auto-exclude              6  (1.1%)
+  flag-for-review          16  (2.9%)
+  clean                   522  (96.0%)
+
+Most common anomaly types:
+  statistical_outlier                                       19 parcel(s)
+  nonresidential_property_type                               5 parcel(s)
+  lot_width_remnant                                          2 parcel(s)
+  unknown_property_type                                      2 parcel(s)
+  unusual_property_type                                      1 parcel(s)
+
+Auto-Exclude Parcels (6):
+  23003044      4400 Arlington Blvd, Arlington VA 22204        nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=3.0_high_value=697364
+  23006291      S Buchanan St, Arlington VA 22204              lot_width_remnant:14.6ft<15ft_threshold
+  23006167      700 S Buchanan St, Arlington VA 22204          nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=4.1_high_value=828635
+  23003004      4444 Arlington Blvd, Arlington VA 22204        nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-16.2_low_value=-32115
+  23038028      915 S Wakefield St, Arlington VA 22204         nonresidential_property_type:215-Gen Comm - other
+  23006169      S Abingdon St, Arlington VA 22204              nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_width_remnant:10.0ft<15ft_threshold|statistical_outlier:est_value_high_z=-3.0_low_value=75
+
+Flag-for-Review Parcels (16):
+  23003047      1St Pl S, Arlington VA 22204                   statistical_outlier:est_value_high_z=-2.7_low_value=27975
+  23023018      7Th St S, Arlington VA 22204                   statistical_outlier:est_value_high_z=-2.7_low_value=28875
+  23023030      4618 6Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.7_low_value=29844
+  23023028      4700 6Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.8_low_value=24045
+  23024017      4701 8Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.7_low_value=29958
+  23013055      4304 4Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-3.0_low_value=347
+  23038013      4318 9Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=3.8_high_value=789988
+  23006119      S Pershing Dr, Arlington VA 22204              unknown_property_type:Public Service/Stormwater|statistical_outlier:est_value_high_z=-3.0_low_value=75
+  23011028      4632 3Rd St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-3.0_low_value=637
+  23004045      4636 2Nd St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.6_low_value=40395
+  23038021      939 S Wakefield St, Arlington VA 22204         unknown_property_type:219-Mixed office/comm
+  23042046      S Pershing Ct, Arlington VA 22204              unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-3.0_low_value=75
+  23042040      4408 S Pershing Ct, Arlington VA 22204         statistical_outlier:est_value_high_z=-2.7_low_value=31314
+  23042039      4406 S Pershing Ct, Arlington VA 22204         statistical_outlier:est_value_high_z=-2.8_low_value=19453
+  23034024      S Taylor St, Arlington VA 22204                statistical_outlier:est_value_high_z=-2.7_low_value=32775
+  23034023      S Taylor St, Arlington VA 22204                statistical_outlier:est_value_high_z=-2.7_low_value=32100
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    6  total_avail_gfa=      12,207 sf  agg_value_high=$     1,695,959
+  flag-for-review       parcels=   16  total_avail_gfa=      38,887 sf  agg_value_high=$     1,162,957
+  clean                 parcels=  522  total_avail_gfa=   1,890,517 sf  agg_value_high=$   176,565,880
+
+  Clean-tier GFA capacity as % of full analysis: 97.4%
+  Clean-tier value as % of full analysis:        98.4%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

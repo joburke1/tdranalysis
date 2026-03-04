@@ -1,0 +1,51 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 469
+
+Quality Tier Summary:
+  auto-exclude              8  (1.7%)
+  flag-for-review           8  (1.7%)
+  clean                   453  (96.6%)
+
+Most common anomaly types:
+  statistical_outlier                                        7 parcel(s)
+  nonresidential_property_type                               7 parcel(s)
+  unknown_property_type                                      2 parcel(s)
+  unusual_property_type                                      1 parcel(s)
+  lot_area_marginal                                          1 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+  low_improvement_value                                      1 parcel(s)
+
+Auto-Exclude Parcels (8):
+  06013040      18Th St N, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_marginal:1617sf<2000sf_threshold|lot_width_remnant:6.5ft<15ft_threshold
+  06013014      N Stafford St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  06013015      N Stafford St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  06013016      N Stafford St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan|low_improvement_value:$13000<$30000_makes_gfa_estimate_unreliable
+  06013028      1914 N Randolph St, Arlington VA 22207         nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-9.2_low_value=-15086
+  06013053      N Randolph St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  05039027      2190 Military Rd, Arlington VA 22207           nonresidential_property_type:215-Gen Comm - other
+  06018024      2100 N Quebec St, Arlington VA 22207           nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (8):
+  06019007      21St St N, Arlington VA 22207                  unknown_property_type:212-Restaurant/eating facility
+  06021010      4009 20Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.9_low_value=-2534
+  06025015      1904 N Oakland St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2189
+  06019006      21St St N, Arlington VA 22207                  unknown_property_type:212-Restaurant/eating facility
+  06022011      1922 N Quincy St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.3_low_value=-3380
+  06003003      4319 17Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2198
+  06010002      1905 N Taylor St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1956
+  05045036      4015 Vacation Ln, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2159
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    8  total_avail_gfa=      29,380 sf  agg_value_high=$     1,986,528
+  flag-for-review       parcels=    8  total_avail_gfa=      10,898 sf  agg_value_high=$       608,625
+  clean                 parcels=  453  total_avail_gfa=   1,500,534 sf  agg_value_high=$   180,191,417
+
+  Clean-tier GFA capacity as % of full analysis: 97.4%
+  Clean-tier value as % of full analysis:        98.6%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

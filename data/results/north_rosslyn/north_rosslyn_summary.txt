@@ -1,5 +1,5 @@
 Analysis Summary: North Rosslyn
-Generated: 2026-03-04 10:38
+Generated: 2026-03-04 14:31
 ============================================================
 
 Total residential parcels analyzed: 268

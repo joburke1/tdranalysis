@@ -1,0 +1,5 @@
+parcel_id,quality_tier,anomaly_flags,anomaly_count
+28013006,clean,,0
+28004069,auto-exclude,lot_area_remnant:900sf<1000sf_threshold|lot_width_remnant:10.8ft<15ft_threshold,2
+28004221,clean,,0
+28015075,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1

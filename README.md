@@ -1,6 +1,6 @@
-# Arlington Zoning Analyzer
+# Arlington TDR Analysis
 
-A Python tool for analyzing maximum by-right residential development potential for parcels in Arlington County, Virginia based on the Zoning Ordinance.
+A Python tool for analyzing maximum by-right residential development potential and Transfer of Development Rights (TDR) value for parcels in Arlington County, Virginia based on the Zoning Ordinance.
 
 ## Overview
 
@@ -36,12 +36,12 @@ Disclaimer: The analysis is based on **Article 5 (Residential Districts)** and *
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd arlington-zoning-analyzer
+git clone https://github.com/joburke1/tdranalysis
+cd tdranalysis
 
 # Create virtual environment (recommended)
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # On macOS/Linux; on Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -49,21 +49,7 @@ pip install -r requirements.txt
 
 ## Quick Start
 
-### 1. Set Up Virtual Environment
-
-```bash
-# Create virtual environment
-python -m venv venv
-
-# Activate it
-venv\Scripts\activate     # Windows
-# source venv/bin/activate  # macOS/Linux
-
-# Install dependencies
-pip install -r requirements.txt
-```
-
-### 2. Verify Environment
+### 1. Verify Environment
 
 ```bash
 python scripts/verify_env.py
@@ -71,7 +57,7 @@ python scripts/verify_env.py
 
 All checks should pass (the "data not downloaded" warning is expected on first run).
 
-### 3. Run the Analysis (single neighborhood)
+### 2. Run the Analysis (single neighborhood)
 
 ```bash
 # Download data + process + analyze a single neighborhood:
@@ -92,7 +78,7 @@ Results are saved to `data/results/{neighborhood}/`:
 - `*_data_dictionary.csv` — Column definitions for the analysis output
 - `map.html` — Self-contained interactive HTML map (no web server required)
 
-### 4. Generate a Standalone Map
+### 3. Generate a Standalone Map
 
 ```bash
 # Generate map for a neighborhood (also runs automatically after analysis):
@@ -107,7 +93,7 @@ python scripts/generate_map.py --neighborhood "Lyon Park" --output my_map.html
 
 The map is color-coded by development status and capacity, with tooltips showing full parcel details and a sidebar with neighborhood statistics.
 
-### 5. Batch Processing (all neighborhoods)
+### 4. Batch Processing (all neighborhoods)
 
 ```bash
 python scripts/run_analysis.py --all-neighborhoods
@@ -116,14 +102,14 @@ python scripts/run_analysis.py --all-neighborhoods
 This runs every civic association neighborhood sequentially and also saves
 a combined `data/results/all_neighborhoods_combined.csv`.
 
-### 6. Refresh Data
+### 5. Refresh Data
 
 ```bash
 # Force re-download of all source datasets:
 python scripts/run_analysis.py --neighborhood "Lyon Park" --force-refresh
 ```
 
-### 7. Advanced Options
+### 6. Advanced Options
 
 ```bash
 # Skip download, use cached data:
@@ -140,7 +126,7 @@ python scripts/run_analysis.py --neighborhood "Lyon Park" \
 python scripts/run_analysis.py --neighborhood "Lyon Park" --log-level DEBUG
 ```
 
-### 8. Python API (single parcel)
+### 7. Python API (single parcel)
 
 ```python
 from shapely.geometry import box
@@ -163,10 +149,12 @@ print(f"Max Height: {result.max_height_ft} ft")
 ## Project Structure
 
 ```
-arlington-zoning-analyzer/
-├── calculation proceedures/     # Calculation methodology documentation
-│   ├── maximum development potential human.md
-│   └── maximum development potential llm.md
+tdranalysis/
+├── supporting documentation/    # Methodology and supporting analysis
+│   ├── maximum development potential human.md  # Calculation methodology (plain language)
+│   ├── maximum development potential llm.md    # Calculation methodology (LLM-optimized)
+│   ├── Valuation of Development Rights.md      # TDR valuation methodology
+│   └── data_quality_issues.md                  # Known API data gaps and handling
 ├── config/                      # Zoning rules and market parameters
 │   ├── residential_districts.json  # By-right development standards by zone
 │   ├── setback_rules.json          # Setback and yard requirements
@@ -176,10 +164,13 @@ arlington-zoning-analyzer/
 │   ├── raw/                     # Downloaded GeoJSON files
 │   ├── processed/               # Enriched GeoPackage files
 │   └── results/                 # Analysis outputs by neighborhood
+├── docs/                        # Project documentation
 ├── scripts/
 │   ├── run_analysis.py          # Main analysis pipeline runner
 │   ├── run_anomaly_check.py     # Data quality anomaly detection
 │   ├── generate_map.py          # Interactive HTML map generator
+│   ├── generate_homepage.py     # Combined neighborhood index map
+│   ├── inspect_parcel.py        # Single-parcel diagnostic report
 │   └── verify_env.py            # Environment/dependency checker
 ├── src/
 │   ├── data/                    # Data download and processing
@@ -231,7 +222,7 @@ Returns a LOW/HIGH price range with a HIGH/MEDIUM/NOT_APPLICABLE confidence rati
 
 ## Calculation Procedures
 
-The `calculation proceedures/` directory contains step-by-step documentation of how maximum development potential is calculated from zoning rules and parcel geometry:
+The `supporting documentation/` directory contains step-by-step documentation of how maximum development potential is calculated from zoning rules and parcel geometry:
 
 - **maximum development potential human.md** — Written for human readers, explaining the calculation methodology in plain language.
 - **maximum development potential llm.md** — Structured for LLM consumption, providing the same calculation logic in a format optimized for AI-assisted analysis and code generation.
@@ -412,6 +403,17 @@ These filters run automatically on every analysis — no manual intervention nee
 | `IMPROVEMENT_VALUE_UNRELIABLE` | $30,000 | Flag: GFA estimate unreliable |
 | `ZSCORE_THRESHOLD` | 2.5 | Flag: statistical outlier |
 
+## Data Quality Limitations
+
+The Arlington Datahub assessment API publishes only a partial snapshot of the county's full PROVAL assessment database. Coverage is highly uneven by RPC district:
+
+- **Affected districts**: 26, 27, 28, 32, 33, 37, and 38 have less than 50% class-511 (single-family residential) assessment coverage in the downloaded data.
+- **Impact**: Parcels with a confirmed `propertyYearBuilt` but no assessment data are excluded from the analysis with reason "Building present but no floor area data available." In Douglas Park (district 26), this affects approximately 70% of eligible residential parcels.
+- **In the output**: Excluded parcels appear in `*_excluded.geojson` and are not counted in aggregate statistics. The `pct_included` field in each neighborhood summary indicates the fraction of eligible parcels that could be analyzed.
+- **Aggregate statistics warning**: For neighborhoods in affected districts, aggregate TDR capacity and valuation estimates substantially understate the full neighborhood total. Use the `pct_included` figure to gauge completeness before drawing policy conclusions.
+
+The complete PROVAL data is available from Arlington County's assessor's office. See `supporting documentation/data_quality_issues.md` for full details and a potential API workaround.
+
 ## Assumptions and Limitations
 
 1. **By-right only**: Does not analyze special exception or site plan scenarios
@@ -437,4 +439,6 @@ This tool is for informational purposes only. The output should not be construed
 
 ## License
 
-[Add license information]
+This project is released into the public domain under the [CC0 1.0 Universal (CC0 1.0) Public Domain Dedication](LICENSE).
+
+You may copy, modify, distribute, and perform the work, even for commercial purposes, all without asking permission. See the [LICENSE](LICENSE) file for the full legal text.

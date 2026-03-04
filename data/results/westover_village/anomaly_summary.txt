@@ -1,0 +1,47 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 358
+
+Quality Tier Summary:
+  auto-exclude              2  (0.6%)
+  flag-for-review          14  (3.9%)
+  clean                   342  (95.5%)
+
+Most common anomaly types:
+  statistical_outlier                                       14 parcel(s)
+  nonresidential_property_type                               2 parcel(s)
+  low_improvement_value                                      1 parcel(s)
+
+Auto-Exclude Parcels (2):
+  10027007      N Longfellow St, Arlington VA 22205            nonresidential_property_type:200-GenCom VacLand-no siteplan
+  09067001      1125 Patrick Henry Dr, Arlington VA 22205      nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-11.7_low_value=-15097
+
+Flag-for-Review Parcels (14):
+  09037044      1532 N Kentucky St, Arlington VA 22205         statistical_outlier:est_value_high_z=-3.0_low_value=87661
+  09038002      1509 N Kentucky St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.9_low_value=103333
+  09038016      5719 15Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-3.6_low_value=21317
+  09039012      5710 15Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.7_low_value=122254
+  09039009      5722 15Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-3.2_low_value=71931
+  09067008      1124 N Kentucky St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.5_low_value=144718
+  09068020      1011 N Kennesaw St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1123
+  10035069      5882 14Th St N, Arlington VA 22205             low_improvement_value:$29400<$30000_makes_gfa_estimate_unreliable
+  10035061      1413 N Lancaster St, Arlington VA 22205        statistical_outlier:est_value_high_z=-3.6_low_value=21408
+  10035012      1431 Mckinley Rd, Arlington VA 22205           statistical_outlier:est_value_high_z=-3.6_low_value=24976
+  10035033      1504 N Lancaster St, Arlington VA 22205        statistical_outlier:est_value_high_z=-3.3_low_value=59237
+  10035018      1523 Mckinley Rd, Arlington VA 22205           statistical_outlier:est_value_high_z=-2.7_low_value=119905
+  10035110      1533 Mckinley Rd, Arlington VA 22205           statistical_outlier:est_value_high_z=-2.8_low_value=110174
+  09072010      1001 N Kensington St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.8_low_value=107825
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=       6,300 sf  agg_value_high=$       365,025
+  flag-for-review       parcels=   14  total_avail_gfa=      12,846 sf  agg_value_high=$     1,520,195
+  clean                 parcels=  342  total_avail_gfa=   1,128,971 sf  agg_value_high=$   146,086,777
+
+  Clean-tier GFA capacity as % of full analysis: 98.3%
+  Clean-tier value as % of full analysis:        98.7%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

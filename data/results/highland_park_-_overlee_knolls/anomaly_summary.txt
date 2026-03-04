@@ -1,0 +1,47 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 616
+
+Quality Tier Summary:
+  auto-exclude              3  (0.5%)
+  flag-for-review          13  (2.1%)
+  clean                   600  (97.4%)
+
+Most common anomaly types:
+  statistical_outlier                                       14 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+  lot_area_marginal                                          1 parcel(s)
+
+Auto-Exclude Parcels (3):
+  11032011      6201 Washington Blvd, Arlington VA 22205       nonresidential_property_type:215-Gen Comm - other
+  11035030      18Th St N, Arlington VA 22205                  nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_marginal:1565sf<2000sf_threshold
+  10017016      5820 20Th Rd N, Arlington VA 22205             nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=18.0_high_value=4836825
+
+Flag-for-Review Parcels (13):
+  11033026      6026 22Nd St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-690
+  11033038      6023 21St St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.8_low_value=-2700
+  11033055      6030 21St St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-922
+  11033053      6038 21St St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.1_low_value=-1671
+  11033075      6055 20Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-847
+  11033082      6032 20Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1052
+  11033094      6023 19Th Rd N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.2_low_value=-1843
+  11043005      1601 N Potomac St, Arlington VA 22205          statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1361
+  11027107      N Potomac St, Arlington VA 22205               statistical_outlier:est_value_high_z=3.4_high_value=1252575
+  10028017      5907 16Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1341
+  10031023      13Th St N, Arlington VA 22205                  statistical_outlier:est_value_high_z=7.1_high_value=2168775
+  10017064      1925 N Madison St, Arlington VA 22205          statistical_outlier:available_gfa_sf_z=-2.5_low_value=-655
+  10017013      2004 N Lexington St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1258
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=       8,402 sf  agg_value_high=$     5,032,296
+  flag-for-review       parcels=   13  total_avail_gfa=      12,600 sf  agg_value_high=$     3,421,350
+  clean                 parcels=  600  total_avail_gfa=   2,121,076 sf  agg_value_high=$   245,764,119
+
+  Clean-tier GFA capacity as % of full analysis: 99.0%
+  Clean-tier value as % of full analysis:        96.7%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

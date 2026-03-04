@@ -20,6 +20,7 @@ Usage
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import logging
 import sys
@@ -44,6 +45,17 @@ _ZONING_EXCLUSION_REASONS = {
     "Non-residential zoning",
     "Zoning district out of scope (not R-5/R-6/R-8/R-10/R-20)",
 }
+
+
+def _load_valuation_params() -> dict:
+    """Load valuation_params.json from config directory. Returns defaults if not found."""
+    config_path = _PROJECT_ROOT / "config" / "valuation_params.json"
+    try:
+        with open(config_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception:
+        logger.warning("Could not load valuation_params.json; using built-in defaults")
+        return {}
 
 
 def _find_analyzed_neighborhoods(results_dir: Path) -> list[dict]:
@@ -76,7 +88,7 @@ def _find_analyzed_neighborhoods(results_dir: Path) -> list[dict]:
     return sorted(neighborhoods, key=lambda x: x["name"])
 
 
-def _compute_summary(geojson_data: dict, excluded_data: dict | None = None) -> dict:
+def _compute_summary(geojson_data: dict, excluded_data: dict | None = None, valuation_params: dict | None = None) -> dict:
     """Compute summary statistics from GeoJSON features."""
     features = geojson_data.get("features", [])
     total = len(features)
@@ -169,11 +181,15 @@ def _compute_summary(geojson_data: dict, excluded_data: dict | None = None) -> d
     pct_included = round(total / total_residential_eligible * 100, 1) if total_residential_eligible > 0 else 0
 
     # Identify parcels used for neighborhood calibration.
-    # Mirrors the criteria in estimate_neighborhood_improvement_rate():
-    #   year_built >= (analysis_year - lookback_years)  →  >= 2016
-    #   improvement_value > _IMPROVEMENT_VALUE_THRESHOLD  →  > 5,000
-    _CALIBRATION_YEAR_CUTOFF = 2016
-    _CALIBRATION_IMP_THRESHOLD = 5_000.0
+    # Mirrors the criteria in estimate_neighborhood_improvement_rate().
+    # Thresholds are loaded from config/valuation_params.json with safe defaults.
+    if valuation_params is None:
+        valuation_params = _load_valuation_params()
+    _cal = valuation_params.get("neighborhood_rate_calibration", {})
+    _lookback = _cal.get("lookback_years", 10)
+    _CALIBRATION_YEAR_CUTOFF = datetime.date.today().year - _lookback
+    _CALIBRATION_IMP_THRESHOLD = float(_cal.get("min_improvement_value", 5_000.0))
+    _fallback_rate = valuation_params.get("residential_improvement_value_per_sf", {}).get("fallback_value", 185)
     calibration_parcel_ids = [
         f["properties"]["parcel_id"]
         for f in features
@@ -212,6 +228,7 @@ def _compute_summary(geojson_data: dict, excluded_data: dict | None = None) -> d
         "neighborhood_rate_high": neighborhood_rate_high,
         "neighborhood_rate_sample": neighborhood_rate_sample,
         "calibration_parcel_ids": calibration_parcel_ids,
+        "fallback_improvement_rate": _fallback_rate,
     }
 
 
@@ -222,7 +239,8 @@ def generate_map_html(
     current_slug: str | None = None,
 ) -> str:
     """Generate a self-contained HTML string with embedded map."""
-    summary = _compute_summary(geojson_data, excluded_data)
+    valuation_params = _load_valuation_params()
+    summary = _compute_summary(geojson_data, excluded_data, valuation_params=valuation_params)
     geojson_str = json.dumps(geojson_data)
     excluded_str = json.dumps(excluded_data) if excluded_data else "null"
     summary_str = json.dumps(summary)
@@ -433,7 +451,7 @@ def generate_map_html(
         <div style="margin-top:16px;padding-top:12px;border-top:1px solid #333;font-size:11px;color:#666;line-height:1.5;">
             <a href="https://github.com/joburke1/tdranalysis" style="color:#8ecae6;">Arlington Transfer of Development Rights Analysis</a>
             by <a href="https://www.linkedin.com/in/john-burke-arlingtonva/" style="color:#8ecae6;">John Burke</a>
-            is marked <a href="https://creativecommons.org/publicdomain/zero/1.0/" style="color:#8ecae6;">CC0 1.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width:1em;max-height:1em;margin-left:.2em;vertical-align:middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/zero.svg" alt="" style="max-width:1em;max-height:1em;margin-left:.2em;vertical-align:middle;">
+            is marked <a href="https://creativecommons.org/publicdomain/zero/1.0/" style="color:#8ecae6;">CC0 1.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="Creative Commons" style="max-width:1em;max-height:1em;margin-left:.2em;vertical-align:middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/zero.svg" alt="CC0 1.0 Universal Public Domain" style="max-width:1em;max-height:1em;margin-left:.2em;vertical-align:middle;">
         </div>
     </div>
 
@@ -475,7 +493,7 @@ def generate_map_html(
     document.getElementById('s-val-high').textContent = fmtM(summary.total_est_high);
     document.getElementById('s-rate').textContent = summary.neighborhood_rate_median != null
         ? fmtD(summary.neighborhood_rate_median) + '/SF'
-        : '$185/SF (estimated \u2014 limited local data)';
+        : '$' + summary.fallback_improvement_rate + '/SF (estimated \u2014 limited local data)';
     document.getElementById('s-rate-sample').textContent = fmt(summary.neighborhood_rate_sample) + ' homes';
 
     const STATUS_LABELS = {

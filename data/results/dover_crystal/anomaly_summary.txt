@@ -1,0 +1,51 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 313
+
+Quality Tier Summary:
+  auto-exclude              2  (0.6%)
+  flag-for-review          17  (5.4%)
+  clean                   294  (93.9%)
+
+Most common anomaly types:
+  statistical_outlier                                       20 parcel(s)
+  nonresidential_property_type                               2 parcel(s)
+  unusual_property_type                                      2 parcel(s)
+  lot_area_marginal                                          1 parcel(s)
+
+Auto-Exclude Parcels (2):
+  04011441      N Randolph St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=-3.2_low_value=40050
+  04011461      N Ridgeview Rd, Arlington VA 22207             nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_marginal:1835sf<2000sf_threshold|statistical_outlier:est_value_high_z=-3.6_low_value=11925
+
+Flag-for-Review Parcels (17):
+  04011093      2775 N Quincy St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.3_low_value=-4127
+  04018013      2706 N Pollard St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-2.9_low_value=-193
+  04016012      2398 N Quincy St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.8_low_value=-1666
+  04011170      2540 N Ridgeview Rd, Arlington VA 22207        statistical_outlier:available_gfa_sf_z=-2.8_low_value=0
+  04020022      3829 24Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.7_low_value=118597
+  04023003      2407 N Nelson St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.5_low_value=496|statistical_outlier:est_value_high_z=-3.2_low_value=56450
+  04019005      3727 25Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-3.2_low_value=58360
+  04019003      3715 25Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.9_low_value=93231
+  04020032      2424 N Nelson St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.4_low_value=-934
+  04011013      2501 N Lincoln St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-3.3_low_value=-805
+  04011016      N Lincoln St, Arlington VA 22207               statistical_outlier:est_value_high_z=-3.2_low_value=61950
+  04011017      N Lincoln St, Arlington VA 22207               statistical_outlier:est_value_high_z=-3.2_low_value=61800
+  04024005      3500 25Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-3.0_low_value=83074
+  04011472      N Quincy St, Arlington VA 22207                unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-3.5_low_value=75
+  04011513      N Quebec St, Arlington VA 22207                unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-3.5_low_value=75
+  04011522      2757 N Quebec St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.3_low_value=-4336
+  04011129      2776 N Quebec St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.8_low_value=-2644
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=       2,556 sf  agg_value_high=$        51,975
+  flag-for-review       parcels=   17  total_avail_gfa=      25,695 sf  agg_value_high=$       533,611
+  clean                 parcels=  294  total_avail_gfa=   1,487,614 sf  agg_value_high=$   140,843,734
+
+  Clean-tier GFA capacity as % of full analysis: 98.1%
+  Clean-tier value as % of full analysis:        99.6%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

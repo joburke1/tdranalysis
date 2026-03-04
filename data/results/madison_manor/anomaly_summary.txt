@@ -1,0 +1,54 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 498
+
+Quality Tier Summary:
+  auto-exclude              1  (0.2%)
+  flag-for-review          23  (4.6%)
+  clean                   474  (95.2%)
+
+Most common anomaly types:
+  statistical_outlier                                       32 parcel(s)
+  nonresidential_property_type                               1 parcel(s)
+
+Auto-Exclude Parcels (1):
+  11058013      890 Mckinley Rd, Arlington VA 22205            nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=2.7_high_value=658869
+
+Flag-for-Review Parcels (23):
+  11040076      1609 N Roosevelt St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.7_low_value=134993
+  11040075      1623 N Roosevelt St, Arlington VA 22205        statistical_outlier:est_value_high_z=-3.1_low_value=102938
+  11040080      6305 15Th Rd N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.0_low_value=330|statistical_outlier:est_value_high_z=-3.8_low_value=32426
+  11040083      6295 15Th Pl N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.8_low_value=132179
+  11040043      1312 N Quintana St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.9_low_value=447|statistical_outlier:est_value_high_z=-3.6_low_value=53208
+  11040044      1308 N Quintana St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-3.7_low_value=-467
+  11040048      1230 N Quintana St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-5.0_low_value=-1880
+  11040039      1227 N Quintana St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.6_low_value=807|statistical_outlier:est_value_high_z=-3.2_low_value=88742
+  11040046      1300 N Quintana St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-4.0_low_value=-785
+  11041089      1101 N Rockingham St, Arlington VA 22203       statistical_outlier:est_value_high_z=2.8_high_value=669405
+  11041079      1115 N Rochester St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.6_low_value=149897
+  11053031      1021 N Quintana St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.8_low_value=127924
+  11041045      6337 11Th Rd N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.6_low_value=153004
+  11053011      1004 N Quantico St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.5_low_value=906|statistical_outlier:est_value_high_z=-3.0_low_value=107844
+  11061015      1014 N Quintana St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.9_low_value=478|statistical_outlier:est_value_high_z=-3.6_low_value=55258
+  11041017      6258 12Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.7_low_value=752|statistical_outlier:est_value_high_z=-3.4_low_value=76525
+  11049023      1101 N Potomac St, Arlington VA 22205          statistical_outlier:est_value_high_z=-2.5_low_value=155929
+  11041002      968 N Rochester St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.9_low_value=487|statistical_outlier:est_value_high_z=-3.9_low_value=28327
+  11061038      N Quintana St, Arlington VA 22205              statistical_outlier:est_value_high_z=-3.8_low_value=29400
+  11054010      894 N Nottingham St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.6_low_value=144995
+  11060005      920 N Quesada St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-4.8_low_value=-1667
+  11057005      927 N Nottingham St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-3.1_low_value=222|statistical_outlier:est_value_high_z=-3.9_low_value=20740
+  11060001      858 N Ohio St, Arlington VA 22205              statistical_outlier:est_value_high_z=-3.3_low_value=76834
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    1  total_avail_gfa=       2,603 sf  agg_value_high=$       658,869
+  flag-for-review       parcels=   23  total_avail_gfa=      26,111 sf  agg_value_high=$     2,340,569
+  clean                 parcels=  474  total_avail_gfa=   1,838,162 sf  agg_value_high=$   193,793,510
+
+  Clean-tier GFA capacity as % of full analysis: 98.5%
+  Clean-tier value as % of full analysis:        98.5%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

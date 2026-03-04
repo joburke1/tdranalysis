@@ -1,0 +1,72 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 1,401
+
+Quality Tier Summary:
+  auto-exclude             11  (0.8%)
+  flag-for-review          26  (1.9%)
+  clean                 1,364  (97.4%)
+
+Most common anomaly types:
+  statistical_outlier                                       20 parcel(s)
+  nonresidential_property_type                              11 parcel(s)
+  lot_area_marginal                                          8 parcel(s)
+  unknown_property_type                                      2 parcel(s)
+  lot_area_remnant                                           1 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+  unusual_property_type                                      1 parcel(s)
+
+Auto-Exclude Parcels (11):
+  13005014      N Frederick St, Arlington VA 22205             nonresidential_property_type:215-Gen Comm - other
+  13005013      N Frederick St, Arlington VA 22205             nonresidential_property_type:215-Gen Comm - other
+  13035015      5Th St N, Arlington VA 22205                   nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_remnant:930sf<1000sf_threshold|lot_width_remnant:11.4ft<15ft_threshold
+  09076002      5312 10Th St N, Arlington VA 22205             nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-29.0_low_value=-77651
+  09076001      Fairfax Dr, Arlington VA 22205                 nonresidential_property_type:215-Gen Comm - other
+  09076003      N Harrison St, Arlington VA 22205              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  09076004      10Th St N, Arlington VA 22205                  nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=16.1_high_value=2879850
+  09061001      1132 N Ivanhoe St, Arlington VA 22205          nonresidential_property_type:215-Gen Comm - other
+  13019024      601 N Vermont St, Arlington VA 22203           nonresidential_property_type:215-Gen Comm - other
+  13007037      9Th Rd N, Arlington VA 22205                   nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=3.0_high_value=866025
+  13034035      800 N Illinois St, Arlington VA 22205          nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (26):
+  09052010      5208 Washington Blvd, Arlington VA 22205       statistical_outlier:available_gfa_sf_z=-3.2_low_value=-25
+  09075013      1014 N Frederick St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.6_low_value=1610
+  14055004      843 N Buchanan St, Arlington VA 22203          statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2517
+  13007030      900 N Lexington St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.5_low_value=9429
+  13006030      849 N Jacksonville St, Arlington VA 22205      statistical_outlier:est_value_high_z=-2.6_low_value=5177
+  13028009      701 N Emerson St, Arlington VA 22203           statistical_outlier:est_value_high_z=-2.6_low_value=2892
+  13031006      701 N Greenbrier St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.5_low_value=16335
+  13031026      646 N Florida St, Arlington VA 22205           statistical_outlier:est_value_high_z=-2.5_low_value=10323
+  13020010      4516 7Th St N, Arlington VA 22203              statistical_outlier:available_gfa_sf_z=-2.6_low_value=-2294
+  13020014      620 N Vermont St, Arlington VA 22203           statistical_outlier:available_gfa_sf_z=-2.6_low_value=-2457
+  13041049      720 N Kensington St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.6_low_value=5399
+  13044048      5330 5Th St N, Arlington VA 22203              statistical_outlier:est_value_high_z=-2.5_low_value=16333
+  13041030      5731 6Th St N, Arlington VA 22205              statistical_outlier:est_value_high_z=-2.6_low_value=8117
+  13035012      5612 5Th St N, Arlington VA 22205              statistical_outlier:est_value_high_z=-2.6_low_value=3759
+  13042007      302 N Kensington St, Arlington VA 22203        unknown_property_type:Public Service/Stormwater|statistical_outlier:est_value_high_z=-2.6_low_value=75
+  13042034      N Kensington St, Arlington VA 22205            unknown_property_type:Public Service/Stormwater|statistical_outlier:est_value_high_z=-2.6_low_value=75
+  13043015      300 N Jefferson St, Arlington VA 22203         statistical_outlier:est_value_high_z=-2.6_low_value=3446
+  13022050      613 N Abingdon St, Arlington VA 22203          lot_area_marginal:1461sf<2000sf_threshold
+  13022051      615 N Abingdon St, Arlington VA 22203          lot_area_marginal:1449sf<2000sf_threshold
+  13022054      621 N Abingdon St, Arlington VA 22203          lot_area_marginal:1430sf<2000sf_threshold
+  13022055      623 N Abingdon St, Arlington VA 22203          lot_area_marginal:1430sf<2000sf_threshold
+  13022066      629 N Abingdon St, Arlington VA 22203          lot_area_marginal:1733sf<2000sf_threshold
+  13022058      635 N Abingdon St, Arlington VA 22203          lot_area_marginal:1393sf<2000sf_threshold
+  13022063      645 N Abingdon St, Arlington VA 22203          lot_area_marginal:1444sf<2000sf_threshold
+  13022062      643 N Abingdon St, Arlington VA 22203          lot_area_marginal:1456sf<2000sf_threshold
+  13022068      637 N Abingdon St, Arlington VA 22203          unusual_property_type:540 - Not Valued Resd. (H.O.A)
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=   11  total_avail_gfa=      37,338 sf  agg_value_high=$     6,153,390
+  flag-for-review       parcels=   26  total_avail_gfa=      19,908 sf  agg_value_high=$       298,917
+  clean                 parcels=1,364  total_avail_gfa=   4,803,187 sf  agg_value_high=$   529,653,714
+
+  Clean-tier GFA capacity as % of full analysis: 98.8%
+  Clean-tier value as % of full analysis:        98.8%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

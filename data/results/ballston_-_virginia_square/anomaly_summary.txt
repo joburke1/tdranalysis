@@ -1,0 +1,43 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 271
+
+Quality Tier Summary:
+  auto-exclude              7  (2.6%)
+  flag-for-review           4  (1.5%)
+  clean                   260  (95.9%)
+
+Most common anomaly types:
+  nonresidential_property_type                               7 parcel(s)
+  statistical_outlier                                        3 parcel(s)
+  low_improvement_value                                      2 parcel(s)
+  unknown_property_type                                      1 parcel(s)
+
+Auto-Exclude Parcels (7):
+  15083006      3809 Washington Blvd, Arlington VA 22201       nonresidential_property_type:215-Gen Comm - other
+  15086024      3422 13Th St N, Arlington VA 22201             nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=4.4_high_value=1206314
+  14040003      9Th St N, Arlington VA 22203                   nonresidential_property_type:200-GenCom VacLand-no siteplan
+  14040004      9Th St N, Arlington VA 22203                   nonresidential_property_type:200-GenCom VacLand-no siteplan
+  14040002      9Th St N, Arlington VA 22203                   nonresidential_property_type:200-GenCom VacLand-no siteplan
+  15039040      Kirkwood Rd, Arlington VA 22201                nonresidential_property_type:200-GenCom VacLand-no siteplan
+  15086023      3400 13Th St N, Arlington VA 22201             nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-13.5_low_value=-56566
+
+Flag-for-Review Parcels (4):
+  14006004      1316 N Taylor St, Arlington VA 22201           low_improvement_value:$29400<$30000_makes_gfa_estimate_unreliable
+  14039003      901 N Oakland St, Arlington VA 22203           unknown_property_type:528-SFD/Apt Zone no site plan
+  15039036      1410 N Kenmore St, Arlington VA 22201          statistical_outlier:available_gfa_sf_z=-2.8_low_value=-1475
+  15085003      12Th Rd N, Arlington VA 22201                  low_improvement_value:$7000<$30000_makes_gfa_estimate_unreliable
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    7  total_avail_gfa=      19,162 sf  agg_value_high=$     2,194,067
+  flag-for-review       parcels=    4  total_avail_gfa=       9,510 sf  agg_value_high=$     1,222,671
+  clean                 parcels=  260  total_avail_gfa=     762,152 sf  agg_value_high=$    97,796,246
+
+  Clean-tier GFA capacity as % of full analysis: 96.4%
+  Clean-tier value as % of full analysis:        96.6%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

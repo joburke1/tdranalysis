@@ -1,0 +1,41 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 177
+
+Quality Tier Summary:
+  auto-exclude              3  (1.7%)
+  flag-for-review           7  (4.0%)
+  clean                   167  (94.4%)
+
+Most common anomaly types:
+  statistical_outlier                                        6 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+  unknown_property_type                                      1 parcel(s)
+
+Auto-Exclude Parcels (3):
+  36032001      923 23Rd St S, Arlington VA 22202              nonresidential_property_type:215-Gen Comm - other
+  36038002      24Th St S, Arlington VA 22202                  nonresidential_property_type:200-GenCom VacLand-no siteplan
+  36039016      24Th St S, Arlington VA 22202                  nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (7):
+  36019005      628 20Th St S, Arlington VA 22202              statistical_outlier:available_gfa_sf_z=-2.6_low_value=-855
+  36030008      710 22Nd St S, Arlington VA 22202              unknown_property_type:311-Apartment - Garden
+  36037005      2425 S Inge St, Arlington VA 22202             statistical_outlier:est_value_high_z=-2.7_low_value=137435
+  36052054      26Th St S, Arlington VA 22202                  statistical_outlier:est_value_high_z=-2.6_low_value=21750
+  36049010      2500 S Fern St, Arlington VA 22202             statistical_outlier:est_value_high_z=-2.6_low_value=19089
+  36026020      835 22Nd St S, Arlington VA 22202              statistical_outlier:est_value_high_z=-2.5_low_value=30048
+  36029033      612 22Nd St S, Arlington VA 22202              statistical_outlier:available_gfa_sf_z=-2.6_low_value=-885
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=       5,104 sf  agg_value_high=$       306,225
+  flag-for-review       parcels=    7  total_avail_gfa=       9,046 sf  agg_value_high=$       208,321
+  clean                 parcels=  167  total_avail_gfa=     579,412 sf  agg_value_high=$    68,094,825
+
+  Clean-tier GFA capacity as % of full analysis: 97.6%
+  Clean-tier value as % of full analysis:        99.3%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

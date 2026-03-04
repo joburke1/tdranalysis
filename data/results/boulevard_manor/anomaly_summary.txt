@@ -1,0 +1,42 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 466
+
+Quality Tier Summary:
+  auto-exclude              4  (0.9%)
+  flag-for-review           5  (1.1%)
+  clean                   457  (98.1%)
+
+Most common anomaly types:
+  statistical_outlier                                        7 parcel(s)
+  unusual_property_type                                      3 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+  unknown_property_type                                      2 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+
+Auto-Exclude Parcels (4):
+  12040087      1St St N, Arlington VA 22203                   unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_width_remnant:9.5ft<15ft_threshold|statistical_outlier:est_value_high_z=-2.5_low_value=75
+  12040055      300 N Montague St, Arlington VA 22203          nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=5.2_high_value=1078414
+  12041032      6000 Wilson Blvd, Arlington VA 22205           nonresidential_property_type:215-Gen Comm - other
+  12041026      6040 Wilson Blvd, Arlington VA 22205           nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=3.8_high_value=876011
+
+Flag-for-Review Parcels (5):
+  12041044      5910 Wilson Blvd, Arlington VA 22203           unknown_property_type:218-Health care Facilities|statistical_outlier:available_gfa_sf_z=-21.1_low_value=-147590
+  12040132      225 N Liberty St, Arlington VA 22203           unknown_property_type:528-SFD/Apt Zone no site plan
+  12040112      1St St N, Arlington VA 22203                   unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.5_low_value=75
+  12042104      Arlington Blvd, Arlington VA 22203             unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.5_low_value=75
+  12030085      N Manchester St, Arlington VA 22203            statistical_outlier:est_value_high_z=9.7_high_value=1696650
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    4  total_avail_gfa=      11,609 sf  agg_value_high=$     2,638,758
+  flag-for-review       parcels=    5  total_avail_gfa=      19,363 sf  agg_value_high=$     1,766,574
+  clean                 parcels=  457  total_avail_gfa=   1,597,726 sf  agg_value_high=$   155,573,181
+
+  Clean-tier GFA capacity as % of full analysis: 98.1%
+  Clean-tier value as % of full analysis:        97.2%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

@@ -1,0 +1,99 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 1,354
+
+Quality Tier Summary:
+  auto-exclude              9  (0.7%)
+  flag-for-review          54  (4.0%)
+  clean                 1,291  (95.3%)
+
+Most common anomaly types:
+  statistical_outlier                                       49 parcel(s)
+  nonresidential_property_type                               7 parcel(s)
+  lot_area_marginal                                          4 parcel(s)
+  low_improvement_value                                      3 parcel(s)
+  unknown_property_type                                      3 parcel(s)
+  unusual_property_type                                      2 parcel(s)
+  lot_area_remnant                                           2 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+
+Auto-Exclude Parcels (9):
+  01064100      N Pocomoke St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  01061001      N Ohio St, Arlington VA 22207                  nonresidential_property_type:200-GenCom VacLand-no siteplan
+  01009001      2824 N Arizona St, Arlington VA 22213          nonresidential_property_type:200-GenCom VacLand-no siteplan
+  01067040      N Rockingham St, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan
+  01008009      6917 Williamsburg Blvd, Arlington VA 22213     nonresidential_property_type:215-Gen Comm - other
+  11014054      19Th St N, Arlington VA 22205                  unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_remnant:864sf<1000sf_threshold|lot_width_remnant:10.6ft<15ft_threshold
+  11014055      19Th St N, Arlington VA 22205                  unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_remnant:946sf<1000sf_threshold|statistical_outlier:est_value_high_z=-2.7_low_value=3525
+  01008011      6901 Williamsburg Blvd, Arlington VA 22213     nonresidential_property_type:215-Gen Comm - other
+  11014014      Washington Blvd, Arlington VA 22205            nonresidential_property_type:200-GenCom VacLand-no siteplan
+
+Flag-for-Review Parcels (54):
+  01015015      6631 29Th St N, Arlington VA 22213             statistical_outlier:est_value_high_z=-2.6_low_value=26003
+  01015025      2827 N Underwood St, Arlington VA 22213        statistical_outlier:est_value_high_z=-2.6_low_value=40938
+  01015017      2822 N Tuckahoe St, Arlington VA 22213         statistical_outlier:est_value_high_z=-2.6_low_value=27075
+  01015012      6613 29Th St N, Arlington VA 22213             statistical_outlier:est_value_high_z=-2.8_low_value=4053
+  01016003      6618 29Th St N, Arlington VA 22213             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1347
+  01016007      2830 N Trinidad St, Arlington VA 22213         statistical_outlier:est_value_high_z=-2.7_low_value=15280
+  01016001      6630 29Th St N, Arlington VA 22213             statistical_outlier:est_value_high_z=-2.7_low_value=11188
+  01049003      2628 N Potomac St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-3.2_low_value=-2188
+  01045012      2614 N Rockingham St, Arlington VA 22207       statistical_outlier:est_value_high_z=-2.7_low_value=9230
+  01046019      2611 N Rockingham St, Arlington VA 22207       statistical_outlier:est_value_high_z=-2.6_low_value=14563
+  01046004      6400 27Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=24791
+  01046001      6412 27Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.5_low_value=28957
+  01053046      2641 N Ohio St, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1284
+  01053027      2619 N Ohio St, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.7_low_value=3404
+  01053034      6020 26Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-1788
+  01052009      2620 N Ohio St, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1647
+  01053037      6029 26Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1124
+  01009040      2801 N Arizona St, Arlington VA 22213          statistical_outlier:est_value_high_z=3.1_high_value=1046322
+  01039003      6844 28Th St N, Arlington VA 22213             statistical_outlier:est_value_high_z=-2.5_low_value=630
+  01013006      6701 Little Falls Rd, Arlington VA 22213       statistical_outlier:available_gfa_sf_z=-3.3_low_value=-2718
+  01039020      6827 27Th St N, Arlington VA 22213             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-1261
+  01064007      2428 N Potomac St, Arlington VA 22207          statistical_outlier:est_value_high_z=-2.5_low_value=27966
+  01066015      2416 N Quantico St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.5_low_value=30069
+  01064022      2447 N Quantico St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.7_low_value=1852
+  01009031      2722 N Yucatan St, Arlington VA 22213          low_improvement_value:$24000<$30000_makes_gfa_estimate_unreliable
+  11028022      19Th St N, Arlington VA 22205                  statistical_outlier:est_value_high_z=-2.5_low_value=29025
+  11028023      19Th St N, Arlington VA 22205                  statistical_outlier:est_value_high_z=-2.5_low_value=31800
+  11028009      1910 N Quantico St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.7_low_value=10496
+  11016008      1934 N Van Buren St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.7_low_value=1111
+  11016009      1930 N Van Buren St, Arlington VA 22205        low_improvement_value:$12900<$30000_makes_gfa_estimate_unreliable
+  11017005      1916 N Underwood St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1212
+  11016014      1912 N Van Buren St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1670
+  11011006      1826 N Van Buren St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.6_low_value=16985
+  11022005      1809 N Tuckahoe St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.5_low_value=-1061
+  11020011      1811 N Underwood St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1130
+  11005037      Washington Blvd, Arlington VA 22205            unknown_property_type:Public Service/Stormwater|statistical_outlier:est_value_high_z=-2.7_low_value=75
+  11005038      Washington Blvd, Arlington VA 22205            unknown_property_type:Public Service/Stormwater|statistical_outlier:est_value_high_z=-2.7_low_value=75
+  11005003      6700 Langston Blvd, Arlington VA 22205         unknown_property_type:Public Service/Stormwater|statistical_outlier:est_value_high_z=-2.7_low_value=75
+  11024025      1100 N Roosevelt St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.6_low_value=26271
+  11023002      1205 N Tuckahoe St, Arlington VA 22205         lot_area_marginal:1143sf<2000sf_threshold|low_improvement_value:$6300<$30000_makes_gfa_estimate_unreliable
+  11023016      1204 N Sycamore St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.7_low_value=1796
+  11064004      1404 N Tuckahoe St, Arlington VA 22205         lot_area_marginal:1759sf<2000sf_threshold
+  01006061      3000 N Underwood St, Arlington VA 22213        statistical_outlier:est_value_high_z=-2.5_low_value=1377
+  01006013      6708 31St St N, Arlington VA 22213             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-2192
+  01006034      6601 31St St N, Arlington VA 22213             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2684
+  11027046      1824 N Quantico St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1154
+  11027039      1825 N Quesada St, Arlington VA 22205          statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1420
+  11027041      1833 N Quesada St, Arlington VA 22205          statistical_outlier:est_value_high_z=-2.6_low_value=12478
+  11019035      6605 16Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.6_low_value=15821
+  11014048      6411 19Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.6_low_value=23376
+  01069034      6605 25Th St N, Arlington VA 22213             statistical_outlier:est_value_high_z=-2.6_low_value=12124
+  01063033      2401 B N Potomac St, Arlington VA 22207        lot_area_marginal:1350sf<2000sf_threshold
+  01063030      2405 B N Potomac St, Arlington VA 22207        lot_area_marginal:1800sf<2000sf_threshold
+  01063025      2507 N Potomac St, Arlington VA 22207          statistical_outlier:est_value_high_z=-2.6_low_value=24224
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    9  total_avail_gfa=      38,223 sf  agg_value_high=$     2,056,807
+  flag-for-review       parcels=   54  total_avail_gfa=      46,405 sf  agg_value_high=$     2,301,429
+  clean                 parcels=1,291  total_avail_gfa=   4,746,873 sf  agg_value_high=$   528,599,864
+
+  Clean-tier GFA capacity as % of full analysis: 98.2%
+  Clean-tier value as % of full analysis:        99.2%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

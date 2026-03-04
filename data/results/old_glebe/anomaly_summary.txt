@@ -1,0 +1,54 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 562
+
+Quality Tier Summary:
+  auto-exclude              3  (0.5%)
+  flag-for-review          19  (3.4%)
+  clean                   540  (96.1%)
+
+Most common anomaly types:
+  unusual_property_type                                     11 parcel(s)
+  statistical_outlier                                        6 parcel(s)
+  lot_area_marginal                                          4 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+
+Auto-Exclude Parcels (3):
+  03066001      4102 N Old Glebe Rd, Arlington VA 22207        nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=2.6_high_value=956473
+  03032046      37Th Pl N, Arlington VA 22207                  nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03036223      N Richmond St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=2.8_high_value=985500
+
+Flag-for-Review Parcels (19):
+  03066089      4211 38Th Rd N, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03066107      N Randolph Ct, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03066104      N Randolph Ct, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03066106      N Randolph Ct, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03066105      N Randolph Ct, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03066090      N Tazewell St, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03066088      N Tazewell St, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03036155      4414 Dittmar Rd, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-3.1_low_value=-5513
+  03032083      3718 N Woodrow St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-2.6_low_value=-4018
+  03044005      3433 N Albemarle St, Arlington VA 22207        statistical_outlier:available_gfa_sf_z=-3.1_low_value=-5675
+  03036218      3823 N Richmond St, Arlington VA 22207         lot_area_marginal:1809sf<2000sf_threshold
+  03036219      3825 N Richmond St, Arlington VA 22207         lot_area_marginal:1943sf<2000sf_threshold
+  03036227      N Richmond St, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03039023      4614 36Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-5385
+  03036209      3804 N Richmond St, Arlington VA 22207         lot_area_marginal:1946sf<2000sf_threshold
+  03036208      3802 N Richmond St, Arlington VA 22207         lot_area_marginal:1943sf<2000sf_threshold
+  03036224      N Richmond St, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03036225      N Richmond St, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03036236      N Stafford St, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=      20,127 sf  agg_value_high=$     2,029,423
+  flag-for-review       parcels=   19  total_avail_gfa=      49,255 sf  agg_value_high=$           600
+  clean                 parcels=  540  total_avail_gfa=   1,896,170 sf  agg_value_high=$   201,063,987
+
+  Clean-tier GFA capacity as % of full analysis: 96.5%
+  Clean-tier value as % of full analysis:        99.0%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

@@ -1,0 +1,63 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 682
+
+Quality Tier Summary:
+  auto-exclude             10  (1.5%)
+  flag-for-review          20  (2.9%)
+  clean                   652  (95.6%)
+
+Most common anomaly types:
+  statistical_outlier                                       21 parcel(s)
+  nonresidential_property_type                              10 parcel(s)
+  unknown_property_type                                      2 parcel(s)
+  lot_area_marginal                                          1 parcel(s)
+  unusual_property_type                                      1 parcel(s)
+
+Auto-Exclude Parcels (10):
+  01075001      N Nottingham St, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_marginal:1860sf<2000sf_threshold|statistical_outlier:est_value_high_z=-2.6_low_value=12075
+  09001046      2255 N Greenbrier St, Arlington VA 22207       nonresidential_property_type:200-GenCom VacLand-no siteplan
+  09001047      5301 22Nd St N, Arlington VA 22207             nonresidential_property_type:200-GenCom VacLand-no siteplan
+  09001045      2251 N Greenbrier St, Arlington VA 22207       nonresidential_property_type:200-GenCom VacLand-no siteplan
+  09001044      2247 N Greenbrier St, Arlington VA 22207       nonresidential_property_type:200-GenCom VacLand-no siteplan
+  09001043      2243 N Greenbrier St, Arlington VA 22207       nonresidential_property_type:200-GenCom VacLand-no siteplan
+  09001042      2239 N Greenbrier St, Arlington VA 22207       nonresidential_property_type:200-GenCom VacLand-no siteplan
+  09001048      2259 S Greenbrier St, Arlington VA 22207       nonresidential_property_type:200-GenCom VacLand-no siteplan
+  11001200      Langston Blvd, Arlington VA 22205              nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=-2.6_low_value=75
+  11001027      6030 Langston Blvd, Arlington VA 22205         nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (20):
+  02052010      5624 27Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.5_low_value=17333
+  02052019      5615 26Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-1089
+  02052001      2621 N Lexington St, Arlington VA 22207        statistical_outlier:est_value_high_z=-2.5_low_value=17376
+  01057001      2443 N Nottingham St, Arlington VA 22207       statistical_outlier:est_value_high_z=-2.6_low_value=13257
+  09001021      5232 Langston Blvd, Arlington VA 22207         unknown_property_type:219-Mixed office/comm|statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1641
+  09001018      2200 N George Mason Dr, Arlington VA 22205     unknown_property_type:211-Retail strip|statistical_outlier:available_gfa_sf_z=-4.1_low_value=-3923
+  09001049      2259 N Greenbrier St, Arlington VA 22204       unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  10006029      2253 N Nottingham St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.5_low_value=17020
+  10008007      2300 N Kentucky St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.6_low_value=15102
+  10009003      2308 N Kensington St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.6_low_value=15131
+  11001118      6244 23Rd St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1152
+  10007014      5805 22Nd St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1294
+  10010022      5601 23Rd St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-1072
+  10011020      5519 22Nd St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.6_low_value=11464
+  10011010      5516 23Rd St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.6_low_value=10838
+  10011012      5508 23Rd St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.5_low_value=20796
+  11001217      6050 23Rd St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.5_low_value=19444
+  01056001      5810 25Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-1460
+  10002003      2400 N Kensington St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.6_low_value=5001
+  11002043      2310 N Potomac St, Arlington VA 22205          statistical_outlier:est_value_high_z=-2.6_low_value=8686
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=   10  total_avail_gfa=      23,421 sf  agg_value_high=$       650,250
+  flag-for-review       parcels=   20  total_avail_gfa=       1,488 sf  agg_value_high=$       171,450
+  clean                 parcels=  652  total_avail_gfa=   2,317,745 sf  agg_value_high=$   266,177,214
+
+  Clean-tier GFA capacity as % of full analysis: 98.9%
+  Clean-tier value as % of full analysis:        99.7%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

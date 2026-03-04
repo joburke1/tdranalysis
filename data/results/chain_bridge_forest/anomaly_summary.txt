@@ -1,0 +1,38 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 64
+
+Quality Tier Summary:
+  auto-exclude              2  (3.1%)
+  flag-for-review           3  (4.7%)
+  clean                    59  (92.2%)
+
+Most common anomaly types:
+  unusual_property_type                                      3 parcel(s)
+  statistical_outlier                                        2 parcel(s)
+  nonresidential_property_type                               1 parcel(s)
+  lot_area_remnant                                           1 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+
+Auto-Exclude Parcels (2):
+  03067067      4250 N Glebe Rd, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=7.2_high_value=4687999
+  03003190      39Th St N, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_remnant:586sf<1000sf_threshold|lot_width_remnant:4.7ft<15ft_threshold
+
+Flag-for-Review Parcels (3):
+  03003110      N Glebe Rd, Arlington VA 22207                 unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03003189      39Th St N, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  03003186      4151 39Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-428
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=       5,317 sf  agg_value_high=$     4,687,999
+  flag-for-review       parcels=    3  total_avail_gfa=           0 sf  agg_value_high=$             0
+  clean                 parcels=   59  total_avail_gfa=     304,220 sf  agg_value_high=$    26,211,888
+
+  Clean-tier GFA capacity as % of full analysis: 98.3%
+  Clean-tier value as % of full analysis:        84.8%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

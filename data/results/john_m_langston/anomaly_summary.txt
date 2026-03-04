@@ -1,0 +1,53 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 441
+
+Quality Tier Summary:
+  auto-exclude              2  (0.5%)
+  flag-for-review          17  (3.9%)
+  clean                   422  (95.7%)
+
+Most common anomaly types:
+  statistical_outlier                                        5 parcel(s)
+  unknown_property_type                                      4 parcel(s)
+  unusual_property_type                                      4 parcel(s)
+  low_improvement_value                                      3 parcel(s)
+  nonresidential_property_type                               2 parcel(s)
+  lot_area_marginal                                          2 parcel(s)
+
+Auto-Exclude Parcels (2):
+  07006133      N Culpeper St, Arlington VA 22207              nonresidential_property_type:300-MultiFam-VacLand-no s.plan
+  09015024      5217 19Th Rd N, Arlington VA 22205             nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (17):
+  07006126      2001 N Culpeper St, Arlington VA 22207         low_improvement_value:$23000<$30000_makes_gfa_estimate_unreliable
+  07006169      1801 N Culpeper St, Arlington VA 22207         low_improvement_value:$24200<$30000_makes_gfa_estimate_unreliable
+  08011032      2004 N Culpeper St, Arlington VA 22207         statistical_outlier:available_gfa_sf_z=-2.8_low_value=95|statistical_outlier:est_value_high_z=-3.0_low_value=11056
+  08001064      N Culpeper St, Arlington VA 22207              unknown_property_type:Public Service/Stormwater
+  09015019      5155 19Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1929
+  09016102      N George Mason Dr, Arlington VA 22205          unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  09016103      N George Mason Dr, Arlington VA 22205          unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  09016098      1824 N George Mason Dr, Arlington VA 22205     lot_area_marginal:1803sf<2000sf_threshold
+  09016099      1826 N George Mason Dr, Arlington VA 22205     lot_area_marginal:1809sf<2000sf_threshold
+  08011019      1931 N Cameron St, Arlington VA 22207          unknown_property_type:311-Apartment - Garden
+  08011020      1941 N Cameron St, Arlington VA 22207          unknown_property_type:311-Apartment - Garden
+  08017021      1833 N Columbus St, Arlington VA 22207         statistical_outlier:available_gfa_sf_z=-2.9_low_value=-2432
+  08016012      1835 N Dinwiddie St, Arlington VA 22207        unknown_property_type:311-Apartment - Garden
+  08017003      1812 N Cameron St, Arlington VA 22207          low_improvement_value:$27000<$30000_makes_gfa_estimate_unreliable
+  09016101      N George Mason Dr, Arlington VA 22205          unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  09016104      N George Mason Dr, Arlington VA 22205          unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  08007007      2025 N Emerson St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2191
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=       9,106 sf  agg_value_high=$       903,575
+  flag-for-review       parcels=   17  total_avail_gfa=      41,822 sf  agg_value_high=$     1,627,795
+  clean                 parcels=  422  total_avail_gfa=   1,271,324 sf  agg_value_high=$   143,634,463
+
+  Clean-tier GFA capacity as % of full analysis: 96.1%
+  Clean-tier value as % of full analysis:        98.3%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

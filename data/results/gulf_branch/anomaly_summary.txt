@@ -1,0 +1,34 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 176
+
+Quality Tier Summary:
+  auto-exclude              2  (1.1%)
+  flag-for-review           2  (1.1%)
+  clean                   172  (97.7%)
+
+Most common anomaly types:
+  statistical_outlier                                        2 parcel(s)
+  nonresidential_property_type                               2 parcel(s)
+
+Auto-Exclude Parcels (2):
+  03047172      N Thomas St, Arlington VA 22207                nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03047174      33Rd Rd N, Arlington VA 22207                  nonresidential_property_type:200-GenCom VacLand-no siteplan
+
+Flag-for-Review Parcels (2):
+  03047022      4425 33Rd Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.9_low_value=-3813
+  03047053      3341 N Randolph St, Arlington VA 22207         statistical_outlier:available_gfa_sf_z=-2.6_low_value=-3050
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=      17,500 sf  agg_value_high=$       774,975
+  flag-for-review       parcels=    2  total_avail_gfa=           0 sf  agg_value_high=$             0
+  clean                 parcels=  172  total_avail_gfa=     692,000 sf  agg_value_high=$    70,199,377
+
+  Clean-tier GFA capacity as % of full analysis: 97.5%
+  Clean-tier value as % of full analysis:        98.9%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

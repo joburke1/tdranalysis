@@ -1,0 +1,30 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 50
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review           2  (4.0%)
+  clean                    48  (96.0%)
+
+Most common anomaly types:
+  lot_area_marginal                                          1 parcel(s)
+  unknown_property_type                                      1 parcel(s)
+
+Flag-for-Review Parcels (2):
+  18020007      1031 N Cleveland St, Arlington VA 22201        lot_area_marginal:1500sf<2000sf_threshold
+  18084004      2451 11Th St N, Arlington VA 22201             unknown_property_type:Public Service/Stormwater
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=    2  total_avail_gfa=       6,157 sf  agg_value_high=$        99,313
+  clean                 parcels=   48  total_avail_gfa=     138,678 sf  agg_value_high=$    19,149,194
+
+  Clean-tier GFA capacity as % of full analysis: 95.7%
+  Clean-tier value as % of full analysis:        99.5%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

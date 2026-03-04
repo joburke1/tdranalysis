@@ -1,0 +1,67 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 883
+
+Quality Tier Summary:
+  auto-exclude              3  (0.3%)
+  flag-for-review          31  (3.5%)
+  clean                   849  (96.1%)
+
+Most common anomaly types:
+  statistical_outlier                                       30 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+  unusual_property_type                                      3 parcel(s)
+  low_improvement_value                                      1 parcel(s)
+  unknown_property_type                                      1 parcel(s)
+
+Auto-Exclude Parcels (3):
+  03047184      N Thomas St, Arlington VA 22207                nonresidential_property_type:200-GenCom VacLand-no siteplan
+  05001031      2666 Military Rd, Arlington VA 22207           nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:available_gfa_sf_z=-5.3_low_value=-9230
+  05042023      2326 Military Rd, Arlington VA 22207           nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (31):
+  03064084      4110 31St St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.7_low_value=6230
+  03047123      2628 N Upland St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.6_low_value=-2107
+  03064025      2522 N Upland St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1688
+  04011497      2685 N Marcey Rd, Arlington VA 22207           unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.7_low_value=75
+  04011484      2665 N Marcey Rd, Arlington VA 22207           statistical_outlier:est_value_high_z=-2.6_low_value=18133
+  04011197      3950 26Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=13126
+  03064006      2551 N Vermont St, Arlington VA 22207          statistical_outlier:est_value_high_z=2.5_high_value=918992
+  04011203      3963 26Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.7_low_value=1219
+  05004012      2513 N Vernon St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1708
+  05024043      4027 25Th Rd N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.7_low_value=7115
+  05025028      2321 N Richmond St, Arlington VA 22207         statistical_outlier:available_gfa_sf_z=-4.4_low_value=-5406
+  05022012      2300 N Richmond St, Arlington VA 22207         statistical_outlier:available_gfa_sf_z=-3.5_low_value=-3551
+  05044007      4026 25Th Rd N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.7_low_value=21162
+  05027033      N Upton St, Arlington VA 22207                 low_improvement_value:$5100<$30000_makes_gfa_estimate_unreliable|statistical_outlier:est_value_high_z=-2.7_low_value=18810
+  05029023      2222 N Vermont St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-2.9_low_value=-2279
+  05027001      4399 Langston Blvd, Arlington VA 22207         unknown_property_type:213-Small office
+  04011496      N Marcey Rd, Arlington VA 22207                unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.7_low_value=75
+  04011211      4017 26Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=7848
+  03047163      4605 26Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.2_low_value=-3780
+  03047159      4612 27Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-2064
+  03047148      2785 N Wakefield St, Arlington VA 22207        statistical_outlier:available_gfa_sf_z=-2.8_low_value=-2620
+  05001051      2521 N Utah St, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.8_low_value=2541
+  05001054      2533 N Utah St, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=32300
+  04011221      2611 N Marcey Rd, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.6_low_value=-2121
+  05042051      N Ridgeview Rd, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  05042037      2339 N Ridgeview Rd, Arlington VA 22207        statistical_outlier:available_gfa_sf_z=-3.0_low_value=-2513
+  05001049      2509 N Utah St, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1945
+  05042010      2310 Military Rd, Arlington VA 22207           statistical_outlier:est_value_high_z=4.6_high_value=1888073
+  05026025      2338 N Taylor St, Arlington VA 22207           statistical_outlier:est_value_high_z=-2.7_low_value=19118
+  03063015      4600 26Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.8_low_value=4749
+  03063040      4509 25Th Rd N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.8_low_value=923
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=      11,323 sf  agg_value_high=$     1,020,549
+  flag-for-review       parcels=   31  total_avail_gfa=      37,958 sf  agg_value_high=$     3,261,226
+  clean                 parcels=  849  total_avail_gfa=   3,536,300 sf  agg_value_high=$   373,117,904
+
+  Clean-tier GFA capacity as % of full analysis: 98.6%
+  Clean-tier value as % of full analysis:        98.9%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

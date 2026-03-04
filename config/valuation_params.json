@@ -28,6 +28,7 @@
     "lookback_years": 10,
     "assumed_envelope_utilization": 1.0,
     "min_sample_size": 5,
-    "notes": "Parameters for deriving neighborhood-specific improvement $/SF from recent construction. Recent homes are assumed to be built at the specified fraction of the max building envelope. The rate is: improvement_value / (max_footprint * 2.5 stories * utilization). Median and +/- 1 std dev define the neighborhood range."
+    "min_improvement_value": 5000,
+    "notes": "Parameters for deriving neighborhood-specific improvement $/SF from recent construction. Recent homes are assumed to be built at the specified fraction of the max building envelope. The rate is: improvement_value / (max_footprint * 2.5 stories * utilization). Median and +/- 1 std dev define the neighborhood range. min_improvement_value filters out sheds and garages from the calibration sample."
   }
 }

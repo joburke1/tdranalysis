@@ -1,0 +1,68 @@
+parcel_id,quality_tier,anomaly_flags,anomaly_count
+16025008,flag-for-review,unknown_property_type:410-Hotel Residence Suites,1
+16025009,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+16027009,clean,,0
+16027008,clean,,0
+16027007,clean,,0
+16027006,clean,,0
+16027002,clean,,0
+16026PLF,clean,,0
+16027010,clean,,0
+16027003,flag-for-review,unknown_property_type:614-Condo Co-op,1
+16026PCC,clean,,0
+16027001,clean,,0
+16026002,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+16026PCE,clean,,0
+16026505,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+16026003,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+16026006,auto-exclude,nonresidential_property_type:300-MultiFam-VacLand-no s.plan,1
+16026007,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+16025075,flag-for-review,unknown_property_type:640-Not Valued Condo (H.O.A.),1
+16025074,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+16026PCG,clean,,0
+16026PCA,clean,,0
+16025PCA,clean,,0
+16025072,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+16025PCC,clean,,0
+16025PCB,clean,,0
+16026PCB,clean,,0
+16026PCD,clean,,0
+16031PCA,clean,,0
+16031PCD,clean,,0
+16025PCD,clean,,0
+16025002,flag-for-review,unknown_property_type:214-Neighborhood Center,1
+16025PCE,clean,,0
+16030PCA,clean,,0
+16031PCB,clean,,0
+16031PCE,clean,,0
+16025073,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+16025014,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+16030004,flag-for-review,unknown_property_type:211-Retail strip,1
+16030005,flag-for-review,unknown_property_type:212-Restaurant/eating facility,1
+16030006,flag-for-review,unknown_property_type:212-Restaurant/eating facility,1
+16030007,flag-for-review,unknown_property_type:212-Restaurant/eating facility,1
+16030008,flag-for-review,unknown_property_type:212-Restaurant/eating facility,1
+16030PCB,clean,,0
+16030025,flag-for-review,unknown_property_type:101-Off Bldg-VacLand-site plan,1
+16030024,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+16030023,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+16030022,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+16030002,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+16030003,flag-for-review,unknown_property_type:212-Restaurant/eating facility,1
+16030030,flag-for-review,unknown_property_type:212-Restaurant/eating facility,1
+16030010,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+16030026,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+16030027,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+16031PCC,clean,,0
+16026078,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+16026506,auto-exclude,nonresidential_property_type:300-MultiFam-VacLand-no s.plan,1
+16028010,clean,,0
+16026507,auto-exclude,nonresidential_property_type:310-Apartment Parking,1
+16028008,flag-for-review,unknown_property_type:311-Apartment - Garden,1
+16028011,clean,,0
+16028012,clean,,0
+16028013,clean,,0
+16028014,clean,,0
+16028015,clean,,0
+16028016,clean,,0
+16028017,flag-for-review,unusual_property_type:540 - Not Valued Resd. (H.O.A),1

@@ -1,0 +1,33 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 4
+
+Quality Tier Summary:
+  auto-exclude              1  (25.0%)
+  flag-for-review           1  (25.0%)
+  clean                     2  (50.0%)
+
+Most common anomaly types:
+  lot_area_remnant                                           1 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+  unusual_property_type                                      1 parcel(s)
+
+Auto-Exclude Parcels (1):
+  28004069      1130 S Harrison St, Arlington VA 22204         lot_area_remnant:900sf<1000sf_threshold|lot_width_remnant:10.8ft<15ft_threshold
+
+Flag-for-Review Parcels (1):
+  28015075      S Frederick St, Arlington VA 22204             unusual_property_type:540 - Not Valued Resd. (H.O.A)
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    1  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=    1  total_avail_gfa=           0 sf  agg_value_high=$             0
+  clean                 parcels=    2  total_avail_gfa=       2,012 sf  agg_value_high=$       145,887
+
+  Clean-tier GFA capacity as % of full analysis: 100.0%
+  Clean-tier value as % of full analysis:        100.0%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

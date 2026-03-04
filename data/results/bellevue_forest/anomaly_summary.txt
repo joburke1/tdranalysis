@@ -1,0 +1,45 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 410
+
+Quality Tier Summary:
+  auto-exclude              1  (0.2%)
+  flag-for-review          14  (3.4%)
+  clean                   395  (96.3%)
+
+Most common anomaly types:
+  statistical_outlier                                       15 parcel(s)
+  nonresidential_property_type                               1 parcel(s)
+
+Auto-Exclude Parcels (1):
+  05001020      2900 Military Rd, Arlington VA 22207           nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=18.0_high_value=34488300
+
+Flag-for-Review Parcels (14):
+  04002082      3656 N Monroe St, Arlington VA 22207           statistical_outlier:est_value_high_z=-3.1_low_value=64013
+  04002059      3618 N Nelson St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.8_low_value=-1239
+  04002041      3619 N Peary St, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-3.3_low_value=-2309
+  04038072      3575 Roberts Ln, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-3.6_low_value=-2045
+  04002048      3401 N Peary St, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-3.7_low_value=-3222
+  04002029      3306 N Peary St, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-3.2_low_value=-2280
+  04007006      3154 N Quincy St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1042
+  04007007      3148 N Quincy St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1560
+  04010022      3822 30Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.1_low_value=-1908
+  04010021      3830 30Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-1706
+  04038109      2936 N Oxford St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-3.4_low_value=-2530
+  04009008      3061 N Pollard St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-2.7_low_value=-985
+  04006021      3147 N Quincy St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1099
+  04006007      3150 N Pollard St, Arlington VA 22207          statistical_outlier:available_gfa_sf_z=-2.6_low_value=-899
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    1  total_avail_gfa=       8,750 sf  agg_value_high=$    34,488,300
+  flag-for-review       parcels=   14  total_avail_gfa=         681 sf  agg_value_high=$        64,013
+  clean                 parcels=  395  total_avail_gfa=   2,194,143 sf  agg_value_high=$   198,261,693
+
+  Clean-tier GFA capacity as % of full analysis: 99.6%
+  Clean-tier value as % of full analysis:        85.2%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

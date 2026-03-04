@@ -1,0 +1,73 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 974
+
+Quality Tier Summary:
+  auto-exclude              6  (0.6%)
+  flag-for-review          35  (3.6%)
+  clean                   933  (95.8%)
+
+Most common anomaly types:
+  statistical_outlier                                       28 parcel(s)
+  lot_area_marginal                                          8 parcel(s)
+  nonresidential_property_type                               6 parcel(s)
+  unusual_property_type                                      5 parcel(s)
+
+Auto-Exclude Parcels (6):
+  02060001      2609 N Glebe Rd, Arlington VA 22207            nonresidential_property_type:215-Gen Comm - other
+  02073103      25Th Rd N, Arlington VA 22207                  nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_marginal:1826sf<2000sf_threshold
+  02054001      2631 N Harrison St, Arlington VA 22207         nonresidential_property_type:215-Gen Comm - other
+  02053022      N Harrison St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  02053005      N Harrison St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=3.8_high_value=1071750
+  02024027      5115 Little Falls Rd, Arlington VA 22207       nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-10.4_low_value=-27197
+
+Flag-for-Review Parcels (35):
+  02085034      4902 Rock Spring Rd, Arlington VA 22207        statistical_outlier:est_value_high_z=2.7_high_value=893751
+  02085033      4910 Rock Spring Rd, Arlington VA 22207        statistical_outlier:est_value_high_z=3.2_high_value=974009
+  02085032      4916 Rock Spring Rd, Arlington VA 22207        statistical_outlier:est_value_high_z=2.7_high_value=890100
+  02085053      5001 30Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-4025
+  02086010      5020 30Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-3545
+  02086009      5028 30Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-4.4_low_value=-8993
+  02039010      3010 N Florida St, Arlington VA 22207          statistical_outlier:est_value_high_z=-2.7_low_value=21737
+  02050010      5217 27Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1998
+  02051005      5206 27Th Rd N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.5_low_value=14917
+  02046015      2727 N George Mason Dr, Arlington VA 22207     statistical_outlier:available_gfa_sf_z=-3.0_low_value=-2514
+  02059025      4907 26Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.5_low_value=9678
+  02067035      4911 25Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1972
+  02054002      5344 27Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1778
+  02054031      2613 N Harrison St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.6_low_value=3607
+  02073035      2538 N Granada St, Arlington VA 22207          statistical_outlier:est_value_high_z=-2.5_low_value=10258
+  02053051      2506 N Harrison St, Arlington VA 22207         lot_area_marginal:1810sf<2000sf_threshold
+  02053053      N Harrison St, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.6_low_value=75
+  02053054      N Harrison St, Arlington VA 22207              unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.6_low_value=75
+  02053052      2504 N Harrison St, Arlington VA 22207         lot_area_marginal:1831sf<2000sf_threshold
+  02053050      2508 N Harrison St, Arlington VA 22207         lot_area_marginal:1846sf<2000sf_threshold
+  02053046      2516 N Harrison St, Arlington VA 22207         lot_area_marginal:1946sf<2000sf_threshold
+  02053047      2514 N Harrison St, Arlington VA 22207         lot_area_marginal:1896sf<2000sf_threshold
+  02053048      2512 N Harrison St, Arlington VA 22207         lot_area_marginal:1872sf<2000sf_threshold
+  02053049      2510 N Harrison St, Arlington VA 22207         lot_area_marginal:1887sf<2000sf_threshold
+  02088005      2712 N Buchanan St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.7_low_value=11310
+  02088013      2600 N Glebe Rd, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2029
+  02088014      2604 N Glebe Rd, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1699
+  02068009      4914 25Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-2606
+  02088028      N Glebe Rd, Arlington VA 22207                 unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.6_low_value=75
+  02088025      2648 N Glebe Rd, Arlington VA 22207            statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1709
+  02088027      N Glebe Rd, Arlington VA 22207                 unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  02088029      N Glebe Rd, Arlington VA 22207                 unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  02035077      2804 N Jefferson St, Arlington VA 22207        statistical_outlier:available_gfa_sf_z=-2.5_low_value=-1623
+  02035073      2817 N Jefferson St, Arlington VA 22207        statistical_outlier:available_gfa_sf_z=-2.9_low_value=-2434
+  02035044      2834 N Harrison St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.5_low_value=54243
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    6  total_avail_gfa=      24,421 sf  agg_value_high=$     2,479,754
+  flag-for-review       parcels=   35  total_avail_gfa=      42,585 sf  agg_value_high=$     2,883,833
+  clean                 parcels=  933  total_avail_gfa=   3,432,648 sf  agg_value_high=$   386,676,309
+
+  Clean-tier GFA capacity as % of full analysis: 98.1%
+  Clean-tier value as % of full analysis:        98.6%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

@@ -1,0 +1,28 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 15
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review           1  (6.7%)
+  clean                    14  (93.3%)
+
+Most common anomaly types:
+  statistical_outlier                                        1 parcel(s)
+
+Flag-for-Review Parcels (1):
+  06024012      3914 17Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-1938
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=    1  total_avail_gfa=           0 sf  agg_value_high=$             0
+  clean                 parcels=   14  total_avail_gfa=      46,606 sf  agg_value_high=$     5,759,775
+
+  Clean-tier GFA capacity as % of full analysis: 100.0%
+  Clean-tier value as % of full analysis:        100.0%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

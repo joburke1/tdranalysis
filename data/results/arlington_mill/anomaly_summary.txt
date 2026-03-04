@@ -1,0 +1,22 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 10
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review           0  (0.0%)
+  clean                    10  (100.0%)
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  clean                 parcels=   10  total_avail_gfa=      37,432 sf  agg_value_high=$     3,390,199
+
+  Clean-tier GFA capacity as % of full analysis: 100.0%
+  Clean-tier value as % of full analysis:        100.0%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

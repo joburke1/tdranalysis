@@ -1,0 +1,31 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 24
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review           3  (12.5%)
+  clean                    21  (87.5%)
+
+Most common anomaly types:
+  statistical_outlier                                        2 parcel(s)
+  unknown_property_type                                      1 parcel(s)
+
+Flag-for-Review Parcels (3):
+  25027027      906 S Oak St, Arlington VA 22204               statistical_outlier:available_gfa_sf_z=-2.9_low_value=-2637
+  25028008      901 S Oak St, Arlington VA 22204               statistical_outlier:est_value_high_z=-3.8_low_value=32722
+  25025030      S Ode St, Arlington VA 22204                   unknown_property_type:414-Hotel - land/other
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=    3  total_avail_gfa=       3,410 sf  agg_value_high=$       455,347
+  clean                 parcels=   21  total_avail_gfa=      49,172 sf  agg_value_high=$     6,255,670
+
+  Clean-tier GFA capacity as % of full analysis: 93.5%
+  Clean-tier value as % of full analysis:        93.2%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

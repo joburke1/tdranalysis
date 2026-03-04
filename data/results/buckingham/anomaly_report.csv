@@ -1,0 +1,5 @@
+parcel_id,quality_tier,anomaly_flags,anomaly_count
+20027005,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+20025014,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+20025002,clean,,0
+20025001,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1

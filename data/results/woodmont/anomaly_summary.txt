@@ -1,0 +1,41 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 292
+
+Quality Tier Summary:
+  auto-exclude              1  (0.3%)
+  flag-for-review           9  (3.1%)
+  clean                   282  (96.6%)
+
+Most common anomaly types:
+  statistical_outlier                                        8 parcel(s)
+  unusual_property_type                                      2 parcel(s)
+  nonresidential_property_type                               1 parcel(s)
+
+Auto-Exclude Parcels (1):
+  04022019      3701 Lorcom Ln, Arlington VA 22207             nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (9):
+  04014009      3911 Lorcom Ln, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.2_low_value=-3307
+  04026121      24Th St N, Arlington VA 22207                  statistical_outlier:est_value_high_z=4.8_high_value=3435075
+  04027024      2812 24Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.9_low_value=-7465
+  04026214      Lorcom Ln, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  04028105      2350 N Daniel St, Arlington VA 22207           statistical_outlier:available_gfa_sf_z=-2.8_low_value=-2528
+  04025004      N Fillmore St, Arlington VA 22207              statistical_outlier:est_value_high_z=2.9_high_value=892050
+  04025005      2419 N Fillmore St, Arlington VA 22207         statistical_outlier:available_gfa_sf_z=-8.5_low_value=-28150
+  04026213      24Th Rd N, Arlington VA 22207                  unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.5_low_value=75
+  04026108      2390 N Fillmore St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.5_low_value=1169
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    1  total_avail_gfa=       4,176 sf  agg_value_high=$       465,004
+  flag-for-review       parcels=    9  total_avail_gfa=      25,016 sf  agg_value_high=$     4,328,369
+  clean                 parcels=  282  total_avail_gfa=   1,044,719 sf  agg_value_high=$   105,189,226
+
+  Clean-tier GFA capacity as % of full analysis: 97.3%
+  Clean-tier value as % of full analysis:        95.6%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

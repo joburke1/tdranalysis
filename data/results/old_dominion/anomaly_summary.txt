@@ -1,0 +1,52 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 427
+
+Quality Tier Summary:
+  auto-exclude              8  (1.9%)
+  flag-for-review           9  (2.1%)
+  clean                   410  (96.0%)
+
+Most common anomaly types:
+  unusual_property_type                                      9 parcel(s)
+  unknown_property_type                                      4 parcel(s)
+  statistical_outlier                                        3 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+  lot_area_marginal                                          3 parcel(s)
+  lot_width_remnant                                          3 parcel(s)
+  lot_area_remnant                                           3 parcel(s)
+
+Auto-Exclude Parcels (8):
+  03063030      4675 25Th St N, Arlington VA 22207             nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-2.9_low_value=-1772
+  05005179      N Wakefield Ct, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_marginal:1179sf<2000sf_threshold|lot_width_remnant:9.5ft<15ft_threshold
+  02061011      N Glebe Rd, Arlington VA 22207                 unknown_property_type:213-Small office|lot_area_remnant:543sf<1000sf_threshold|lot_width_remnant:2.2ft<15ft_threshold
+  02062006      2425 N Glebe Rd, Arlington VA 22207            nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=3.6_high_value=1014776
+  05005173      N Wakefield Ct, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_remnant:810sf<1000sf_threshold
+  05005200      Old Dominion Dr, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan
+  05005177      N Wakefield Ct, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_remnant:707sf<1000sf_threshold
+  05013038      N Glebe Rd, Arlington VA 22207                 unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_marginal:1207sf<2000sf_threshold|lot_width_remnant:6.0ft<15ft_threshold
+
+Flag-for-Review Parcels (9):
+  03063028      4705 25Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1370
+  05005174      N Wakefield Ct, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  05005175      N Wakefield Ct, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  02061023      N Glebe Rd, Arlington VA 22207                 unknown_property_type:213-Small office
+  02061002      2517 N Glebe Rd, Arlington VA 22207            unknown_property_type:213-Small office
+  05005176      N Wakefield Ct, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_marginal:1739sf<2000sf_threshold
+  05005178      N Wakefield Ct, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  05032005      4701 Old Dominion Dr, Arlington VA 22207       unknown_property_type:213-Small office
+  05013035      N Glebe Rd, Arlington VA 22207                 unusual_property_type:540 - Not Valued Resd. (H.O.A)
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    8  total_avail_gfa=      12,407 sf  agg_value_high=$     1,080,926
+  flag-for-review       parcels=    9  total_avail_gfa=      24,711 sf  agg_value_high=$       410,306
+  clean                 parcels=  410  total_avail_gfa=   1,189,787 sf  agg_value_high=$   152,230,074
+
+  Clean-tier GFA capacity as % of full analysis: 97.0%
+  Clean-tier value as % of full analysis:        99.0%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

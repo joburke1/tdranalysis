@@ -1,0 +1,52 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 305
+
+Quality Tier Summary:
+  auto-exclude              7  (2.3%)
+  flag-for-review          11  (3.6%)
+  clean                   287  (94.1%)
+
+Most common anomaly types:
+  statistical_outlier                                        9 parcel(s)
+  nonresidential_property_type                               7 parcel(s)
+  unusual_property_type                                      2 parcel(s)
+  lot_area_remnant                                           2 parcel(s)
+  lot_width_remnant                                          2 parcel(s)
+  lot_area_marginal                                          1 parcel(s)
+
+Auto-Exclude Parcels (7):
+  37001100      1805 S Arlington Ridge Rd, Arlington VA 22202  nonresidential_property_type:215-Gen Comm - other
+  37001099      S Arlington Ridge Rd, Arlington VA 22202       nonresidential_property_type:200-GenCom VacLand-no siteplan
+  37001097      S Arlington Ridge Rd, Arlington VA 22202       nonresidential_property_type:200-GenCom VacLand-no siteplan
+  37038033      2222 S Arlington Ridge Rd, Arlington VA 22202  nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_remnant:344sf<1000sf_threshold|lot_width_remnant:5.4ft<15ft_threshold
+  37021306      S Grant St, Arlington VA 22202                 nonresidential_property_type:200-GenCom VacLand-no siteplan
+  37038034      2222 S Arlington Ridge Rd, Arlington VA 22202  nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_remnant:344sf<1000sf_threshold|lot_width_remnant:4.5ft<15ft_threshold
+  37021196      2612 S Ives St, Arlington VA 22202             nonresidential_property_type:200-GenCom VacLand-no siteplan
+
+Flag-for-Review Parcels (11):
+  37002086      19Th Rd S, Arlington VA 22202                  unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  36006014      1015 20Th St S, Arlington VA 22202             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-2204
+  38001214      23Rd St S, Arlington VA 22202                  unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_marginal:1551sf<2000sf_threshold
+  37010030      2207 S Knoll St, Arlington VA 22202            statistical_outlier:est_value_high_z=3.7_high_value=844200
+  37016007      1107 23Rd Rd S, Arlington VA 22202             statistical_outlier:est_value_high_z=-2.9_low_value=15848
+  36035004      1013 26Th St S, Arlington VA 22202             statistical_outlier:est_value_high_z=-3.0_low_value=6680
+  37025024      2616 S Grant St, Arlington VA 22202            statistical_outlier:est_value_high_z=-2.9_low_value=13265
+  37021197      2630 S Ives St, Arlington VA 22202             statistical_outlier:est_value_high_z=-2.9_low_value=8912
+  37030017      2727 S Lang St, Arlington VA 22206             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-384
+  37021167      2725 S Arlington Ridge Rd, Arlington VA 22202  statistical_outlier:available_gfa_sf_z=-2.9_low_value=-717
+  37021250      1222 26Th Rd S, Arlington VA 22202             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-110
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    7  total_avail_gfa=       7,008 sf  agg_value_high=$       437,405
+  flag-for-review       parcels=   11  total_avail_gfa=      15,430 sf  agg_value_high=$       888,979
+  clean                 parcels=  287  total_avail_gfa=     958,491 sf  agg_value_high=$    96,076,530
+
+  Clean-tier GFA capacity as % of full analysis: 97.7%
+  Clean-tier value as % of full analysis:        98.6%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

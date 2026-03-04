@@ -1,0 +1,74 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 821
+
+Quality Tier Summary:
+  auto-exclude              2  (0.2%)
+  flag-for-review          42  (5.1%)
+  clean                   777  (94.6%)
+
+Most common anomaly types:
+  statistical_outlier                                       44 parcel(s)
+  nonresidential_property_type                               2 parcel(s)
+
+Auto-Exclude Parcels (2):
+  09028001      5533 16Th St N, Arlington VA 22205             nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=2.7_high_value=750536
+  09024012      1600 N Inglewood St, Arlington VA 22205        nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-9.6_low_value=-12318
+
+Flag-for-Review Parcels (42):
+  10015026      2009 N Kenilworth St, Arlington VA 22205       statistical_outlier:available_gfa_sf_z=-2.8_low_value=-483
+  10015007      2008 N Jefferson St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.7_low_value=77232
+  09008003      5304 22Nd St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.5_low_value=105414
+  09005002      5442 22Nd St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-3.1_low_value=34147
+  09009004      2013 N Greenbrier St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.6_low_value=99691
+  09005015      2101 N Inglewood St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.5_low_value=-657
+  09011006      2106 N Harrison St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.9_low_value=41253
+  09005009      2010 Patrick Henry Dr, Arlington VA 22205      statistical_outlier:available_gfa_sf_z=-2.5_low_value=-641
+  09009005      2017 N Greenbrier St, Arlington VA 22205       statistical_outlier:available_gfa_sf_z=-3.5_low_value=-1479
+  09006005      2126 N Hollister St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.8_low_value=61256
+  09010013      2004 N Greenbrier St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.5_low_value=103272
+  09010015      5307 20Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.8_low_value=-1819
+  09012003      5436 21St St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.7_low_value=66032
+  09010011      2012 N Greenbrier St, Arlington VA 22205       statistical_outlier:est_value_high_z=-3.1_low_value=36320
+  10016022      2021 N Kentucky St, Arlington VA 22205         statistical_outlier:est_value_high_z=-3.3_low_value=2209
+  10016047      2019 N Lexington St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.8_low_value=-490
+  10016040      2008 N Kentucky St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.7_low_value=-353
+  10039005      5718 20Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-197
+  10016002      5730 22Nd St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.9_low_value=-576
+  09012015      5431 20Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.9_low_value=42205
+  09013002      1885 Patrick Henry Dr, Arlington VA 22205      statistical_outlier:est_value_high_z=-2.8_low_value=56480
+  09014002      1807 N Hollister St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.6_low_value=-737
+  09027007      1730 N Harrison St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.6_low_value=81907
+  09016067      N George Mason Dr, Arlington VA 22205          statistical_outlier:est_value_high_z=-3.0_low_value=48225
+  10023004      5716 19Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-705
+  10025006      1611 N Lexington St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.9_low_value=-652
+  09034007      5502 16Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-3.1_low_value=18846
+  10025020      1604 Patrick Henry Dr, Arlington VA 22205      statistical_outlier:est_value_high_z=-3.1_low_value=24161
+  09035014      5543 15Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-689
+  09046005      1331 N Harrison St, Arlington VA 22205         statistical_outlier:est_value_high_z=-3.2_low_value=9672
+  09045012      1330 N Harrison St, Arlington VA 22205         statistical_outlier:est_value_high_z=-3.0_low_value=27911
+  09047002      1313 N Greenbrier St, Arlington VA 22205       statistical_outlier:est_value_high_z=-3.1_low_value=21576
+  09046015      1310 N Greenbrier St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.6_low_value=85381
+  09046002      1313 N Harrison St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-2.8_low_value=-1117
+  09044017      1318 N Illinois St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.6_low_value=86995
+  09043010      1436 N Inglewood St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.9_low_value=48500
+  09043019      1440 N Inglewood St, Arlington VA 22205        statistical_outlier:est_value_high_z=-3.0_low_value=29935
+  09016016      1719 N Greenbrier St, Arlington VA 22205       statistical_outlier:available_gfa_sf_z=-2.6_low_value=-745
+  10024024      5720 18Th Rd N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.6_low_value=97632
+  09016084      1731 N Greenbrier St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.9_low_value=37833
+  09016215      5301 18Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-1074
+  09022014      1614 N Kenilworth St, Arlington VA 22205       statistical_outlier:available_gfa_sf_z=-3.0_low_value=-661
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=       2,946 sf  agg_value_high=$       750,536
+  flag-for-review       parcels=   42  total_avail_gfa=      17,531 sf  agg_value_high=$     1,344,085
+  clean                 parcels=  777  total_avail_gfa=   2,866,754 sf  agg_value_high=$   330,455,223
+
+  Clean-tier GFA capacity as % of full analysis: 99.3%
+  Clean-tier value as % of full analysis:        99.4%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

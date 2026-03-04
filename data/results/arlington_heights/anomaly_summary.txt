@@ -1,0 +1,55 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 420
+
+Quality Tier Summary:
+  auto-exclude              4  (1.0%)
+  flag-for-review          20  (4.8%)
+  clean                   396  (94.3%)
+
+Most common anomaly types:
+  statistical_outlier                                       22 parcel(s)
+  nonresidential_property_type                               4 parcel(s)
+  lot_area_marginal                                          4 parcel(s)
+
+Auto-Exclude Parcels (4):
+  24008028      6 S Garfield St, Arlington VA 22204            nonresidential_property_type:200-GenCom VacLand-no siteplan
+  24022060      6Th St S, Arlington VA 22204                   nonresidential_property_type:200-GenCom VacLand-no siteplan
+  24007035      S Garfield St, Arlington VA 22204              nonresidential_property_type:215-Gen Comm - other|lot_area_marginal:1064sf<2000sf_threshold|statistical_outlier:est_value_high_z=-3.5_low_value=36150
+  24007015      2920 Arlington Blvd, Arlington VA 22204        nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (20):
+  24008015      106 S Garfield St, Arlington VA 22204          statistical_outlier:est_value_high_z=-3.4_low_value=44546
+  24009029      102 S Highland St, Arlington VA 22204          statistical_outlier:available_gfa_sf_z=-3.9_low_value=-1625
+  24009031      108 S Highland St, Arlington VA 22204          statistical_outlier:available_gfa_sf_z=-2.7_low_value=-163
+  24008029      131 S Highland St, Arlington VA 22204          statistical_outlier:available_gfa_sf_z=-3.0_low_value=-535
+  24010020      112 S Hudson St, Arlington VA 22204            statistical_outlier:est_value_high_z=-2.6_low_value=112294
+  24021019      302 S Highland St, Arlington VA 22204          statistical_outlier:est_value_high_z=-2.6_low_value=112665
+  24006001      2901 2Nd St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-3.3_low_value=55823
+  24023020      2900 2Nd St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-3.3_low_value=60804
+  24021023      404 S Highland St, Arlington VA 22204          statistical_outlier:available_gfa_sf_z=-3.4_low_value=-1011
+  24019013      3211 5Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-3.0_low_value=85237
+  25006006      3008 6Th St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-3.4_low_value=-1039
+  25005015      2915 7Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.9_low_value=93943
+  25006014      3011 7Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.8_low_value=96065
+  24022065      513 S Highland St, Arlington VA 22204          statistical_outlier:est_value_high_z=-3.0_low_value=84169
+  24022067      2911 6Th St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-3.0_low_value=-442
+  25009066      3224 7Th St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-2.5_low_value=1457|statistical_outlier:est_value_high_z=-3.0_low_value=133858
+  24016021      3360 5Th St S, Arlington VA 22204              lot_area_marginal:1120sf<2000sf_threshold|statistical_outlier:available_gfa_sf_z=-3.4_low_value=-1018
+  24016022      3356 5Th St S, Arlington VA 22204              lot_area_marginal:1120sf<2000sf_threshold|statistical_outlier:available_gfa_sf_z=-3.5_low_value=-1086
+  24016023      3352 5Th St S, Arlington VA 22204              lot_area_marginal:1475sf<2000sf_threshold|statistical_outlier:available_gfa_sf_z=-3.2_low_value=-758
+  24011029      132 S Irving St, Arlington VA 22204            statistical_outlier:available_gfa_sf_z=2.5_high_value=6300
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    4  total_avail_gfa=      13,629 sf  agg_value_high=$       864,963
+  flag-for-review       parcels=   20  total_avail_gfa=      14,780 sf  agg_value_high=$     1,405,228
+  clean                 parcels=  396  total_avail_gfa=   1,328,977 sf  agg_value_high=$   135,937,174
+
+  Clean-tier GFA capacity as % of full analysis: 97.9%
+  Clean-tier value as % of full analysis:        98.4%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

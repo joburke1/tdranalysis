@@ -1,0 +1,69 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 647
+
+Quality Tier Summary:
+  auto-exclude              2  (0.3%)
+  flag-for-review          33  (5.1%)
+  clean                   612  (94.6%)
+
+Most common anomaly types:
+  statistical_outlier                                       40 parcel(s)
+  unusual_property_type                                      3 parcel(s)
+  nonresidential_property_type                               1 parcel(s)
+  unknown_property_type                                      1 parcel(s)
+  lot_area_remnant                                           1 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+
+Auto-Exclude Parcels (2):
+  12028001      N Arlington Mill Dr, Arlington VA 22205        nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=7.2_high_value=1238175
+  12007080      891 Mckinley Rd, Arlington VA 22205            unusual_property_type:540 - Not Valued Resd. (H.O.A)|lot_area_remnant:319sf<1000sf_threshold|lot_width_remnant:8.4ft<15ft_threshold
+
+Flag-for-Review Parcels (33):
+  12001008      1121 N Ohio St, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-308
+  12001002      1075 N Ohio St, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.3_low_value=-773
+  12011010      974 N Longfellow St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-3.3_low_value=-694
+  12011013      962 N Longfellow St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-3.9_low_value=-1565
+  12021019      1024 N Livingston St, Arlington VA 22205       statistical_outlier:est_value_high_z=-2.5_low_value=108920
+  12026020      1021 N Liberty St, Arlington VA 22205          statistical_outlier:available_gfa_sf_z=-2.9_low_value=-253
+  12021027      948 N Livingston St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.8_low_value=-66
+  12027056      913 N Larrimore St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.8_low_value=82334
+  12018017      866 N Lebanon St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-3.0_low_value=-422
+  12023017      6035 9Th St N, Arlington VA 22205              statistical_outlier:available_gfa_sf_z=-2.6_low_value=123|statistical_outlier:est_value_high_z=-3.3_low_value=16684
+  12024013      6011 Wilson Blvd, Arlington VA 22205           unknown_property_type:211-Retail strip|statistical_outlier:est_value_high_z=-3.1_low_value=40590
+  12025024      859 N Liberty St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-2.6_low_value=166|statistical_outlier:est_value_high_z=-3.3_low_value=21340
+  12007041      844 N Madison St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-2.6_low_value=119|statistical_outlier:est_value_high_z=-3.4_low_value=11724
+  12007078      845 Mckinley Rd, Arlington VA 22205            statistical_outlier:est_value_high_z=-2.6_low_value=100329
+  12007070      844 N Manchester St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.8_low_value=76128
+  12007049      841 N Manchester St, Arlington VA 22205        statistical_outlier:est_value_high_z=-3.1_low_value=49896
+  12007040      848 N Madison St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-3.0_low_value=-293
+  12007050      845 N Manchester St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.8_low_value=79642
+  12007071      848 N Manchester St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-3.2_low_value=-654
+  12007039      852 N Madison St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-3.1_low_value=-512
+  12007072      852 N Manchester St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.9_low_value=-168
+  12007038      856 N Madison St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-3.3_low_value=-698
+  12007052      853 N Manchester St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.7_low_value=74|statistical_outlier:est_value_high_z=-3.4_low_value=7275
+  12007037      860 N Madison St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-3.3_low_value=-718
+  12007053      857 N Manchester St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-2.7_low_value=70|statistical_outlier:est_value_high_z=-3.4_low_value=6958
+  12007074      6184 8Th Pl N, Arlington VA 22205              statistical_outlier:available_gfa_sf_z=-3.2_low_value=-634
+  12007036      864 N Madison St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-2.8_low_value=-105
+  12007035      868 N Madison St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-2.6_low_value=184|statistical_outlier:est_value_high_z=-3.3_low_value=17327
+  12007034      872 N Madison St, Arlington VA 22205           statistical_outlier:est_value_high_z=-3.1_low_value=45027
+  12007057      873 N Manchester St, Arlington VA 22205        statistical_outlier:est_value_high_z=-2.8_low_value=74782
+  12007081      6181 Wilson Blvd, Arlington VA 22205           unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-3.5_low_value=75
+  12007033      876 N Madison St, Arlington VA 22205           statistical_outlier:available_gfa_sf_z=-2.8_low_value=-74
+  12007079      884 N Madison St, Arlington VA 22205           unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-3.5_low_value=75
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    2  total_avail_gfa=       6,300 sf  agg_value_high=$     1,238,175
+  flag-for-review       parcels=   33  total_avail_gfa=      20,317 sf  agg_value_high=$       739,107
+  clean                 parcels=  612  total_avail_gfa=   2,358,940 sf  agg_value_high=$   250,939,106
+
+  Clean-tier GFA capacity as % of full analysis: 98.9%
+  Clean-tier value as % of full analysis:        99.2%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

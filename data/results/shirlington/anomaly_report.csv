@@ -1,0 +1,62 @@
+parcel_id,quality_tier,anomaly_flags,anomaly_count
+28002PCA,clean,,0
+29004PCB,clean,,0
+29005PCC,clean,,0
+29003PCB,clean,,0
+29003006,flag-for-review,unknown_property_type:211-Retail strip,1
+29003PCD,clean,,0
+29003PCC,clean,,0
+29020019,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29020018,clean,,0
+29020017,clean,,0
+29020005,clean,,0
+29020006,clean,,0
+29020010,clean,,0
+29020011,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29020012,clean,,0
+29020022,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29020016,clean,,0
+29020015,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29020013,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29020001,clean,,0
+29020002,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29020003,clean,,0
+29020021,clean,,0
+29020020,clean,,0
+29020023,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29020004,clean,,0
+29020007,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29020009,clean,,0
+29020014,clean,,0
+29020008,clean,,0
+29019024,clean,,0
+29019022,flag-for-review,unknown_property_type:112-Off bldg 7+ stories,1
+29019026,clean,,0
+29019023,clean,,0
+29019021,clean,,0
+29019020,clean,,0
+29019019,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+29019018,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+29020024,clean,,0
+29019030,flag-for-review,unknown_property_type:253-Service station,1
+29019033,clean,,0
+29023004,clean,,0
+29023008,auto-exclude,nonresidential_property_type:200-GenCom VacLand-no siteplan,1
+29019032,flag-for-review,unknown_property_type:101-Off Bldg-VacLand-site plan,1
+29023007,clean,,0
+29003PCF,clean,,0
+29014PLB,clean,,0
+29014007,flag-for-review,unknown_property_type:312-Apartment - Mid-rise,1
+29014PLA,clean,,0
+29003028,flag-for-review,unknown_property_type:251-Warehouse,1
+29003027,clean,,0
+29014PCB,clean,,0
+29014018,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+29014017,clean,,0
+29014016,flag-for-review,unknown_property_type:313-Apartment - High-rise,1
+29014PCA,clean,,0
+29014183,auto-exclude,nonresidential_property_type:215-Gen Comm - other,1
+29014184,clean,,0
+29003PCA,clean,,0
+29003029,clean,,0
+29023005,flag-for-review,unknown_property_type:111-Off bldg < 7 stories,1

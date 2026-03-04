@@ -1,0 +1,65 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 887
+
+Quality Tier Summary:
+  auto-exclude             17  (1.9%)
+  flag-for-review          16  (1.8%)
+  clean                   854  (96.3%)
+
+Most common anomaly types:
+  statistical_outlier                                       17 parcel(s)
+  nonresidential_property_type                              17 parcel(s)
+  lot_area_remnant                                           1 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+
+Auto-Exclude Parcels (17):
+  02005034      N Harrison St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  02005025      N Harrison St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  02018061      Williamsburg Blvd, Arlington VA 22207          nonresidential_property_type:200-GenCom VacLand-no siteplan
+  02021001      4981 Rock Spring Rd, Arlington VA 22207        nonresidential_property_type:215-Gen Comm - other
+  03061016      Old Dominion Dr, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03061026      Rock Spring Rd, Arlington VA 22207             nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03061025      4804 Rock Spring Rd, Arlington VA 22207        nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03061003      Old Dominion Dr, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03061002      Old Dominion Dr, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03061017      N Glebe Rd, Arlington VA 22207                 nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03061028      N Glebe Rd, Arlington VA 22207                 nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03061027      Old Dominion Dr, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan
+  03061024      Old Dominion Dr, Arlington VA 22207            nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_remnant:128sf<1000sf_threshold|lot_width_remnant:8.5ft<15ft_threshold|statistical_outlier:est_value_high_z=-2.5_low_value=1125
+  03061012      2902 N Glebe Rd, Arlington VA 22207            nonresidential_property_type:215-Gen Comm - other
+  03061011      Old Dominion Dr, Arlington VA 22207            nonresidential_property_type:215-Gen Comm - other
+  03061010      2912 N Glebe Rd, Arlington VA 22207            nonresidential_property_type:215-Gen Comm - other
+  03061005      4810 Rock Spring Rd, Arlington VA 22207        nonresidential_property_type:200-GenCom VacLand-no siteplan
+
+Flag-for-Review Parcels (16):
+  03012005      3777 N Dumbarton St, Arlington VA 22207        statistical_outlier:est_value_high_z=2.6_high_value=1469132
+  02018001      5156 37Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-2388
+  03021007      4972 34Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2536
+  03020018      5031 34Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-2760
+  03025012      4913 33Rd Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-2073
+  02023016      3308 N George Mason Dr, Arlington VA 22207     statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2586
+  03060012      4826 33Rd Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-4.4_low_value=-6721
+  03060022      4765 33Rd St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-3349
+  03060045      4879 Old Dominion Dr, Arlington VA 22207       statistical_outlier:est_value_high_z=2.6_high_value=881855
+  02024024      3206 N George Mason Dr, Arlington VA 22207     statistical_outlier:available_gfa_sf_z=-3.1_low_value=-3594
+  02029006      5608 33Rd St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2550
+  02029009      5535 32Nd St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-2076
+  02026006      5520 31St St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-2508
+  02025034      5301 31St Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.1_low_value=-3515
+  02025010      5220 32Nd St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.5_low_value=1897
+  02025028      5220 31St Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-3335
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=   17  total_avail_gfa=      89,117 sf  agg_value_high=$     1,839,743
+  flag-for-review       parcels=   16  total_avail_gfa=      16,247 sf  agg_value_high=$     2,352,884
+  clean                 parcels=  854  total_avail_gfa=   3,582,964 sf  agg_value_high=$   356,048,286
+
+  Clean-tier GFA capacity as % of full analysis: 97.1%
+  Clean-tier value as % of full analysis:        98.8%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

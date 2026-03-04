@@ -1,0 +1,51 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 630
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review          24  (3.8%)
+  clean                   606  (96.2%)
+
+Most common anomaly types:
+  statistical_outlier                                       29 parcel(s)
+
+Flag-for-Review Parcels (24):
+  13046111      410 N Granada St, Arlington VA 22203           statistical_outlier:available_gfa_sf_z=-4.9_low_value=-2102
+  13054009      5340 N Carlin Springs Rd, Arlington VA 22203   statistical_outlier:available_gfa_sf_z=-3.8_low_value=-830
+  13054013      234 N Galveston St, Arlington VA 22203         statistical_outlier:est_value_high_z=-2.9_low_value=95507
+  13052026      216 N Greenbrier St, Arlington VA 22203        statistical_outlier:est_value_high_z=-2.5_low_value=136110
+  13053021      316 N Granada St, Arlington VA 22203           statistical_outlier:est_value_high_z=-2.6_low_value=128764
+  13050008      345 N Granada St, Arlington VA 22203           statistical_outlier:available_gfa_sf_z=-2.7_low_value=420|statistical_outlier:est_value_high_z=-3.4_low_value=50404
+  13059007      329 N Edison St, Arlington VA 22203            statistical_outlier:est_value_high_z=-2.8_low_value=111657
+  13059017      5113 3Rd St N, Arlington VA 22203              statistical_outlier:est_value_high_z=-3.0_low_value=93077
+  13046071      5134 3Rd St N, Arlington VA 22203              statistical_outlier:est_value_high_z=-2.7_low_value=116525
+  13049007      4810 3Rd St N, Arlington VA 22203              statistical_outlier:available_gfa_sf_z=-5.2_low_value=-2462
+  13060006      225 N Columbus St, Arlington VA 22203          statistical_outlier:available_gfa_sf_z=-3.1_low_value=-42
+  13060005      221 N Columbus St, Arlington VA 22203          statistical_outlier:est_value_high_z=-2.9_low_value=97283
+  13049011      4807 2Nd Rd N, Arlington VA 22203              statistical_outlier:est_value_high_z=-2.6_low_value=130072
+  13055031      5328 2Nd St N, Arlington VA 22203              statistical_outlier:est_value_high_z=-2.7_low_value=115574
+  13055018      116 N Galveston St, Arlington VA 22203         statistical_outlier:est_value_high_z=-2.5_low_value=135766
+  13057026      107 N Greenbrier St, Arlington VA 22203        statistical_outlier:est_value_high_z=-2.8_low_value=103916
+  13055026      113 N Galveston St, Arlington VA 22203         statistical_outlier:est_value_high_z=-2.6_low_value=131550
+  13046064      209 N Evergreen St, Arlington VA 22203         statistical_outlier:available_gfa_sf_z=-3.9_low_value=-1017
+  13066016      128 N Park Dr, Arlington VA 22203              statistical_outlier:est_value_high_z=-2.7_low_value=122667
+  13065021      112 N Abingdon St, Arlington VA 22203          statistical_outlier:available_gfa_sf_z=-2.7_low_value=465|statistical_outlier:est_value_high_z=-3.3_low_value=54869
+  13069003      4762 1St St N, Arlington VA 22203              statistical_outlier:available_gfa_sf_z=-3.0_low_value=75|statistical_outlier:est_value_high_z=-3.8_low_value=9054
+  13063013      4629 Henderson Rd, Arlington VA 22203          statistical_outlier:available_gfa_sf_z=-2.6_low_value=516|statistical_outlier:est_value_high_z=-3.2_low_value=66196
+  21006013      34 S Park Dr, Arlington VA 22204               statistical_outlier:est_value_high_z=-2.7_low_value=117790
+  21008053      51 S Aberdeen St, Arlington VA 22204           statistical_outlier:available_gfa_sf_z=-2.6_low_value=577|statistical_outlier:est_value_high_z=-3.4_low_value=46744
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=   24  total_avail_gfa=      16,635 sf  agg_value_high=$     1,863,524
+  clean                 parcels=  606  total_avail_gfa=   2,282,824 sf  agg_value_high=$   239,767,617
+
+  Clean-tier GFA capacity as % of full analysis: 99.3%
+  Clean-tier value as % of full analysis:        99.2%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

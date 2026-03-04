@@ -1,0 +1,33 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 60
+
+Quality Tier Summary:
+  auto-exclude              1  (1.7%)
+  flag-for-review           1  (1.7%)
+  clean                    58  (96.7%)
+
+Most common anomaly types:
+  nonresidential_property_type                               1 parcel(s)
+  low_improvement_value                                      1 parcel(s)
+  statistical_outlier                                        1 parcel(s)
+
+Auto-Exclude Parcels (1):
+  04011055      2770 N Nelson St, Arlington VA 22207           nonresidential_property_type:200-GenCom VacLand-no siteplan|low_improvement_value:$13300<$30000_makes_gfa_estimate_unreliable
+
+Flag-for-Review Parcels (1):
+  04011039      3614 27Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-10234
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    1  total_avail_gfa=         728 sf  agg_value_high=$        11,125
+  flag-for-review       parcels=    1  total_avail_gfa=           0 sf  agg_value_high=$             0
+  clean                 parcels=   58  total_avail_gfa=     307,260 sf  agg_value_high=$    25,692,616
+
+  Clean-tier GFA capacity as % of full analysis: 99.8%
+  Clean-tier value as % of full analysis:        100.0%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

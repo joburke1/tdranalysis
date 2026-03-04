@@ -127,6 +127,18 @@ def main() -> None:
     df = pd.read_csv(csv_path, dtype={"parcel_id": str})
     logger.info(f"Loaded {len(df):,} parcels")
 
+    # Anomaly detection requires full pipeline output columns.
+    # Neighborhoods where all parcels are excluded produce a reduced CSV.
+    required_cols = {"available_gfa_sf", "lot_area_sf", "zoning_district"}
+    missing = required_cols - set(df.columns)
+    if missing:
+        logger.warning(
+            f"Analysis CSV is missing required columns {missing}. "
+            "This typically means all parcels were excluded from analysis "
+            "(e.g., no in-scope residential zoning). Skipping anomaly check."
+        )
+        sys.exit(0)
+
     # --- Run anomaly detection ---
     anomaly_df = detect_anomalies(df)
 

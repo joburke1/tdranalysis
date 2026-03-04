@@ -1,0 +1,25 @@
+parcel_id,quality_tier,anomaly_flags,anomaly_count
+25025029,clean,,0
+25027002,clean,,0
+25027003,clean,,0
+25025027,clean,,0
+25027030,clean,,0
+25027004,clean,,0
+25025026,clean,,0
+25025025,clean,,0
+25027028,clean,,0
+25027006,clean,,0
+25025024,clean,,0
+25027027,flag-for-review,statistical_outlier:available_gfa_sf_z=-2.9_low_value=-2637,1
+25027007,clean,,0
+25025023,clean,,0
+25027025,clean,,0
+25027009,clean,,0
+25027024,clean,,0
+25028003,clean,,0
+25028004,clean,,0
+25028005,clean,,0
+25028006,clean,,0
+25028008,flag-for-review,statistical_outlier:est_value_high_z=-3.8_low_value=32722,1
+25028009,clean,,0
+25025030,flag-for-review,unknown_property_type:414-Hotel - land/other,1

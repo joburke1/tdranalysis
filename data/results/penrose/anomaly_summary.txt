@@ -1,0 +1,53 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 373
+
+Quality Tier Summary:
+  auto-exclude              3  (0.8%)
+  flag-for-review          20  (5.4%)
+  clean                   350  (93.8%)
+
+Most common anomaly types:
+  statistical_outlier                                       22 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+
+Auto-Exclude Parcels (3):
+  24005011      2405 1St Rd S, Arlington VA 22204              nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=-2.6_low_value=113550
+  24001057      1St St S, Arlington VA 22204                   nonresidential_property_type:200-GenCom VacLand-no siteplan
+  24005014      125 S Barton St, Arlington VA 22204            nonresidential_property_type:200-GenCom VacLand-no siteplan|statistical_outlier:est_value_high_z=-2.6_low_value=113550
+
+Flag-for-Review Parcels (20):
+  24005007      2408 1St Rd S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-2.7_low_value=-442
+  24001074      2411 1St St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.8_low_value=94818
+  24005026      2407 2Nd St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-3.1_low_value=-998
+  24001134      2710 S 1St Rd S, Arlington VA 22204            statistical_outlier:available_gfa_sf_z=-2.7_low_value=-445
+  24001005      2707 2Nd St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-3.7_low_value=4679
+  24029051      301 S Adams St, Arlington VA 22204             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-532
+  24024016      302 S Edgewood St, Arlington VA 22204          statistical_outlier:est_value_high_z=-3.4_low_value=37763
+  24025005      405 S Edgewood St, Arlington VA 22204          statistical_outlier:available_gfa_sf_z=-3.0_low_value=-849
+  24024021      406 S Edgewood St, Arlington VA 22204          statistical_outlier:available_gfa_sf_z=-3.3_low_value=-1158
+  24024014      2800 2Nd St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.5_low_value=117720
+  25004017      S Barton St, Arlington VA 22204                statistical_outlier:est_value_high_z=-3.4_low_value=34725
+  24027007      2520 5Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-3.1_low_value=65392
+  25004025      614 S Barton St, Arlington VA 22204            statistical_outlier:available_gfa_sf_z=-3.1_low_value=-961
+  25002030      616 S Wayne St, Arlington VA 22204             statistical_outlier:est_value_high_z=-3.2_low_value=56392
+  24029001      507 S Adams St, Arlington VA 22204             statistical_outlier:available_gfa_sf_z=-3.8_low_value=-1893
+  25018015      812 S Veitch St, Arlington VA 22204            statistical_outlier:est_value_high_z=-3.5_low_value=22220
+  25018016      816 S Veitch St, Arlington VA 22204            statistical_outlier:est_value_high_z=-3.6_low_value=19950
+  25017017      807 S Barton St, Arlington VA 22204            statistical_outlier:est_value_high_z=-2.7_low_value=100627
+  25017099      2304 8Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.9_low_value=82879
+  24001136      2711 1St St S, Arlington VA 22204              statistical_outlier:available_gfa_sf_z=-3.6_low_value=-1553
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=      11,624 sf  agg_value_high=$       418,275
+  flag-for-review       parcels=   20  total_avail_gfa=       9,089 sf  agg_value_high=$       637,163
+  clean                 parcels=  350  total_avail_gfa=   1,172,332 sf  agg_value_high=$   128,982,962
+
+  Clean-tier GFA capacity as % of full analysis: 98.3%
+  Clean-tier value as % of full analysis:        99.2%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

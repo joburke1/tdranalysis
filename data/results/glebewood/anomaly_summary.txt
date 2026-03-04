@@ -1,0 +1,35 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 15
+
+Quality Tier Summary:
+  auto-exclude              1  (6.7%)
+  flag-for-review           1  (6.7%)
+  clean                    13  (86.7%)
+
+Most common anomaly types:
+  statistical_outlier                                        2 parcel(s)
+  unknown_property_type                                      1 parcel(s)
+  nonresidential_property_type                               1 parcel(s)
+  lot_area_remnant                                           1 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+
+Auto-Exclude Parcels (1):
+  07006345      20Th St N, Arlington VA 22207                  nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_remnant:995sf<1000sf_threshold|lot_width_remnant:11.7ft<15ft_threshold|statistical_outlier:est_value_high_z=-3.0_low_value=37875
+
+Flag-for-Review Parcels (1):
+  07006344      2000 N Glebe Rd, Arlington VA 22207            unknown_property_type:218-Health care Facilities|statistical_outlier:available_gfa_sf_z=-3.5_low_value=-19443
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    1  total_avail_gfa=         746 sf  agg_value_high=$        37,875
+  flag-for-review       parcels=    1  total_avail_gfa=           0 sf  agg_value_high=$             0
+  clean                 parcels=   13  total_avail_gfa=      55,806 sf  agg_value_high=$     5,663,300
+
+  Clean-tier GFA capacity as % of full analysis: 98.7%
+  Clean-tier value as % of full analysis:        99.3%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

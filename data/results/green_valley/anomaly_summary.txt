@@ -1,0 +1,33 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 62
+
+Quality Tier Summary:
+  auto-exclude              1  (1.6%)
+  flag-for-review           1  (1.6%)
+  clean                    60  (96.8%)
+
+Most common anomaly types:
+  nonresidential_property_type                               1 parcel(s)
+  lot_area_remnant                                           1 parcel(s)
+  statistical_outlier                                        1 parcel(s)
+
+Auto-Exclude Parcels (1):
+  31004006      19Th St S, Arlington VA 22204                  nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_remnant:553sf<1000sf_threshold
+
+Flag-for-Review Parcels (1):
+  31002020      3013 18Th St S, Arlington VA 22204             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-352
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    1  total_avail_gfa=         415 sf  agg_value_high=$        21,075
+  flag-for-review       parcels=    1  total_avail_gfa=           0 sf  agg_value_high=$             0
+  clean                 parcels=   60  total_avail_gfa=     224,598 sf  agg_value_high=$    19,164,385
+
+  Clean-tier GFA capacity as % of full analysis: 99.8%
+  Clean-tier value as % of full analysis:        99.9%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

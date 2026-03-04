@@ -1,0 +1,53 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 73
+
+Quality Tier Summary:
+  auto-exclude              3  (4.1%)
+  flag-for-review          18  (24.7%)
+  clean                    52  (71.2%)
+
+Most common anomaly types:
+  lot_area_marginal                                         18 parcel(s)
+  statistical_outlier                                        6 parcel(s)
+  lot_area_remnant                                           2 parcel(s)
+  nonresidential_property_type                               1 parcel(s)
+
+Auto-Exclude Parcels (3):
+  33007037      1317 S Quinn St, Arlington VA 22204            lot_area_remnant:800sf<1000sf_threshold
+  33007035      1313 S Quinn St, Arlington VA 22204            lot_area_remnant:800sf<1000sf_threshold
+  33009001      1601 13Th Rd S, Arlington VA 22204             nonresidential_property_type:215-Gen Comm - other
+
+Flag-for-Review Parcels (18):
+  33007040      1715 13Th Rd S, Arlington VA 22204             lot_area_marginal:1090sf<2000sf_threshold
+  33007042      1711 13Th Rd S, Arlington VA 22204             lot_area_marginal:1090sf<2000sf_threshold
+  33007044      1707 13Th Rd S, Arlington VA 22204             lot_area_marginal:1199sf<2000sf_threshold|statistical_outlier:est_value_high_z=-2.6_low_value=14607
+  33007046      1332 S Queen St, Arlington VA 22204            lot_area_marginal:1010sf<2000sf_threshold|statistical_outlier:est_value_high_z=-2.6_low_value=10248
+  33007038      1319 S Quinn St, Arlington VA 22204            lot_area_marginal:1083sf<2000sf_threshold
+  33007048      1328 S Queen St, Arlington VA 22204            lot_area_marginal:1010sf<2000sf_threshold|statistical_outlier:est_value_high_z=-2.6_low_value=10248
+  33007023      1741 13Th St S, Arlington VA 22204             lot_area_marginal:1000sf<2000sf_threshold
+  33007027      1731 13Th St S, Arlington VA 22204             lot_area_marginal:1000sf<2000sf_threshold
+  33007029      1727 13Th St S, Arlington VA 22204             lot_area_marginal:1000sf<2000sf_threshold
+  33007039      1717 13Th Rd S, Arlington VA 22204             lot_area_marginal:1199sf<2000sf_threshold|statistical_outlier:est_value_high_z=-2.6_low_value=3774
+  33007045      1334 S Queen St, Arlington VA 22204            lot_area_marginal:1111sf<2000sf_threshold
+  33007043      1709 13Th Rd S, Arlington VA 22204             lot_area_marginal:1090sf<2000sf_threshold
+  33007047      1330 S Queen St, Arlington VA 22204            lot_area_marginal:1010sf<2000sf_threshold|statistical_outlier:est_value_high_z=-2.6_low_value=9444
+  33007049      1326 S Queen St, Arlington VA 22204            lot_area_marginal:1010sf<2000sf_threshold|statistical_outlier:est_value_high_z=-2.6_low_value=8640
+  33007022      1743 13Th St S, Arlington VA 22204             lot_area_marginal:1000sf<2000sf_threshold
+  33007028      1729 13Th St S, Arlington VA 22204             lot_area_marginal:1000sf<2000sf_threshold
+  33007024      1739 13Th St S, Arlington VA 22204             lot_area_marginal:1000sf<2000sf_threshold
+  33001026      1002 S Queen St, Arlington VA 22204            lot_area_marginal:1960sf<2000sf_threshold
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=   18  total_avail_gfa=       1,128 sf  agg_value_high=$       305,988
+  clean                 parcels=   52  total_avail_gfa=     220,062 sf  agg_value_high=$    20,563,501
+
+  Clean-tier GFA capacity as % of full analysis: 99.5%
+  Clean-tier value as % of full analysis:        98.5%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

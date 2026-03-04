@@ -1,0 +1,64 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 552
+
+Quality Tier Summary:
+  auto-exclude              4  (0.7%)
+  flag-for-review          29  (5.3%)
+  clean                   519  (94.0%)
+
+Most common anomaly types:
+  statistical_outlier                                       29 parcel(s)
+  nonresidential_property_type                               4 parcel(s)
+  low_improvement_value                                      1 parcel(s)
+
+Auto-Exclude Parcels (4):
+  07006174      1900 N Glebe Rd, Arlington VA 22207            nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=7.3_high_value=1481886
+  07036005      1500 N Glebe Rd, Arlington VA 22207            nonresidential_property_type:215-Gen Comm - other
+  07035044      N Aberdeen St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+  07035047      N Aberdeen St, Arlington VA 22207              nonresidential_property_type:200-GenCom VacLand-no siteplan
+
+Flag-for-Review Parcels (29):
+  07006184      1722 N Glebe Rd, Arlington VA 22207            statistical_outlier:est_value_high_z=5.7_high_value=1242790
+  07032017      4810 17Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.9_low_value=4722
+  07032009      4912 17Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.8_low_value=14572
+  07032004      5008 17Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-710
+  07032028      4901 16Th Rd N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.5_low_value=60716
+  07033014      4816 16Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-583
+  07035016      1511 N Buchanan St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.8_low_value=12074
+  07045010      4902 14Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.6_low_value=47158
+  07045006      4918 14Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.2_low_value=-1564
+  07035014      1503 N Buchanan St, Arlington VA 22205         statistical_outlier:available_gfa_sf_z=-3.0_low_value=-1396
+  07035013      1423 N Buchanan St, Arlington VA 22205         statistical_outlier:est_value_high_z=-2.8_low_value=18737
+  07044028      15Th St N, Arlington VA 22205                  statistical_outlier:est_value_high_z=-2.7_low_value=38625
+  07044027      5002 15Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-3.1_low_value=-1521
+  07035027      1514 N Abingdon St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.7_low_value=37893
+  07043005      4630 15Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.1_low_value=-1502
+  07043013      4627 14Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.1_low_value=-1457
+  07035032      1412 N Abingdon St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.6_low_value=54199
+  07046019      4641 13Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.5_low_value=61457
+  07047005      1223 N Abingdon St, Arlington VA 22207         statistical_outlier:available_gfa_sf_z=-2.5_low_value=-544
+  07045025      5003 13Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-717
+  07045026      5005 13Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.8_low_value=20861
+  07048012      4814 13Th St N, Arlington VA 22205             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-592
+  07051020      1222 N Dinwiddie St, Arlington VA 22205        statistical_outlier:available_gfa_sf_z=-3.1_low_value=-1428
+  07047003      1215 N Abingdon St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.7_low_value=38407
+  07035023      N Aberdeen St, Arlington VA 22205              statistical_outlier:est_value_high_z=-2.7_low_value=37800
+  07035024      N Buchanan St, Arlington VA 22205              low_improvement_value:$13200<$30000_makes_gfa_estimate_unreliable
+  07054010      4727 11Th St N, Arlington VA 22205             statistical_outlier:est_value_high_z=-2.9_low_value=6596
+  07006286      5017 17Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.5_low_value=-543
+  07006199      4719 17Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.7_low_value=-2358
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    4  total_avail_gfa=      13,382 sf  agg_value_high=$     2,185,521
+  flag-for-review       parcels=   29  total_avail_gfa=      26,724 sf  agg_value_high=$     1,777,220
+  clean                 parcels=  519  total_avail_gfa=   1,842,930 sf  agg_value_high=$   217,974,934
+
+  Clean-tier GFA capacity as % of full analysis: 97.9%
+  Clean-tier value as % of full analysis:        98.2%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

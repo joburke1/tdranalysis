@@ -1,0 +1,80 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 191
+
+Quality Tier Summary:
+  auto-exclude              3  (1.6%)
+  flag-for-review          44  (23.0%)
+  clean                   144  (75.4%)
+
+Most common anomaly types:
+  lot_area_marginal                                         38 parcel(s)
+  statistical_outlier                                        7 parcel(s)
+  unusual_property_type                                      5 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+  lot_width_remnant                                          1 parcel(s)
+
+Auto-Exclude Parcels (3):
+  16004089      2013 21St St N, Arlington VA 22201             nonresidential_property_type:215-Gen Comm - other
+  16004168      2220 N Scott St, Arlington VA 22209            nonresidential_property_type:300-MultiFam-VacLand-no s.plan|statistical_outlier:available_gfa_sf_z=3.5_high_value=8750
+  15004069      Langston Blvd, Arlington VA 22201              nonresidential_property_type:200-GenCom VacLand-no siteplan|lot_area_marginal:1530sf<2000sf_threshold|lot_width_remnant:12.4ft<15ft_threshold
+
+Flag-for-Review Parcels (44):
+  16004047      2206 N Taft St, Arlington VA 22201             statistical_outlier:available_gfa_sf_z=3.2_high_value=7710
+  16004207      2129 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004208      2131 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004210      2135 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004211      2137 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004214      2202 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004215      2204 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004216      2206 N Scott St, Arlington VA 22209            lot_area_marginal:1440sf<2000sf_threshold
+  16004217      2208 N Scott St, Arlington VA 22209            lot_area_marginal:1440sf<2000sf_threshold
+  16004218      2210 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004219      2212 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004209      2133 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004221      2121 N Scott St, Arlington VA 22209            unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:available_gfa_sf_z=3.5_high_value=8750
+  16004180      1737 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004181      1735 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004182      1733 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004183      1731 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004184      1729 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004185      1727 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004186      1725 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004187      1723 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004188      1721 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004189      1719 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1920sf<2000sf_threshold
+  16004195      1767 22Nd St N, Arlington VA 22209             lot_area_marginal:1480sf<2000sf_threshold
+  16004198      1759 22Nd St N, Arlington VA 22209             lot_area_marginal:1480sf<2000sf_threshold
+  16004199      1757 22Nd St N, Arlington VA 22209             lot_area_marginal:1480sf<2000sf_threshold
+  16004200      1755 22Nd St N, Arlington VA 22209             lot_area_marginal:1480sf<2000sf_threshold
+  16004201      1753 22Nd St N, Arlington VA 22209             lot_area_marginal:1480sf<2000sf_threshold
+  16004202      1751 22Nd St N, Arlington VA 22209             lot_area_marginal:1850sf<2000sf_threshold
+  16004177      1705 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1741sf<2000sf_threshold
+  16004176      1707 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1741sf<2000sf_threshold
+  16004175      1709 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1741sf<2000sf_threshold
+  16004174      1711 22Nd Ct N, Arlington VA 22209             lot_area_marginal:1741sf<2000sf_threshold
+  16004191      1775 22Nd St N, Arlington VA 22209             lot_area_marginal:1884sf<2000sf_threshold
+  16004192      1773 22Nd St N, Arlington VA 22209             lot_area_marginal:1480sf<2000sf_threshold
+  16004193      1771 22Nd St N, Arlington VA 22209             lot_area_marginal:1480sf<2000sf_threshold
+  16004194      1769 22Nd St N, Arlington VA 22209             lot_area_marginal:1480sf<2000sf_threshold
+  16004205      2125 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004206      2127 N Scott St, Arlington VA 22209            lot_area_marginal:1920sf<2000sf_threshold
+  16004203      1777 22Nd Ct N, Arlington VA 22209             unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:available_gfa_sf_z=3.5_high_value=8750
+  16010030      N Courthouse Rd, Arlington VA 22201            unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  16010019      2109 21St Rd N, Arlington VA 22201             unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-3.1_low_value=75
+  16010034      21St Rd N, Arlington VA 22201                  unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-3.1_low_value=75
+  15004005      1922 N Veitch St, Arlington VA 22201           statistical_outlier:available_gfa_sf_z=-3.1_low_value=-3059
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=      15,048 sf  agg_value_high=$     8,246,820
+  flag-for-review       parcels=   44  total_avail_gfa=      38,748 sf  agg_value_high=$       647,090
+  clean                 parcels=  144  total_avail_gfa=     284,124 sf  agg_value_high=$    35,893,221
+
+  Clean-tier GFA capacity as % of full analysis: 84.1%
+  Clean-tier value as % of full analysis:        80.1%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

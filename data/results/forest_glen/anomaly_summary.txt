@@ -1,0 +1,28 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 43
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review           1  (2.3%)
+  clean                    42  (97.7%)
+
+Most common anomaly types:
+  statistical_outlier                                        1 parcel(s)
+
+Flag-for-Review Parcels (1):
+  22013011      5224 7Th St S, Arlington VA 22204              statistical_outlier:est_value_high_z=-2.7_low_value=252112
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=    1  total_avail_gfa=       2,643 sf  agg_value_high=$       252,112
+  clean                 parcels=   42  total_avail_gfa=     163,993 sf  agg_value_high=$    14,528,043
+
+  Clean-tier GFA capacity as % of full analysis: 98.4%
+  Clean-tier value as % of full analysis:        98.3%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

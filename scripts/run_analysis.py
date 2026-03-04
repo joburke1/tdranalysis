@@ -1124,7 +1124,7 @@ def main() -> None:
                 _save_results(result, neighborhood_output_dir, neighborhood, config_dir, excluded)
                 all_results.append(result)
             except Exception as e:
-                logger.error("Failed to process '%s': %s", neighborhood, e)
+                logger.exception("Failed to process '%s': %s", neighborhood, e)
                 failed.append(neighborhood)
 
         # Aggregate summary CSV

@@ -1,0 +1,69 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 515
+
+Quality Tier Summary:
+  auto-exclude              3  (0.6%)
+  flag-for-review          33  (6.4%)
+  clean                   479  (93.0%)
+
+Most common anomaly types:
+  statistical_outlier                                       29 parcel(s)
+  lot_area_marginal                                          6 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+  unusual_property_type                                      2 parcel(s)
+  low_improvement_value                                      1 parcel(s)
+
+Auto-Exclude Parcels (3):
+  19011001      606 N Irving St, Arlington VA 22201            nonresidential_property_type:215-Gen Comm - other
+  19039067      3313 Arlington Blvd, Arlington VA 22201        nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-5.9_low_value=-7198
+  19054007      3201 Arlington Blvd, Arlington VA 22201        nonresidential_property_type:215-Gen Comm - other|statistical_outlier:available_gfa_sf_z=-4.8_low_value=-5233
+
+Flag-for-Review Parcels (33):
+  19015017      807 N Lincoln St, Arlington VA 22201           statistical_outlier:est_value_high_z=-2.5_low_value=64676
+  19015034      644 N Kenmore St, Arlington VA 22201           statistical_outlier:available_gfa_sf_z=-3.1_low_value=-2184
+  19011027      825 N Ivy St, Arlington VA 22201               statistical_outlier:est_value_high_z=-2.6_low_value=49375
+  19013022      703 N Jackson St, Arlington VA 22201           low_improvement_value:$10500<$30000_makes_gfa_estimate_unreliable
+  19015009      629 N Lincoln St, Arlington VA 22201           statistical_outlier:est_value_high_z=-2.9_low_value=5491
+  19026011      505 N Ivy St, Arlington VA 22201               statistical_outlier:available_gfa_sf_z=-2.6_low_value=-1219
+  19024011      502 N Jackson St, Arlington VA 22201           statistical_outlier:available_gfa_sf_z=-3.2_low_value=-2363
+  19039076      N Jackson St, Arlington VA 22201               statistical_outlier:est_value_high_z=-2.7_low_value=36075
+  19039030      224 N Nelson St, Arlington VA 22201            statistical_outlier:est_value_high_z=-2.7_low_value=36943
+  19039077      N Pershing Dr, Arlington VA 22201              statistical_outlier:est_value_high_z=-2.7_low_value=32850
+  19039073      N Pershing Dr, Arlington VA 22201              statistical_outlier:est_value_high_z=-2.7_low_value=29625
+  19048002      201 N Jackson St, Arlington VA 22201           statistical_outlier:available_gfa_sf_z=-4.3_low_value=-4439
+  19039074      N Pershing Dr, Arlington VA 22201              statistical_outlier:est_value_high_z=-2.7_low_value=26475
+  19039096      35 N Oakland St, Arlington VA 22203            lot_area_marginal:1648sf<2000sf_threshold
+  19039110      51 N Oakland St, Arlington VA 22203            unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.9_low_value=75
+  19039109      55 N Oakland St, Arlington VA 22203            unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-2.9_low_value=75
+  19052005      3222 1St Rd N, Arlington VA 22201              statistical_outlier:est_value_high_z=-2.8_low_value=18725
+  19053005      3214 1St St N, Arlington VA 22201              statistical_outlier:est_value_high_z=-2.7_low_value=37502
+  19039099      29 N Oakland St, Arlington VA 22203            lot_area_marginal:1862sf<2000sf_threshold
+  19039101      25 N Oakland St, Arlington VA 22203            lot_area_marginal:1843sf<2000sf_threshold
+  19039100      27 N Oakland St, Arlington VA 22203            lot_area_marginal:1952sf<2000sf_threshold
+  19039104      19 N Oakland St, Arlington VA 22203            lot_area_marginal:1648sf<2000sf_threshold|statistical_outlier:est_value_high_z=-2.9_low_value=7943
+  19039107      13 N Oakland St, Arlington VA 22203            lot_area_marginal:1656sf<2000sf_threshold
+  19039106      15 N Oakland St, Arlington VA 22203            statistical_outlier:est_value_high_z=-2.6_low_value=53209
+  19023011      504 N Kenmore St, Arlington VA 22201           statistical_outlier:est_value_high_z=-2.7_low_value=36443
+  19014038      650 N Jackson St, Arlington VA 22201           statistical_outlier:available_gfa_sf_z=-3.4_low_value=-2676
+  19014044      616 N Jackson St, Arlington VA 22201           statistical_outlier:est_value_high_z=-2.5_low_value=61729
+  19021012      510 N Monroe St, Arlington VA 22201            statistical_outlier:est_value_high_z=-2.7_low_value=35466
+  19021011      512 N Monroe St, Arlington VA 22201            statistical_outlier:est_value_high_z=-2.8_low_value=12884
+  19011040      819 N Ivy St, Arlington VA 22201               statistical_outlier:available_gfa_sf_z=-2.5_low_value=-1123
+  19018013      604 N Lincoln St, Arlington VA 22201           statistical_outlier:est_value_high_z=-2.5_low_value=67658
+  19018009      3500 7Th St N, Arlington VA 22201              statistical_outlier:available_gfa_sf_z=-3.0_low_value=-1958
+  19017005      3510 8Th St N, Arlington VA 22201              statistical_outlier:est_value_high_z=-2.5_low_value=60887
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=   33  total_avail_gfa=      38,521 sf  agg_value_high=$     1,388,930
+  clean                 parcels=  479  total_avail_gfa=   1,765,717 sf  agg_value_high=$   241,749,312
+
+  Clean-tier GFA capacity as % of full analysis: 97.9%
+  Clean-tier value as % of full analysis:        99.4%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

@@ -1,0 +1,51 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 1,000
+
+Quality Tier Summary:
+  auto-exclude              3  (0.3%)
+  flag-for-review          17  (1.7%)
+  clean                   980  (98.0%)
+
+Most common anomaly types:
+  statistical_outlier                                       13 parcel(s)
+  unusual_property_type                                      5 parcel(s)
+  nonresidential_property_type                               3 parcel(s)
+
+Auto-Exclude Parcels (3):
+  01018020      3016 N Westmoreland St, Arlington VA 22213     nonresidential_property_type:215-Gen Comm - other
+  01033002      N Sycamore St, Arlington VA 22207              nonresidential_property_type:215-Gen Comm - other
+  02034013      6025 Little Falls Rd, Arlington VA 22207       nonresidential_property_type:215-Gen Comm - other|statistical_outlier:est_value_high_z=5.9_high_value=1699754
+
+Flag-for-Review Parcels (17):
+  01029021      6301 28Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-486
+  01029023      6309 28Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.9_low_value=24960
+  01033006      6406 28Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=79419
+  01029024      2800 N Roosevelt St, Arlington VA 22207        statistical_outlier:est_value_high_z=-2.5_low_value=85274
+  01031003      6300 28Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-190
+  01074021      6021 27Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=68145
+  01034021      2644 N Sycamore St, Arlington VA 22207         statistical_outlier:est_value_high_z=-2.6_low_value=75198
+  01033011      6413 27Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.8_low_value=41557
+  01033015      6429 27Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-559
+  02035008      2906 N Kensington St, Arlington VA 22207       statistical_outlier:available_gfa_sf_z=-3.3_low_value=-4344
+  01001058      6454 N Rochester St, Arlington VA 22213        unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  01001061      N Tacoma St, Arlington VA 22213                unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  01001062      N Tacoma St, Arlington VA 22213                unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  01001060      N Tacoma St, Arlington VA 22213                unusual_property_type:540 - Not Valued Resd. (H.O.A)
+  01002005      3580 N Powhatan St, Arlington VA 22213         statistical_outlier:available_gfa_sf_z=-3.0_low_value=-5015
+  02035135      2901 N Lexington St, Arlington VA 22207        statistical_outlier:est_value_high_z=5.5_high_value=1581090
+  01001059      N Tacoma St, Arlington VA 22213                unusual_property_type:540 - Not Valued Resd. (H.O.A)
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    3  total_avail_gfa=      15,450 sf  agg_value_high=$     2,529,479
+  flag-for-review       parcels=   17  total_avail_gfa=      42,162 sf  agg_value_high=$     1,956,018
+  clean                 parcels=  980  total_avail_gfa=   3,321,438 sf  agg_value_high=$   352,598,296
+
+  Clean-tier GFA capacity as % of full analysis: 98.3%
+  Clean-tier value as % of full analysis:        98.7%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.

@@ -1,0 +1,58 @@
+Anomaly Detection Report
+============================================================
+Total parcels analyzed: 483
+
+Quality Tier Summary:
+  auto-exclude              0  (0.0%)
+  flag-for-review          30  (6.2%)
+  clean                   453  (93.8%)
+
+Most common anomaly types:
+  statistical_outlier                                       31 parcel(s)
+  unusual_property_type                                      1 parcel(s)
+
+Flag-for-Review Parcels (30):
+  07017010      4452 20Th Rd N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=104953
+  07018004      4513 20Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.1_low_value=-787
+  07018005      4601 20Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.7_low_value=99452
+  07015017      4427 19Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.9_low_value=-464
+  07019013      4519 19Th Rd N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.7_low_value=100246
+  07019014      4523 19Th Rd N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.8_low_value=81598
+  07014006      4408 20Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-291
+  07015008      4410 20Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=102815
+  07026045      1739 N Wakefield St, Arlington VA 22207        statistical_outlier:est_value_high_z=-2.7_low_value=97326
+  07026043      1733 N Wakefield St, Arlington VA 22207        statistical_outlier:est_value_high_z=-3.1_low_value=32026
+  07026042      1731 N Wakefield St, Arlington VA 22207        statistical_outlier:est_value_high_z=-2.7_low_value=98422
+  07026047      1743 N Wakefield St, Arlington VA 22207        statistical_outlier:est_value_high_z=-2.7_low_value=88480
+  07026040      1727 N Wakefield St, Arlington VA 22207        statistical_outlier:est_value_high_z=-3.1_low_value=45332
+  07026044      1737 N Wakefield St, Arlington VA 22207        statistical_outlier:est_value_high_z=-2.9_low_value=65870
+  07026049      N Wakefield St, Arlington VA 22207             unusual_property_type:540 - Not Valued Resd. (H.O.A)|statistical_outlier:est_value_high_z=-3.4_low_value=75
+  07026039      1725 N Wakefield St, Arlington VA 22207        statistical_outlier:est_value_high_z=-3.0_low_value=50232
+  07021017      4415 19Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.8_low_value=84581
+  07026016      1718 N Utah St, Arlington VA 22207             statistical_outlier:est_value_high_z=-3.0_low_value=56059
+  07022021      1808 N Utah St, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.6_low_value=103122
+  07028009      4610 17Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-258
+  07027031      4507 16Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.8_low_value=-360
+  07038009      4508 16Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-2.8_low_value=84605
+  07027002      1615 N Wakefield St, Arlington VA 22207        statistical_outlier:available_gfa_sf_z=-4.1_low_value=-2216
+  07041010      4534 15Th St N, Arlington VA 22207             statistical_outlier:est_value_high_z=-3.2_low_value=21780
+  07027022      4407 16Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=19|statistical_outlier:est_value_high_z=-3.4_low_value=2025
+  07012006      4449 20Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.7_low_value=-193
+  07020009      4524 19Th Rd N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.2_low_value=-866
+  07037025      4609 15Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-3.0_low_value=-563
+  07037001      15Th St N, Arlington VA 22207                  statistical_outlier:est_value_high_z=-2.8_low_value=83850
+  07037027      4605 15Th St N, Arlington VA 22207             statistical_outlier:available_gfa_sf_z=-2.6_low_value=-39
+
+Impact on Aggregate Values (available_gfa_sf and est_value_high):
+  auto-exclude          parcels=    0  total_avail_gfa=           0 sf  agg_value_high=$             0
+  flag-for-review       parcels=   30  total_avail_gfa=      17,015 sf  agg_value_high=$     1,402,849
+  clean                 parcels=  453  total_avail_gfa=   1,773,745 sf  agg_value_high=$   218,215,012
+
+  Clean-tier GFA capacity as % of full analysis: 99.0%
+  Clean-tier value as % of full analysis:        99.4%
+
+============================================================
+NOTE: 'auto-exclude' parcels have disqualifying data issues.
+      'flag-for-review' parcels warrant human review before
+      being included in final policy analysis.
+      'clean' parcels pass all automated checks.
