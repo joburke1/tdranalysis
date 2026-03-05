@@ -14,14 +14,14 @@ This module integrates:
 import logging
 from dataclasses import dataclass, field, asdict
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional
 
 import geopandas as gpd
-from shapely.geometry import Polygon, MultiPolygon, Point
+from shapely.geometry import Polygon, MultiPolygon
 
-from ..geometry.lot_metrics import LotMetricsCalculator, LotMetrics
-from ..rules.engine import ZoningRulesEngine, DevelopmentStandards
-from ..rules.validators import ZoningValidator, ValidationResult, ConformanceStatus
+from ..geometry.lot_metrics import LotMetricsCalculator
+from ..rules.engine import ZoningRulesEngine
+from ..rules.validators import ZoningValidator
 
 logger = logging.getLogger(__name__)
 
@@ -118,16 +118,16 @@ class DevelopmentPotentialResult:
     def summary(self) -> str:
         """Generate human-readable summary."""
         lines = [
-            f"Development Potential Analysis",
+            "Development Potential Analysis",
             f"{'='*40}",
             f"Parcel ID: {self.parcel_id or 'N/A'}",
             f"Zoning District: {self.zoning_district or 'N/A'}",
-            f"",
-            f"Lot Metrics:",
+            "",
+            "Lot Metrics:",
             f"  Area: {self.lot_area_sf:,.0f} sf" if self.lot_area_sf else "  Area: N/A",
             f"  Width: {self.lot_width_ft:.1f} ft" if self.lot_width_ft else "  Width: N/A",
             f"  Depth: {self.lot_depth_ft:.1f} ft" if self.lot_depth_ft else "  Depth: N/A",
-            f"",
+            "",
             f"Conformance: {self.conformance_status}",
         ]
         
@@ -136,8 +136,8 @@ class DevelopmentPotentialResult:
         
         if self.is_conforming:
             lines.extend([
-                f"",
-                f"Development Limits (By-Right):",
+                "",
+                "Development Limits (By-Right):",
                 f"  Max Height: {self.max_height_ft} ft",
                 f"  Max Lot Coverage: {self.max_lot_coverage_sf:,.0f} sf ({self.max_lot_coverage_pct}%)" if self.max_lot_coverage_sf else "",
                 f"  Max Building Footprint: {self.max_building_footprint_sf:,.0f} sf" if self.max_building_footprint_sf else "",
@@ -146,12 +146,12 @@ class DevelopmentPotentialResult:
             ])
         
         if self.notes:
-            lines.extend([f"", f"Notes:"])
+            lines.extend(["", "Notes:"])
             for note in self.notes:
                 lines.append(f"  - {note}")
         
         if self.analysis_errors:
-            lines.extend([f"", f"Errors:"])
+            lines.extend(["", "Errors:"])
             for error in self.analysis_errors:
                 lines.append(f"  - {error}")
         
