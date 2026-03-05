@@ -2,6 +2,14 @@
 
 A Python tool for analyzing maximum by-right residential development potential and Transfer of Development Rights (TDR) value for parcels in Arlington County, Virginia based on the Zoning Ordinance.
 
+## Presentation
+
+A summary presentation of the analysis findings is available for download:
+
+**[Arlington TDR Analysis Presentation.pptx](Arlington%20TDR%20Analysis%20Presentation.pptx)**
+
+This slide deck summarizes the methodology, key findings, and policy implications for housing advocates and policymakers who are not familiar with the underlying code or data.
+
 ## Overview
 
 This tool determines what can be built on a residential parcel "by-right" (without special permits) and estimates the monetary value of unused development rights. Analysis is based on:
