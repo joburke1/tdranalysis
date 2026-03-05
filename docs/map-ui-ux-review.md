@@ -42,7 +42,7 @@ Labels like "Improvement $/SF", "Available GFA", "Underdeveloped", and "not_appl
   - "Underdeveloped" → "Parcels below zoning max"
   - "Near capacity" → "Parcels near zoning max"
   - "Vacant buildable" → "Vacant buildable lots"
-  - "not_applicable" in confidence breakdown → "No unused capacity"
+  - "not_applicable" in valuation display → "No unused capacity"
   - "Development Potential" (tooltip heading) → "Development Capacity"
 
 ### Medium Priority

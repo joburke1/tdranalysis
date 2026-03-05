@@ -1,6 +1,6 @@
 <!-- Generated: 2026-02-20 | Files scanned: 6 | Token estimate: ~500 -->
 
-# Data — Arlington Zoning Analyzer
+# Data ï¿½ Arlington Zoning Analyzer
 
 ## External Data Sources
 
@@ -63,14 +63,13 @@ Per-district development standards (keyed by district code, e.g. "R-6"):
 - `parking_spaces_per_unit`
 
 ### config/setback_rules.json
-Yard and setback requirements from Article 3, §3.2 (keyed by district):
+Yard and setback requirements from Article 3, ï¿½3.2 (keyed by district):
 - `front_yard_ft`, `side_yard_ft`, `rear_yard_ft`
 
 ### config/valuation_params.json
 Market parameters for rights valuation:
-- `land_residual_discount_factor`: {low, high} — default 0.55 / 0.75
+- `land_residual_discount_factor`: {low, high} ï¿½ default 0.55 / 0.75
 - `residential_improvement_value_per_sf`: fallback $185/SF
-- `confidence_thresholds`: min_land_value, min_available_gfa for HIGH confidence
 - `neighborhood_rate_calibration`: lookback_years=10, min_sample=5
 
 ### config/data_dictionary.json

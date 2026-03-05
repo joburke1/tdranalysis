@@ -218,7 +218,7 @@ Computes remaining unused development capacity:
 Estimates monetary value of unused rights using the Land Residual method:
 - **Land Residual** — Derives a land $/SF rate from assessed value (land value ÷ max GFA), then applies it to available GFA scaled by a discount factor reflecting the partial-severance TDR context.
 
-Returns a LOW/HIGH price range with a HIGH/MEDIUM/NOT_APPLICABLE confidence rating based on data quality thresholds.
+Returns a LOW/HIGH price range estimate based on available assessed land value and unused GFA.
 
 ## Calculation Procedures
 
@@ -254,7 +254,6 @@ Contains configurable market parameters that should be calibrated to current con
 |-----------|-------------|
 | `land_residual_discount_factor` | low: 0.55 / high: 0.75 — fraction of the implied land rate attributable to severable development rights |
 | `residential_improvement_value_per_sf` | Fallback $185/SF (used when neighborhood rate has insufficient sample) |
-| `confidence_thresholds` | Min land value ($100k) and min available GFA (500 SF) for HIGH confidence |
 | `neighborhood_rate_calibration` | lookback_years: 10, min_sample: 5 homes for local rate derivation |
 
 ### data_dictionary.json
@@ -296,7 +295,6 @@ Defines all 40 output columns with labels, descriptions, data sources, and examp
 | `development_status` | vacant / underdeveloped / overdeveloped |
 | `est_value_low` | Lower bound estimated value of unused rights ($) |
 | `est_value_high` | Upper bound estimated value of unused rights ($) |
-| `valuation_confidence` | HIGH / MEDIUM / LOW / not_applicable |
 | `neighborhood_imp_rate_median` | Median $/SF from recent neighborhood construction |
 | `neighborhood_imp_rate_low` | Low end of neighborhood improvement rate range |
 | `neighborhood_imp_rate_high` | High end of neighborhood improvement rate range |
