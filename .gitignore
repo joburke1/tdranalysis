@@ -56,3 +56,7 @@ Thumbs.db
 
 # Claude Code local configuration
 .claude/
+
+# Local-only presentation artifacts
+scripts/generate_presentation.py
+data/results/tdr_analysis_findings.pptx
