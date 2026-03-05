@@ -1,0 +1,212 @@
+name: Triage Data Quality Report
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  triage:
+    if: contains(github.event.issue.labels.*.name, 'data-quality')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Parse and validate issue
+        id: validate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+            const issueNumber = context.payload.issue.number;
+
+            // ── Field extraction helpers ──────────────────────────────────
+            function extractField(label, body) {
+              // GitHub form fields render as "### Label\n\nValue\n"
+              const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const re = new RegExp(`###\\s*${escaped}\\s*\\n+([^\\n#][^\\n]*)`, 'i');
+              const m = body.match(re);
+              if (!m) return '';
+              const val = m[1].trim();
+              return (val === '_No response_' || val === '') ? '' : val;
+            }
+
+            const parcelId          = extractField('Parcel ID (RPCMSTR)', body);
+            const streetAddress     = extractField('Street Address', body);
+            const neighborhood      = extractField('Neighborhood', body);
+            const currentClass      = extractField('Current TDR Classification', body);
+            const currentZoning     = extractField('Current Zoning District', body);
+            const currentPropClass  = extractField('Current Property Class Code', body);
+            const correctClass      = extractField('Correct TDR Classification', body);
+            const correctZoning     = extractField('Correct Zoning District', body);
+            const correctPropClass  = extractField('Correct Property Class Code', body);
+            const correctGfa        = extractField('Correct Gross Floor Area (SF)', body);
+            const description       = extractField('Problem Description', body);
+            const evidence          = extractField('Evidence / Source', body);
+
+            // ── Validation ────────────────────────────────────────────────
+            const errors = [];
+            const warnings = [];
+
+            // Parcel ID: must be exactly 8 digits
+            const parcelIdValid = /^\d{8}$/.test(parcelId);
+            if (!parcelId) {
+              errors.push('Parcel ID is missing.');
+            } else if (!parcelIdValid) {
+              errors.push(`Parcel ID \`${parcelId}\` is not a valid 8-digit RPCMSTR code.`);
+            }
+
+            // Neighborhood: must not be blank or "Other"
+            const knownNeighborhoods = [
+              'Alcova Heights','Arlington Forest','Arlington Heights','Arlington Ridge',
+              'Arlington View','Ashton Heights','Aurora Highlands','Ballston-Virginia Square',
+              'Bluemont','Barcroft','Boulevard Manor','Cherrydale','Claremont',
+              'Clarendon-Courthouse','Colonial Village','Country Club Hills','Crystal City',
+              'Dominion Hills','Douglas Park','Drew Model/Nauck','East Falls Church',
+              'Glencarlyn','Green Valley','Hall\'s Hill/High View Park',
+              'Highland Park/Overlee Knolls','Johnson\'s Hill','Leeway-Windover','Lexington',
+              'Lyon Park','Lyon Village','Maywood','Millbrook','North Highland','North Rosslyn',
+              'Oakcrest','Penrose','Radnor/Ft. Myer Heights','Rivercrest','Rosslyn',
+              'Shirlington','Shirley-Duke','South Arlington','South Highlands',
+              'Spout Run Parkway','Tara-Leeway Heights','Waverly Hills','Westover',
+              'Williamsburg','Woodland Park'
+            ];
+            const neighborhoodKnown = knownNeighborhoods.includes(neighborhood);
+            if (!neighborhood) {
+              errors.push('Neighborhood is missing.');
+            } else if (!neighborhoodKnown) {
+              warnings.push(`Neighborhood "${neighborhood}" is not in the known list — owner will verify.`);
+            }
+
+            // At least one correction field must be populated
+            const BLANK_SENTINEL = '(leave blank — not the problem)';
+            const hasCorrection = [correctClass, correctZoning, correctPropClass, correctGfa]
+              .some(v => v && v !== BLANK_SENTINEL);
+            if (!hasCorrection) {
+              errors.push('No correction provided. Fill in at least one "correct" field to describe what should change.');
+            }
+
+            // GFA must be numeric if provided
+            if (correctGfa && correctGfa !== BLANK_SENTINEL && !/^\d+(\.\d+)?$/.test(correctGfa)) {
+              errors.push(`Correct GFA "${correctGfa}" must be a number (e.g., 1800).`);
+            }
+
+            const isValid = errors.length === 0;
+
+            // ── Neighborhood slug for correction JSON ─────────────────────
+            function toSlug(name) {
+              return name.toLowerCase().replace(/[^\w-]/g, '_');
+            }
+            const neighborhoodSlug = toSlug(neighborhood || 'unknown');
+
+            // ── Build triage comment ──────────────────────────────────────
+            function statusIcon(condition) {
+              return condition ? '✅' : '❌';
+            }
+            function optionalIcon(val) {
+              return (val && val !== BLANK_SENTINEL) ? '✅ provided' : '—';
+            }
+
+            const rows = [
+              `| Field | Reported Current | Reporter's Correction |`,
+              `|-------|-----------------|----------------------|`,
+              `| TDR Classification | ${currentClass || '—'} | ${correctClass && correctClass !== BLANK_SENTINEL ? correctClass : '—'} |`,
+              `| Zoning District    | ${currentZoning || '—'} | ${correctZoning || '—'} |`,
+              `| Property Class     | ${currentPropClass || '—'} | ${correctPropClass || '—'} |`,
+              `| GFA (SF)           | — | ${correctGfa && correctGfa !== BLANK_SENTINEL ? correctGfa : '—'} |`,
+            ].join('\n');
+
+            let validationBlock = '';
+            if (errors.length > 0) {
+              validationBlock += '\n**Validation errors (must fix before review):**\n';
+              errors.forEach(e => { validationBlock += `- ❌ ${e}\n`; });
+            }
+            if (warnings.length > 0) {
+              validationBlock += '\n**Warnings:**\n';
+              warnings.forEach(w => { validationBlock += `- ⚠️ ${w}\n`; });
+            }
+            if (isValid && warnings.length === 0) {
+              validationBlock = '\n✅ All required fields validated successfully.\n';
+            }
+
+            const nextStep = isValid
+              ? '\n**Next step:** The owner will validate this locally using VS Code (inspect_parcel output) and comment `/approve spot_check=<type> note="..."` or `/reject reason="..."`.'
+              : '\n**Action required:** Please edit the issue body to fix the errors above. The triage check will re-run automatically.';
+
+            const comment = [
+              `## Triage: Data Quality Report #${issueNumber}`,
+              '',
+              `**Parcel:** \`${parcelId || 'MISSING'}\` · **Neighborhood:** ${neighborhood || 'MISSING'} · **Address:** ${streetAddress || '—'}`,
+              '',
+              '### Field Comparison',
+              '',
+              rows,
+              '',
+              '### Problem Description',
+              '',
+              description || '_(none provided)_',
+              '',
+              evidence ? `**Evidence:** ${evidence}` : '',
+              '',
+              '### Validation',
+              validationBlock,
+              nextStep,
+            ].join('\n');
+
+            // Store outputs for next steps
+            core.setOutput('is_valid', isValid ? 'true' : 'false');
+            core.setOutput('parcel_id', parcelId);
+            core.setOutput('neighborhood', neighborhood);
+            core.setOutput('neighborhood_slug', neighborhoodSlug);
+            core.setOutput('comment_body', comment);
+            core.setOutput('has_errors', errors.length > 0 ? 'true' : 'false');
+
+            // Post the comment
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: comment,
+            });
+
+      - name: Apply labels
+        uses: actions/github-script@v7
+        env:
+          IS_VALID: ${{ steps.validate.outputs.is_valid }}
+        with:
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const isValid = process.env.IS_VALID === 'true';
+
+            const addLabels = ['triaged'];
+            const removeLabels = [];
+
+            if (isValid) {
+              addLabels.push('needs-human-review');
+              removeLabels.push('needs-more-info');
+            } else {
+              addLabels.push('needs-more-info');
+              removeLabels.push('needs-human-review');
+            }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              labels: addLabels,
+            });
+
+            // Best-effort label removal (ignore 404 if label not present)
+            for (const label of removeLabels) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name: label,
+                });
+              } catch (e) {
+                // Label wasn't applied — that's fine
+              }
+            }

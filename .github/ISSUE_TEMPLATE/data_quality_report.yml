@@ -1,0 +1,197 @@
+name: Data Quality Report
+description: Report incorrect parcel data — wrong classification, zoning, property class, or GFA
+title: "[DQ] <parcel_id>: <brief description>"
+labels: ["data-quality"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to report a data quality problem with a specific parcel.
+        Fill in the **Parcel Identification** section completely. For the correction
+        fields, fill in only the fields that are wrong.
+
+  - type: markdown
+    attributes:
+      value: "## Parcel Identification"
+
+  - type: input
+    id: parcel_id
+    attributes:
+      label: Parcel ID (RPCMSTR)
+      description: 8-digit parcel code from the county GIS or the map popup
+      placeholder: "23026006"
+    validations:
+      required: true
+
+  - type: input
+    id: street_address
+    attributes:
+      label: Street Address
+      description: Street address as known or observed
+      placeholder: "123 Main St N, Arlington VA"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: neighborhood
+    attributes:
+      label: Neighborhood
+      description: Civic association neighborhood shown on the map
+      options:
+        - Alcova Heights
+        - Arlington Forest
+        - Arlington Heights
+        - Arlington Ridge
+        - Arlington View
+        - Ashton Heights
+        - Aurora Highlands
+        - Ballston-Virginia Square
+        - Bluemont
+        - Barcroft
+        - Boulevard Manor
+        - Cherrydale
+        - Claremont
+        - Clarendon-Courthouse
+        - Colonial Village
+        - Country Club Hills
+        - Crystal City
+        - Dominion Hills
+        - Douglas Park
+        - Drew Model/Nauck
+        - East Falls Church
+        - Glencarlyn
+        - Green Valley
+        - Hall's Hill/High View Park
+        - Highland Park/Overlee Knolls
+        - Johnson's Hill
+        - Leeway-Windover
+        - Lexington
+        - Lyon Park
+        - Lyon Village
+        - Maywood
+        - Millbrook
+        - North Highland
+        - North Rosslyn
+        - Oakcrest
+        - Penrose
+        - Radnor/Ft. Myer Heights
+        - Rivercrest
+        - Rosslyn
+        - Shirlington
+        - Shirley-Duke
+        - South Arlington
+        - South Highlands
+        - Spout Run Parkway
+        - Tara-Leeway Heights
+        - Waverly Hills
+        - Westover
+        - Williamsburg
+        - Woodland Park
+        - Other (describe in problem description)
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: "## What the system currently shows"
+
+  - type: dropdown
+    id: current_classification
+    attributes:
+      label: Current TDR Classification
+      description: TDR potential label shown in the map popup or CSV
+      options:
+        - Full
+        - Substantial
+        - Limited
+        - None
+        - Excluded
+        - Not shown / unknown
+    validations:
+      required: true
+
+  - type: input
+    id: current_zoning
+    attributes:
+      label: Current Zoning District
+      description: Zoning shown in the map popup (e.g., R-8, R-6)
+      placeholder: "R-8"
+    validations:
+      required: false
+
+  - type: input
+    id: current_property_class
+    attributes:
+      label: Current Property Class Code
+      description: Property class code shown (e.g., 010, 201, 510)
+      placeholder: "010"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: "## What you believe is correct\n*(Fill in only the fields that are wrong)*"
+
+  - type: dropdown
+    id: correct_classification
+    attributes:
+      label: Correct TDR Classification
+      description: What the TDR potential should be, if wrong
+      options:
+        - "(leave blank — not the problem)"
+        - Full
+        - Substantial
+        - Limited
+        - None
+        - Excluded
+    validations:
+      required: false
+
+  - type: input
+    id: correct_zoning
+    attributes:
+      label: Correct Zoning District
+      description: The correct zoning district, if the current one is wrong
+      placeholder: "R-6"
+    validations:
+      required: false
+
+  - type: input
+    id: correct_property_class
+    attributes:
+      label: Correct Property Class Code
+      description: The correct property class code, if the current one is wrong
+      placeholder: "010"
+    validations:
+      required: false
+
+  - type: input
+    id: correct_gfa_sf
+    attributes:
+      label: Correct Gross Floor Area (SF)
+      description: Correct GFA in square feet, if the value in the system is wrong
+      placeholder: "1800"
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: "## Additional Context"
+
+  - type: textarea
+    id: problem_description
+    attributes:
+      label: Problem Description
+      description: Describe what is wrong and why it matters
+      placeholder: "The parcel shows as Excluded but there is a house on it. It should be analyzed for TDR potential."
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence / Source
+      description: Where did you verify this? (County GIS URL, permit records, satellite imagery note, personal observation, etc.)
+      placeholder: "Arlington County GIS shows a dwelling unit on this parcel: https://..."
+    validations:
+      required: false

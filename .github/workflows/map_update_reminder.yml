@@ -1,0 +1,158 @@
+name: Map Update Reminder
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  check-map-update:
+    # Only fire when a correction PR is merged
+    if: |
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'correction/issue-')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Count corrections and check thresholds
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            // Read last map update date
+            const lastUpdateFile = 'corrections/.last_map_update';
+            let lastUpdateDate = null;
+            try {
+              const raw = fs.readFileSync(lastUpdateFile, 'utf8').trim();
+              if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+                lastUpdateDate = new Date(raw);
+              }
+            } catch (e) {
+              // File doesn't exist yet — treat as never updated
+            }
+
+            const today = new Date();
+            const daysSinceUpdate = lastUpdateDate
+              ? Math.floor((today - lastUpdateDate) / (1000 * 60 * 60 * 24))
+              : 9999;
+
+            // List merged correction PRs since last map update
+            const { data: pulls } = await github.rest.pulls.list({
+              owner:     context.repo.owner,
+              repo:      context.repo.repo,
+              state:     'closed',
+              base:      'main',
+              per_page:  100,
+            });
+
+            const since = lastUpdateDate || new Date(0);
+            const mergedCorrections = pulls.filter(pr =>
+              pr.merged_at &&
+              new Date(pr.merged_at) > since &&
+              pr.head.ref.startsWith('correction/issue-')
+            );
+
+            const count = mergedCorrections.length;
+            const THRESHOLD_COUNT = 5;
+            const THRESHOLD_DAYS  = 14;
+
+            const needsUpdate = count >= THRESHOLD_COUNT || daysSinceUpdate >= THRESHOLD_DAYS;
+
+            core.setOutput('needs_update',       needsUpdate ? 'true' : 'false');
+            core.setOutput('correction_count',   String(count));
+            core.setOutput('days_since_update',  String(daysSinceUpdate));
+            core.setOutput('merged_corrections', JSON.stringify(
+              mergedCorrections.map(pr => ({
+                number: pr.number,
+                title:  pr.title,
+                branch: pr.head.ref,
+              }))
+            ));
+
+      - name: Open map update reminder issue
+        if: steps.check.outputs.needs_update == 'true'
+        uses: actions/github-script@v7
+        env:
+          CORRECTION_COUNT:    ${{ steps.check.outputs.correction_count }}
+          DAYS_SINCE_UPDATE:   ${{ steps.check.outputs.days_since_update }}
+          MERGED_CORRECTIONS:  ${{ steps.check.outputs.merged_corrections }}
+        with:
+          script: |
+            const count       = process.env.CORRECTION_COUNT;
+            const days        = process.env.DAYS_SINCE_UPDATE;
+            const corrections = JSON.parse(process.env.MERGED_CORRECTIONS);
+
+            // Check if a reminder issue is already open to avoid duplicates
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner:  context.repo.owner,
+              repo:   context.repo.repo,
+              labels: 'map-update-needed',
+              state:  'open',
+            });
+
+            if (existing.length > 0) {
+              console.log(`Reminder issue #${existing[0].number} already open — skipping.`);
+              return;
+            }
+
+            const correctionList = corrections
+              .map(pr => `- PR #${pr.number}: ${pr.title}`)
+              .join('\n');
+
+            const daysText = days === '9999' ? 'never' : `${days} days ago`;
+            const body = [
+              `**${count} correction(s) have been merged** since the last map update (${daysText}).`,
+              '',
+              '## Pending corrections',
+              '',
+              correctionList || '_none listed_',
+              '',
+              '## Required actions',
+              '',
+              '1. Open VS Code and run the **DQ: Apply Merged Corrections** task to update `spot_checks.csv`',
+              '2. Re-run the pipeline for each affected neighborhood',
+              '3. Run the **DQ: Regenerate Maps** task for each affected neighborhood',
+              '4. Commit the updated `map.html` file(s) — GitHub Pages will deploy automatically',
+              '5. Close this issue once maps are updated',
+              '',
+              '> The `corrections/.last_map_update` file will be updated automatically by the Regenerate Maps task.',
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner:    context.repo.owner,
+              repo:     context.repo.repo,
+              title:    `[Action Required] Map update needed — ${count} correction(s) pending`,
+              body:     body,
+              labels:   ['map-update-needed'],
+              assignees: ['johnb'],
+            });
+
+      - name: Post progress comment on merged PR
+        if: steps.check.outputs.needs_update == 'false'
+        uses: actions/github-script@v7
+        env:
+          CORRECTION_COUNT: ${{ steps.check.outputs.correction_count }}
+        with:
+          script: |
+            const count = parseInt(process.env.CORRECTION_COUNT);
+            const THRESHOLD_COUNT = 5;
+            const remaining = THRESHOLD_COUNT - count;
+
+            await github.rest.issues.createComment({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: `Correction merged. ${count}/${THRESHOLD_COUNT} corrections since last map update (${remaining} more will trigger a map update reminder).`,
+            });
