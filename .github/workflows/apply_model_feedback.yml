@@ -14,7 +14,7 @@ jobs:
     # Only respond to /approve-feedback or /reject-feedback from the project owner
     # on issues labeled model-feedback
     if: |
-      github.event.comment.user.login == 'johnb' &&
+      github.event.comment.user.login == 'joburke1' &&
       contains(github.event.issue.labels.*.name, 'model-feedback') &&
       (startsWith(github.event.comment.body, '/approve-feedback') ||
        startsWith(github.event.comment.body, '/reject-feedback'))

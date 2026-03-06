@@ -13,7 +13,7 @@ jobs:
   handle-command:
     # Only respond to commands from the project owner
     if: |
-      github.event.comment.user.login == 'johnb' &&
+      github.event.comment.user.login == 'joburke1' &&
       contains(github.event.issue.labels.*.name, 'data-quality') &&
       (startsWith(github.event.comment.body, '/approve') ||
        startsWith(github.event.comment.body, '/reject'))
@@ -126,7 +126,7 @@ jobs:
               spot_check_notes:   note,
               reporter:           reporter,
               reported_date:      today,
-              approved_by:        'johnb',
+              approved_by:        'joburke1',
               approved_date:      today,
             };
 
