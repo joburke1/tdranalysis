@@ -528,6 +528,73 @@ def _apply_spot_check_exclusions(
     return residential
 
 
+def _load_correction_overrides(output_dir: Path) -> "pd.DataFrame":
+    """Load overrides.csv from output_dir, or return an empty DataFrame."""
+    import pandas as pd
+
+    ov_path = output_dir / "overrides.csv"
+    if not ov_path.exists():
+        return pd.DataFrame(columns=[
+            "parcel_id", "propertyClassTypeCode", "propertyClassTypeDsc",
+            "grossFloorAreaSquareFeetQty", "propertyYearBuilt", "storyHeightCnt",
+        ])
+    return pd.read_csv(ov_path, dtype=str)
+
+
+def _apply_correction_overrides(
+    parcels: "gpd.GeoDataFrame",
+    overrides_df: "pd.DataFrame",
+    label: str,
+) -> "gpd.GeoDataFrame":
+    """Patch GDF columns for parcels that have correction overrides.
+
+    Sets propertyStreetNbrNameText to 'CORRECTION_OVERRIDE' so the parcel
+    passes Filter 4 (no property record), and patches the other override
+    columns so Filter 5 (no GFA data) also passes.
+    """
+    import pandas as pd
+
+    if overrides_df.empty or "RPCMSTR" not in parcels.columns:
+        return parcels
+
+    parcels = parcels.copy()
+    numeric_cols = {"grossFloorAreaSquareFeetQty", "propertyYearBuilt", "storyHeightCnt"}
+    override_field_cols = [c for c in overrides_df.columns if c != "parcel_id"]
+
+    n_patched = 0
+    for _, ov_row in overrides_df.iterrows():
+        pid = str(ov_row["parcel_id"]).strip()
+        mask = parcels["RPCMSTR"].astype(str) == pid
+        if not mask.any():
+            continue
+
+        # Make Filter 4 pass: set a non-null street address sentinel
+        parcels.loc[mask, "propertyStreetNbrNameText"] = "CORRECTION_OVERRIDE"
+
+        # Patch each override field
+        for col in override_field_cols:
+            val = ov_row.get(col, "")
+            if pd.isna(val) or str(val).strip() == "":
+                continue
+            if col not in parcels.columns:
+                parcels[col] = None
+            if col in numeric_cols:
+                try:
+                    parcels.loc[mask, col] = float(val)
+                except (ValueError, TypeError):
+                    pass
+            else:
+                parcels.loc[mask, col] = str(val)
+
+        n_patched += 1
+
+    if n_patched:
+        logger.info(
+            "[%s] Patched %d parcel(s) from correction overrides", label, n_patched
+        )
+    return parcels
+
+
 def _track_exclusion(
     before: "gpd.GeoDataFrame",
     after: "gpd.GeoDataFrame",
@@ -566,6 +633,12 @@ def _run_analysis(
     from src.analysis import estimate_valuation_geodataframe
 
     excluded_parts: list = []
+
+    # Apply correction overrides before any exclusion filters so that confirmed
+    # parcels with missing API data can pass the filter chain.
+    overrides_df = _load_correction_overrides(output_dir)
+    if not overrides_df.empty:
+        parcels = _apply_correction_overrides(parcels, overrides_df, label)
 
     # Step 1 — keep only residentially-zoned parcels.
     if "is_residential_zoning" in parcels.columns:

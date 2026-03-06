@@ -7,5 +7,12 @@
   "reporter": "joburke1",
   "reported_date": "2026-03-06",
   "approved_by": "joburke1",
-  "approved_date": "2026-03-06"
+  "approved_date": "2026-03-06",
+  "overrides": {
+    "propertyClassTypeCode": "511",
+    "propertyClassTypeDsc": "511-Single Family Detached",
+    "grossFloorAreaSquareFeetQty": 2368.0,
+    "propertyYearBuilt": 1991.0,
+    "storyHeightCnt": 2.0
+  }
 }

@@ -43,6 +43,16 @@ SPOT_CHECK_COLS = [
     "issue_number",
 ]
 
+# Columns written to overrides.csv (structured field values for confirmed parcels)
+OVERRIDE_COLS = [
+    "parcel_id",
+    "propertyClassTypeCode",
+    "propertyClassTypeDsc",
+    "grossFloorAreaSquareFeetQty",
+    "propertyYearBuilt",
+    "storyHeightCnt",
+]
+
 
 def load_corrections(corrections_dir: Path, neighborhood: str | None) -> list[dict]:
     """Load all correction JSON files, optionally filtered by neighborhood slug."""
@@ -133,6 +143,47 @@ def apply_to_neighborhood(
             writer = csv.DictWriter(f, fieldnames=SPOT_CHECK_COLS, extrasaction="ignore")
             writer.writeheader()
             writer.writerows(existing.values())
+
+    # Write overrides.csv for confirmed records that have an overrides dict.
+    override_rows: list[dict] = []
+    for rec in records:
+        overrides = rec.get("overrides")
+        if not overrides or not isinstance(overrides, dict):
+            continue
+        parcel_id = rec.get("parcel_id", "")
+        if not parcel_id:
+            continue
+        row = {"parcel_id": parcel_id}
+        for col in OVERRIDE_COLS[1:]:
+            val = overrides.get(col)
+            row[col] = str(val) if val is not None else ""
+        override_rows.append(row)
+
+    if override_rows and not dry_run:
+        ov_path = results_dir / neighborhood_slug / "overrides.csv"
+        ov_path.parent.mkdir(parents=True, exist_ok=True)
+        # Upsert: load existing, merge by parcel_id, write back.
+        existing_ov: dict[str, dict] = {}
+        if ov_path.exists():
+            with ov_path.open(newline="", encoding="utf-8") as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    existing_ov[row["parcel_id"]] = row
+        for row in override_rows:
+            existing_ov[row["parcel_id"]] = row
+        with ov_path.open("w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=OVERRIDE_COLS, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(existing_ov.values())
+        print(
+            f"  {neighborhood_slug}: wrote {len(override_rows)} override record(s) "
+            "to overrides.csv"
+        )
+    elif override_rows and dry_run:
+        print(
+            f"  {neighborhood_slug}: would write {len(override_rows)} override record(s) "
+            "to overrides.csv (dry run)"
+        )
 
     return applied, already_present
 

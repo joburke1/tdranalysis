@@ -85,6 +85,8 @@ Results are saved to `data/results/{neighborhood}/`:
 - `*_summary.txt` — Human-readable statistics
 - `*_data_dictionary.csv` — Column definitions for the analysis output
 - `map.html` — Self-contained interactive HTML map (no web server required)
+- `spot_checks.csv` — Persistent manual review records (read by pipeline; never overwritten)
+- `overrides.csv` — Structured field overrides for confirmed-but-missing parcels (written by `apply_corrections.py`)
 
 ### 3. Generate a Standalone Map
 
@@ -173,8 +175,10 @@ tdranalysis/
 │   ├── processed/               # Enriched GeoPackage files
 │   └── results/                 # Analysis outputs by neighborhood
 ├── docs/                        # Project documentation
+├── corrections/                 # Version-controlled correction records (one JSON per approved issue)
 ├── scripts/
 │   ├── run_analysis.py          # Main analysis pipeline runner
+│   ├── apply_corrections.py     # Merge approved correction JSONs into spot_checks.csv / overrides.csv
 │   ├── run_anomaly_check.py     # Data quality anomaly detection
 │   ├── generate_map.py          # Interactive HTML map generator
 │   ├── generate_homepage.py     # Combined neighborhood index map
@@ -390,14 +394,15 @@ Verify:
 
 These filters run automatically on every analysis — no manual intervention needed:
 
-| Filter | What it removes | Rationale |
-|--------|----------------|-----------|
-| Zoning district | Non-R-5/R-6/R-8/R-10/R-20 zones | By-right standards only apply to one-family districts |
-| Property class 201/210 | Commercial vacant land, parking | Non-residential use |
-| Class 510 remnants | Vacant parcels < 80% of min lot size | Alley strips, unbuildable remnants |
-| No property API record | Parcels with no address or class | Administrative parcels, unregistered strips |
-| No GFA data | Building exists but no improvement value | GFA estimation impossible; analysis unreliable |
-| Spot check exclusions | Parcels marked "excluded" in spot_checks.csv | Persistent manual review decisions |
+| Step | What it does | Notes |
+|------|-------------|-------|
+| Correction overrides | Patches field values for confirmed-but-missing parcels | Reads `overrides.csv`; applied **before** all exclusion filters |
+| Zoning district filter | Removes non-R-5/R-6/R-8/R-10/R-20 zones | By-right standards only apply to one-family districts |
+| Property class 201/210 | Removes commercial vacant land and parking | Non-residential use |
+| Class 510 remnants | Removes vacant parcels < 80% of min lot size | Alley strips, unbuildable remnants |
+| No property API record | Removes parcels with no address or class | Administrative parcels, unregistered strips |
+| No GFA data | Removes buildings with no improvement value | GFA estimation impossible; analysis unreliable |
+| Spot check exclusions | Removes parcels marked `excluded` in `spot_checks.csv` | Persistent manual review decisions |
 
 ### Anomaly Detection Thresholds
 
@@ -408,6 +413,59 @@ These filters run automatically on every analysis — no manual intervention nee
 | `LOT_WIDTH_REMNANT` | 15 ft | Auto-exclude: too narrow |
 | `IMPROVEMENT_VALUE_UNRELIABLE` | $30,000 | Flag: GFA estimate unreliable |
 | `ZSCORE_THRESHOLD` | 2.5 | Flag: statistical outlier |
+
+## Reporting Data Quality Issues
+
+If you find a parcel that appears to be incorrectly classified, excluded, or missing from the analysis, please file a **Data Quality Report** on GitHub Issues.
+
+**[Open a Data Quality Report →](https://github.com/joburke1/tdranalysis/issues/new?template=data_quality_report.yml)**
+
+### What to include
+
+The issue form will prompt you for:
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| Parcel ID (RPCMSTR) | Yes | 8-digit parcel code from the map popup or county GIS |
+| Street Address | Yes | Street address for the parcel |
+| Neighborhood | Yes | Civic association neighborhood shown on the map |
+| Current TDR Classification | Yes | What the system currently shows |
+| Correct TDR Classification | No | What it should show, if wrong |
+| Correct Property Class Code | No | Verified class code from the county assessor |
+| Correct Gross Floor Area (SF) | No | Verified GFA from county property records |
+| Problem Description | Yes | What is wrong and why it matters |
+| Evidence / Source | No | County GIS link, permit record, or observation |
+
+### How to verify parcel data
+
+Use the Arlington County property search to verify building details:
+`https://propertysearch.arlingtonva.us`
+
+Search by address or parcel ID (RPCMSTR). The **Details** tab shows property class; the **Improvements** tab shows year built, GFA, and story count.
+
+### What happens after you file an issue
+
+1. A triage bot automatically validates the form and labels the issue `needs-human-review`
+2. The project owner validates the report locally using `inspect_parcel.py`
+3. If approved, a correction PR is created and merged — the parcel is then re-analyzed on the next pipeline run
+4. If the parcel was previously excluded due to missing API data and you supply the correct GFA and property class, the parcel will be included in the full analysis going forward
+
+### Correction workflow (for the project owner)
+
+After merging a correction PR:
+
+```bash
+# Apply corrections from merged JSON files to spot_checks.csv and overrides.csv:
+python scripts/apply_corrections.py --neighborhood <slug>
+
+# Re-run analysis (uses corrected data):
+python scripts/run_analysis.py --neighborhood "Neighborhood Name" --skip-download --skip-process
+
+# Regenerate map:
+python scripts/generate_map.py --neighborhood "Neighborhood Name"
+```
+
+Correction records are stored in `corrections/<neighborhood_slug>/<issue_number>.json` and are version-controlled. See `corrections/README.md` for the full JSON schema.
 
 ## Data Quality Limitations
 

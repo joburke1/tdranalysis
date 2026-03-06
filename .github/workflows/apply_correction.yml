@@ -77,6 +77,24 @@ jobs:
               return;
             }
 
+            // ── Extract override fields from issue body ────────────────────
+            const correctPropertyClass = extractField('Correct Property Class Code', issueBody);
+            const correctGfaSf         = extractField('Correct Gross Floor Area (SF)', issueBody);
+
+            const overrides = {};
+            if (correctPropertyClass) {
+              overrides.propertyClassTypeCode = correctPropertyClass.split('-')[0].trim();
+              overrides.propertyClassTypeDsc  = correctPropertyClass;
+            }
+            const gfaNum = parseFloat(correctGfaSf);
+            if (!isNaN(gfaNum) && gfaNum > 0) {
+              overrides.grossFloorAreaSquareFeetQty = gfaNum;
+            }
+
+            const overridesJson = Object.keys(overrides).length > 0
+              ? JSON.stringify(overrides)
+              : '';
+
             core.setOutput('parcel_id',         parcelId);
             core.setOutput('neighborhood',       neighborhood);
             core.setOutput('neighborhood_slug',  neighborhoodSlug);
@@ -85,6 +103,7 @@ jobs:
             core.setOutput('reject_reason',      rejectReason);
             core.setOutput('reporter',           reporter);
             core.setOutput('issue_number',       String(issueNumber));
+            core.setOutput('overrides_json',     overridesJson);
 
       # ── APPROVE PATH ──────────────────────────────────────────────────────
 
@@ -104,6 +123,7 @@ jobs:
           SPOT_CHECK_TYPE:   ${{ steps.parse.outputs.spot_check_type }}
           NOTE:              ${{ steps.parse.outputs.note }}
           REPORTER:          ${{ steps.parse.outputs.reporter }}
+          OVERRIDES_JSON:    ${{ steps.parse.outputs.overrides_json }}
         with:
           script: |
             const issueNumber      = process.env.ISSUE_NUMBER;
@@ -113,6 +133,7 @@ jobs:
             const spotCheckType    = process.env.SPOT_CHECK_TYPE;
             const note             = process.env.NOTE;
             const reporter         = process.env.REPORTER;
+            const overridesJson    = process.env.OVERRIDES_JSON || '';
             const today           = new Date().toISOString().slice(0, 10);
 
             const branchName = `correction/issue-${issueNumber}`;
@@ -129,6 +150,14 @@ jobs:
               approved_by:        'joburke1',
               approved_date:      today,
             };
+
+            if (overridesJson) {
+              try {
+                correctionData.overrides = JSON.parse(overridesJson);
+              } catch (e) {
+                core.warning(`Could not parse overrides JSON: ${e.message}`);
+              }
+            }
 
             const content = JSON.stringify(correctionData, null, 2) + '\n';
             const contentBase64 = Buffer.from(content).toString('base64');

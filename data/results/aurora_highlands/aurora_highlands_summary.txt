@@ -1,24 +1,24 @@
 Analysis Summary: Aurora Highlands
-Generated: 2026-03-04 10:37
+Generated: 2026-03-06 15:29
 ============================================================
 
-Total residential parcels analyzed: 177
-Conforming parcels: 77 (43.5%)
+Total residential parcels analyzed: 178
+Conforming parcels: 78 (43.8%)
 
 Zoning district breakdown:
-  R-5             126 parcels
+  R-5             127 parcels
   R-6              51 parcels
 
 Development status:
-  underdeveloped      155 parcels
+  underdeveloped      156 parcels
   near-capacity        11 parcels
   overdeveloped         6 parcels
   vacant                5 parcels
 
 Unused GFA Capacity (parcels with positive available rights):
-  Parcels with capacity: 168
-  Total available SF:         593,562 sf
-  Median per parcel:            3,826 sf
+  Parcels with capacity: 169
+  Total available SF:         597,144 sf
+  Median per parcel:            3,824 sf
 
 Neighborhood Improvement Rate Calibration:
   Median $/SF:     $       211
