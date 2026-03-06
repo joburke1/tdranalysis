@@ -1,0 +1,364 @@
+name: Apply Model Feedback (approve/reject)
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  handle-command:
+    # Only respond to /approve-feedback or /reject-feedback from the project owner
+    # on issues labeled model-feedback
+    if: |
+      github.event.comment.user.login == 'johnb' &&
+      contains(github.event.issue.labels.*.name, 'model-feedback') &&
+      (startsWith(github.event.comment.body, '/approve-feedback') ||
+       startsWith(github.event.comment.body, '/reject-feedback'))
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Parse command and issue
+        id: parse
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const commentBody = context.payload.comment.body.trim();
+            const issueNumber = context.payload.issue.number;
+            const issueBody   = context.payload.issue.body || '';
+            const issueTitle  = context.payload.issue.title || '';
+
+            // ── Determine command type ────────────────────────────────────
+            const isApprove = commentBody.startsWith('/approve-feedback');
+            const isReject  = commentBody.startsWith('/reject-feedback');
+            core.setOutput('is_approve', isApprove ? 'true' : 'false');
+            core.setOutput('is_reject',  isReject  ? 'true' : 'false');
+
+            // ── Parse arguments ───────────────────────────────────────────
+            let ownerNote    = '';
+            let rejectReason = '';
+
+            if (isApprove) {
+              const noteMatch = commentBody.match(/note="([^"]+)"/);
+              ownerNote = noteMatch ? noteMatch[1] : '';
+            }
+            if (isReject) {
+              const reasonMatch = commentBody.match(/reason="([^"]+)"/);
+              rejectReason = reasonMatch ? reasonMatch[1] : 'No reason provided.';
+            }
+
+            // ── Extract fields from issue body ────────────────────────────
+            function extractField(label, body) {
+              const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const re = new RegExp(`###\\s*${escaped}\\s*\\n+([^\\n#][^\\n]*)`, 'i');
+              const m = body.match(re);
+              if (!m) return '';
+              const val = m[1].trim();
+              return (val === '_No response_' || val === '') ? '' : val;
+            }
+
+            function extractCheckedBoxes(label, body) {
+              const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const re = new RegExp(`###\\s*${escaped}[\\s\\S]*?(?=###|$)`, 'i');
+              const m = body.match(re);
+              if (!m) return [];
+              const checked = [];
+              for (const line of m[0].split('\n')) {
+                const box = line.match(/^-\s*\[x\]\s*(.+)/i);
+                if (box) checked.push(box[1].trim());
+              }
+              return checked;
+            }
+
+            // Extract multi-line textarea fields (capture until next ### heading or end)
+            function extractTextarea(label, body) {
+              const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const re = new RegExp(`###\\s*${escaped}\\s*\\n+([\\s\\S]*?)(?=\\n###|$)`, 'i');
+              const m = body.match(re);
+              if (!m) return '';
+              const val = m[1].trim();
+              return (val === '_No response_' || val === '') ? '' : val;
+            }
+
+            const category           = extractField('Feedback Category', issueBody);
+            const critique           = extractTextarea('The Critique', issueBody);
+            const proposedImprovement = extractTextarea('Proposed Improvement', issueBody);
+            const affectedDocs       = extractCheckedBoxes('Which supporting document(s) does this affect?', issueBody);
+            const reporter           = context.payload.issue.user.login;
+            const today              = new Date().toISOString().slice(0, 10);
+
+            core.setOutput('issue_number',        String(issueNumber));
+            core.setOutput('issue_title',         issueTitle);
+            core.setOutput('reporter',            reporter);
+            core.setOutput('today',               today);
+            core.setOutput('category',            category);
+            core.setOutput('affected_docs',       affectedDocs.join('|'));
+            core.setOutput('critique',            critique);
+            core.setOutput('proposed_improvement', proposedImprovement);
+            core.setOutput('owner_note',          ownerNote);
+            core.setOutput('reject_reason',       rejectReason);
+
+      # ── APPROVE PATH ──────────────────────────────────────────────────────
+
+      - name: Create feedback branch and record
+        id: create_feedback
+        if: steps.parse.outputs.is_approve == 'true'
+        uses: actions/github-script@v7
+        env:
+          ISSUE_NUMBER:         ${{ steps.parse.outputs.issue_number }}
+          ISSUE_TITLE:          ${{ steps.parse.outputs.issue_title }}
+          REPORTER:             ${{ steps.parse.outputs.reporter }}
+          TODAY:                ${{ steps.parse.outputs.today }}
+          CATEGORY:             ${{ steps.parse.outputs.category }}
+          AFFECTED_DOCS:        ${{ steps.parse.outputs.affected_docs }}
+          CRITIQUE:             ${{ steps.parse.outputs.critique }}
+          PROPOSED_IMPROVEMENT: ${{ steps.parse.outputs.proposed_improvement }}
+          OWNER_NOTE:           ${{ steps.parse.outputs.owner_note }}
+        with:
+          script: |
+            const issueNumber        = process.env.ISSUE_NUMBER;
+            const issueTitle         = process.env.ISSUE_TITLE;
+            const reporter           = process.env.REPORTER;
+            const today              = process.env.TODAY;
+            const category           = process.env.CATEGORY;
+            const affectedDocs       = (process.env.AFFECTED_DOCS || '').split('|').filter(Boolean);
+            const critique           = process.env.CRITIQUE;
+            const proposedImprovement = process.env.PROPOSED_IMPROVEMENT;
+            const ownerNote          = process.env.OWNER_NOTE;
+
+            const branchName = `model-feedback/issue-${issueNumber}`;
+            const filePath   = `model_feedback/${issueNumber}.md`;
+
+            // ── Build TODO checklist based on category ────────────────────
+            const categoryDocMap = {
+              'Discount factor / valuation parameters':                           ['supporting documentation/Valuation of Development Rights.md'],
+              'TDR classification thresholds':                                   ['supporting documentation/Valuation of Development Rights.md'],
+              'Development potential assumptions (story count, footprint rules)': ['supporting documentation/maximum development potential human.md', 'supporting documentation/maximum development potential llm.md'],
+              'Demand-side analysis (developer economics, site plan cost assumptions)': ['supporting documentation/Arlington site plan process costs.md'],
+              'Supply-side analysis (conservation easement data, comparable programs)': ['supporting documentation/Valuation of Development Rights.md'],
+            };
+
+            const docsToUpdate = categoryDocMap[category] || [];
+            // Merge with explicitly checked docs
+            const checkedDocMap = {
+              'Valuation of Development Rights.md':   'supporting documentation/Valuation of Development Rights.md',
+              'Arlington site plan process costs.md': 'supporting documentation/Arlington site plan process costs.md',
+              'maximum development potential.md':     'supporting documentation/maximum development potential human.md',
+            };
+            for (const checked of affectedDocs) {
+              const path = checkedDocMap[checked];
+              if (path && !docsToUpdate.includes(path)) docsToUpdate.push(path);
+            }
+
+            const docTodos = docsToUpdate.length > 0
+              ? docsToUpdate.map(d => `- [ ] Update \`${d}\` to address critique`).join('\n')
+              : '- [ ] Review supporting documentation and update the relevant file(s)';
+
+            const affectedDocsFormatted = affectedDocs.length > 0
+              ? affectedDocs.join(', ')
+              : '_Not specified_';
+
+            // ── Build the .md record ──────────────────────────────────────
+            const recordContent = [
+              `# Model Feedback #${issueNumber}: ${issueTitle}`,
+              '',
+              `**Issue:** #${issueNumber}`,
+              `**Reporter:** @${reporter}`,
+              `**Date reported:** ${today}`,
+              `**Category:** ${category}`,
+              `**Affected documents (self-reported):** ${affectedDocsFormatted}`,
+              '',
+              '---',
+              '',
+              '## Critique',
+              '',
+              critique || '_(none provided)_',
+              '',
+              '---',
+              '',
+              '## Proposed Improvement',
+              '',
+              proposedImprovement || '_(none provided)_',
+              '',
+              '---',
+              '',
+              '## Owner Note',
+              '',
+              ownerNote || '_(none)_',
+              '',
+              '---',
+              '',
+              '## Status',
+              '',
+              'approved — implementation in progress',
+              '',
+              '---',
+              '',
+              '## TODO',
+              '',
+              docTodos,
+              '- [ ] If parameter change warranted: update `config/valuation_params.json`',
+              '- [ ] If code change warranted: update relevant pipeline script(s)',
+              '- [ ] Regenerate analysis for affected neighborhood(s) to validate impact',
+              '',
+            ].join('\n');
+
+            const contentBase64 = Buffer.from(recordContent).toString('base64');
+
+            // Get default branch SHA
+            const { data: ref } = await github.rest.git.getRef({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              ref:   'heads/main',
+            });
+            const mainSha = ref.object.sha;
+
+            // Create branch
+            await github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              ref:   `refs/heads/${branchName}`,
+              sha:   mainSha,
+            });
+
+            // Create the feedback record file
+            await github.rest.repos.createOrUpdateFileContents({
+              owner:   context.repo.owner,
+              repo:    context.repo.repo,
+              path:    filePath,
+              message: `Add model feedback record for issue #${issueNumber}`,
+              content: contentBase64,
+              branch:  branchName,
+            });
+
+            core.setOutput('branch_name', branchName);
+            core.setOutput('file_path',   filePath);
+            core.setOutput('doc_todos',   docTodos);
+
+      - name: Create pull request
+        id: create_pr
+        if: steps.parse.outputs.is_approve == 'true'
+        uses: actions/github-script@v7
+        env:
+          ISSUE_NUMBER:  ${{ steps.parse.outputs.issue_number }}
+          ISSUE_TITLE:   ${{ steps.parse.outputs.issue_title }}
+          CATEGORY:      ${{ steps.parse.outputs.category }}
+          AFFECTED_DOCS: ${{ steps.parse.outputs.affected_docs }}
+          OWNER_NOTE:    ${{ steps.parse.outputs.owner_note }}
+          BRANCH_NAME:   ${{ steps.create_feedback.outputs.branch_name }}
+          FILE_PATH:     ${{ steps.create_feedback.outputs.file_path }}
+          DOC_TODOS:     ${{ steps.create_feedback.outputs.doc_todos }}
+        with:
+          script: |
+            const issueNumber  = process.env.ISSUE_NUMBER;
+            const issueTitle   = process.env.ISSUE_TITLE;
+            const category     = process.env.CATEGORY;
+            const affectedDocs = (process.env.AFFECTED_DOCS || '').split('|').filter(Boolean);
+            const ownerNote    = process.env.OWNER_NOTE;
+            const branchName   = process.env.BRANCH_NAME;
+            const filePath     = process.env.FILE_PATH;
+            const docTodos     = process.env.DOC_TODOS;
+
+            const affectedDocsList = affectedDocs.length > 0
+              ? affectedDocs.map(d => `- ${d}`).join('\n')
+              : '- _Not specified — see feedback record_';
+
+            const { data: pr } = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo:  context.repo.repo,
+              title: `[Model Feedback] Issue #${issueNumber}: ${issueTitle}`,
+              head:  branchName,
+              base:  'main',
+              body: [
+                `Closes #${issueNumber}`,
+                '',
+                '## Feedback summary',
+                '',
+                `- **Category:** ${category}`,
+                `- **Affected docs (self-reported):**`,
+                affectedDocsList,
+                `- **Owner note:** ${ownerNote || '_(none)_'}`,
+                '',
+                '## Files to review and update',
+                '',
+                docTodos,
+                '- [ ] If parameter change warranted: update `config/valuation_params.json`',
+                '- [ ] If code change warranted: update relevant pipeline script(s)',
+                '- [ ] Regenerate analysis for affected neighborhood(s) to validate impact',
+                '',
+                `**Feedback record:** \`${filePath}\``,
+                '',
+                `See issue #${issueNumber} for the full critique and proposed improvement.`,
+              ].join('\n'),
+            });
+
+            core.setOutput('pr_url',    pr.html_url);
+            core.setOutput('pr_number', String(pr.number));
+
+      - name: Post PR link on issue
+        if: steps.parse.outputs.is_approve == 'true'
+        uses: actions/github-script@v7
+        env:
+          ISSUE_NUMBER: ${{ steps.parse.outputs.issue_number }}
+          PR_URL:       ${{ steps.create_pr.outputs.pr_url }}
+          PR_NUMBER:    ${{ steps.create_pr.outputs.pr_number }}
+        with:
+          script: |
+            const issueNumber = process.env.ISSUE_NUMBER;
+            const prUrl       = process.env.PR_URL;
+            const prNumber    = process.env.PR_NUMBER;
+
+            await github.rest.issues.createComment({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: parseInt(issueNumber),
+              body: [
+                `Feedback approved. PR #${prNumber} created: ${prUrl}`,
+                '',
+                'The PR branch is your workspace to update the supporting documentation, config, and/or pipeline scripts. Merge when the changes are complete.',
+              ].join('\n'),
+            });
+
+      # ── REJECT PATH ──────────────────────────────────────────────────────
+
+      - name: Post rejection and close issue
+        if: steps.parse.outputs.is_reject == 'true'
+        uses: actions/github-script@v7
+        env:
+          ISSUE_NUMBER:  ${{ steps.parse.outputs.issue_number }}
+          REJECT_REASON: ${{ steps.parse.outputs.reject_reason }}
+        with:
+          script: |
+            const issueNumber = process.env.ISSUE_NUMBER;
+            const reason      = process.env.REJECT_REASON;
+
+            await github.rest.issues.createComment({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: parseInt(issueNumber),
+              body: [
+                '**Feedback rejected.**',
+                '',
+                `**Reason:** ${reason}`,
+                '',
+                'No changes will be made to the model documentation or configuration as a result of this critique. If you believe this decision is incorrect, please open a new issue with additional evidence or sources.',
+              ].join('\n'),
+            });
+
+            await github.rest.issues.addLabels({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: parseInt(issueNumber),
+              labels:       ['rejected'],
+            });
+
+            await github.rest.issues.update({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: parseInt(issueNumber),
+              state:        'closed',
+              state_reason: 'not_planned',
+            });

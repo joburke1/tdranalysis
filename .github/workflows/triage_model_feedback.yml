@@ -1,0 +1,188 @@
+name: Triage Model Feedback Report
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  issues: write
+
+jobs:
+  triage:
+    if: contains(github.event.issue.labels.*.name, 'model-feedback')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Parse and validate issue
+        id: validate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+            const issueNumber = context.payload.issue.number;
+            const repoOwner = context.repo.owner;
+            const repoName  = context.repo.repo;
+
+            // ── Field extraction helpers ──────────────────────────────────
+            function extractField(label, body) {
+              const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const re = new RegExp(`###\\s*${escaped}\\s*\\n+([^\\n#][^\\n]*)`, 'i');
+              const m = body.match(re);
+              if (!m) return '';
+              const val = m[1].trim();
+              return (val === '_No response_' || val === '') ? '' : val;
+            }
+
+            // Checkboxes render as a list of "- [x] Label" lines under the heading
+            function extractCheckedBoxes(label, body) {
+              const escaped = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+              const re = new RegExp(`###\\s*${escaped}[\\s\\S]*?(?=###|$)`, 'i');
+              const m = body.match(re);
+              if (!m) return [];
+              const section = m[0];
+              const checked = [];
+              for (const line of section.split('\n')) {
+                const box = line.match(/^-\s*\[x\]\s*(.+)/i);
+                if (box) checked.push(box[1].trim());
+              }
+              return checked;
+            }
+
+            const category          = extractField('Feedback Category', body);
+            const critique          = extractField('The Critique', body);
+            const proposedImprovement = extractField('Proposed Improvement', body);
+            const references        = extractField('Supporting References', body);
+            const impactAssessment  = extractField('Impact Assessment', body);
+            const affectedDocs      = extractCheckedBoxes('Which supporting document(s) does this affect?', body);
+
+            // ── Validation ────────────────────────────────────────────────
+            const errors = [];
+
+            if (!category || category === '_No response_') {
+              errors.push('Feedback Category is missing.');
+            }
+            if (!critique) {
+              errors.push('The Critique field is required and must not be empty.');
+            }
+            if (!proposedImprovement) {
+              errors.push('The Proposed Improvement field is required and must not be empty.');
+            }
+
+            const isValid = errors.length === 0;
+
+            // ── Category → supporting doc mapping ─────────────────────────
+            const baseUrl = `https://github.com/${repoOwner}/${repoName}/blob/main/supporting%20documentation`;
+            const docMap = {
+              'Discount factor / valuation parameters': [
+                { name: 'Valuation of Development Rights.md', url: `${baseUrl}/Valuation%20of%20Development%20Rights.md` },
+              ],
+              'TDR classification thresholds': [
+                { name: 'Valuation of Development Rights.md', url: `${baseUrl}/Valuation%20of%20Development%20Rights.md` },
+              ],
+              'Development potential assumptions (story count, footprint rules)': [
+                { name: 'maximum development potential human.md', url: `${baseUrl}/maximum%20development%20potential%20human.md` },
+                { name: 'maximum development potential llm.md',   url: `${baseUrl}/maximum%20development%20potential%20llm.md` },
+              ],
+              'Demand-side analysis (developer economics, site plan cost assumptions)': [
+                { name: 'Arlington site plan process costs.md', url: `${baseUrl}/Arlington%20site%20plan%20process%20costs.md` },
+              ],
+              'Supply-side analysis (conservation easement data, comparable programs)': [
+                { name: 'Valuation of Development Rights.md', url: `${baseUrl}/Valuation%20of%20Development%20Rights.md` },
+              ],
+            };
+
+            const mappedDocs = docMap[category] || [];
+
+            // Also add any explicitly checked docs not already included
+            const docNameMap = {
+              'Valuation of Development Rights.md':   { name: 'Valuation of Development Rights.md', url: `${baseUrl}/Valuation%20of%20Development%20Rights.md` },
+              'Arlington site plan process costs.md': { name: 'Arlington site plan process costs.md', url: `${baseUrl}/Arlington%20site%20plan%20process%20costs.md` },
+              'maximum development potential.md':     { name: 'maximum development potential human.md', url: `${baseUrl}/maximum%20development%20potential%20human.md` },
+            };
+            for (const checked of affectedDocs) {
+              const entry = docNameMap[checked];
+              if (entry && !mappedDocs.some(d => d.name === entry.name)) {
+                mappedDocs.push(entry);
+              }
+            }
+
+            const docLines = mappedDocs.length > 0
+              ? mappedDocs.map(d => `- [${d.name}](${d.url})`).join('\n')
+              : '_Unable to map category to a specific document — review all supporting docs._';
+
+            // ── Build triage comment ──────────────────────────────────────
+            let validationBlock = '';
+            if (errors.length > 0) {
+              validationBlock += '\n**Validation errors (must fix before review):**\n';
+              errors.forEach(e => { validationBlock += `- ${e}\n`; });
+            } else {
+              validationBlock = '\nAll required fields present.\n';
+            }
+
+            const nextStep = isValid
+              ? '\n**Next step:** The owner will review the supporting document(s) above and comment `/approve-feedback note="..."` or `/reject-feedback reason="..."`.'
+              : '\n**Action required:** Please edit the issue body to fix the errors above. The triage check will re-run automatically.';
+
+            const comment = [
+              `## Triage: Model Feedback Report #${issueNumber}`,
+              '',
+              `**Category:** ${category || 'MISSING'}`,
+              '',
+              '### Likely affected supporting document(s)',
+              '',
+              docLines,
+              '',
+              '### Validation',
+              validationBlock,
+              nextStep,
+            ].join('\n');
+
+            core.setOutput('is_valid',  isValid ? 'true' : 'false');
+            core.setOutput('comment_body', comment);
+
+            await github.rest.issues.createComment({
+              owner:        repoOwner,
+              repo:         repoName,
+              issue_number: issueNumber,
+              body:         comment,
+            });
+
+      - name: Apply labels
+        uses: actions/github-script@v7
+        env:
+          IS_VALID: ${{ steps.validate.outputs.is_valid }}
+        with:
+          script: |
+            const issueNumber = context.payload.issue.number;
+            const isValid = process.env.IS_VALID === 'true';
+
+            const addLabels    = ['triaged'];
+            const removeLabels = [];
+
+            if (isValid) {
+              addLabels.push('needs-model-review');
+              removeLabels.push('needs-more-info');
+            } else {
+              addLabels.push('needs-more-info');
+              removeLabels.push('needs-model-review');
+            }
+
+            await github.rest.issues.addLabels({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: issueNumber,
+              labels:       addLabels,
+            });
+
+            for (const label of removeLabels) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner:        context.repo.owner,
+                  repo:         context.repo.repo,
+                  issue_number: issueNumber,
+                  name:         label,
+                });
+              } catch (e) {
+                // Label wasn't applied — that's fine
+              }
+            }

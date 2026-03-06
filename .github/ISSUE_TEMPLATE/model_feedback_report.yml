@@ -1,0 +1,74 @@
+name: Model Feedback Report
+description: Critique or suggest improvement to the valuation methodology, TDR classification logic, or supporting analysis
+title: "[Feedback] <brief description>"
+labels: ["model-feedback"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to report a substantive critique of the model's methodology —
+        an assumption you believe is incorrect, outdated, or incomplete.
+        These are not data bugs (use the Data Quality Report for those). They are
+        critiques of the economic reasoning documented in `supporting documentation/`.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feedback Category
+      description: Which aspect of the methodology does this critique address?
+      options:
+        - Discount factor / valuation parameters
+        - TDR classification thresholds
+        - Development potential assumptions (story count, footprint rules)
+        - Demand-side analysis (developer economics, site plan cost assumptions)
+        - Supply-side analysis (conservation easement data, comparable programs)
+        - Other methodology critique
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: affected_docs
+    attributes:
+      label: Which supporting document(s) does this affect?
+      description: Check all that apply. These guide the owner's review.
+      options:
+        - label: "Valuation of Development Rights.md"
+        - label: "Arlington site plan process costs.md"
+        - label: "maximum development potential.md"
+        - label: "Other / not sure"
+
+  - type: textarea
+    id: critique
+    attributes:
+      label: The Critique
+      description: What assumption or conclusion do you believe is incorrect or incomplete?
+      placeholder: "The lower bound of 0.55 is anchored in 2008–2010 NJ SADC data; more recent transactions may shift this range."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed_improvement
+    attributes:
+      label: Proposed Improvement
+      description: What should change, and why? Include sources, citations, or data if available.
+      placeholder: "Update supply-side analysis with 2020–2025 SADC data to recalibrate the discount range."
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: Supporting References
+      description: Cite authoritative sources — academic papers, government program data, appraisal standards, court rulings, or empirical evidence. Include URLs or document titles.
+      placeholder: "NJ SADC Annual Report 2024, Table 3: TDR transaction prices 2020–2024"
+    validations:
+      required: false
+
+  - type: textarea
+    id: impact_assessment
+    attributes:
+      label: Impact Assessment
+      description: Which neighborhoods or parcel types would be most affected by this change?
+      placeholder: "R-20 districts would be most affected — this assumption drives the Full/Substantial boundary."
+    validations:
+      required: false
