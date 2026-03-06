@@ -104,7 +104,7 @@ body:
         - Full
         - Substantial
         - Limited
-        - None
+        - No TDR potential
         - Excluded
         - Not shown / unknown
     validations:
@@ -142,7 +142,7 @@ body:
         - Full
         - Substantial
         - Limited
-        - None
+        - No TDR potential
         - Excluded
     validations:
       required: false
