@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transfer of Development Rights (TDR) Analysis: Cherry Valley Nature Area</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; height: 100vh; }
+
+#sidebar {
+    width: 380px; min-width: 380px; background: #1a1a2e; color: #e0e0e0;
+    overflow-y: auto; padding: 20px; font-size: 14px; line-height: 1.5;
+}
+#sidebar h1 { font-size: 22px; color: #fff; margin-bottom: 4px; }
+#sidebar h2 { font-size: 14px; color: #8ecae6; margin: 16px 0 8px; border-bottom: 1px solid #333; padding-bottom: 4px; }
+#sidebar .subtitle { color: #999; font-size: 12px; margin-bottom: 16px; }
+
+.stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+.stat-box { background: #16213e; border-radius: 6px; padding: 12px; }
+.stat-box .label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-box .value { font-size: 18px; font-weight: 700; color: #fff; margin-top: 2px; }
+.stat-box .value.small { font-size: 14px; }
+.stat-box.wide { grid-column: 1 / -1; }
+
+.breakdown { margin: 8px 0; }
+.breakdown-row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #222; }
+.breakdown-row .bk-label { color: #ccc; }
+.breakdown-row .bk-value { color: #fff; font-weight: 600; }
+
+.legend { margin-top: 12px; }
+.legend-item { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 12px; }
+.legend-swatch { width: 20px; height: 14px; border-radius: 2px; border: 1px solid #555; flex-shrink: 0; }
+
+#selected-parcel {
+    background: #16213e; border: 1px solid #8ecae6; border-radius: 6px;
+    padding: 12px; margin-bottom: 12px; display: none; position: relative;
+}
+#selected-parcel .sp-dismiss {
+    position: absolute; top: 6px; right: 8px; cursor: pointer;
+    color: #999; font-size: 16px; line-height: 1; background: none; border: none;
+}
+#selected-parcel .sp-dismiss:hover { color: #fff; }
+#selected-parcel .sp-header { font-weight: 700; font-size: 14px; color: #fff; margin-bottom: 6px; padding-right: 20px; }
+#selected-parcel .sp-row { display: flex; justify-content: space-between; gap: 8px; padding: 2px 0; }
+#selected-parcel .sp-label { color: #999; font-size: 12px; }
+#selected-parcel .sp-value { color: #fff; font-weight: 600; font-size: 12px; }
+#selected-parcel .sp-highlight { color: #8ecae6; font-weight: 700; }
+
+.disclaimer { margin-top: 16px; padding: 10px; background: #2a1a1a; border-left: 3px solid #e63946; border-radius: 4px; font-size: 11px; color: #ccc; }
+
+#sidebar h2.filterable { cursor: pointer; user-select: none; }
+#sidebar h2.filterable:hover { color: #ffd700; }
+#sidebar h2.filterable .filter-hint { font-size: 10px; color: #666; font-weight: 400; margin-left: 6px; text-transform: none; letter-spacing: 0; }
+#sidebar h2.filterable.filter-active { color: #ffd700; border-bottom-color: #ffd700; }
+#sidebar h2.filterable.filter-active .filter-hint { color: #ffd700; }
+
+#map { flex: 1; }
+
+.parcel-tooltip {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 12px; line-height: 1.4; max-width: 320px;
+}
+.parcel-tooltip .tt-header { font-weight: 700; font-size: 13px; margin-bottom: 6px; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+.parcel-tooltip .tt-section { margin-top: 6px; }
+.parcel-tooltip .tt-section-title { font-weight: 600; color: #555; font-size: 11px; text-transform: uppercase; margin-bottom: 2px; }
+.parcel-tooltip .tt-row { display: flex; justify-content: space-between; gap: 12px; }
+.parcel-tooltip .tt-label { color: #666; }
+.parcel-tooltip .tt-value { font-weight: 600; text-align: right; }
+.parcel-tooltip .tt-highlight { color: #084594; font-weight: 700; }
+</style>
+</head>
+<body>
+<div id="sidebar">
+    <div id="nav-bar" style="display:flex; align-items:center; gap:8px; margin-bottom:12px; padding-bottom:12px; border-bottom:1px solid #333;">
+      <a href="../index.html" style="color:#8ecae6; text-decoration:none; font-size:12px; white-space:nowrap;">&#8592; Arlington</a>
+      <select id="neighborhood-selector"
+              onchange="if(this.value) window.location.href='../'+this.value+'/map.html'"
+              style="flex:1; background:#16213e; color:#e0e0e0; border:1px solid #444; border-radius:4px; padding:4px; font-size:12px;">
+        <option value="" disabled selected>Cherry Valley Nature Area</option>
+        <option value="alcova_heights">Alcova Heights</option>
+        <option value="arlington_-_east_falls_church">Arlington - East Falls Church</option>
+        <option value="arlington_forest">Arlington Forest</option>
+        <option value="arlington_heights">Arlington Heights</option>
+        <option value="arlington_mill">Arlington Mill</option>
+        <option value="arlington_ridge">Arlington Ridge</option>
+        <option value="arlington_view">Arlington View</option>
+        <option value="arlingwood">Arlingwood</option>
+        <option value="ashton_heights">Ashton Heights</option>
+        <option value="aurora_highlands">Aurora Highlands</option>
+        <option value="ballston_-_virginia_square">Ballston - Virginia Square</option>
+        <option value="barcroft">Barcroft</option>
+        <option value="bellevue_forest">Bellevue Forest</option>
+        <option value="bluemont">Bluemont</option>
+        <option value="boulevard_manor">Boulevard Manor</option>
+        <option value="buckingham">Buckingham</option>
+        <option value="chain_bridge_forest">Chain Bridge Forest</option>
+        <option value="cherrydale">Cherrydale</option>
+        <option value="claremont">Claremont</option>
+        <option value="clarendon_-_courthouse">Clarendon - Courthouse</option>
+        <option value="colonial_village">Colonial Village</option>
+        <option value="columbia_forest">Columbia Forest</option>
+        <option value="columbia_heights">Columbia Heights</option>
+        <option value="crystal_city">Crystal City</option>
+        <option value="dominion_hills">Dominion Hills</option>
+        <option value="donaldson_run">Donaldson Run</option>
+        <option value="douglas_park">Douglas Park</option>
+        <option value="dover_crystal">Dover Crystal</option>
+        <option value="fairlington">Fairlington</option>
+        <option value="forest_glen">Forest Glen</option>
+        <option value="foxcroft_heights">Foxcroft Heights</option>
+        <option value="glebewood">Glebewood</option>
+        <option value="glencarlyn">Glencarlyn</option>
+        <option value="green_valley">Green Valley</option>
+        <option value="gulf_branch">Gulf Branch</option>
+        <option value="highland_park_-_overlee_knolls">Highland Park - Overlee Knolls</option>
+        <option value="john_m_langston">John M Langston</option>
+        <option value="leeway_overlee">Leeway Overlee</option>
+        <option value="long_branch_creek">Long Branch Creek</option>
+        <option value="lyon_park">Lyon Park</option>
+        <option value="lyon_village">Lyon Village</option>
+        <option value="madison_manor">Madison Manor</option>
+        <option value="maywood">Maywood</option>
+        <option value="north_highlands">North Highlands</option>
+        <option value="north_rosslyn">North Rosslyn</option>
+        <option value="old_dominion">Old Dominion</option>
+        <option value="old_glebe">Old Glebe</option>
+        <option value="penrose">Penrose</option>
+        <option value="radnor_ft_myer_heights">Radnor/Ft.Myer Heights</option>
+        <option value="rivercrest">Rivercrest</option>
+        <option value="riverwood">Riverwood</option>
+        <option value="rock_spring">Rock Spring</option>
+        <option value="shirlington">Shirlington</option>
+        <option value="stafford-albemarle-glebe">Stafford-Albemarle-Glebe</option>
+        <option value="tara_-_leeway_heights">Tara - Leeway Heights</option>
+        <option value="waverly_hills">Waverly Hills</option>
+        <option value="waycroft_-_woodlawn">Waycroft - Woodlawn</option>
+        <option value="westover_village">Westover Village</option>
+        <option value="williamsburg">Williamsburg</option>
+        <option value="woodmont">Woodmont</option>
+        <option value="yorktown">Yorktown</option>
+
+      </select>
+    </div>
+    <h1 id="neighborhood-name"></h1>
+    <div class="subtitle">Transfer of Development Rights Analysis</div>
+
+    <div id="selected-parcel"></div>
+
+    <h2>Overview</h2>
+    <div class="stat-grid">
+        <div class="stat-box">
+            <div class="label">Parcels Analyzed</div>
+            <div class="value" id="s-total"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">With Unused Capacity</div>
+            <div class="value" id="s-with-capacity"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Zoned Residential</div>
+            <div class="value" id="s-residential-total"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Included in Analysis</div>
+            <div class="value" id="s-pct-included"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Vacant Buildable</div>
+            <div class="value" id="s-vacant"></div>
+        </div>
+    </div>
+
+    <h2>Unused Development Potential</h2>
+    <div class="stat-grid">
+        <div class="stat-box wide">
+            <div class="label">Total Available GFA</div>
+            <div class="value" id="s-avail-gfa"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Median per Parcel</div>
+            <div class="value small" id="s-median-gfa"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Parcels Valued</div>
+            <div class="value" id="s-valued"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Aggregate Value (Low)</div>
+            <div class="value small" id="s-val-low"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Aggregate Value (High)</div>
+            <div class="value small" id="s-val-high"></div>
+        </div>
+    </div>
+
+    <h2>Legend</h2>
+    <div class="legend">
+        <div class="legend-item"><div class="legend-swatch" style="background:#009E73"></div> High development potential</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#56B4E9"></div> Moderate potential</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#F0E442"></div> Low potential</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#E69F00"></div> Near capacity</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#D55E00"></div> Exceeds max GFA</div>
+        <div class="legend-item"><div class="legend-swatch" style="background:#888"></div> Excluded / no data</div>
+    </div>
+
+    <h2 class="filterable" id="calibration-header" onclick="toggleCalibrationFilter()" title="Click to highlight calibration homes on the map">Neighborhood Calibration<span class="filter-hint" id="calibration-filter-hint">click to filter</span></h2>
+    <div class="stat-grid">
+        <div class="stat-box">
+            <div class="label">Improvement $/SF</div>
+            <div class="value small" id="s-rate"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Sample Size</div>
+            <div class="value" id="s-rate-sample"></div>
+        </div>
+    </div>
+
+    <h2>Assessment Values</h2>
+    <div class="stat-grid">
+        <div class="stat-box">
+            <div class="label">Total Land Value</div>
+            <div class="value small" id="s-land"></div>
+        </div>
+        <div class="stat-box">
+            <div class="label">Total Improvement Value</div>
+            <div class="value small" id="s-improvement"></div>
+        </div>
+        <div class="stat-box wide">
+            <div class="label">Total Assessed Value</div>
+            <div class="value" id="s-assessed"></div>
+        </div>
+    </div>
+
+    <h2>Zoning Districts</h2>
+    <div class="breakdown" id="zoning-breakdown"></div>
+
+    <h2>Development Status</h2>
+    <div class="breakdown" id="status-breakdown"></div>
+
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong> Valuation estimates are for TDR policy analysis only,
+        not property appraisals. Improvement $/SF derived from recent construction in this
+        neighborhood. All values should be independently verified before use in policy decisions.
+    </div>
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid #333;font-size:11px;color:#666;line-height:1.5;">
+        <a href="https://github.com/joburke1/tdranalysis" style="color:#8ecae6;">Arlington Transfer of Development Rights Analysis</a>
+        by <a href="https://www.linkedin.com/in/john-burke-arlingtonva/" style="color:#8ecae6;">John Burke</a>
+        is marked <a href="https://creativecommons.org/publicdomain/zero/1.0/" style="color:#8ecae6;">CC0 1.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width:1em;max-height:1em;margin-left:.2em;vertical-align:middle;"><img src="https://mirrors.creativecommons.org/presskit/icons/zero.svg" alt="" style="max-width:1em;max-height:1em;margin-left:.2em;vertical-align:middle;">
+    </div>
+</div>
+
+<div id="map"></div>
+
+<script>
+// --- Embedded data ---
+const geojsonData = {"type": "FeatureCollection", "name": "cherry_valley_nature_area_analysis", "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}}, "features": [{"type": "Feature", "properties": {"parcel_id": "06024040", "street_address": "3800 18Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": true, "lot_area_sf": 6160.0, "lot_width_ft": 39.2, "is_conforming": false, "year_built": 1937.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 2824.0, "current_stories": null, "land_value": 840200.0, "improvement_value": 522400.0, "max_footprint_sf": 1848.0, "max_gfa_sf": 4620.0, "max_height_ft": 35, "available_gfa_sf": 1796.0, "gfa_utilization_pct": 61.125541125541126, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 179642.76190476195, "est_value_high": 244967.40259740263, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10645747599995, 38.892864327000034], [-77.10667950199996, 38.89246878400006], [-77.10678041899996, 38.89251941000002], [-77.10661465499999, 38.89291287400004], [-77.10653428299997, 38.89288995200006], [-77.10645747599995, 38.892864327000034]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024041", "street_address": "3726 18Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": true, "lot_area_sf": 6299.0, "lot_width_ft": 39.1, "is_conforming": false, "year_built": 1938.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 3420.0, "current_stories": null, "land_value": 841800.0, "improvement_value": 632700.0, "max_footprint_sf": 1889.7, "max_gfa_sf": 4724.25, "max_height_ft": 35, "available_gfa_sf": 1304.25, "gfa_utilization_pct": 72.39244324495951, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 127820.22702016195, "est_value_high": 174300.30957294808, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10631094299998, 38.89281041300006], [-77.10657155899997, 38.89241807500007], [-77.10667950199996, 38.89246878400006], [-77.10645747599995, 38.892864327000034], [-77.10638418299999, 38.892838743], [-77.10631094299998, 38.89281041300006]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024031", "street_address": "1710 N Pollard St, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": false, "lot_area_sf": 6146.0, "lot_width_ft": 47.2, "is_conforming": false, "year_built": 1960.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 722.0, "current_stories": null, "land_value": 840000.0, "improvement_value": 133500.0, "max_footprint_sf": 1843.8, "max_gfa_sf": 4609.5, "max_height_ft": 35, "available_gfa_sf": 3887.5, "gfa_utilization_pct": 15.663304045991975, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 389635.5353075171, "est_value_high": 531321.1845102506, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10693256599995, 38.891741337000056], [-77.10707670399995, 38.89173755500008], [-77.10725245799995, 38.89173414700007], [-77.10738951699994, 38.891733026000026], [-77.10736710699996, 38.89180138400006], [-77.10734458999995, 38.891875287000055], [-77.10695449099995, 38.89187890000003], [-77.10693256599995, 38.891741337000056]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024025", "street_address": "3909 17Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": false, "lot_area_sf": 5448.0, "lot_width_ft": 49.6, "is_conforming": false, "year_built": 1953.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 2010.0, "current_stories": null, "land_value": 831600.0, "improvement_value": 371900.0, "max_footprint_sf": 1634.4, "max_gfa_sf": 4085.9999999999995, "max_height_ft": 35, "available_gfa_sf": 2075.9999999999995, "gfa_utilization_pct": 49.19236417033774, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 232383.96475770924, "est_value_high": 316887.2246696035, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10724769399997, 38.89143477100003], [-77.10742348199994, 38.89143136300005], [-77.10742462899998, 38.89149179000001], [-77.10742865699996, 38.89170602900003], [-77.10738951699994, 38.891733026000026], [-77.10725245799995, 38.89173414700007], [-77.10724859499999, 38.89148970300005], [-77.10724769399997, 38.89143477100003]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024095", "street_address": "17Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": true, "lot_area_sf": 6993.0, "lot_width_ft": 59.6, "is_conforming": false, "year_built": null, "property_type": "510-Res - Vacant(SF & Twnhse)", "current_gfa_sf": null, "current_stories": null, "land_value": 850100.0, "improvement_value": 0.0, "max_footprint_sf": 2097.9, "max_gfa_sf": 5244.75, "max_height_ft": 35, "available_gfa_sf": 5244.75, "gfa_utilization_pct": 0.0, "development_status": "vacant", "gfa_source": "not_available", "est_value_low": 467555.00000000006, "est_value_high": 637575.0, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10627283799994, 38.891335334000075], [-77.10629967899996, 38.89147844700007], [-77.10632964099995, 38.891638156000056], [-77.10606955299993, 38.89167068600005], [-77.10603676999995, 38.89147532700007], [-77.10601602099996, 38.89135150900005], [-77.10627283799994, 38.891335334000075]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024034", "street_address": "1739 N Quincy St, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": true, "lot_area_sf": 6338.0, "lot_width_ft": 72.3, "is_conforming": true, "year_built": 1937.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 490.0, "current_stories": null, "land_value": 842300.0, "improvement_value": 90600.0, "max_footprint_sf": 1901.4, "max_gfa_sf": 4753.5, "max_height_ft": 35, "available_gfa_sf": 4263.5, "gfa_utilization_pct": 10.308193962343537, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 415510.74524034926, "est_value_high": 566605.5616913853, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10725589399993, 38.892643129000064], [-77.10756445199996, 38.89267699300006], [-77.10756406799999, 38.892685886000045], [-77.10756375499994, 38.89269475200006], [-77.10756351299995, 38.89270364600004], [-77.10756326999994, 38.89271254100003], [-77.10756313299999, 38.89272140900002], [-77.10756299499997, 38.89273030400007], [-77.10756292799994, 38.89273917300004], [-77.10756293099996, 38.89274807000004], [-77.10756296999995, 38.89275694100007], [-77.10756304299997, 38.892765839000035], [-77.10756318699998, 38.892774737], [-77.10756336599997, 38.89278360900004], [-77.10756357999998, 38.89279250900006], [-77.10756386399999, 38.89280138200007], [-77.10756421899997, 38.892810284000056], [-77.10756457299993, 38.89281915700007], [-77.10756503399995, 38.89282803300006], [-77.10756476799997, 38.89284173200008], [-77.10725902899998, 38.89284362700004], [-77.10725589399993, 38.892643129000064]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024042", "street_address": "3722 18Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": true, "lot_area_sf": 8610.0, "lot_width_ft": 49.6, "is_conforming": false, "year_built": 1938.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 1610.0, "current_stories": null, "land_value": 869600.0, "improvement_value": 297800.0, "max_footprint_sf": 2520.0, "max_gfa_sf": 6300.0, "max_height_ft": 35, "available_gfa_sf": 4690.0, "gfa_utilization_pct": 25.555555555555554, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 356052.88888888893, "est_value_high": 485526.6666666666, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10615743799997, 38.89275367100003], [-77.10641880099996, 38.89232289700004], [-77.10645664299994, 38.89236453700005], [-77.10657155899997, 38.89241807500007], [-77.10631094299998, 38.89281041300006], [-77.10626910699995, 38.89279344100002], [-77.10615743799997, 38.89275367100003]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024028", "street_address": "1707 N Quincy St, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": false, "lot_area_sf": 5236.0, "lot_width_ft": 42.8, "is_conforming": false, "year_built": 1953.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 314.0, "current_stories": null, "land_value": 829100.0, "improvement_value": 58000.0, "max_footprint_sf": 1570.8, "max_gfa_sf": 3927.0, "max_height_ft": 35, "available_gfa_sf": 3613.0, "gfa_utilization_pct": 7.995925642984466, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 419543.1792717087, "est_value_high": 572104.3353705119, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10738951699994, 38.891733026000026], [-77.10742865699996, 38.89170602900003], [-77.10749980399999, 38.89166293600004], [-77.10762983599994, 38.89166173100005], [-77.10779499899996, 38.89166091600003], [-77.10775017899994, 38.89179771400006], [-77.10736710699996, 38.89180138400006], [-77.10738951699994, 38.891733026000026]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024051", "street_address": "3700 17Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": true, "lot_area_sf": 9133.0, "lot_width_ft": 41.5, "is_conforming": false, "year_built": 1930.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 2925.0, "current_stories": null, "land_value": 875800.0, "improvement_value": 541200.0, "max_footprint_sf": 2520.0, "max_gfa_sf": 6300.0, "max_height_ft": 35, "available_gfa_sf": 3375.0, "gfa_utilization_pct": 46.42857142857143, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 258048.2142857143, "est_value_high": 351883.9285714286, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10518296399994, 38.891547600000024], [-77.10533029499999, 38.891560307000084], [-77.10535400299993, 38.89214824200007], [-77.10520635099994, 38.89215198100003], [-77.10518296399994, 38.891547600000024]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024050", "street_address": "3704 17Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": true, "lot_area_sf": 8691.0, "lot_width_ft": 40.6, "is_conforming": false, "year_built": 1930.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 2931.0, "current_stories": null, "land_value": 870500.0, "improvement_value": 542200.0, "max_footprint_sf": 2520.0, "max_gfa_sf": 6300.0, "max_height_ft": 35, "available_gfa_sf": 3369.0, "gfa_utilization_pct": 46.523809523809526, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 256030.63095238095, "est_value_high": 349132.6785714285, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10533029499999, 38.891560307000084], [-77.10547762499992, 38.891573040000026], [-77.10548731899996, 38.89179558500006], [-77.10549926199998, 38.892086808000045], [-77.10546753899996, 38.89209192300008], [-77.10546652499994, 38.89214408600003], [-77.10535400299993, 38.89214824200007], [-77.10533029499999, 38.891560307000084]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024012", "street_address": "3914 17Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": false, "lot_area_sf": 9746.0, "lot_width_ft": 53.8, "is_conforming": false, "year_built": 2022.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 8238.0, "current_stories": null, "land_value": 883200.0, "improvement_value": 1524100.0, "max_footprint_sf": 2520.0, "max_gfa_sf": 6300.0, "max_height_ft": 35, "available_gfa_sf": -1938.0, "gfa_utilization_pct": 130.76190476190476, "development_status": "overdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": null, "est_value_high": null, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10766162799996, 38.89092891400002], [-77.10766465699999, 38.891134903000086], [-77.10766757999994, 38.891346383000034], [-77.10745318499994, 38.89134933400004], [-77.10747688199996, 38.89085258000007], [-77.10764768299998, 38.89092325600005], [-77.10766162799996, 38.89092891400002]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024014", "street_address": "3904 17Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": false, "lot_area_sf": 6503.0, "lot_width_ft": 63.7, "is_conforming": true, "year_built": 1952.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 3465.0, "current_stories": null, "land_value": 844300.0, "improvement_value": 641100.0, "max_footprint_sf": 1950.9, "max_gfa_sf": 4877.25, "max_height_ft": 35, "available_gfa_sf": 1412.25, "gfa_utilization_pct": 71.04413347685683, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 134460.90958019375, "est_value_high": 183355.7857911733, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10703387699994, 38.89104778900001], [-77.10727983399994, 38.89104795900005], [-77.10724982599997, 38.89132495400003], [-77.10703546499997, 38.891327905000026], [-77.10703387699994, 38.89104778900001]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024015", "street_address": "3900 17Th St N, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": false, "lot_area_sf": 6690.0, "lot_width_ft": 65.4, "is_conforming": true, "year_built": 1952.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 568.0, "current_stories": null, "land_value": 806500.0, "improvement_value": 105100.0, "max_footprint_sf": 2007.0, "max_gfa_sf": 5017.5, "max_height_ft": 35, "available_gfa_sf": 4449.5, "gfa_utilization_pct": 11.320378674638764, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 393360.63029397116, "est_value_high": 536400.8594917788, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10678083999994, 38.89105028000006], [-77.10703387699994, 38.89104778900001], [-77.10703546499997, 38.891327905000026], [-77.10691245899994, 38.891329192000065], [-77.10690116799998, 38.891329799000054], [-77.10688989999993, 38.89132922600004], [-77.10687882999997, 38.891327530000076], [-77.10686813299998, 38.89132468400004], [-77.10685798399999, 38.89132077400007], [-77.10684862699998, 38.89131585800004], [-77.10684016799996, 38.89130999100006], [-77.10683274299998, 38.89130331200006], [-77.10682652599996, 38.89129596100002], [-77.10682162099994, 38.891287995000035], [-77.10681805899998, 38.891279632000085], [-77.10681597799999, 38.89127095700007], [-77.10681537699998, 38.89126213500001], [-77.10678083999994, 38.89105028000006]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024010", "street_address": "1621 N Quincy St, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": false, "lot_area_sf": 5709.0, "lot_width_ft": 56.1, "is_conforming": false, "year_built": 1937.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 1562.0, "current_stories": null, "land_value": 834700.0, "improvement_value": 288900.0, "max_footprint_sf": 1712.7, "max_gfa_sf": 4281.75, "max_height_ft": 35, "available_gfa_sf": 2719.75, "gfa_utilization_pct": 36.48041104688504, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 291608.9049454078, "est_value_high": 397648.5067437379, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10766465699999, 38.891134903000086], [-77.10766162799996, 38.89092891400002], [-77.10796833199997, 38.89105612100006], [-77.10797604699997, 38.89105926600006], [-77.10797370558909, 38.89107740981629], [-77.10797085474591, 38.89109548058968], [-77.10796749672589, 38.89111346402568], [-77.10796363418557, 38.89113134588841], [-77.10795927018447, 38.89114911202616], [-77.10795440817061, 38.891166748383995], [-77.10794905199997, 38.891184241000076], [-77.10794736399998, 38.89118943700002], [-77.10766465699999, 38.891134903000086]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024083", "street_address": "1609 N Quincy St, Arlington VA 22207", "neighborhood": "Cherry Valley Nature Area", "zoning_district": "R-6", "is_split_zoned": true, "lot_area_sf": 8888.0, "lot_width_ft": 36.2, "is_conforming": false, "year_built": 1975.0, "property_type": "511-Single Family Detached", "current_gfa_sf": 1894.0, "current_stories": null, "land_value": 785600.0, "improvement_value": 350400.0, "max_footprint_sf": 2520.0, "max_gfa_sf": 6300.0, "max_height_ft": 35, "available_gfa_sf": 4406.0, "gfa_utilization_pct": 30.063492063492063, "development_status": "underdeveloped", "gfa_source": "estimated_from_improvement_value", "est_value_low": 302181.6634920635, "est_value_high": 412065.9047619048, "neighborhood_imp_rate_median": 185, "neighborhood_imp_rate_low": 185, "neighborhood_imp_rate_high": 185, "neighborhood_imp_rate_sample": 1}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10742461499996, 38.8908299920001], [-77.10735488899995, 38.89080170500006], [-77.10730608199998, 38.89078190400003], [-77.10718057599995, 38.890730987000055], [-77.10741269899995, 38.89053877000003], [-77.10801741499995, 38.890518478000025], [-77.10801634899997, 38.89057338600003], [-77.10755222099993, 38.89058985300004], [-77.10742461499996, 38.8908299920001]]]]}}]};
+const excludedData = {"type": "FeatureCollection", "name": "cherry_valley_nature_area_excluded", "crs": {"type": "name", "properties": {"name": "urn:ogc:def:crs:OGC:1.3:CRS84"}}, "features": [{"type": "Feature", "properties": {"parcel_id": "06024045", "street_address": "18Th St N, Arlington VA 22207", "zoning_district": "S-3A", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Non-residential zoning"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10602040099997, 38.89221107400004], [-77.10591118699995, 38.892045015000065], [-77.10567142499997, 38.891904866000075], [-77.10565305899996, 38.89158610700009], [-77.10577723099993, 38.891705661000046], [-77.10617045299995, 38.892083790000065], [-77.10641880099996, 38.89232289700004], [-77.10613004299995, 38.892355169000034], [-77.10611593699997, 38.892357748000045], [-77.10602040099997, 38.89221107400004]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024087", "street_address": null, "zoning_district": "S-3A", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Non-residential zoning"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10692600899995, 38.89207902300005], [-77.10689934399994, 38.89200456400005], [-77.10689656299996, 38.89199577100005], [-77.10689392299997, 38.8919869800001], [-77.10689131899996, 38.89197816100004], [-77.10688874899995, 38.89196934400008], [-77.10688624999995, 38.89196052700003], [-77.10688382099994, 38.89195168300006], [-77.10688146299998, 38.891942840000084], [-77.10687914099998, 38.89193394300002], [-77.10687688799999, 38.89192510100004], [-77.10687470699997, 38.89191620600007], [-77.10687259499997, 38.89190733800008], [-77.10687051899998, 38.89189841700005], [-77.10686854899996, 38.89188952400007], [-77.10686661399996, 38.89188060300006], [-77.10686342099996, 38.89186408900007], [-77.10691936099995, 38.89187848300002], [-77.10694713999999, 38.89207652800007], [-77.10698578199998, 38.89207698600006], [-77.10698556899996, 38.89208799500006], [-77.10692936099996, 38.892087329000034], [-77.10692600899995, 38.89207902300005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024049", "street_address": null, "zoning_district": "S-3A", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Non-residential zoning"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10548731899996, 38.89179558500006], [-77.10547762499992, 38.891573040000026], [-77.10563203499999, 38.89158311100006], [-77.10565305899996, 38.89158610700009], [-77.10567142499997, 38.891904866000075], [-77.10564367599996, 38.891888061000024], [-77.10548731899996, 38.89179558500006]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024069", "street_address": null, "zoning_district": "S-3A", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Non-residential zoning"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10601602099996, 38.89135150900005], [-77.10603676999995, 38.89147532700007], [-77.10606955299993, 38.89167068600005], [-77.10577723099993, 38.891705661000046], [-77.10565305899996, 38.89158610700009], [-77.10564760699998, 38.89147070800004], [-77.10564311599995, 38.89137454300003], [-77.10601602099996, 38.89135150900005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024033", "street_address": "N Quincy St, Arlington VA 22207", "zoning_district": "S-3A", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Non-residential zoning"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10641880099996, 38.89232289700004], [-77.10617045299995, 38.892083790000065], [-77.10577723099993, 38.891705661000046], [-77.10606955299993, 38.89167068600005], [-77.10632964099995, 38.891638156000056], [-77.10633020399996, 38.89163808000006], [-77.10675985099994, 38.89158825600003], [-77.10683383599996, 38.891578149000054], [-77.10686907199994, 38.891573075000046], [-77.10685437299998, 38.89148502700002], [-77.10684703999995, 38.89144100400006], [-77.10687865699998, 38.891441379000064], [-77.10688651599997, 38.89148540900004], [-77.10693256599995, 38.891741337000056], [-77.10695449099995, 38.89187890000003], [-77.10691936099995, 38.89187848300002], [-77.10686342099996, 38.89186408900007], [-77.10686661399996, 38.89188060300006], [-77.10686854899996, 38.89188952400007], [-77.10687051899998, 38.89189841700005], [-77.10687259499997, 38.89190733800008], [-77.10687470699997, 38.89191620600007], [-77.10687688799999, 38.89192510100004], [-77.10687914099998, 38.89193394300002], [-77.10688146299998, 38.891942840000084], [-77.10688382099994, 38.89195168300006], [-77.10688624999995, 38.89196052700003], [-77.10688874899995, 38.89196934400008], [-77.10689131899996, 38.89197816100004], [-77.10689392299997, 38.8919869800001], [-77.10689656299996, 38.89199577100005], [-77.10689934399994, 38.89200456400005], [-77.10692600899995, 38.89207902300005], [-77.10692936099996, 38.892087329000034], [-77.10698556899996, 38.89208799500006], [-77.10698578199998, 38.89207698600006], [-77.10702445999993, 38.89207744500005], [-77.10702851899998, 38.89222852500006], [-77.10729007399993, 38.89233048500005], [-77.10762066699994, 38.89231518200007], [-77.107580795, 38.89255910700006], [-77.10757945899996, 38.892568181000065], [-77.10757819399998, 38.89257722800006], [-77.10757689399998, 38.89258630200002], [-77.10757562799995, 38.892595376000024], [-77.10757432799994, 38.89260442200003], [-77.10757306299996, 38.89261349700006], [-77.10757183299995, 38.89262257200007], [-77.10757056699998, 38.892631646000034], [-77.10756933699997, 38.892640721000056], [-77.10756810699996, 38.89264976800008], [-77.10756687699995, 38.89265884300004], [-77.10756564699993, 38.892667918000036], [-77.10756445199996, 38.89267699300006], [-77.10725589399993, 38.892643129000064], [-77.10715071699997, 38.89263089700005], [-77.10702451599997, 38.89261567000003], [-77.10696490099997, 38.89260947100006], [-77.10689879399996, 38.89257573500003], [-77.10678041899996, 38.89251941000002], [-77.10667950199996, 38.89246878400006], [-77.10657155899997, 38.89241807500007], [-77.10645664299994, 38.89236453700005], [-77.10641880099996, 38.89232289700004]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024072", "street_address": null, "zoning_district": "S-3A", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Non-residential zoning"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10583245799995, 38.89103353500006], [-77.10600840599994, 38.89102189300007], [-77.10603816499997, 38.89129685100004], [-77.10586225199995, 38.89130849300003], [-77.10583245799995, 38.89103353500006]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024071", "street_address": "3804 17Th St N, Arlington VA 22207", "zoning_district": "S-3A", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Non-residential zoning"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10600840599994, 38.89102189300007], [-77.10618428299995, 38.89101025000007], [-77.10621407899998, 38.891285208000056], [-77.10603816499997, 38.89129685100004], [-77.10600840599994, 38.89102189300007]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024036", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10709428499996, 38.893003690000064], [-77.10715071699997, 38.89263089700005], [-77.10725589399993, 38.892643129000064], [-77.10725902899998, 38.89284362700004], [-77.10725923699994, 38.89301388400002], [-77.10717497799999, 38.893010139000054], [-77.10709428499996, 38.893003690000064]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024037", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10692954699995, 38.89298251400004], [-77.10702451599997, 38.89261567000003], [-77.10715071699997, 38.89263089700005], [-77.10709428499996, 38.893003690000064], [-77.10701013299996, 38.89299445400007], [-77.10692954699995, 38.89298251400004]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024039", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10661465499999, 38.89291287400004], [-77.10678041899996, 38.89251941000002], [-77.10689879399996, 38.89257573500003], [-77.10677550699995, 38.89295322700007], [-77.10676454899992, 38.892951175000086], [-77.10675359299995, 38.892949013000084], [-77.10674270899995, 38.89294674200005], [-77.10673186099996, 38.89294444400007], [-77.10672097999998, 38.89294200800004], [-77.10671017099997, 38.89293949100006], [-77.10669939899998, 38.89293689100003], [-77.10668866399999, 38.89293421000007], [-77.10667796499996, 38.89293142000003], [-77.10666733899996, 38.892928548000036], [-77.10665671499999, 38.89292559300003], [-77.10664612699996, 38.89292252900001], [-77.10663557599997, 38.89291941100006], [-77.10662509799994, 38.89291615600007], [-77.10661465499999, 38.89291287400004]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024043", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10600009999996, 38.89271335900002], [-77.10613004299995, 38.892355169000034], [-77.10641880099996, 38.89232289700004], [-77.10615743799997, 38.89275367100003], [-77.10614727799997, 38.892750283000055], [-77.10613708199998, 38.89274697600007], [-77.10612677899996, 38.89274377800006], [-77.10611647299999, 38.89274069000004], [-77.10610609599996, 38.892737656000065], [-77.10609568099994, 38.89273478700004], [-77.10608522799998, 38.892731999000034], [-77.10607470399998, 38.89272929300006], [-77.10606417799994, 38.892726724000056], [-77.10605361399996, 38.892724237000046], [-77.10604294299998, 38.892721859000055], [-77.10603227099995, 38.89271956300007], [-77.10602159599995, 38.89271740400003], [-77.10601084899997, 38.89271532700006], [-77.10600009999996, 38.89271335900002]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024047", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10522209099997, 38.89242677300007], [-77.10566510099994, 38.89241281000004], [-77.10566727999998, 38.892481487000055], [-77.10566945899994, 38.892550192000044], [-77.10522644799994, 38.89256412700008], [-77.10522432299997, 38.89249270400007], [-77.10522209099997, 38.89242677300007]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024032", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10691936099995, 38.89187848300002], [-77.10695449099995, 38.89187890000003], [-77.10734458999995, 38.891875287000055], [-77.10732223299993, 38.89194092700005], [-77.10732313399996, 38.89207549400003], [-77.10702445999993, 38.89207744500005], [-77.10698578199998, 38.89207698600006], [-77.10694713999999, 38.89207652800007], [-77.10691936099995, 38.89187848300002]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024029", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10734458999995, 38.891875287000055], [-77.10736710699996, 38.89180138400006], [-77.10775017899994, 38.89179771400006], [-77.10770530599996, 38.89193723100004], [-77.10732223299993, 38.89194092700005], [-77.10734458999995, 38.891875287000055]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024024", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10707197499994, 38.891438179], [-77.10724769399997, 38.89143477100003], [-77.10724859499999, 38.89148970300005], [-77.10725245799995, 38.89173414700007], [-77.10707670399995, 38.89173755500008], [-77.10707270199998, 38.89148761700004], [-77.10707197499994, 38.891438179]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024035", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10725923699994, 38.89301388400002], [-77.10725902899998, 38.89284362700004], [-77.10756476799997, 38.89284173200008], [-77.10756923499997, 38.89297362300003], [-77.10756825899995, 38.89298228900003], [-77.10756507599996, 38.89299059900004], [-77.10755990199992, 38.892998282000065], [-77.10755288399997, 38.893005009000035], [-77.10754423899994, 38.89301048100002], [-77.10753439299998, 38.89301451000006], [-77.10752373299994, 38.89301699300005], [-77.10751265, 38.89301774000006], [-77.10750163499995, 38.89301675800005], [-77.10725923699994, 38.89301388400002]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024085", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10569262699994, 38.89226210400005], [-77.10572158399998, 38.89221853900004], [-77.10602040099997, 38.89221107400004], [-77.10611593699997, 38.892357748000045], [-77.10613004299995, 38.892355169000034], [-77.10600009999996, 38.89271335900002], [-77.10598920699995, 38.89271152700005], [-77.10597827999999, 38.89270969500007], [-77.10596734999996, 38.892707973], [-77.10595641799993, 38.89270636000003], [-77.10594544999998, 38.892704802000026], [-77.10593444599992, 38.89270332600005], [-77.10592343999997, 38.89270190500002], [-77.10591243099998, 38.892700621000095], [-77.10590138699996, 38.89269936400007], [-77.10589034099996, 38.89269821700004], [-77.10587929299997, 38.89269715200003], [-77.10586820899994, 38.89269614100006], [-77.10585712299996, 38.89269524100004], [-77.10584603499996, 38.892694423000066], [-77.10583491199998, 38.89269365900003], [-77.10582378599997, 38.89269297800009], [-77.10581272899996, 38.892692407000034], [-77.10580156499996, 38.89269189000005], [-77.10579039899994, 38.892691456000094], [-77.10577926699995, 38.89269110400004], [-77.10576813399996, 38.892690835000025], [-77.10575699899994, 38.892690647000045], [-77.10574582699996, 38.89269054200002], [-77.10573468799997, 38.89269052000002], [-77.10572354799996, 38.89269058000008], [-77.10571240699994, 38.89269072200004], [-77.10569262699994, 38.89226210400005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024046", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10522644799994, 38.89256412700008], [-77.10566945899994, 38.892550192000044], [-77.10567520499995, 38.892616137000054], [-77.10567743699994, 38.89268206900003], [-77.10528722699996, 38.89269119400005], [-77.10527451299998, 38.89269085100005], [-77.10526219599994, 38.89268820600005], [-77.10525104499999, 38.89268340500008], [-77.10524161799998, 38.892676703000056], [-77.10523443399995, 38.89266846200008], [-77.10522990699997, 38.89265915400005], [-77.10522830699993, 38.89264927600004], [-77.10522867999998, 38.89263005800007], [-77.10522644799994, 38.89256412700008]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024048", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10547221699994, 38.89221280500004], [-77.10565499799998, 38.89220948300005], [-77.10565722999996, 38.892275414000046], [-77.10566288699994, 38.89234413300006], [-77.10566510099994, 38.89241281000004], [-77.10522209099997, 38.89242677300007], [-77.10521991199994, 38.892358123000065], [-77.10521422099998, 38.89228937700005], [-77.10521204299994, 38.89222070000006], [-77.10547221699994, 38.89221280500004]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024086", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10565499799998, 38.89220948300005], [-77.10547221699994, 38.89221280500004], [-77.10546652499994, 38.89214408600003], [-77.10546753899996, 38.89209192300008], [-77.10549926199998, 38.892086808000045], [-77.10548731899996, 38.89179558500006], [-77.10564367599996, 38.891888061000024], [-77.10567142499997, 38.891904866000075], [-77.10591118699995, 38.892045015000065], [-77.10602040099997, 38.89221107400004], [-77.10572158399998, 38.89221853900004], [-77.10569262699994, 38.89226210400005], [-77.10569018099994, 38.892207154000054], [-77.10565499799998, 38.89220948300005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024030", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10732223299993, 38.89194092700005], [-77.10770530599996, 38.89193723100004], [-77.10769418099994, 38.89196730500002], [-77.10769074299998, 38.89197605200008], [-77.10768740999998, 38.89198485500004], [-77.10768421699998, 38.89199365900002], [-77.10768112899996, 38.892002520000084], [-77.10767814599996, 38.89201138100004], [-77.10767526799998, 38.89202024400002], [-77.10767252999995, 38.89202916400006], [-77.10766989699994, 38.89203808500002], [-77.10766736899996, 38.89204703500007], [-77.10766494599994, 38.892056013000044], [-77.10766266399996, 38.892064993000076], [-77.10766045099997, 38.892074001000026], [-77.10732313399996, 38.89207549400003], [-77.10732223299993, 38.89194092700005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024026", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10742348199994, 38.89143136300005], [-77.10762733999996, 38.891428288000036], [-77.10762802799998, 38.89149420100007], [-77.10762983599994, 38.89166173100005], [-77.10749980399999, 38.89166293600004], [-77.10742865699996, 38.89170602900003], [-77.10742462899998, 38.89149179000001], [-77.10742348199994, 38.89143136300005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024027", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10762733999996, 38.891428288000036], [-77.10779957999995, 38.89142483700005], [-77.10781228599994, 38.89142553700004], [-77.10782471599998, 38.89142779900003], [-77.10783655599994, 38.891431482000016], [-77.10784752599994, 38.891436555000034], [-77.10785734699994, 38.89144287700003], [-77.10786584599998, 38.891450337000045], [-77.10785018599995, 38.891496834000066], [-77.10779499899996, 38.89166091600003], [-77.10762983599994, 38.89166173100005], [-77.10762802799998, 38.89149420100007], [-77.10762733999996, 38.891428288000036]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024018", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10618428299995, 38.89101025000007], [-77.10618454999997, 38.89099652300006], [-77.10639915799999, 38.89098259300005], [-77.10642517499997, 38.89127120900002], [-77.10621407899998, 38.891285208000056], [-77.10618428299995, 38.89101025000007]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024013", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10727983399994, 38.89104795900005], [-77.10730608199998, 38.89078190400003], [-77.10735488899995, 38.89080170500006], [-77.10742461499996, 38.8908299920001], [-77.10747688199996, 38.89085258000007], [-77.10745318499994, 38.89134933400004], [-77.10730207499994, 38.89135028800007], [-77.10724581499994, 38.891352367000025], [-77.10724982599997, 38.89132495400003], [-77.10727983399994, 38.89104795900005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024011", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10766465699999, 38.891134903000086], [-77.10794736399998, 38.89118943700002], [-77.10798317999998, 38.89119634500005], [-77.10794178399993, 38.891341395000026], [-77.10766757999994, 38.891346383000034], [-77.10766465699999, 38.891134903000086]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024017", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10639915799999, 38.89098259300005], [-77.10672979899994, 38.89096454700007], [-77.10674571099997, 38.89104986300002], [-77.10677700099995, 38.891247950000036], [-77.10642517499997, 38.89127120900002], [-77.10639915799999, 38.89098259300005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024094", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10797604699997, 38.89105926600006], [-77.10796833199997, 38.89105612100006], [-77.10800287799998, 38.89090549800007], [-77.10799441399995, 38.89097954100003], [-77.10798664199996, 38.89101789300001], [-77.10798227699995, 38.891061806000025], [-77.10797604699997, 38.89105926600006]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024081", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10766162799996, 38.89092891400002], [-77.10764768299998, 38.89092325600005], [-77.10767458199996, 38.89080274900006], [-77.10802182699996, 38.89083435300006], [-77.10800287799998, 38.89090549800007], [-77.10796833199997, 38.89105612100006], [-77.10766162799996, 38.89092891400002]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024073", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10566713699995, 38.89104255700005], [-77.10583245799995, 38.89103353500006], [-77.10586225199995, 38.89130849300003], [-77.10567931299994, 38.89132005200002], [-77.10564061699993, 38.89132233900006], [-77.10563583199996, 38.89120694800005], [-77.10562851199995, 38.89104484400008], [-77.10566713699995, 38.89104255700005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024084", "street_address": null, "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "No property record in county database"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10801502099997, 38.89046078200005], [-77.10801741499995, 38.890518478000025], [-77.10741269899995, 38.89053877000003], [-77.10718057599995, 38.890730987000055], [-77.10707252899995, 38.890685769000065], [-77.10705869599997, 38.890493382000045], [-77.10732945599995, 38.890482862000056], [-77.10801502099997, 38.89046078200005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024023", "street_address": "3901 17Th St N, Arlington VA 22207", "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Building present but no floor area data available"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10687865699998, 38.891441379000064], [-77.10707197499994, 38.891438179], [-77.10707270199998, 38.89148761700004], [-77.10707670399995, 38.89173755500008], [-77.10693256599995, 38.891741337000056], [-77.10688651599997, 38.89148540900004], [-77.10687865699998, 38.891441379000064]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024038", "street_address": "3808 18Th St N, Arlington VA 22207", "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Building present but no floor area data available"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10677550699995, 38.89295322700007], [-77.10689879399996, 38.89257573500003], [-77.10696490099997, 38.89260947100006], [-77.10702451599997, 38.89261567000003], [-77.10692954699995, 38.89298251400004], [-77.10691832999998, 38.89298111800008], [-77.10690718499997, 38.892979613000094], [-77.10689600699999, 38.89297799700005], [-77.10688490199993, 38.89297627300003], [-77.10687379899996, 38.89297443900007], [-77.10686273199997, 38.89297252300002], [-77.10685170399995, 38.892970470000094], [-77.10684071199995, 38.89296833500002], [-77.10682975699996, 38.89296606300006], [-77.10681880499999, 38.89296370900007], [-77.10680792499994, 38.89296124500004], [-77.10679708199996, 38.89295867300005], [-77.106786276, 38.89295601800006], [-77.10677550699995, 38.89295322700007]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024078", "street_address": "1721 N Quincy St, Arlington VA 22207", "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Building present but no floor area data available"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10702445999993, 38.89207744500005], [-77.10732313399996, 38.89207549400003], [-77.10766045099997, 38.892074001000026], [-77.10765856399996, 38.89208249200005], [-77.10765671299998, 38.89209098200007], [-77.10765493199995, 38.892099474000084], [-77.10765318599992, 38.89210796600003], [-77.10765143999998, 38.89211645800004], [-77.10764972799996, 38.89212497800002], [-77.10764812199993, 38.892133499000074], [-77.10764651599999, 38.89214202000005], [-77.10764494499995, 38.89215054200003], [-77.10764344499994, 38.89215906400005], [-77.10764197899994, 38.89216758700007], [-77.10764054799995, 38.89217613800004], [-77.10763915299998, 38.89218468900003], [-77.10763782799995, 38.892193213000056], [-77.10763653699996, 38.89220176600002], [-77.107635282, 38.89221031900007], [-77.10763406099994, 38.89221889900005], [-77.10763291099994, 38.89222745300003], [-77.10762066699994, 38.89231518200007], [-77.10729007399993, 38.89233048500005], [-77.10702851899998, 38.89222852500006], [-77.10702445999993, 38.89207744500005]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024075", "street_address": "1705 N Pollard St, Arlington VA 22207", "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Building present but no floor area data available"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10671259499998, 38.89130759900008], [-77.10678647299994, 38.891302983000045], [-77.10681773299996, 38.89148459300004], [-77.10683383599996, 38.891578149000054], [-77.10675985099994, 38.89158825600003], [-77.10633020399996, 38.89163808000006], [-77.10632964099995, 38.891638156000056], [-77.10629967899996, 38.89147844700007], [-77.10627283799994, 38.891335334000075], [-77.10671259499998, 38.89130759900008]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024080", "street_address": "1615 N Quincy St, Arlington VA 22207", "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Building present but no floor area data available"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10767458199996, 38.89080274900006], [-77.10771285499999, 38.89064118600006], [-77.10801879699994, 38.89062833600008], [-77.10802603299999, 38.890798676000024], [-77.10802555399994, 38.890823385000026], [-77.10802182699996, 38.89083435300006], [-77.10767458199996, 38.89080274900006]]]]}}, {"type": "Feature", "properties": {"parcel_id": "06024082", "street_address": "1611 N Quincy St, Arlington VA 22207", "zoning_district": "R-6", "neighborhood": "Cherry Valley Nature Area", "exclusion_reason": "Building present but no floor area data available"}, "geometry": {"type": "MultiPolygon", "coordinates": [[[[-77.10767458199996, 38.89080274900006], [-77.10764768299998, 38.89092325600005], [-77.10747688199996, 38.89085258000007], [-77.10742461499996, 38.8908299920001], [-77.10755222099993, 38.89058985300004], [-77.10801634899997, 38.89057338600003], [-77.10801879699994, 38.89062833600008], [-77.10771285499999, 38.89064118600006], [-77.10767458199996, 38.89080274900006]]]]}}]};
+const summary = {"neighborhood": "Cherry Valley Nature Area", "total_parcels": 15, "total_residential_eligible": 45, "excluded_count": 37, "in_scope_excluded": 30, "pct_included": 33.3, "zoning_counts": {"R-6": 15}, "status_counts": {"underdeveloped": 13, "vacant": 1, "overdeveloped": 1}, "vacant_count": 1, "underdeveloped_count": 13, "near_capacity_count": 0, "overdeveloped_count": 1, "total_land_value": 12645300.0, "total_improvement_value": 6099900.0, "total_assessed_value": 18745200.0, "total_available_gfa": 46606.5, "parcels_with_capacity": 14, "median_available_gfa": 3613.0, "total_est_low": 4223835.2559408285, "total_est_high": 5759775.34901022, "parcels_with_value": 14, "neighborhood_rate_median": 185, "neighborhood_rate_low": 185, "neighborhood_rate_high": 185, "neighborhood_rate_sample": 1, "calibration_parcel_ids": ["06024012"]};
+
+// --- Helpers ---
+function fmt(n) { return n == null ? 'N/A' : n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmtD(n) { return n == null ? 'N/A' : '$' + n.toLocaleString('en-US', {maximumFractionDigits: 0}); }
+function fmtM(n) {
+    if (n == null) return 'N/A';
+    if (Math.abs(n) >= 1e9) return '$' + (n/1e9).toFixed(1) + 'B';
+    if (Math.abs(n) >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+    if (Math.abs(n) >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+    return '$' + n.toFixed(0);
+}
+function fmtPct(n) { return n == null ? 'N/A' : n.toFixed(1) + '%'; }
+
+// --- Populate sidebar ---
+document.getElementById('neighborhood-name').textContent = summary.neighborhood || 'Unknown';
+document.title = 'Transfer of Development Rights (TDR) Analysis: ' + (summary.neighborhood || 'Unknown');
+document.getElementById('s-total').textContent = fmt(summary.total_parcels);
+document.getElementById('s-with-capacity').textContent = fmt(summary.parcels_with_capacity);
+document.getElementById('s-residential-total').textContent = fmt(summary.total_residential_eligible);
+document.getElementById('s-pct-included').textContent = fmtPct(summary.pct_included);
+document.getElementById('s-vacant').textContent = fmt(summary.vacant_count);
+document.getElementById('s-land').textContent = fmtM(summary.total_land_value);
+document.getElementById('s-improvement').textContent = fmtM(summary.total_improvement_value);
+document.getElementById('s-assessed').textContent = fmtM(summary.total_assessed_value);
+document.getElementById('s-avail-gfa').textContent = fmt(summary.total_available_gfa) + ' SF';
+document.getElementById('s-median-gfa').textContent = fmt(summary.median_available_gfa) + ' SF';
+document.getElementById('s-valued').textContent = fmt(summary.parcels_with_value);
+document.getElementById('s-val-low').textContent = fmtM(summary.total_est_low);
+document.getElementById('s-val-high').textContent = fmtM(summary.total_est_high);
+document.getElementById('s-rate').textContent = summary.neighborhood_rate_median != null
+    ? fmtD(summary.neighborhood_rate_median) + '/SF'
+    : '$185/SF (estimated — limited local data)';
+document.getElementById('s-rate-sample').textContent = fmt(summary.neighborhood_rate_sample) + ' homes';
+
+const STATUS_LABELS = {
+    'overdeveloped': 'Exceeds max GFA',
+    'near-capacity': 'Near capacity',
+    'underdeveloped': 'Underdeveloped',
+    'vacant': 'High development potential',
+};
+function statusLabel(s) { return STATUS_LABELS[s] || s; }
+
+function fillBreakdown(id, obj) {
+    const el = document.getElementById(id);
+    const sorted = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+    el.innerHTML = sorted.map(([k, v]) =>
+        '<div class="breakdown-row"><span class="bk-label">' + statusLabel(k) + '</span><span class="bk-value">' + fmt(v) + '</span></div>'
+    ).join('');
+}
+fillBreakdown('zoning-breakdown', summary.zoning_counts);
+fillBreakdown('status-breakdown', summary.status_counts);
+// Map jargon labels to user-friendly text
+// --- Map ---
+const map = L.map('map', { zoomControl: true });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    maxZoom: 20
+}).addTo(map);
+
+// --- Color scale ---
+// Max available GFA for scaling (use 95th percentile to avoid outlier skew)
+const gfaValues = geojsonData.features
+    .map(f => f.properties.available_gfa_sf)
+    .filter(v => v != null && v > 0)
+    .sort((a, b) => a - b);
+const maxGfa = gfaValues.length > 0 ? gfaValues[Math.floor(gfaValues.length * 0.95)] : 5000;
+
+function getColor(props) {
+    const status = props.development_status;
+    const avail = props.available_gfa_sf;
+    const spotCheck = props.spot_check_result;
+
+    // Grey for excluded
+    if (spotCheck === 'excluded') return '#888';
+
+    // Vacant = high potential (teal)
+    if (status === 'vacant') return '#009E73';
+
+    // Exceeds max GFA = orange-red
+    if (status === 'overdeveloped') return '#D55E00';
+
+    // Near-capacity = amber
+    if (status === 'near-capacity') return '#E69F00';
+
+    // No data
+    if (avail == null) return '#888';
+
+    // Gradient for underdeveloped (more potential = teal)
+    if (avail <= 0) return '#E69F00';
+    const t = Math.min(avail / maxGfa, 1);
+    if (t < 0.33) return '#F0E442';
+    if (t < 0.66) return '#56B4E9';
+    return '#009E73';
+}
+
+function getWeight(props) {
+    return 1;
+}
+
+function getBorderColor(props) {
+    return '#444';
+}
+
+// --- Tooltip ---
+function makeTooltip(props) {
+    const addr = props.street_address || 'No address';
+    const pid = props.parcel_id || '';
+    const zoning = props.zoning_district || '';
+    const status = props.development_status || 'unknown';
+
+    let html = '<div class="parcel-tooltip">';
+    html += '<div class="tt-header">' + addr + '</div>';
+    html += '<div class="tt-row"><span class="tt-label">Parcel ID</span><span class="tt-value">' + pid + '</span></div>';
+    html += '<div class="tt-row"><span class="tt-label">Zoning</span><span class="tt-value">' + zoning + '</span></div>';
+    html += '<div class="tt-row"><span class="tt-label">Status</span><span class="tt-value">' + statusLabel(status) + '</span></div>';
+
+    html += '<div class="tt-section"><div class="tt-section-title">Current Building</div>';
+    html += '<div class="tt-row"><span class="tt-label">Year Built</span><span class="tt-value">' + (props.year_built ? Math.round(props.year_built) : 'N/A') + '</span></div>';
+    html += '<div class="tt-row"><span class="tt-label">Current GFA</span><span class="tt-value">' + (props.current_gfa_sf != null ? fmt(Math.round(props.current_gfa_sf)) + ' SF' : 'N/A') + '</span></div>';
+    html += '<div class="tt-row"><span class="tt-label">Stories</span><span class="tt-value">' + (props.current_stories || 'N/A') + '</span></div>';
+    html += '</div>';
+
+    html += '<div class="tt-section"><div class="tt-section-title">Assessment</div>';
+    html += '<div class="tt-row"><span class="tt-label">Land</span><span class="tt-value">' + fmtD(props.land_value) + '</span></div>';
+    html += '<div class="tt-row"><span class="tt-label">Improvement</span><span class="tt-value">' + fmtD(props.improvement_value) + '</span></div>';
+    html += '</div>';
+
+    html += '<div class="tt-section"><div class="tt-section-title">Development Potential</div>';
+    html += '<div class="tt-row"><span class="tt-label">Max GFA</span><span class="tt-value">' + (props.max_gfa_sf != null ? fmt(Math.round(props.max_gfa_sf)) + ' SF' : 'N/A') + '</span></div>';
+    html += '<div class="tt-row"><span class="tt-label">Available GFA</span><span class="tt-value tt-highlight">' + (props.available_gfa_sf != null ? fmt(Math.round(props.available_gfa_sf)) + ' SF' : 'N/A') + '</span></div>';
+    html += '<div class="tt-row"><span class="tt-label">Utilization</span><span class="tt-value">' + (props.gfa_utilization_pct != null ? props.gfa_utilization_pct.toFixed(1) + '%' : 'N/A') + '</span></div>';
+    html += '</div>';
+
+    if (props.est_value_low != null) {
+        html += '<div class="tt-section"><div class="tt-section-title">Estimated Value of Unused Rights</div>';
+        html += '<div class="tt-row"><span class="tt-label">Range</span><span class="tt-value tt-highlight">' + fmtD(props.est_value_low) + ' &ndash; ' + fmtD(props.est_value_high) + '</span></div>';
+        html += '</div>';
+    }
+
+    if (props.spot_check_result) {
+        html += '<div class="tt-section"><div class="tt-section-title">Spot Check</div>';
+        html += '<div class="tt-row"><span class="tt-label">Result</span><span class="tt-value">' + props.spot_check_result + '</span></div>';
+        if (props.spot_check_notes) {
+            html += '<div style="font-size:11px;color:#666;margin-top:2px">' + props.spot_check_notes + '</div>';
+        }
+        html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+}
+
+// --- Selected parcel panel ---
+let selectedLayer = null;
+function selectParcel(props, layer) {
+    // Reset previous selection
+    if (selectedLayer) geojsonLayer.resetStyle(selectedLayer);
+    selectedLayer = layer;
+    layer.setStyle({ weight: 3, color: '#ffd700', fillOpacity: 0.9 });
+    layer.bringToFront();
+
+    const el = document.getElementById('selected-parcel');
+    const addr = props.street_address || 'No address';
+    let html = '<button class="sp-dismiss" onclick="dismissSelection()">&times;</button>';
+    html += '<div class="sp-header">' + addr + '</div>';
+    html += '<div class="sp-row"><span class="sp-label">Parcel ID</span><span class="sp-value">' + (props.parcel_id || '') + '</span></div>';
+    html += '<div class="sp-row"><span class="sp-label">Zoning</span><span class="sp-value">' + (props.zoning_district || '') + '</span></div>';
+    html += '<div class="sp-row"><span class="sp-label">Status</span><span class="sp-value">' + statusLabel(props.development_status || '') + '</span></div>';
+    if (props.available_gfa_sf != null) {
+        html += '<div class="sp-row"><span class="sp-label">Available GFA</span><span class="sp-value sp-highlight">' + fmt(Math.round(props.available_gfa_sf)) + ' SF</span></div>';
+    }
+    if (props.est_value_low != null) {
+        html += '<div class="sp-row"><span class="sp-label">Est. Value</span><span class="sp-value sp-highlight">' + fmtD(props.est_value_low) + ' – ' + fmtD(props.est_value_high) + '</span></div>';
+    }
+    el.innerHTML = html;
+    el.style.display = 'block';
+}
+function dismissSelection() {
+    if (selectedLayer) geojsonLayer.resetStyle(selectedLayer);
+    selectedLayer = null;
+    const el = document.getElementById('selected-parcel');
+    el.style.display = 'none';
+    el.innerHTML = '';
+}
+
+// --- Calibration filter ---
+const calibrationIds = new Set(summary.calibration_parcel_ids || []);
+let calibrationFilterActive = false;
+
+function toggleCalibrationFilter() {
+    calibrationFilterActive = !calibrationFilterActive;
+    const header = document.getElementById('calibration-header');
+    const hint = document.getElementById('calibration-filter-hint');
+    if (calibrationFilterActive) {
+        header.classList.add('filter-active');
+        hint.textContent = 'click to clear';
+    } else {
+        header.classList.remove('filter-active');
+        hint.textContent = 'click to filter';
+    }
+    geojsonLayer.eachLayer(function(layer) {
+        const pid = layer.feature && layer.feature.properties && layer.feature.properties.parcel_id;
+        if (calibrationFilterActive) {
+            if (calibrationIds.has(pid)) {
+                layer.setStyle({ fillColor: '#ffd700', fillOpacity: 0.9, color: '#b8860b', weight: 2.5, opacity: 1 });
+                layer.bringToFront();
+            } else {
+                layer.setStyle({ fillOpacity: 0.08, opacity: 0.2 });
+            }
+        } else {
+            geojsonLayer.resetStyle(layer);
+        }
+    });
+    // Keep selected parcel highlighted if it's a calibration parcel
+    if (selectedLayer) {
+        selectedLayer.setStyle({ weight: 3, color: '#ffd700', fillOpacity: calibrationFilterActive ? 0.95 : 0.9 });
+    }
+}
+
+// --- Add GeoJSON layer ---
+const geojsonLayer = L.geoJSON(geojsonData, {
+    style: function(feature) {
+        return {
+            fillColor: getColor(feature.properties),
+            fillOpacity: 0.65,
+            color: getBorderColor(feature.properties),
+            weight: getWeight(feature.properties),
+            opacity: 0.8
+        };
+    },
+    onEachFeature: function(feature, layer) {
+        layer.bindTooltip(makeTooltip(feature.properties), {
+            sticky: true,
+            direction: 'top',
+            className: ''
+        });
+
+        layer.on('mouseover', function() {
+            if (this !== selectedLayer) {
+                const pid = feature.properties.parcel_id;
+                if (calibrationFilterActive && !calibrationIds.has(pid)) {
+                    this.setStyle({ weight: 1.5, color: '#fff', fillOpacity: 0.25 });
+                } else {
+                    this.setStyle({ weight: 3, color: '#fff', fillOpacity: 0.85 });
+                }
+            }
+            this.bringToFront();
+        });
+        layer.on('mouseout', function() {
+            if (this !== selectedLayer) {
+                if (calibrationFilterActive) {
+                    const pid = feature.properties.parcel_id;
+                    if (calibrationIds.has(pid)) {
+                        this.setStyle({ fillColor: '#ffd700', fillOpacity: 0.9, color: '#b8860b', weight: 2.5, opacity: 1 });
+                    } else {
+                        this.setStyle({ fillOpacity: 0.08, opacity: 0.2 });
+                    }
+                } else {
+                    geojsonLayer.resetStyle(this);
+                }
+            }
+        });
+        layer.on('click', function() {
+            selectParcel(feature.properties, this);
+        });
+    }
+}).addTo(map);
+
+// --- Excluded parcels layer ---
+if (excludedData && excludedData.features && excludedData.features.length > 0) {
+    function makeExcludedTooltip(props) {
+        const addr = props.street_address || 'No address';
+        let html = '<div class="parcel-tooltip">';
+        html += '<div class="tt-header">' + addr + '</div>';
+        if (props.parcel_id) html += '<div class="tt-row"><span class="tt-label">Parcel ID</span><span class="tt-value">' + props.parcel_id + '</span></div>';
+        if (props.zoning_district) html += '<div class="tt-row"><span class="tt-label">Zoning</span><span class="tt-value">' + props.zoning_district + '</span></div>';
+        html += '<div class="tt-section"><div class="tt-section-title">Excluded</div>';
+        html += '<div style="color:#e63946;font-weight:600">' + (props.exclusion_reason || 'Unknown reason') + '</div>';
+        html += '</div></div>';
+        return html;
+    }
+
+    const excludedLayer = L.geoJSON(excludedData, {
+        style: function() {
+            return { fillColor: '#888', fillOpacity: 0.35, color: '#666', weight: 0.5, opacity: 0.6 };
+        },
+        onEachFeature: function(feature, layer) {
+            layer.bindTooltip(makeExcludedTooltip(feature.properties), {
+                sticky: true, direction: 'top', className: ''
+            });
+            layer.on('mouseover', function() {
+                if (this !== selectedLayer) {
+                    this.setStyle({ weight: 2, color: '#fff', fillOpacity: 0.5 });
+                }
+                this.bringToFront();
+            });
+            layer.on('mouseout', function() {
+                if (this !== selectedLayer) {
+                    excludedLayer.resetStyle(this);
+                }
+            });
+            layer.on('click', function() {
+                const p = feature.properties;
+                if (selectedLayer) geojsonLayer.resetStyle(selectedLayer);
+                selectedLayer = this;
+                this.setStyle({ weight: 3, color: '#ffd700', fillOpacity: 0.6 });
+                this.bringToFront();
+                const el = document.getElementById('selected-parcel');
+                let html = '<button class="sp-dismiss" onclick="dismissSelection()">&times;</button>';
+                html += '<div class="sp-header">' + (p.street_address || 'No address') + '</div>';
+                if (p.parcel_id) html += '<div class="sp-row"><span class="sp-label">Parcel ID</span><span class="sp-value">' + p.parcel_id + '</span></div>';
+                if (p.zoning_district) html += '<div class="sp-row"><span class="sp-label">Zoning</span><span class="sp-value">' + p.zoning_district + '</span></div>';
+                html += '<div class="sp-row"><span class="sp-label">Status</span><span class="sp-value" style="color:#e63946">Excluded</span></div>';
+                html += '<div class="sp-row"><span class="sp-label">Reason</span><span class="sp-value" style="color:#e63946">' + (p.exclusion_reason || 'Unknown') + '</span></div>';
+                el.innerHTML = html;
+                el.style.display = 'block';
+            });
+        }
+    }).addTo(map);
+
+    // Ensure analyzed parcels render on top of excluded
+    geojsonLayer.bringToFront();
+}
+
+// Fit map to data bounds
+if (geojsonLayer.getBounds().isValid()) {
+    map.fitBounds(geojsonLayer.getBounds(), { padding: [40, 40] });
+}
+
+// --- URL parameter: auto-select parcel ---
+(function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var targetParcel = urlParams.get('parcel');
+    if (targetParcel) {
+        geojsonLayer.eachLayer(function(layer) {
+            if (layer.feature && layer.feature.properties.parcel_id === targetParcel) {
+                selectParcel(layer.feature.properties, layer);
+                map.fitBounds(layer.getBounds(), { padding: [60, 60], maxZoom: 18 });
+            }
+        });
+    }
+})();
+</script>
+</body>
+</html>
